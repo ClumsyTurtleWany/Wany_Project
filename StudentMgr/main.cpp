@@ -23,11 +23,6 @@ public:
 	std::string getPhone() { return phone; };
 };
 
-void githubTest()
-{
-	// push?
-}
-
 template <typename T>
 struct node
 {
