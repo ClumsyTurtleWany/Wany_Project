@@ -2,9 +2,53 @@
 #include "main.h"
 #include "LinkedList.hpp"
 #include <list>
+#include <string>
+
+class student
+{
+private:
+	std::string name;
+	int age;
+	std::string phone;
+
+public:
+	student(std::string _name = "", int _age = 0, std::string _phone = "") : name(_name), age(_age), phone(_phone) {};
+
+	void setName(std::string _str) { name = _str; };
+	void setAge(int _age) { age = _age; };
+	void setPhone(std::string _num) { phone = _num; };
+
+	std::string getName() { return name; };
+	int getAge() { return age; };
+	std::string getPhone() { return phone; };
+};
+
+template <typename T>
+struct node
+{
+	const T		data;
+	node* prev;
+	node* next;
+	node() = default;
+	node(const node&) = delete;
+	node& operator=(const node&) = delete;
+};
 
 void main()
 {
+	// Std List
+	std::list<int> stdList;
+	for (int i = 0; i < 10; i++)
+	{
+		stdList.push_back((i + 1) * 10);
+	}
+
+	for (auto iter = stdList.begin(); iter != stdList.end(); ++iter)
+	{
+		std::cout << *iter << std::endl;
+	}
+
+	// Linked List List
 	LL::List<int> LL_List;
 	for (int i = 0; i < 10; i++)
 	{
@@ -12,34 +56,28 @@ void main()
 		LL_List.push_back(data);
 	}
 
-	LL::List<int>::iterator _iter = LL_List.begin();
-	_iter++;
-	++_iter;
-
-	int testData = 200;
-	LL_List.insert(_iter, testData);
-
-	LL::List<int> LL_List2;
-	LL_List2.assign(LL_List.begin(), LL_List.end());
-
-	
-	std::list<int> std_List;
-	for (int i = 0; i < 10; i++)
+	for (auto iter = LL_List.begin(); iter != LL_List.end(); ++iter)
 	{
-		int data = (i + 1) * 10;
-		std_List.push_back(data);
+		std::cout << *iter << std::endl;
 	}
 
-	std::list<int>::iterator _iter_std = std_List.begin();
-	_iter_std++;
-	++_iter_std;
+	std::list<student> stdList_cl;
 
-	std_List.insert(_iter_std, 200);
+	student stu_A("AAA", 20, "010-0000-0000");
+	student stu_B("BBB", 27, "010-1111-0000");
+	student stu_C("CCC", 31, "010-0000-1111");
 
-	std_List.sort();
+	stdList_cl.push_back(stu_A);
+	stdList_cl.push_back(stu_B);
+	stdList_cl.push_back(stu_C);
 
-	std::list<int> std_List2;
-	std_List2.assign(5, 1);
-	std_List2.assign(std_List.begin(), std_List.end());
+	LL::List<student> LL_List_cl;
 
+	LL_List_cl.push_back(stu_A);
+	LL_List_cl.push_back(stu_B);
+	LL_List_cl.push_back(stu_C);
+
+	student stu_test = LL_List_cl[0];
+	std::string strName = LL_List_cl[0].getName();
+	
 }

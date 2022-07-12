@@ -1,105 +1,27 @@
 #pragma once
 
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-// History - Wany(KIM DONG WAN)
-//
-// 2022.07.08 added Linked List Base Class.
-// 2022.07.10 added Stack and Queue.
-// 2022.07.11 added List.
-// 
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-// Stack (Last-In, First-Out)
-//
-// STL Stack Member Function List
-//
-// empty: return true or false.
-// size: return element amount.
-// -top: return last element. (pop_back) - Stack Original Function
-// push: insert element. (push_back)
-// emplace: construct and insert element.
-// pop: remove last element.
-// swap: swap contents.
-//
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-// Queue (First-In, First-Out)
-// 
-// STL Queue Member Function List
-//
-// empty: return true or false.
-// size: return element amount.
-// -front: return first element. (pop_front) - Queue Original Function
-// -back: return last element. (pop_back) - Queue Original Function
-// push: insert element. (push_back)
-// emplace: construct and insert element.
-// pop: remove first element.
-// swap: swap contents.
-//
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-// List
-//
-// STL List Member Function List
-// 
-// -assign: delete all element & insert new elements.
-// -back: return last element.
-// -begin: return iterator of first element.
-// -cbegin: return const iterator of first element.
-// -cend: return const iterator of last element.
-// -clear: delete all element.
-// -crbegin: return reversed const iterator of first element. (= cend)
-// -crend : return reversed const iterator of last element. (= cbegin)
-// -emplace: insert element.
-// -emplace_back: insert element. (pusb_back)
-// -emplace_front: insert element. (push_front)
-// empty: return true or false.
-// -end: return iterator of last element.
-// -erase: delete element or delete element of selected area.
-// -front: return first element.
-// -get_allocator: return copy of allocator.
-// insert: insert element or insert elements of selected area.
-// max_size: return maximum list length.
-// merge: delete element and insert element to list, sort asec, desc, etc.
-// pop_back: delete last element.
-// pop_front: delete first element.
-// push_back: insert element at last.
-// push_front: insert element at first.
-// rbegin: return reversed iterator of first element. (= end)
-// resize: resize.
-// reverse: reverse list.
-// size: return element amount.
-// sort: sort asec, desc, etc.
-// splice: delete element and insert element at other list.
-// swap: swap elements with other list.
-// unique: delete same element.
-// 
-///////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////
-
 namespace LL
 {
 	template <typename T>
 	struct node
 	{
 		T		data;
-		node* prev;
-		node* next;
+		node*	prev;
+		node*	next;
 	};
 
+	///////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////
+	// 
+	// Linked List Base Class
+	// 
+	///////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////
 	template <typename T>
 	class LinkedListBase
 	{
 		private:
 		public:
-			/*template <typename T>
-			struct node
-			{
-				T		data;
-				node*	prev;
-				node*	next;
-			} node;*/
 
 		protected:
 			node<T>*	head;
@@ -130,8 +52,10 @@ namespace LL
 	template<typename T>
 	inline LinkedListBase<T>::LinkedListBase()
 	{
-		head = nullptr;
-		tail = nullptr;
+		head = new node<T>;
+		tail = new node<T>;
+		head->next = tail;
+		tail->prev = head;
 		dataSize = 0;
 	}
 
@@ -139,6 +63,8 @@ namespace LL
 	inline LinkedListBase<T>::~LinkedListBase()
 	{
 		release();
+		delete[] head;
+		delete[] tail;
 	}
 
 	template<typename T>
@@ -149,19 +75,14 @@ namespace LL
 		newNode->prev = nullptr;
 		newNode->next = nullptr;
 
-		if (head == nullptr)
-		{
-			head = newNode;
-			tail = newNode;
-		}
-		else
-		{
-			newNode->next = head;
-			head->prev = newNode;
-			head = head->prev;
-			tail->next = head;
-		}
+		node<T>* tempNode = head->next; // == tail
+		tempNode->prev = newNode;
+		newNode->next = tempNode; // newNode->next = tail
+		newNode->prev = head;
+		head->next = newNode;
+		
 
+		
 		dataSize++;
 	}
 
@@ -173,18 +94,18 @@ namespace LL
 		newNode->prev = nullptr;
 		newNode->next = nullptr;
 
-		if (head == nullptr)
-		{
-			head = newNode;
-			tail = newNode;
-		}
-		else
-		{
-			newNode->prev = tail;
-			tail->next = newNode;
-			tail = tail->next;
-			head->prev = tail;
-		}
+		node<T>* tempNode = tail->prev; // == tail
+		tempNode->next = newNode;
+		newNode->prev = tempNode;
+		newNode->next = tail;
+		tail->prev = newNode;
+
+		// push_front
+		//node<T>* tempNode = head->next; // == tail
+		//tempNode->prev = newNode;
+		//newNode->next = tempNode; // newNode->next = tail
+		//newNode->prev = head;
+		//head->next = newNode;
 
 		dataSize++;
 	}
@@ -192,33 +113,23 @@ namespace LL
 	template<typename T>
 	inline void LinkedListBase<T>::pop_back()
 	{
-		//T _data = tail->data;
 		node<T>* curNode = tail->prev;
-		delete[] tail;
-		tail = curNode;
+		node<T>* prevNode = curNode->prev;
+		tail->prev = prevNode;
+		prevNode->next = tail;
+		delete[] curNode;
 		dataSize--;
-		if (dataSize == 0)
-		{
-			head = nullptr;
-			tail = nullptr;
-		}
-		//return _data;
 	}
 
 	template<typename T>
 	inline void LinkedListBase<T>::pop_front()
 	{
-		//T _data = head->data;
-		node<T>* tempNode = head->next;
-		delete[] head;
-		head = tempNode;
+		node<T>* curNode = head->next;
+		node<T>* nextNode = curNode->next;
+		head->next = nextNode;
+		nextNode->prev = head;
+		delete[] curNode;
 		dataSize--;
-		if (dataSize == 0)
-		{
-			head = nullptr;
-			tail = nullptr;
-		}
-		//return _data;
 	}
 
 	template<typename T>
@@ -254,9 +165,9 @@ namespace LL
 			pop_back();
 		}
 	}
-
 	///////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////
+	
 	///////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////
 	// 
@@ -272,19 +183,26 @@ namespace LL
 	// pop: remove last element.
 	// swap: swap contents.
 	//
+	///////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////
 	template <typename T>
 	class Stack : public LinkedListBase<T>
 	{
-	private:
-	public:
-		Stack() {};
-		~Stack() {};
-		T& top() { return LinkedListBase<T>::tail->data; };
-		void	push(T& _data) { LinkedListBase<T>::push_back(_data); };
-		void	pop() { LinkedListBase<T>::pop_back(); };
+		private:
+		public:
+			Stack() {};
+			~Stack() {};
+			T& top() 
+			{ 
+				node<T>* curNode = LinkedListBase<T>::tail->prev;
+				return curNode->data; 
+			};
+			void	push(T& _data) { LinkedListBase<T>::push_back(_data); };
+			void	pop() { LinkedListBase<T>::pop_back(); };
 	};
 	///////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////
+	
 	///////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////
 	// 
@@ -301,6 +219,8 @@ namespace LL
 	// pop: remove first element.
 	// swap: swap contents.
 	//
+	///////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////
 	template <typename T>
 	class Queue : public LinkedListBase<T>
 	{
@@ -308,13 +228,22 @@ namespace LL
 	public:
 		Queue() {};
 		~Queue() {};
-		T& front() { return LinkedListBase<T>::head->data; };
-		T& back() { return LinkedListBase<T>::tail->data; };
+		T& front() 
+		{ 
+			node<T>* curNode = LinkedListBase<T>::head->next;
+			return curNode->data; 
+		};
+		T& back() 
+		{ 
+			node<T>* curNode = LinkedListBase<T>::tail->prev;
+			return curNode->data; 
+		};
 		void	push(T& _data) { LinkedListBase<T>::push_back(_data); };
 		void	pop() { LinkedListBase<T>::pop_front(); };
 	};
 	///////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////
+	
 	///////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////
 	// 
@@ -354,148 +283,161 @@ namespace LL
 	// swap: swap elements with other list.
 	// unique: delete same element.
 	// 
+	///////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////
 	template <typename T>
 	class List : public LinkedListBase<T>
 	{
-	private:
-	public:
-		// iterator
-		class iterator
-		{
-			private:
-				node<T>* cur;
+		private:
+		public:
+			// iterator
+			class iterator
+			{
+				private:
+					node<T>* cur;
 
-			public:
-				iterator(node<T>* _node = nullptr) : cur(_node) {};
+				public:
+					iterator(node<T>* _node = nullptr) : cur(_node) {};
 
-				iterator& operator++()
+					iterator& operator++()
+					{
+						cur = cur->next;
+						return *this;
+					}
+
+					iterator operator++(int)
+					{
+						iterator temp = *this;
+						++* this;
+						return temp;
+					}
+
+					iterator& operator--()
+					{
+						cur = cur->prev;
+						return *this;
+					}
+
+					iterator operator--(int)
+					{
+						iterator temp = *this;
+						--* this;
+						return temp;
+					}
+
+					node<T>* operator&()
+					{
+						return cur;
+					}
+
+					T& operator*()
+					{
+						return cur->data;
+					}
+
+					/*bool operator !=(iterator& _cmp)
+					{
+						return (cur != _cmp.cur);
+					}*/
+
+					bool operator !=(iterator _cmp)
+					{
+						return (cur != _cmp.cur);
+					}
+
+					bool operator ==(iterator& _cmp)
+					{
+						return (cur == _cmp.cur);
+					}
+			};
+
+			T& operator[](int _idx)
+			{
+				iterator iter = begin();
+				for (int cnt = 0; cnt < _idx; cnt++)
 				{
-					cur = cur->next;
-					return *this;
+					++iter;
 				}
+				return *iter;
+			}
 
-				iterator operator++(int)
-				{
-					iterator temp = *this;
-					++* this;
-					return temp;
-				}
+			// -assign: delete all element & insert new elements.
+			void	assign(int _count, T& _data = 0);
+			void	assign(List& _list);
+			void	assign(iterator _first, iterator _last);
 
-				iterator& operator--()
-				{
-					cur = cur->prev;
-					return *this;
-				}
+			// -back: return last element.
+			T& back();
 
-				iterator operator--(int)
-				{
-					iterator temp = *this;
-					--* this;
-					return temp;
-				}
+			// -begin: return iterator of first element.
+			iterator begin() {	return iterator(LinkedListBase<T>::head->next); }
 
-				node<T>* operator&()
-				{
-					return cur;
-				}
+			// -cbegin: return const iterator of first element.
+			const iterator cbegin() { return iterator(LinkedListBase<T>::head->next); }
 
-				T& operator*()
-				{
-					return cur->data;
-				}
-
-				bool operator !=(iterator& _cmp)
-				{
-					return (cur != _cmp.cur);
-				}
-
-				bool operator ==(iterator& _cmp)
-				{
-					return (cur == _cmp.cur);
-				}
-		};
-
-		// -assign: delete all element & insert new elements.
-		void	assign(int _count, T& _data = 0);
-		//void	assign(List& _list);
-		void	assign(iterator _first, iterator _last);
-
-		// -back: return last element.
-		T& back();
-
-		// -begin: return iterator of first element.
-		iterator begin() {	return iterator(LinkedListBase<T>::head); }
-
-		// -cbegin: return const iterator of first element.
-		const iterator cbegin() { return iterator(LinkedListBase<T>::head); }
+			// end: return iterator of last element.
+			iterator end() { return iterator(LinkedListBase<T>::tail); }
 		
-		// -cend: return const iterator of last element.
-		// -clear: delete all element.
-		void clear();
+			// -cend: return const iterator of last element.
+			const iterator cend() { return iterator(LinkedListBase<T>::tail); }
+		
+			// -clear: delete all element.
+			void clear();
 
-		// -crbegin: return reversed const iterator of first element. (= cend)
+			
 		
-		// -crend : return reversed const iterator of last element. (= cbegin)
-		
-		// -emplace: insert element.
-		// -emplace_back: insert element. (pusb_back)
-		void emplace_back(T& _data);
+			
 
-		// -emplace_front: insert element. (push_front)
-		void emplace_front(T& _data);
+			// -erase: delete element or delete element of selected area.
+			void erase(iterator _iter);
+			void erase(iterator _first, iterator _last);
 
-		// empty: return true or false.
+			// -front: return first element.
+			T& front();
+			
+			// -get_allocator: return copy of allocator.
 		
-		// -end: return iterator of last element.
-		iterator end() { return iterator(LinkedListBase<T>::tail); }
+			// insert: insert element or insert elements of selected area.
+			void insert(iterator _iter, T& _data);
 
-		// -erase: delete element or delete element of selected area.
-		void erase(iterator _iter) {};
-		void erase(iterator _first, iterator _last) {};
+			
 
-		// -front: return first element.
-		T& front() { return LinkedListBase<T>::head->data; }
+			// merge: delete element and insert element to list, sort asec, desc, etc.
 		
-		// -get_allocator: return copy of allocator.
-		
+			// pop_back: delete last element.
+			void pop_back();
 
-		// insert: insert element or insert elements of selected area.
-		void insert(iterator _iter, T& _data);
+			// pop_front: delete first element.
+			void pop_front();
 
-		// max_size: return maximum list length.
-		
+			// push_back: insert element at last.
+			void push_back(T& _data);
 
-		// merge: delete element and insert element to list, sort asec, desc, etc.
-		
+			// push_front: insert element at first.
+			void push_front(T& _data);		 
 
-		// pop_back: delete last element.
-		void pop_back();
 
-		// pop_front: delete first element.
-		void pop_front();
+			// empty: return true or false.
+			// size: return element amount.
+			// -emplace: insert element.
+			
+			// max_size: return maximum list length. (Max allocate count)
+			// rbegin: return reversed iterator of first element. (= end)
+			// resize: resize.
+			// reverse: reverse list.
+			// sort: sort asec, desc, etc.
+			// splice: delete element and insert element at other list.
+			// swap: swap elements with other list.
+			// unique: delete same element.
+			// -crbegin: return reversed const iterator of first element. (= cend)
+			// -crend : return reversed const iterator of last element. (= cbegin)
 
-		// push_back: insert element at last.
-		void push_back(T& _data);
+			
+			// -emplace_back: insert element. (pusb_back)
+			void emplace_back(T& _data);
 
-		// push_front: insert element at first.
-		void push_front(T& _data);
-		 
-		
-		// rbegin: return reversed iterator of first element. (= end)
-				
-		// resize: resize.
-		
-		// reverse: reverse list.
-		
-		// size: return element amount.
-		
-		// sort: sort asec, desc, etc.
-		
-		// splice: delete element and insert element at other list.
-		
-		// swap: swap elements with other list.
-		
-		// unique: delete same element.
+			// -emplace_front: insert element. (push_front)
+			void emplace_front(T& _data);
 	};
 
 	template<typename T>
@@ -507,11 +449,18 @@ namespace LL
 		}
 	}
 
-	/*template<typename T>
+	template<typename T>
 	inline void List<T>::assign(List& _list)
 	{
-		
-	}*/
+		clear();
+		iterator first = _list.begin();
+		iterator last = _list.end();
+		while (first != last)
+		{
+			push_back(*first);
+			first++;
+		}
+	}
 
 	template<typename T>
 	inline void List<T>::assign(iterator _first, iterator _last)
@@ -527,7 +476,8 @@ namespace LL
 	template<typename T>
 	inline T& List<T>::back()
 	{
-		return LinkedListBase<T>::tail->data;
+		node<T>* curNode = LinkedListBase<T>::tail->prev;
+		return curNode->data;
 	}
 
 	template<typename T>
@@ -549,6 +499,41 @@ namespace LL
 	}
 
 	template<typename T>
+	inline void List<T>::erase(iterator _iter)
+	{
+		node<T>* selectedNode = &_iter;
+		node<T>* prevNode = selectedNode->prev;
+		node<T>* nextNode = selectedNode->next;
+		prevNode->next = nextNode;
+		nextNode->prev = prevNode;
+		delete[] selectedNode;
+	}
+
+	template<typename T>
+	inline void List<T>::erase(iterator _first, iterator _last)
+	{
+		node<T>* selectedFirst = &_first;
+		node<T>* newFirst = selectedFirst->prev;
+		node<T>* selectedLast = &_last;
+		newFirst->next = selectedLast;
+		selectedLast->prev = newFirst;
+
+		for (iterator iter = _first; iter != _last; )
+		{
+			node<T>* deleteNode = &iter;
+			iter++;
+			delete[] deleteNode;
+		}
+	}
+
+	template<typename T>
+	inline T& List<T>::front()
+	{
+		node<T>* curNode = LinkedListBase<T>::head->next;
+		return curNode->data;
+	}
+
+	template<typename T>
 	inline void List<T>::insert(iterator _iter, T& _data)
 	{
 		node<T>* nowPos = &_iter;
@@ -556,10 +541,6 @@ namespace LL
 		node<T>* newNode = new node<T>;
 		newNode->data = _data;
 
-		/*newNode->prev = prevNode;
-		prevNode->next = newNode;
-		newNode->next = nowPos;
-		nowPos->prev = newNode;*/
 		prevNode->next = newNode;
 		newNode->prev = prevNode;
 		newNode->next = nowPos;
