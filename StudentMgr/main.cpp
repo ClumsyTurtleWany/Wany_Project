@@ -3,6 +3,7 @@
 #include "LinkedList.hpp"
 #include <list>
 #include <string>
+#include <algorithm>
 
 class student
 {
@@ -13,6 +14,7 @@ private:
 
 public:
 	student(std::string _name = "", int _age = 0, std::string _phone = "") : name(_name), age(_age), phone(_phone) {};
+	~student() {};
 
 	void setName(std::string _str) { name = _str; };
 	void setAge(int _age) { age = _age; };
@@ -34,20 +36,13 @@ struct node
 	node& operator=(const node&) = delete;
 };
 
-void main()
+bool asce(int& _a, int& _b)
 {
-	// Std List
-	std::list<int> stdList;
-	for (int i = 0; i < 10; i++)
-	{
-		stdList.push_back((i + 1) * 10);
-	}
+	return _a < _b;
+}
 
-	for (auto iter = stdList.begin(); iter != stdList.end(); ++iter)
-	{
-		std::cout << *iter << std::endl;
-	}
-
+int main()
+{
 	// Linked List List
 	LL::List<int> LL_List;
 	for (int i = 0; i < 10; i++)
@@ -61,23 +56,23 @@ void main()
 		std::cout << *iter << std::endl;
 	}
 
-	std::list<student> stdList_cl;
+	LL::List<int>::iterator iter1 = LL_List.begin();
+	iter1++;
+	iter1++;
+	iter1++;
+	iter1++;
+	iter1++;
 
-	student stu_A("AAA", 20, "010-0000-0000");
-	student stu_B("BBB", 27, "010-1111-0000");
-	student stu_C("CCC", 31, "010-0000-1111");
+	LL_List.swap(LL_List.begin(), iter1);
+	int data = 66;
+	LL_List.push_front(data);
+	data = 77;
+	LL_List.push_back(data);
 
-	stdList_cl.push_back(stu_A);
-	stdList_cl.push_back(stu_B);
-	stdList_cl.push_back(stu_C);
+	//LL_List_cl.swap(LL_List_cl.begin(), --LL_List_cl.end());
 
-	LL::List<student> LL_List_cl;
+	LL_List.sort(LL_List.begin(), --LL_List.end(), asce);
 
-	LL_List_cl.push_back(stu_A);
-	LL_List_cl.push_back(stu_B);
-	LL_List_cl.push_back(stu_C);
-
-	student stu_test = LL_List_cl[0];
-	std::string strName = LL_List_cl[0].getName();
-	
+	int a = 0;
+	return 0;
 }
