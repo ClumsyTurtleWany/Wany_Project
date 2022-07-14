@@ -15,238 +15,6 @@ namespace LL
 	///////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////
 	// 
-	// Linked List Base Class
-	// 
-	///////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////
-	//template <typename T>
-	//class LinkedListBase
-	//{
-	//	private:
-	//	public:
-
-	//	protected:
-	//		node<T>*	head;
-	//		node<T>*	tail;
-	//		size_t		dataSize = 0;
-
-	//	public:
-	//		LinkedListBase();
-	//		~LinkedListBase();
-
-	//		// Common Function
-	//		bool		empty();
-	//		size_t		size();
-	//		void		emplace(T& _data);
-	//		//void swap();
-
-	//	protected:
-	//		// Common Function
-	//		void		release();
-
-	//		// List Function
-	//		void		push_front(T& _data);
-	//		void		push_back(T& _data);
-	//		void		pop_back();
-	//		void		pop_front();
-	//};
-
-	//template<typename T>
-	//inline LinkedListBase<T>::LinkedListBase()
-	//{
-	//	head = new node<T>;
-	//	tail = new node<T>;
-	//	head->next = tail;
-	//	tail->prev = head;
-	//	dataSize = 0;
-	//}
-
-	//template<typename T>
-	//inline LinkedListBase<T>::~LinkedListBase()
-	//{
-	//	release();
-	//	delete head;
-	//	delete tail;
-	//}
-
-	//template<typename T>
-	//inline void LinkedListBase<T>::push_front(T& _data)
-	//{
-	//	node<T>* newNode = new node<T>;
-	//	newNode->data = _data;
-	//	newNode->prev = nullptr;
-	//	newNode->next = nullptr;
-
-	//	node<T>* tempNode = head->next; // == tail
-	//	tempNode->prev = newNode;
-	//	newNode->next = tempNode; // newNode->next = tail
-	//	newNode->prev = head;
-	//	head->next = newNode;
-	//	
-	//	dataSize++;
-	//}
-
-	//template<typename T>
-	//inline void LinkedListBase<T>::push_back(T& _data)
-	//{
-	//	node<T>* newNode = new node<T>;
-	//	newNode->data = _data;
-	//	newNode->prev = nullptr;
-	//	newNode->next = nullptr;
-
-	//	node<T>* tempNode = tail->prev; // == tail
-	//	tempNode->next = newNode;
-	//	newNode->prev = tempNode;
-	//	newNode->next = tail;
-	//	tail->prev = newNode;
-
-	//	// push_front
-	//	//node<T>* tempNode = head->next; // == tail
-	//	//tempNode->prev = newNode;
-	//	//newNode->next = tempNode; // newNode->next = tail
-	//	//newNode->prev = head;
-	//	//head->next = newNode;
-
-	//	dataSize++;
-	//}
-
-	//template<typename T>
-	//inline void LinkedListBase<T>::pop_back()
-	//{
-	//	node<T>* curNode = tail->prev;
-	//	node<T>* prevNode = curNode->prev;
-	//	tail->prev = prevNode;
-	//	prevNode->next = tail;
-	//	delete curNode;
-	//	dataSize--;
-	//}
-
-	//template<typename T>
-	//inline void LinkedListBase<T>::pop_front()
-	//{
-	//	node<T>* curNode = head->next;
-	//	node<T>* nextNode = curNode->next;
-	//	head->next = nextNode;
-	//	nextNode->prev = head;
-	//	delete curNode;
-	//	dataSize--;
-	//}
-
-	//template<typename T>
-	//inline bool LinkedListBase<T>::empty()
-	//{
-	//	if (dataSize > 0)
-	//	{
-	//		return false;
-	//	}
-	//	else
-	//	{
-	//		return true;
-	//	}
-	//}
-
-	//template<typename T>
-	//inline size_t LinkedListBase<T>::size()
-	//{
-	//	return dataSize;
-	//}
-
-	//template<typename T>
-	//inline void LinkedListBase<T>::emplace(T& _data)
-	//{
-	//	push_back(_data);
-	//}
-
-	//template<typename T>
-	//inline void LinkedListBase<T>::release()
-	//{
-	//	while (!empty())
-	//	{
-	//		pop_back();
-	//	}
-	//}
-	///////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////
-
-	///////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////
-	// 
-	// Stack (Last-In, First-Out)
-	//
-	// STL Stack Member Function List
-	//
-	// empty: return true or false.
-	// size: return element amount.
-	// -top: return last element. (pop_back) - Stack Original Function
-	// push: insert element. (push_back)
-	// emplace: construct and insert element.
-	// pop: remove last element.
-	// swap: swap contents.
-	//
-	///////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////
-	/*template <typename T>
-	class Stack : public LinkedListBase<T>
-	{
-	private:
-	public:
-	Stack() {};
-	~Stack() {};
-	T& top()
-	{
-	node<T>* curNode = LinkedListBase<T>::tail->prev;
-	return curNode->data;
-	};
-	void	push(T& _data) { LinkedListBase<T>::push_back(_data); };
-	void	pop() { LinkedListBase<T>::pop_back(); };
-	};*/
-	///////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////
-
-	///////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////
-	// 
-	// Queue (First-In, First-Out)
-	// 
-	// STL Queue Member Function List
-	//
-	// empty: return true or false.
-	// size: return element amount.
-	// -front: return first element. (pop_front) - Queue Original Function
-	// -back: return last element. (pop_back) - Queue Original Function
-	// push: insert element. (push_back)
-	// emplace: construct and insert element.
-	// pop: remove first element.
-	// swap: swap contents.
-	//
-	///////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////
-	/*template <typename T>
-	class Queue : public LinkedListBase<T>
-	{
-	private:
-	public:
-	Queue() {};
-	~Queue() {};
-	T& front()
-	{
-	node<T>* curNode = LinkedListBase<T>::head->next;
-	return curNode->data;
-	};
-	T& back()
-	{
-	node<T>* curNode = LinkedListBase<T>::tail->prev;
-	return curNode->data;
-	};
-	void	push(T& _data) { LinkedListBase<T>::push_back(_data); };
-	void	pop() { LinkedListBase<T>::pop_front(); };
-	};*/
-	///////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////
-
-	///////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////
-	// 
 	// List
 	//
 	// STL List Member Function List
@@ -288,164 +56,164 @@ namespace LL
 	template <typename T>
 	class List //: public LinkedListBase<T>
 	{
-	private:
-		node<T>*	head;
-		node<T>*	tail;
-		size_t		dataSize = 0;
-
-	public:
-		List();
-		~List();
-
-		// iterator
-		class iterator
-		{
 		private:
-			node<T>* cur;
+			node<T>*	head;
+			node<T>*	tail;
+			size_t		dataSize = 0;
 
 		public:
-			iterator(node<T>* _node = nullptr) : cur(_node) {};
+			List();
+			~List();
 
-			iterator& operator++()
+			// iterator
+			class iterator
 			{
-				cur = cur->next;
-				return *this;
+				private:
+					node<T>* cur;
+
+				public:
+					iterator(node<T>* _node = nullptr) : cur(_node) {};
+
+					iterator& operator++()
+					{
+						cur = cur->next;
+						return *this;
+					}
+
+					iterator operator++(int)
+					{
+						iterator temp = *this;
+						++* this;
+						return temp;
+					}
+
+					iterator& operator--()
+					{
+						cur = cur->prev;
+						return *this;
+					}
+
+					iterator operator--(int)
+					{
+						iterator temp = *this;
+						--* this;
+						return temp;
+					}
+
+					node<T>* operator&()
+					{
+						return cur;
+					}
+
+					T& operator*()
+					{
+						return cur->data;
+					}
+
+					bool operator !=(iterator _cmp)
+					{
+						return (cur != _cmp.cur);
+					}
+
+					//bool operator ==(iterator& _cmp)
+					bool operator ==(iterator _cmp)
+					{
+						return (cur == _cmp.cur);
+					}
+			};
+
+			T& operator[](int _idx)
+			{
+				iterator iter = begin();
+				for (int cnt = 0; cnt < _idx; cnt++)
+				{
+					++iter;
+				}
+				return *iter;
 			}
 
-			iterator operator++(int)
-			{
-				iterator temp = *this;
-				++* this;
-				return temp;
-			}
+			// -assign: delete all element & insert new elements.
+			void	assign(int _count, T& _data = 0);
+			void	assign(List& _list);
+			void	assign(iterator _first, iterator _last);
 
-			iterator& operator--()
-			{
-				cur = cur->prev;
-				return *this;
-			}
+			// -back: return last element.
+			T& back();
 
-			iterator operator--(int)
-			{
-				iterator temp = *this;
-				--* this;
-				return temp;
-			}
+			// -begin: return iterator of first element.
+			iterator begin() { return iterator(head->next); }
 
-			node<T>* operator&()
-			{
-				return cur;
-			}
+			// -cbegin: return const iterator of first element.
+			const iterator cbegin() { return iterator(head->next); }
 
-			T& operator*()
-			{
-				return cur->data;
-			}
+			// end: return iterator of tail(!= last element).
+			//		last element == --end()
+			iterator end() { return iterator(tail); }
 
-			bool operator !=(iterator _cmp)
-			{
-				return (cur != _cmp.cur);
-			}
+			// -cend: return const iterator of last element.
+			const iterator cend() { return iterator(tail); }
 
-			//bool operator ==(iterator& _cmp)
-			bool operator ==(iterator _cmp)
-			{
-				return (cur == _cmp.cur);
-			}
-		};
+			// -clear: delete all element.
+			void clear();
 
-		T& operator[](int _idx)
-		{
-			iterator iter = begin();
-			for (int cnt = 0; cnt < _idx; cnt++)
-			{
-				++iter;
-			}
-			return *iter;
-		}
+			// -erase: delete element or delete element of selected area.
+			void erase(iterator _iter);
+			void erase(iterator _first, iterator _last);
 
-		// -assign: delete all element & insert new elements.
-		void	assign(int _count, T& _data = 0);
-		void	assign(List& _list);
-		void	assign(iterator _first, iterator _last);
+			// -front: return first element.
+			T& front();
 
-		// -back: return last element.
-		T& back();
+			// insert: insert element or insert elements of selected area.
+			void insert(iterator _iter, T& _data);
 
-		// -begin: return iterator of first element.
-		iterator begin() { return iterator(head->next); }
+			// merge: delete element and insert element to List, sort asec, desc, etc.
 
-		// -cbegin: return const iterator of first element.
-		const iterator cbegin() { return iterator(head->next); }
+			// pop_back: delete last element.
+			void pop_back();
 
-		// end: return iterator of tail(!= last element).
-		//		last element == --end()
-		iterator end() { return iterator(tail); }
+			// pop_front: delete first element.
+			void pop_front();
 
-		// -cend: return const iterator of last element.
-		const iterator cend() { return iterator(tail); }
+			// push_back: insert element at last.
+			void push_back(T& _data);
 
-		// -clear: delete all element.
-		void clear();
+			// push_front: insert element at first.
+			void push_front(T& _data);
 
-		// -erase: delete element or delete element of selected area.
-		void erase(iterator _iter);
-		void erase(iterator _first, iterator _last);
+			// swap: swap element.
+			void swap(iterator _iter1, iterator _iter2);
 
-		// -front: return first element.
-		T& front();
+			// swap: swap elements with other List.
 
-		// insert: insert element or insert elements of selected area.
-		void insert(iterator _iter, T& _data);
+			// sort: sort asec, desc, etc.
+			void sort(iterator _first, iterator _last, bool(*_comparisonFunc)(T&, T&) = nullptr, size_t _dataSize = NULL);
 
-		// merge: delete element and insert element to List, sort asec, desc, etc.
+			// empty: return true or false.
+			bool		empty();
 
-		// pop_back: delete last element.
-		void pop_back();
+			// size: return element amount.
+			size_t		size();
 
-		// pop_front: delete first element.
-		void pop_front();
-
-		// push_back: insert element at last.
-		void push_back(T& _data);
-
-		// push_front: insert element at first.
-		void push_front(T& _data);
-
-		// swap: swap element.
-		void swap(iterator _iter1, iterator _iter2);
-
-		// swap: swap elements with other List.
-
-		// sort: sort asec, desc, etc.
-		void sort(iterator _first, iterator _last, bool(*_comparisonFunc)(T&, T&) = nullptr, size_t _dataSize = NULL);
-
-		// empty: return true or false.
-		bool		empty();
-
-		// size: return element amount.
-		size_t		size();
-
-		// -emplace: insert element.
-		void		emplace(T& _data);
+			// -emplace: insert element.
+			void		emplace(T& _data);
 
 
-		// max_size: return maximum List length. (Max allocate count)
-		// rbegin: return reversed iterator of first element. (= end)
-		// resize: resize.
-		// reverse: reverse List.
-		// sort: sort asec, desc, etc.
-		// splice: delete element and insert element at other List.
-		// unique: delete same element.
-		// -crbegin: return reversed const iterator of first element. (= cend)
-		// -crend : return reversed const iterator of last element. (= cbegin)
-		// -get_allocator: return copy of allocator.
+			// max_size: return maximum List length. (Max allocate count)
+			// rbegin: return reversed iterator of first element. (= end)
+			// resize: resize.
+			// reverse: reverse List.
+			// sort: sort asec, desc, etc.
+			// splice: delete element and insert element at other List.
+			// unique: delete same element.
+			// -crbegin: return reversed const iterator of first element. (= cend)
+			// -crend : return reversed const iterator of last element. (= cbegin)
+			// -get_allocator: return copy of allocator.
 
-		// -emplace_back: insert element. (pusb_back)
-		void emplace_back(T& _data);
+			// -emplace_back: insert element. (pusb_back)
+			void emplace_back(T& _data);
 
-		// -emplace_front: insert element. (push_front)
-		void emplace_front(T& _data);
+			// -emplace_front: insert element. (push_front)
+			void emplace_front(T& _data);
 	};
 
 	template<typename T>
@@ -731,6 +499,80 @@ namespace LL
 		push_back(_data);
 	}
 
+	///////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////
+
+
+	///////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////
+	// 
+	// Stack (Last-In, First-Out)
+	//
+	// STL Stack Member Function List
+	//
+	// empty: return true or false.
+	// size: return element amount.
+	// -top: return last element. (pop_back) - Stack Original Function
+	// push: insert element. (push_back)
+	// emplace: construct and insert element.
+	// pop: remove last element.
+	// swap: swap contents.
+	//
+	///////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////
+	template <typename T>
+	class Stack
+	{
+		private:
+			LL::List<T>* stackList;
+
+		public:
+			Stack() { stackList = new List<T>; };
+			~Stack() { delete stackList; };
+
+			T& top() { return stackList.back(); };
+			void	push(T& _data) { stackList.push_back(_data); };
+			void	pop() { stackList.pop_back(); };
+			size_t	size() { return stackList.size(); };
+			bool	empty() { return stackList.empty(); };
+	};
+	///////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////
+
+	///////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////
+	// 
+	// Queue (First-In, First-Out)
+	// 
+	// STL Queue Member Function List
+	//
+	// empty: return true or false.
+	// size: return element amount.
+	// -front: return first element. (pop_front) - Queue Original Function
+	// -back: return last element. (pop_back) - Queue Original Function
+	// push: insert element. (push_back)
+	// emplace: construct and insert element.
+	// pop: remove first element.
+	// swap: swap contents.
+	//
+	///////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////
+	template <typename T>
+	class Queue
+	{
+		private:
+			LL::List<T>* queueList;
+
+		public:
+			Queue() { queueList = new List<T>; };
+			~Queue() { delete queueList; };
+			T& front() { return *queueList.begin(); };
+			T& back() { return queueList.back(); };
+			void	push(T& _data) { queueList.push_back(_data); };
+			void	pop() { queueList.pop_front(); };
+			size_t	size() { return queueList.size(); };
+			bool	empty() { return queueList.empty(); };
+	};
 	///////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////
 }
