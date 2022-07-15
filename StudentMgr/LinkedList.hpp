@@ -9,7 +9,7 @@ namespace LL
 		node*	prev;
 		node*	next;
 
-		node() : data(), prev(nullptr), next(nullptr) {};
+		node() : data(T()), prev(nullptr), next(nullptr) {};
 	};
 
 	///////////////////////////////////////////////////////////////
@@ -186,7 +186,7 @@ namespace LL
 			// swap: swap elements with other List.
 
 			// sort: sort asec, desc, etc.
-			void sort(iterator _first, iterator _last, bool(*_comparisonFunc)(T&, T&) = nullptr, size_t _dataSize = NULL);
+			void sort(iterator _first, iterator _last, bool(*_comparisonFunc)(T&, T&));
 
 			// empty: return true or false.
 			bool		empty();
@@ -374,15 +374,6 @@ namespace LL
 	template<typename T>
 	inline void List<T>::swap(iterator _iter1, iterator _iter2)
 	{
-		// iter1->prev <-> iter2->prev
-		// iter1->next <-> iter2->next
-		// 
-		// (iter1->prev)->next = iter2
-		// (iter1->next)->prev = iter2
-		// 
-		// (iter2->prev)->next = iter1
-		// (iter2->next)->prev = iter1
-
 		node<T>* node1 = &_iter1;
 		node<T>* node2 = &_iter2;
 
@@ -391,87 +382,125 @@ namespace LL
 		node<T>* prev_2 = node2->prev;
 		node<T>* next_2 = node2->next;
 
-		// iter1->prev <-> iter2->prev
-		// iter1->next <-> iter2->next
-		node1->prev = node2->prev;
-		node1->next = node2->next;
+		if ((next_1 != node2) && (prev_1 != node2))
+		{
+			// node2 move
+			node2->prev = node1->prev;
+			node2->next = node1->next;
+			prev_1->next = node2;
+			next_1->prev = node2;
 
-		// (iter1->prev)->next = iter2
-		// (iter1->next)->prev = iter2
-		prev_1->next = node2;
-		next_1->prev = node2;
+			// node1 move
+			node1->prev = prev_2;
+			node1->next = next_2;
+			prev_2->next = node1;
+			next_2->prev = node1;
+		}
+		else
+		{
+			// node2 move
+			node2->prev = node1->prev;
+			prev_1->next = node2;
+			node1->prev = node2;
+			node2->next = node1;
 
+			// node1 move
+			next_2->prev = node1;
+			node1->next = next_2;
+		}
 
-		// iter1->prev <-> iter2->prev
-		// iter1->next <-> iter2->next
-		node2->prev = prev_1;
-		node2->next = next_1;
-
-		// (iter2->prev)->next = iter1
-		// (iter2->next)->prev = iter1
-		prev_2->next = node1;
-		next_2->prev = node1;
 	}
 
 	template<typename T>
-	inline void List<T>::sort(iterator _first, iterator _last, bool(*_comparisonFunc)(T&, T&), size_t _dataSize)
+	inline void List<T>::sort(iterator _first, iterator _last, bool(*_comparisonFunc)(T&, T&))
 	{
-		iterator pivot = _first;
-		T& pivotVal = *pivot;
+		bool bTest = false;
+		// Qsort Test
+		//if (false)
+		//{
+		//	iterator pivot = _first;
+		//	T& pivotVal = *pivot;
 
-		iterator left = _first;
-		left++;
+		//	iterator left = _first;
+		//	left++;
 
-		iterator borderLeft = left;
-		iterator right = _last;
-		if (_last == end())
+		//	iterator borderLeft = left;
+		//	borderLeft++;
+		//	iterator right = _last;
+		//	if (_last == end())
+		//	{
+		//		right--;
+		//	}
+
+		//	if (_comparisonFunc == nullptr)
+		//	{
+		//		_comparisonFunc = [](T& _a, T& _b)
+		//		{
+		//			return _a < _b;
+		//		};
+		//	}
+
+		//	int leftMoveCnt = 0;
+		//	int rightMoveCnt = 0;
+		//	if (_dataSize == NULL)
+		//	{
+		//		_dataSize = dataSize;
+		//	}
+
+		//	while (((leftMoveCnt + rightMoveCnt) < (_dataSize - 1)) && (right != borderLeft))
+		//	{
+		//		//while ((left != _last) && (pivotVal < *left))
+		//		while ((left != _last) && _comparisonFunc(*left, pivotVal))
+		//		{
+		//			left++;
+		//			leftMoveCnt++;
+		//		}
+
+		//		//while ((right != pivot) && (*right < pivotVal))
+		//		while ((right != borderLeft) && _comparisonFunc(pivotVal, *right))
+		//		{
+		//			right--;
+		//			rightMoveCnt++;
+		//		}
+
+		//		if ((leftMoveCnt + rightMoveCnt) < (_dataSize - 1))
+		//		{
+		//			swap(left, right);
+		//		}
+		//	}
+
+		//	if ((leftMoveCnt + rightMoveCnt) >= (_dataSize - 1))
+		//	{
+		//		swap(pivot, right);
+		//	}
+		//	iterator last = pivot;
+		//	iterator first = pivot;
+		//	sort(right, --last, _comparisonFunc, (_dataSize - rightMoveCnt - 1));
+		//	sort(++first, _last, _comparisonFunc, (_dataSize - leftMoveCnt - 1));
+		//}
+		
+		// Buble sort
+		
+		if (!bTest)
 		{
-			right--;
-		}
+			iterator IterlastElement = _last;
+			IterlastElement--;
 
-		if (_comparisonFunc == nullptr)
-		{
-			_comparisonFunc = [](T& _a, T& _b)
+			for (iterator iter = _first; iter != _last; iter++)
 			{
-				return _a < _b;
-			};
-		}
-
-		int leftMoveCnt = 0;
-		int rightMoveCnt = 0;
-		if (_dataSize == NULL)
-		{
-			_dataSize = dataSize;
-		}
-
-		while ((leftMoveCnt + rightMoveCnt) < (_dataSize - 1))
-		{
-			//while ((left != _last) && (pivotVal < *left))
-			while ((left != _last) && _comparisonFunc(*left, pivotVal))
-			{
-				left++;
-				leftMoveCnt++;
+				for (iterator iter2 = _first; iter2 != IterlastElement; iter2++)
+				{
+					iterator next = iter2;
+					next++;
+					if (!_comparisonFunc(*iter2, *next))
+					{
+						T temp = *iter2;
+						*iter2 = *next;
+						*next = temp;
+					}
+				}
 			}
-
-			//while ((right != pivot) && (*right < pivotVal))
-			while ((right != borderLeft) && _comparisonFunc(pivotVal, *right))
-			{
-				right--;
-				rightMoveCnt++;
-			}
-
-			if ((leftMoveCnt + rightMoveCnt) < (_dataSize - 1))
-			{
-				swap(left, right);
-			}
 		}
-
-		swap(pivot, right);
-
-		sort(right, --pivot, _comparisonFunc, (_dataSize - rightMoveCnt - 1));
-		sort(++pivot, _last, _comparisonFunc, (_dataSize - leftMoveCnt - 1));
-
-		// left가 last까지 도달하고, right가 first 까지 도달하면 정렬할 필요가 없음. 다 같은 값
 	}
 
 	template<typename T>
@@ -530,11 +559,11 @@ namespace LL
 			Stack() { stackList = new List<T>; };
 			~Stack() { delete stackList; };
 
-			T& top() { return stackList.back(); };
-			void	push(T& _data) { stackList.push_back(_data); };
-			void	pop() { stackList.pop_back(); };
-			size_t	size() { return stackList.size(); };
-			bool	empty() { return stackList.empty(); };
+			T& top() { return stackList->back(); };
+			void	push(T& _data) { stackList->push_back(_data); };
+			void	pop() { stackList->pop_back(); };
+			size_t	size() { return stackList->size(); };
+			bool	empty() { return stackList->empty(); };
 	};
 	///////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////
@@ -566,12 +595,13 @@ namespace LL
 		public:
 			Queue() { queueList = new List<T>; };
 			~Queue() { delete queueList; };
-			T& front() { return *queueList.begin(); };
-			T& back() { return queueList.back(); };
-			void	push(T& _data) { queueList.push_back(_data); };
-			void	pop() { queueList.pop_front(); };
-			size_t	size() { return queueList.size(); };
-			bool	empty() { return queueList.empty(); };
+
+			T& front() { return *queueList->begin(); };
+			T& back() { return queueList->back(); };
+			void	push(T& _data) { queueList->push_back(_data); };
+			void	pop() { queueList->pop_front(); };
+			size_t	size() { return queueList->size(); };
+			bool	empty() { return queueList->empty(); };
 	};
 	///////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////

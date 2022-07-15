@@ -21,6 +21,9 @@
     <ClCompile Include="FileMgr.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="StudentMgr.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -32,5 +35,11 @@
     <ClInclude Include="LinkedList.hpp">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="StudentMgr.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>
