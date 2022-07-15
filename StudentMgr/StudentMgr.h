@@ -51,6 +51,7 @@ public:
 	std::string getPhone() { return phone; };
 	int getScore(ESUBJECT _subject);
 	bool eraseSubject(ESUBJECT _subject);
+	// return iterator of finded subject.
 	LL::List<subject>::iterator findSubject(ESUBJECT _subject);	
 };
 
@@ -76,5 +77,13 @@ public:
 	LL::List<student>::iterator findID(int _id);
 	LL::List<student>::iterator findName(std::string _name);
 	
+	// to do: function list
+	// score sort, id sort, name sort, age sort
+	// file save, write data, file load, read data
+	// print data
+	// create dummy data for debug.
+	// ui
+	// control
+
 };
 

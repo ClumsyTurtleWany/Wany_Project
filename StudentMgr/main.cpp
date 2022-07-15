@@ -197,6 +197,8 @@ void studentMgrTest()
 	std::cout << "Math: " << stuUnknown.getScore(ESUBJECT::EN_MATH) << ", Kor: "
 		<< stuUnknown.getScore(ESUBJECT::EN_KOR) << ", Eng: " << stuUnknown.getScore(ESUBJECT::EN_ENG) << std::endl;
 
+	studentManager.eraseStudent(2);
+
 	int a = 0;
 }
 

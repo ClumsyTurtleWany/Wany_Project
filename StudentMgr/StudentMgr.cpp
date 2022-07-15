@@ -136,13 +136,16 @@ LL::List<student>::iterator studentMgr::findName(std::string _name)
 
 student& studentMgr::getStudent(int _id)
 {
+	bool bFind = false;
 	auto it = findID(_id);
 	if (it != nullptr)
 	{
+		bFind = true;
 		return *it;
 	}
 	else
 	{
-		//return nullptr;
+		student temp;
+		return temp;
 	}
 }
