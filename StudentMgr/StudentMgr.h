@@ -1,7 +1,9 @@
 #pragma once
 #include <string>
 #include "LinkedList.hpp"
-
+#include <iostream>
+#include <list>
+#include <algorithm>
 
 enum class ESUBJECT
 {
@@ -29,19 +31,17 @@ private:
 	std::string name;
 	int age;
 	std::string phone;
-	LL::List<subject>* subjects;	
+	LL::List<subject> subjects;	
 
 public:
-	student(std::string _name = "", int _age = 0, std::string _phone = "") : name(_name), age(_age), phone(_phone) 
-	{
-		subjects = new LL::List<subject>;
-	};
-	~student() { delete subjects; };
+	student(std::string _name = "", int _age = 0, std::string _phone = "", int _id = NULL) : name(_name), age(_age), phone(_phone), id(NULL) {};
+
+	~student() {};
 
 	void setName(std::string _str) { name = _str; };
 	void setAge(int _age) { age = _age; };
 	void setPhone(std::string _num) { phone = _num; };
-	void setScore(subject& _subject) { subjects->push_back(_subject); };
+	void setScore(subject& _subject) { subjects.push_back(_subject); };
 	void setScore(ESUBJECT _subject, int _score);
 	void setID(int _id) { id = _id; };
 
@@ -58,27 +58,31 @@ public:
 class studentMgr
 {
 private:
-	LL::List<student>* studentList;
+	LL::List<student> studentList;
 	int cnt_id = 0;
 
 public:
-	studentMgr()
-	{
-		studentList = new LL::List<student>;
-	}
-	~studentMgr()
-	{
-		delete studentList;
-	}
+	studentMgr() {};
+	~studentMgr() {};
 
 	void insertStudent(student& _student);
 	bool eraseStudent(int _id);
-	student& getStudent(int _id);
 	LL::List<student>::iterator findID(int _id);
 	LL::List<student>::iterator findName(std::string _name);
+	student& getStudent(int _id);
 	
 	// to do: function list
 	// score sort, id sort, name sort, age sort
+
+	// sort by subject score.
+	// default: decending. (false: decending, true: ascending)
+	void sortScore(ESUBJECT _subject, bool _ascending = false);
+
+
+	//void sortID(bool _ascending = true);
+	//void sortName(bool _ascending = true);
+	//void sortAge(bool _ascending = true);
+
 	// file save, write data, file load, read data
 	// print data
 	// create dummy data for debug.
@@ -86,4 +90,3 @@ public:
 	// control
 
 };
-

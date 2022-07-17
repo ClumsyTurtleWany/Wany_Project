@@ -9,8 +9,8 @@
 LL::List<subject>::iterator student::findSubject(ESUBJECT _subject)
 {
 	bool bFind = false;
-	size_t listSize = subjects->size();
-	for (auto it = subjects->begin(); it != subjects->end(); it++)
+	size_t listSize = subjects.size();
+	for (auto it = subjects.begin(); it != subjects.end(); it++)
 	{
 		subject temp = *it;
 		if (temp.sub == _subject)
@@ -38,7 +38,7 @@ void student::setScore(ESUBJECT _subject, int _score)
 	else
 	{
 		subject* temp = new subject(_subject, _score);
-		subjects->push_back(*temp);
+		subjects.push_back(*temp);
 	}
 }
 
@@ -61,7 +61,7 @@ bool student::eraseSubject(ESUBJECT _subject)
 	auto it = findSubject(_subject);
 	if (it != nullptr)
 	{
-		subjects->erase(it);
+		subjects.erase(it);
 		return true;
 	}
 	else
@@ -78,8 +78,9 @@ bool student::eraseSubject(ESUBJECT _subject)
 
 void studentMgr::insertStudent(student& _student)
 {
+	//student* newStudent = new student;
 	_student.setID(++cnt_id);
-	studentList->push_back(_student);
+	studentList.push_back(_student);
 }
 
 bool studentMgr::eraseStudent(int _id)
@@ -87,7 +88,7 @@ bool studentMgr::eraseStudent(int _id)
 	auto it = findID(_id);
 	if (it != nullptr)
 	{
-		studentList->erase(it);
+		studentList.erase(it);
 		return true;
 	}
 	else
@@ -99,8 +100,8 @@ bool studentMgr::eraseStudent(int _id)
 LL::List<student>::iterator studentMgr::findID(int _id)
 {
 	bool bFind = false;
-	size_t listSize = studentList->size();
-	for (auto it = studentList->begin(); it != studentList->end(); it++)
+	size_t listSize = studentList.size();
+	for (auto it = studentList.begin(); it != studentList.end(); it++)
 	{
 		if ((*it).getID() == _id)
 		{
@@ -118,8 +119,8 @@ LL::List<student>::iterator studentMgr::findID(int _id)
 LL::List<student>::iterator studentMgr::findName(std::string _name)
 {
 	bool bFind = false;
-	size_t listSize = studentList->size();
-	for (auto it = studentList->begin(); it != studentList->end(); it++)
+	size_t listSize = studentList.size();
+	for (auto it = studentList.begin(); it != studentList.end(); it++)
 	{
 		if ((*it).getName() == _name)
 		{
@@ -149,3 +150,24 @@ student& studentMgr::getStudent(int _id)
 		return temp;
 	}
 }
+
+void studentMgr::sortScore(ESUBJECT _subject, bool _ascending)
+{
+	if (!_ascending)
+	{
+		studentList.sort(studentList.begin(), studentList.end(),
+			[_subject](student& _a, student& _b)
+			{
+				return _a.getScore(_subject) > _b.getScore(_subject);
+			});
+	}
+	else
+	{
+		studentList.sort(studentList.begin(), studentList.end(),
+			[_subject](student& _a, student& _b)
+			{
+				return _a.getScore(_subject) > _b.getScore(_subject);
+			});
+	}
+}
+

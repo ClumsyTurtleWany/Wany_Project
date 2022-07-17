@@ -1,4 +1,6 @@
 #pragma once
+#include <iostream>
+#include <functional>
 
 namespace LL
 {
@@ -54,7 +56,7 @@ namespace LL
 	///////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////
 	template <typename T>
-	class List //: public LinkedListBase<T>
+	class List
 	{
 		private:
 			node<T>*	head;
@@ -132,6 +134,12 @@ namespace LL
 				return *iter;
 			}
 
+			// solved shallow copy.
+			void operator=(const List& _list)
+			{
+				this->assign(_list.head->next, _list.tail);
+			}
+
 			// -assign: delete all element & insert new elements.
 			void	assign(int _count, T& _data = 0);
 			void	assign(List& _list);
@@ -187,6 +195,7 @@ namespace LL
 
 			// sort: sort asec, desc, etc.
 			void sort(iterator _first, iterator _last, bool(*_comparisonFunc)(T&, T&));
+			void sort(iterator _first, iterator _last, std::function<bool(T&, T&)> _comparisonFunc);
 
 			// empty: return true or false.
 			bool		empty();
@@ -196,7 +205,6 @@ namespace LL
 
 			// -emplace: insert element.
 			void		emplace(T& _data);
-
 
 			// max_size: return maximum List length. (Max allocate count)
 			// rbegin: return reversed iterator of first element. (= end)
@@ -263,6 +271,7 @@ namespace LL
 		{
 			pop_back();
 		}
+		dataSize = 0;
 	}
 
 	template<typename T>
@@ -280,11 +289,19 @@ namespace LL
 	template<typename T>
 	inline void List<T>::erase(iterator _iter)
 	{
+		if (_iter == nullptr)
+		{
+			return;
+		}
+
 		node<T>* selectedNode = &_iter;
 		node<T>* prevNode = selectedNode->prev;
 		node<T>* nextNode = selectedNode->next;
 		prevNode->next = nextNode;
 		nextNode->prev = prevNode;
+
+		selectedNode->prev = nullptr;
+		selectedNode->next = nullptr;
 		delete selectedNode;
 		dataSize--;
 	}
@@ -342,7 +359,9 @@ namespace LL
 	template<typename T>
 	inline List<T>::~List()
 	{
+		std::cout << "List destructor" << std::endl;
 		clear();
+		dataSize = 0;
 		delete head;
 		delete tail;
 	}
@@ -412,92 +431,59 @@ namespace LL
 	}
 
 	template<typename T>
-	inline void List<T>::sort(iterator _first, iterator _last, bool(*_comparisonFunc)(T&, T&))
+	inline void List<T>::sort(iterator _first, iterator _last, bool (*_comparisonFunc)(T&, T&))
 	{
 		bool bTest = false;
-		// Qsort Test
-		//if (false)
-		//{
-		//	iterator pivot = _first;
-		//	T& pivotVal = *pivot;
-
-		//	iterator left = _first;
-		//	left++;
-
-		//	iterator borderLeft = left;
-		//	borderLeft++;
-		//	iterator right = _last;
-		//	if (_last == end())
-		//	{
-		//		right--;
-		//	}
-
-		//	if (_comparisonFunc == nullptr)
-		//	{
-		//		_comparisonFunc = [](T& _a, T& _b)
-		//		{
-		//			return _a < _b;
-		//		};
-		//	}
-
-		//	int leftMoveCnt = 0;
-		//	int rightMoveCnt = 0;
-		//	if (_dataSize == NULL)
-		//	{
-		//		_dataSize = dataSize;
-		//	}
-
-		//	while (((leftMoveCnt + rightMoveCnt) < (_dataSize - 1)) && (right != borderLeft))
-		//	{
-		//		//while ((left != _last) && (pivotVal < *left))
-		//		while ((left != _last) && _comparisonFunc(*left, pivotVal))
-		//		{
-		//			left++;
-		//			leftMoveCnt++;
-		//		}
-
-		//		//while ((right != pivot) && (*right < pivotVal))
-		//		while ((right != borderLeft) && _comparisonFunc(pivotVal, *right))
-		//		{
-		//			right--;
-		//			rightMoveCnt++;
-		//		}
-
-		//		if ((leftMoveCnt + rightMoveCnt) < (_dataSize - 1))
-		//		{
-		//			swap(left, right);
-		//		}
-		//	}
-
-		//	if ((leftMoveCnt + rightMoveCnt) >= (_dataSize - 1))
-		//	{
-		//		swap(pivot, right);
-		//	}
-		//	iterator last = pivot;
-		//	iterator first = pivot;
-		//	sort(right, --last, _comparisonFunc, (_dataSize - rightMoveCnt - 1));
-		//	sort(++first, _last, _comparisonFunc, (_dataSize - leftMoveCnt - 1));
-		//}
 		
 		// Buble sort
 		
-		if (!bTest)
-		{
-			iterator IterlastElement = _last;
-			IterlastElement--;
+		iterator IterlastElement = _last;
+		IterlastElement--;
 
-			for (iterator iter = _first; iter != _last; iter++)
+		for (iterator iter = _first; iter != _last; iter++)
+		{
+			for (iterator iter2 = _first; iter2 != IterlastElement; iter2++)
 			{
-				for (iterator iter2 = _first; iter2 != IterlastElement; iter2++)
+				iterator next = iter2;
+				next++;
+				if (!_comparisonFunc(*iter2, *next))
 				{
-					iterator next = iter2;
-					next++;
-					if (!_comparisonFunc(*iter2, *next))
-					{
-						T temp = *iter2;
-						*iter2 = *next;
-						*next = temp;
-					}
+					/*T temp = *iter2;
+					*iter2 = *next;
+					*next = temp;*/
+					T* temp = new T;
+					*temp = *iter2;
+					*iter2 = *next;
+					*next = *temp;
+					delete temp;
+				}
+			}
+		}
+	}
+
+	template<typename T>
+	inline void List<T>::sort(iterator _first, iterator _last, std::function<bool(T&, T&)> _comparisonFunc)
+	{
+		bool bTest = false;
+
+		// Buble sort
+
+		iterator IterlastElement = _last;
+		IterlastElement--;
+
+		for (iterator iter = _first; iter != _last; iter++)
+		{
+			for (iterator iter2 = _first; iter2 != IterlastElement; iter2++)
+			{
+				iterator next = iter2;
+				next++;
+				if (!_comparisonFunc(*iter2, *next))
+				{
+					T* temp = new T;
+					*temp = *iter2;
+					*iter2 = *next;
+					*next = *temp;
+					delete temp;
 				}
 			}
 		}

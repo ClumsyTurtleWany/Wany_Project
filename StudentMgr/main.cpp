@@ -3,6 +3,7 @@
 #include "LinkedList.hpp"
 #include <string>
 #include "StudentMgr.h"
+#include <list>
 
 bool asce(int& _a, int& _b)
 {
@@ -182,7 +183,7 @@ void studentMgrTest()
 	studentManager.insertStudent(stuB);
 	studentManager.insertStudent(stuC);
 
-	auto stuUnknown = studentManager.getStudent(2);
+	student& stuUnknown = studentManager.getStudent(2);
 
 	std::string name = stuUnknown.getName();
 	int age = stuUnknown.getAge();
@@ -197,7 +198,7 @@ void studentMgrTest()
 	std::cout << "Math: " << stuUnknown.getScore(ESUBJECT::EN_MATH) << ", Kor: "
 		<< stuUnknown.getScore(ESUBJECT::EN_KOR) << ", Eng: " << stuUnknown.getScore(ESUBJECT::EN_ENG) << std::endl;
 
-	studentManager.eraseStudent(2);
+	studentManager.sortScore(ESUBJECT::EN_KOR);
 
 	int a = 0;
 }
