@@ -124,16 +124,6 @@ namespace LL
 					}
 			};
 
-			T& operator[](int _idx)
-			{
-				iterator iter = begin();
-				for (int cnt = 0; cnt < _idx; cnt++)
-				{
-					++iter;
-				}
-				return *iter;
-			}
-
 			// solved shallow copy.
 			void operator=(const List& _list)
 			{
@@ -194,7 +184,7 @@ namespace LL
 			// swap: swap elements with other List.
 
 			// sort: sort asec, desc, etc.
-			void sort(iterator _first, iterator _last, bool(*_comparisonFunc)(T&, T&));
+			//void sort(iterator _first, iterator _last, bool(*_comparisonFunc)(T&, T&));
 			void sort(iterator _first, iterator _last, std::function<bool(T&, T&)> _comparisonFunc);
 
 			// empty: return true or false.
@@ -359,7 +349,6 @@ namespace LL
 	template<typename T>
 	inline List<T>::~List()
 	{
-		std::cout << "List destructor" << std::endl;
 		clear();
 		dataSize = 0;
 		delete head;
@@ -430,36 +419,36 @@ namespace LL
 
 	}
 
-	template<typename T>
-	inline void List<T>::sort(iterator _first, iterator _last, bool (*_comparisonFunc)(T&, T&))
-	{
-		bool bTest = false;
-		
-		// Buble sort
-		
-		iterator IterlastElement = _last;
-		IterlastElement--;
+	//template<typename T>
+	//inline void List<T>::sort(iterator _first, iterator _last, bool (*_comparisonFunc)(T&, T&))
+	//{
+	//	bool bTest = false;
+	//	
+	//	// Buble sort
+	//	
+	//	iterator IterlastElement = _last;
+	//	IterlastElement--;
 
-		for (iterator iter = _first; iter != _last; iter++)
-		{
-			for (iterator iter2 = _first; iter2 != IterlastElement; iter2++)
-			{
-				iterator next = iter2;
-				next++;
-				if (!_comparisonFunc(*iter2, *next))
-				{
-					/*T temp = *iter2;
-					*iter2 = *next;
-					*next = temp;*/
-					T* temp = new T;
-					*temp = *iter2;
-					*iter2 = *next;
-					*next = *temp;
-					delete temp;
-				}
-			}
-		}
-	}
+	//	for (iterator iter = _first; iter != _last; iter++)
+	//	{
+	//		for (iterator iter2 = _first; iter2 != IterlastElement; iter2++)
+	//		{
+	//			iterator next = iter2;
+	//			next++;
+	//			if (!_comparisonFunc(*iter2, *next))
+	//			{
+	//				/*T temp = *iter2;
+	//				*iter2 = *next;
+	//				*next = temp;*/
+	//				T* temp = new T;
+	//				*temp = *iter2;
+	//				*iter2 = *next;
+	//				*next = *temp;
+	//				delete temp;
+	//			}
+	//		}
+	//	}
+	//}
 
 	template<typename T>
 	inline void List<T>::sort(iterator _first, iterator _last, std::function<bool(T&, T&)> _comparisonFunc)
@@ -553,6 +542,8 @@ namespace LL
 	};
 	///////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////
+	
+
 
 	///////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////
@@ -591,4 +582,5 @@ namespace LL
 	};
 	///////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////
+	
 }

@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="student">
-    <Position X="5" Y="0.5" Width="1.5" />
+    <Position X="5.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>BAAAAEAAAAAAQEAAAAAAAAAAAAAEAABkAAIEIAAAAAA=</HashCode>
-      <FileName>main.cpp</FileName>
+      <HashCode>RAAAAEAAAEAAQECAAAIAAAAAAAAECADEAAAsAAAACgA=</HashCode>
+      <FileName>StudentMgr.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="LL::List&lt;T&gt;">
-    <Position X="0.5" Y="0.5" Width="2" />
+    <Position X="1" Y="0.5" Width="2" />
     <Compartments>
       <Compartment Name="Nested Types" Collapsed="false" />
     </Compartments>
@@ -20,30 +20,77 @@
       </Class>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AEAAACECgBBEgABAgJEIAAASEAEAAAAAAQEAAgAAQgI=</HashCode>
+      <HashCode>AEAAACECgBBEgABAgJEIAAASEAAAAAAAAQEgAgAAQgI=</HashCode>
       <FileName>LinkedList.hpp</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="LL::Stack&lt;T&gt;">
-    <Position X="9" Y="0.5" Width="1.5" />
+    <Position X="9.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAACIAAAIgCgAAAAgAAAAAIAAAAAAA=</HashCode>
       <FileName>LinkedList.hpp</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="LL::Queue&lt;T&gt;">
-    <Position X="7" Y="0.5" Width="1.5" />
+    <Position X="7.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAEEAADAAAAAAAIAAAIACQAAAAAAAAAAIAAAAAAA=</HashCode>
       <FileName>LinkedList.hpp</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="FileMgr">
+    <Position X="11.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAICAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FileMgr.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="studentMgr">
+    <Position X="5.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIACSAIAAgAIAAIAAAABQAAAQIEAAAQgAQAAAAAA=</HashCode>
+      <FileName>StudentMgr.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UI">
+    <Position X="11.5" Y="3.75" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="UI::EMAINMENU" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>UI.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="UI::ESORTMODE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>UI.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAAgCAAgABIAQBAAEAEAAAAgAAAEAA=</HashCode>
+      <FileName>UI.h</FileName>
+    </TypeIdentifier>
+  </Class>
   <Struct Name="LL::node&lt;T&gt;">
-    <Position X="3" Y="0.5" Width="1.5" />
+    <Position X="3.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABQAAIAAAA=</HashCode>
       <FileName>LinkedList.hpp</FileName>
     </TypeIdentifier>
   </Struct>
+  <Struct Name="subject">
+    <Position X="9.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAAAAAAAIAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>StudentMgr.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Enum Name="ESUBJECT">
+    <Position X="7.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIEAAAAABAAAAAAAAAAAAAAAEAAAAAAAgAACAAAAAA=</HashCode>
+      <FileName>StudentMgr.h</FileName>
+    </TypeIdentifier>
+  </Enum>
   <Font Name="맑은 고딕" Size="9" />
 </ClassDiagram>

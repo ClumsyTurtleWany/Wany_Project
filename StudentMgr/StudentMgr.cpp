@@ -56,6 +56,24 @@ int student::getScore(ESUBJECT _subject)
 	}
 }
 
+int student::getTotalScore()
+{
+	int total = 0;
+	total += getScore(ESUBJECT::EN_KOR);
+	total += getScore(ESUBJECT::EN_ENG);
+	total += getScore(ESUBJECT::EN_MATH);
+	total += getScore(ESUBJECT::EN_SOCI);
+	total += getScore(ESUBJECT::EN_SCI);
+	return total;
+}
+
+double student::getAverageScore()
+{
+	double total = static_cast<double>(getTotalScore());
+	size_t size = subjects.size();
+	return (total / size);
+}
+
 bool student::eraseSubject(ESUBJECT _subject)
 {
 	auto it = findSubject(_subject);
@@ -144,11 +162,21 @@ student& studentMgr::getStudent(int _id)
 		bFind = true;
 		return *it;
 	}
-	else
-	{
-		student temp;
-		return temp;
-	}
+}
+
+LL::List<student>::iterator studentMgr::begin()
+{
+	return studentList.begin();
+}
+
+LL::List<student>::iterator studentMgr::end()
+{
+	return studentList.end();
+}
+
+const size_t studentMgr::getSize()
+{
+	return studentList.size();
 }
 
 void studentMgr::sortScore(ESUBJECT _subject, bool _ascending)
@@ -166,8 +194,69 @@ void studentMgr::sortScore(ESUBJECT _subject, bool _ascending)
 		studentList.sort(studentList.begin(), studentList.end(),
 			[_subject](student& _a, student& _b)
 			{
-				return _a.getScore(_subject) > _b.getScore(_subject);
+				return _a.getScore(_subject) < _b.getScore(_subject);
 			});
 	}
 }
+
+void studentMgr::sortID(bool _ascending)
+{
+	if (!_ascending)
+	{
+		studentList.sort(studentList.begin(), studentList.end(),
+			[](student& _a, student& _b)
+			{
+				return _a.getID() > _b.getID();
+			});
+	}
+	else
+	{
+		studentList.sort(studentList.begin(), studentList.end(),
+			[](student& _a, student& _b)
+			{
+				return _a.getID() < _b.getID();
+			});
+	}
+}
+
+void studentMgr::sortName(bool _ascending)
+{
+	if (!_ascending)
+	{
+		studentList.sort(studentList.begin(), studentList.end(),
+			[](student& _a, student& _b)
+			{
+				return _a.getName() > _b.getName();
+			});
+	}
+	else
+	{
+		studentList.sort(studentList.begin(), studentList.end(),
+			[](student& _a, student& _b)
+			{
+				return _a.getName() < _b.getName();
+			});
+	}
+}
+
+void studentMgr::sortAge(bool _ascending)
+{
+	if (!_ascending)
+	{
+		studentList.sort(studentList.begin(), studentList.end(),
+			[](student& _a, student& _b)
+			{
+				return _a.getAge() > _b.getAge();
+			});
+	}
+	else
+	{
+		studentList.sort(studentList.begin(), studentList.end(),
+			[](student& _a, student& _b)
+			{
+				return _a.getAge() < _b.getAge();
+			});
+	}
+}
+
 
