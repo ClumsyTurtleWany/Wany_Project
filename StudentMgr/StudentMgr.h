@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
-#include <cstdlib>
-#include <ctime>
+#include <fstream>
 #include "LinkedList.hpp"
 
 enum class ESUBJECT
@@ -66,6 +65,7 @@ public:
 	bool eraseStudent(int _id);
 	LL::List<student>::iterator findID(int _id);
 	LL::List<student>::iterator findName(std::string _name);
+	bool findNameAll(std::string _name, LL::List<student>& _list);
 	student& getStudent(int _id);
 
 	LL::List<student>::iterator begin();
@@ -88,4 +88,9 @@ public:
 	// sort by age.
 	// default: ascending. (true: ascending, false: decending)
 	void sortAge(bool _ascending = true);
+
+	// File Management
+	bool saveFile(std::string _name);
+	bool loadFile(std::string _name);
+	// findFile
 };

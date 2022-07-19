@@ -1,22 +1,239 @@
 #include "UI.h"
 
-void UI::printData()
+void UI::initialize()
+{
+	width_ID = 5;
+	width_Name = 7;
+	width_Age = 6;
+	width_Kor = 6;
+	width_Eng = 6;
+	width_Math = 6;
+	width_Soci = 6;
+	width_Sci = 6;
+	width_Total = 7;
+	width_Aver = 7;
+	offset_x = 1;
+
+	totalSize = width_ID + width_Name + width_Age + width_Kor + width_Eng + width_Math + width_Soci + width_Sci + width_Total + width_Aver;
+
+	initializeMenu();
+}
+
+void UI::initializeMenu()
+{
+	mainMenu = new menu[EMAINMENU::SIZE];
+	mainMenu[EMAINMENU::EN_INSERT_NEW_STUDENT].key = std::to_string(EMAINMENU::EN_INSERT_NEW_STUDENT);
+	mainMenu[EMAINMENU::EN_INSERT_NEW_STUDENT].name = "Insert Student";
+
+	mainMenu[EMAINMENU::EN_ERASE_STUDENT].key = std::to_string(EMAINMENU::EN_ERASE_STUDENT);
+	mainMenu[EMAINMENU::EN_ERASE_STUDENT].name = "Erase Student";
+
+	mainMenu[EMAINMENU::EN_FIND_STUDENT].key = std::to_string(EMAINMENU::EN_FIND_STUDENT);
+	mainMenu[EMAINMENU::EN_FIND_STUDENT].name = "Find Student";
+
+	mainMenu[EMAINMENU::EN_SORT_STUDENT].key = std::to_string(EMAINMENU::EN_SORT_STUDENT);
+	mainMenu[EMAINMENU::EN_SORT_STUDENT].name = "Sort Student";
+
+	mainMenu[EMAINMENU::EN_MAKE_DUMMY].key = std::to_string(EMAINMENU::EN_MAKE_DUMMY);
+	mainMenu[EMAINMENU::EN_MAKE_DUMMY].name = "Make Dummy Student";
+
+	mainMenu[EMAINMENU::EN_SAVE_FILE].key = std::to_string(EMAINMENU::EN_SAVE_FILE);
+	mainMenu[EMAINMENU::EN_SAVE_FILE].name = "Save File";
+
+	mainMenu[EMAINMENU::EN_LOAD_FILE].key = std::to_string(EMAINMENU::EN_LOAD_FILE);
+	mainMenu[EMAINMENU::EN_LOAD_FILE].name = "Load File";
+
+	mainMenu[EMAINMENU::EN_EXIT].key = std::to_string(EMAINMENU::EN_EXIT);
+	mainMenu[EMAINMENU::EN_EXIT].name = "Exit";
+}
+
+void UI::releaseMenu()
+{
+	delete[] mainMenu;
+}
+
+void UI::printSingleLine()
+{
+	printOffset();
+	for (int i = 0; i < totalSize; i++)
+	{
+		std::cout << "-";
+	}
+	std::cout << std::endl;
+}
+
+void UI::printDoubleLine()
+{
+	printOffset();
+	for (int i = 0; i < totalSize; i++)
+	{
+		std::cout << "=";
+	}
+	std::cout << std::endl;
+}
+
+void UI::printOffset()
+{
+	for (int i = 0; i < offset_x; i++)
+	{
+		std::cout << " ";
+	}
+}
+
+void UI::printTitleLine(std::string _title)
+{
+	size_t titleSize = _title.size();
+	size_t doubleLineSize = totalSize - titleSize - 2;
+	
+	printOffset();
+	for (size_t cnt = 0; cnt < (doubleLineSize / 2); cnt++)
+	{
+		std::cout << "=";
+	}
+	std::cout << " ";
+	std::cout << _title;
+	std::cout << " ";
+	for (size_t cnt = 0; cnt < (doubleLineSize / 2) + 1; cnt++)
+	{
+		std::cout << "=";
+	}
+	std::cout << std::endl;
+}
+
+void UI::printTitle(std::string _title)
+{
+	printDoubleLine();
+	printTitleLine(_title);
+	printDoubleLine();
+}
+
+void UI::printParamList()
+{
+	printOffset();
+	std::cout << std::setw(width_ID) << std::right << "ID";
+	std::cout << std::setw(width_Name) << std::right << "Name";
+	std::cout << std::setw(width_Age) << std::right << "Age";
+	std::cout << std::setw(width_Kor) << std::right << "Kor";
+	std::cout << std::setw(width_Eng) << std::right << "Eng";
+	std::cout << std::setw(width_Math) << std::right << "Math";
+	std::cout << std::setw(width_Soci) << std::right << "Soci";
+	std::cout << std::setw(width_Sci) << std::right << "Sci";
+	std::cout << std::setw(width_Total) << std::right << "Total";
+	std::cout << std::setw(width_Aver) << std::right << "Aver";
+	std::cout << std::endl;
+}
+
+void UI::printMenuTitleLine(std::string _title)
+{
+	printOffset();
+	int offsetBorder = 5;
+	for (int i = 0; i < offsetBorder; i++)
+	{
+		std::cout << "=";
+	}
+	std::cout << " ";
+
+	int width = totalSize - static_cast<int>(_title.size()) - offsetBorder - 1;
+	std::cout << _title;
+
+	for (int i = 0; i < (width - offsetBorder); i++)
+	{
+		std::cout << " ";
+	}
+	for (int i = 0; i < offsetBorder; i++)
+	{
+		std::cout << "=";
+	}
+
+	std::cout << std::endl;
+}
+
+void UI::printMenuLine(std::string _key, std::string _title)
+{
+	printOffset();
+	int width = totalSize - static_cast<int>(_key.size()) - static_cast<int>(_title.size()) - 3;
+	std::cout << "[" << _key << "] ";
+	std::cout << _title;
+	for (int i = 0; i < (width - 5); i++)
+	{
+		std::cout << " ";
+	}
+	for (int i = 0; i < 5; i++)
+	{
+		std::cout << "=";
+	}
+
+	std::cout << std::endl;
+}
+
+void UI::redraw()
 {
 	system("cls");
-	std::cout << " ============================================================= " << std::endl;
-	std::cout << " ====================== Student Manager ====================== " << std::endl;
-	std::cout << " ============================================================= " << std::endl;
-	std::cout << std::setw(5) << std::right << "ID";
-	std::cout << std::setw(7) << std::right << "Name";
-	std::cout << std::setw(6) << std::right << "Age";
-	std::cout << std::setw(6) << std::right << "Kor";
-	std::cout << std::setw(6) << std::right << "Eng";
-	std::cout << std::setw(6) << std::right << "Math";
-	std::cout << std::setw(6) << std::right << "Soci";
-	std::cout << std::setw(6) << std::right << "Sci";
-	std::cout << std::setw(7) << std::right << "Total";
-	std::cout << std::setw(7) << std::right << "Aver" << std::endl;
-	std::cout << " ------------------------------------------------------------- " << std::endl;
+	printTitle("Student Manager");
+	printData();
+	
+	switch (selectedMenu)
+	{
+		case EMAINMENU::EN_INSERT_NEW_STUDENT:
+		{		
+			printDoubleLine();
+			printMenuTitleLine(mainMenu[EMAINMENU::EN_INSERT_NEW_STUDENT].name);
+			printDoubleLine();
+			break;
+		}
+		case EMAINMENU::EN_ERASE_STUDENT:
+		{
+			printDoubleLine();
+			printMenuTitleLine(mainMenu[EMAINMENU::EN_ERASE_STUDENT].name);
+			printDoubleLine();
+			break;
+		}
+		case EMAINMENU::EN_FIND_STUDENT:
+		{
+			printDoubleLine();
+			printMenuTitleLine(mainMenu[EMAINMENU::EN_FIND_STUDENT].name);
+			printDoubleLine();
+			break;
+		}
+		case EMAINMENU::EN_SORT_STUDENT:
+		{
+			printDoubleLine();
+			printMenuTitleLine(mainMenu[EMAINMENU::EN_SORT_STUDENT].name);
+			printDoubleLine();
+			break;
+		}
+		case EMAINMENU::EN_MAKE_DUMMY:
+		{
+			printDoubleLine();
+			printMenuTitleLine(mainMenu[EMAINMENU::EN_MAKE_DUMMY].name);
+			printDoubleLine();
+			break;
+		}
+		case EMAINMENU::EN_SAVE_FILE:
+		{
+			printDoubleLine();
+			printMenuTitleLine(mainMenu[EMAINMENU::EN_SAVE_FILE].name);
+			printDoubleLine();
+			break;
+		}
+		case EMAINMENU::EN_LOAD_FILE:
+		{
+			printDoubleLine();
+			printMenuTitleLine(mainMenu[EMAINMENU::EN_LOAD_FILE].name);
+			printDoubleLine();
+			break;
+		}
+		default:
+			printMainMenu();
+			break;
+	}
+
+}
+
+void UI::printData()
+{
+	printParamList();
+	printSingleLine();
 
 	if (studentManager != nullptr)
 	{
@@ -32,121 +249,54 @@ void UI::printData()
 			std::cout << std::endl;
 		}
 	}
-	std::cout << " ============================================================= " << std::endl;
+	printDoubleLine();
 }
+
 
 void UI::printStudentData(student& _student)
 {
-	std::cout << std::setw(5) << std::right << _student.getID();
-	std::cout << std::setw(7) << std::right << _student.getName();
-	std::cout << std::setw(6) << std::right << _student.getAge();
-	std::cout << std::setw(6) << std::right << _student.getScore(ESUBJECT::EN_KOR);
-	std::cout << std::setw(6) << std::right << _student.getScore(ESUBJECT::EN_ENG);
-	std::cout << std::setw(6) << std::right << _student.getScore(ESUBJECT::EN_MATH);
-	std::cout << std::setw(6) << std::right << _student.getScore(ESUBJECT::EN_SOCI);
-	std::cout << std::setw(6) << std::right << _student.getScore(ESUBJECT::EN_SCI);
-	std::cout << std::setw(7) << std::right << _student.getTotalScore();
-	std::cout << std::setw(7) << std::right << _student.getAverageScore() << std::endl;
+	printOffset();
+	std::cout << std::setw(width_ID) << std::right << _student.getID();
+	std::cout << std::setw(width_Name) << std::right << _student.getName();
+	std::cout << std::setw(width_Age) << std::right << _student.getAge();
+	std::cout << std::setw(width_Kor) << std::right << _student.getScore(ESUBJECT::EN_KOR);
+	std::cout << std::setw(width_Eng) << std::right << _student.getScore(ESUBJECT::EN_ENG);
+	std::cout << std::setw(width_Math) << std::right << _student.getScore(ESUBJECT::EN_MATH);
+	std::cout << std::setw(width_Soci) << std::right << _student.getScore(ESUBJECT::EN_SOCI);
+	std::cout << std::setw(width_Sci) << std::right << _student.getScore(ESUBJECT::EN_SCI);
+	std::cout << std::setw(width_Total) << std::right << _student.getTotalScore();
+	std::cout << std::setw(width_Aver) << std::right << _student.getAverageScore() << std::endl;
 }
 
 void UI::printMainMenu()
 {
-	std::cout << " ============================================================= " << std::endl;
-	std::cout << " ===== Menu                   Key                        ===== " << std::endl;
-	std::cout << " ============================================================= " << std::endl;
-	std::cout << " ===== Insert New Student     (0)                        ===== " << std::endl;
-	std::cout << " ===== Erase Student          (1)                        ===== " << std::endl;
-	std::cout << " ===== Find Student           (2)                        ===== " << std::endl;
-	std::cout << " ===== Sort Student           (3)                        ===== " << std::endl;
-	std::cout << " ===== Make Dummy             (4)                        ===== " << std::endl;
-	std::cout << " ===== Exit                   (ESC)                      ===== " << std::endl;
-	std::cout << " ============================================================= " << std::endl;
+	printDoubleLine();
+	printMenuTitleLine("Menu");
+	printDoubleLine();
+	for (int i = 0; i < EMAINMENU::SIZE; i++)
+	{
+		printMenuLine(mainMenu[i].key, mainMenu[i].name);
+	}
+	printDoubleLine();
 }
 
 void UI::printSortMenu()
 {
-	std::cout << " ============================================================= " << std::endl;
-	std::cout << "  Sort Student                                           ===== " << std::endl;
-	std::cout << " ============================================================= " << std::endl;
-	std::cout << " ===== Sort by ID     (Ascending)     (0)                ===== " << std::endl;
-	std::cout << " ===== Sort by ID     (Decending)     (1)                ===== " << std::endl;
-	std::cout << " ===== Sort by Name   (Ascending)     (2)                ===== " << std::endl;
-	std::cout << " ===== Sort by Name   (Decending)     (3)                ===== " << std::endl;
-	std::cout << " ===== Sort by Age    (Ascending)     (4)                ===== " << std::endl;
-	std::cout << " ===== Sort by Age    (Decending)     (5)                ===== " << std::endl;
-	std::cout << " ===== Sort by Score  (Ascending)     (6)                ===== " << std::endl;
-	std::cout << " ===== Sort by Score  (Decending)     (7)                ===== " << std::endl;
-	std::cout << " ===== Exit                           (9)                ===== " << std::endl;
-	std::cout << " ============================================================= " << std::endl;
-}
-
-void UI::printInsertStudent()
-{
-	std::cout << " ============================================================= " << std::endl;
-	std::cout << "  Insert New Student                                     ===== " << std::endl;
-	std::cout << " ============================================================= " << std::endl;
-	std::cout << " Name: ";
-	std::string name;
-	std::cin >> name;
-
-	std::cout << " Age: ";
-	int age;
-	std::cin >> age;
-
-	std::cout << " Kor: ";
-	int scoreKor;
-	std::cin >> scoreKor;
-
-	std::cout << " Eng: ";
-	int scoreEng;
-	std::cin >> scoreEng;
-
-	std::cout << " Math: ";
-	int scoreMath;
-	std::cin >> scoreMath;
-
-	std::cout << " Soci: ";
-	int scoreSoci;
-	std::cin >> scoreSoci;
-
-	std::cout << " Sci: ";
-	int scoreSci;
-	std::cin >> scoreSci;
-
-	student newStudent(name, age);
-	newStudent.setScore(ESUBJECT::EN_KOR, scoreKor);
-	newStudent.setScore(ESUBJECT::EN_ENG, scoreEng);
-	newStudent.setScore(ESUBJECT::EN_MATH, scoreMath);
-	newStudent.setScore(ESUBJECT::EN_SOCI, scoreSoci);
-	newStudent.setScore(ESUBJECT::EN_SCI, scoreSci);
-
-	studentManager->insertStudent(newStudent);
-}
-
-void UI::eraseStudent()
-{
-	std::cout << " ============================================================= " << std::endl;
-	std::cout << "  Erase Student                                          ===== " << std::endl;
-	std::cout << " ============================================================= " << std::endl;
-	std::cout << " target ID: ";
-	int id;
-	std::cin >> id;
-	if (!studentManager->eraseStudent(id))
-	{
-		std::cout << " Can't find id[" << id << "]" << std::endl;
-		std::cout << " Please retry again." << std::endl;
-	}
-	else
-	{
-		
-	}
+	printDoubleLine();
+	printMenuTitleLine("Sort Student");
+	printDoubleLine();
+	/*printMenuLine("[0] Ascending Sort by ID");
+	printMenuLine("[1] Decending Sort by ID");
+	printMenuLine("[2] Ascending Sort by Name");
+	printMenuLine("[3] Decending Sort by Name");*/
+	printDoubleLine();
 }
 
 void UI::findStudent()
 {
-	std::cout << " ============================================================= " << std::endl;
-	std::cout << "  Find Student                                           ===== " << std::endl;
-	std::cout << " ============================================================= " << std::endl;
+	printDoubleLine();
+	printMenuTitleLine("Find Student");
+	printDoubleLine();
 	std::cout << " name: ";
 	std::string name;
 	std::cin >> name;
@@ -167,8 +317,71 @@ void UI::sortStudent()
 	
 }
 
-void UI::redraw()
+
+std::string UI::getInputName()
 {
-	printData();
-	printMainMenu();
+	printDoubleLine();
+	printMenuTitleLine("Find Student");
+	printDoubleLine();
+	std::cout << " name: ";
+	std::string name;
+	std::cin >> name;
+	return name;
+}
+
+int UI::getInputEraseTarget()
+{
+	printDoubleLine();
+	printMenuTitleLine("Erase Student");
+	printDoubleLine();
+
+	std::cout << " target ID: ";
+	int id;
+	std::cin >> id;
+
+	return id;
+}
+
+int UI::getInputKey()
+{
+	int key = _getch();
+	return key;
+}
+
+void UI::getInputStudent(student& _target)
+{
+	std::cout << " Name: ";
+	std::string name;
+	std::cin >> name;
+	_target.setName(name);
+
+	std::cout << " Age: ";
+	int age;
+	std::cin >> age;
+	_target.setAge(age);
+
+	std::cout << " Kor: ";
+	int scoreKor;
+	std::cin >> scoreKor;
+	_target.setScore(ESUBJECT::EN_KOR, scoreKor);
+
+	std::cout << " Eng: ";
+	int scoreEng;
+	std::cin >> scoreEng;
+	_target.setScore(ESUBJECT::EN_ENG, scoreEng);
+
+	std::cout << " Math: ";
+	int scoreMath;
+	std::cin >> scoreMath;
+	_target.setScore(ESUBJECT::EN_MATH, scoreMath);
+
+	std::cout << " Soci: ";
+	int scoreSoci;
+	std::cin >> scoreSoci;
+	_target.setScore(ESUBJECT::EN_SOCI, scoreSoci);
+
+	std::cout << " Sci: ";
+	int scoreSci;
+	std::cin >> scoreSci;
+	_target.setScore(ESUBJECT::EN_SCI, scoreSci);
 }

@@ -97,7 +97,10 @@ bool student::eraseSubject(ESUBJECT _subject)
 void studentMgr::insertStudent(student& _student)
 {
 	//student* newStudent = new student;
-	_student.setID(++cnt_id);
+	if (_student.getID() == NULL)
+	{
+		_student.setID(++cnt_id);
+	}
 	studentList.push_back(_student);
 }
 
@@ -150,6 +153,40 @@ LL::List<student>::iterator studentMgr::findName(std::string _name)
 	if (!bFind)
 	{
 		return nullptr;
+	}
+}
+
+ bool studentMgr::findNameAll(std::string _name, LL::List<student>& _list)
+{
+	bool bFind = false;
+	size_t listSize = studentList.size();
+	std::string nameUpper;
+	for (int i = 0; i < _name.size(); i++)
+	{
+		nameUpper.push_back(toupper(_name[i]));
+	}
+
+	for (auto it = studentList.begin(); it != studentList.end(); it++)
+	{
+		std::string name = (*it).getName();
+		for (int i = 0; i < name.size(); i++)
+		{
+			name[i] = toupper(name[i]);
+		}
+		if (name == nameUpper)
+		{
+			bFind = true;
+			_list.push_back(*it);
+		}
+	}
+
+	if (!bFind)
+	{
+		return false;
+	}
+	else
+	{
+		return true;
 	}
 }
 
@@ -259,4 +296,123 @@ void studentMgr::sortAge(bool _ascending)
 	}
 }
 
+bool studentMgr::saveFile(std::string _name)
+{
+	std::fstream file(_name, std::ios_base::in | std::ios_base::out | std::ios_base::trunc);
+	if (!file.is_open())
+	{
+		std::cout << _name << " open failed." << std::endl;
+		return false;
+	}
+	else
+	{
+		if (!studentList.empty())
+		{
+			file << cnt_id << std::endl;
+			file << "id,name,age,kor,eng,math,soci,sci,total,aver" << std::endl;
+			for (auto it = studentList.begin(); it != studentList.end(); it++)
+			{
+				/*if (it != studentManager->begin())
+				{
+					std::cout << std::endl;
+				}*/
+				file << (*it).getID() << ","
+					<< (*it).getName() << ","
+					<< (*it).getAge() << ","
+					<< (*it).getScore(ESUBJECT::EN_KOR) << ","
+					<< (*it).getScore(ESUBJECT::EN_ENG) << ","
+					<< (*it).getScore(ESUBJECT::EN_MATH) << ","
+					<< (*it).getScore(ESUBJECT::EN_SOCI) << ","
+					<< (*it).getScore(ESUBJECT::EN_SCI) << ","
+					<< (*it).getTotalScore() << ","
+					<< (*it).getAverageScore() << std::endl;
+			}
 
+			file.close();
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+}
+
+bool studentMgr::loadFile(std::string _name)
+{
+	std::fstream file(_name);
+	if (!file.is_open())
+	{
+		return false;
+	}
+	else
+	{
+		if (!file.eof())
+		{
+			std::string strCntID;
+			std::getline(file, strCntID);
+			studentList.clear();
+			cnt_id = std::stoi(strCntID);
+
+			std::string dummy;
+			std::getline(file, dummy);
+		}
+
+		int cnt = 0;
+		while (!file.eof())
+		{
+			student loadStudent;
+			std::string lineData;
+			// ID
+			std::getline(file, lineData, ',');
+			if (!lineData.empty())
+			{
+				loadStudent.setID(std::stoi(lineData));
+				std::cout << "id: " << lineData << std::endl;
+
+				// Name
+				std::getline(file, lineData, ',');
+				loadStudent.setName(lineData);
+				std::cout << "name: " << lineData << std::endl;
+
+				// Age
+				std::getline(file, lineData, ',');
+				loadStudent.setAge(std::stoi(lineData));
+				std::cout << "age: " << lineData << std::endl;
+
+				// Kor
+				std::getline(file, lineData, ',');
+				loadStudent.setScore(ESUBJECT::EN_KOR, std::stoi(lineData));
+				std::cout << "kor: " << lineData << std::endl;
+
+				// Eng
+				std::getline(file, lineData, ',');
+				loadStudent.setScore(ESUBJECT::EN_ENG, std::stoi(lineData));
+				std::cout << "eng: " << lineData << std::endl;
+
+				// Math
+				std::getline(file, lineData, ',');
+				loadStudent.setScore(ESUBJECT::EN_MATH, std::stoi(lineData));
+				std::cout << "math: " << lineData << std::endl;
+
+				// Soci
+				std::getline(file, lineData, ',');
+				loadStudent.setScore(ESUBJECT::EN_SOCI, std::stoi(lineData));
+				std::cout << "soci: " << lineData << std::endl;
+
+				// Sci
+				std::getline(file, lineData, ',');
+				loadStudent.setScore(ESUBJECT::EN_SCI, std::stoi(lineData));
+				std::cout << "sci: " << lineData << std::endl;
+
+				std::getline(file, lineData, ','); // total
+				std::getline(file, lineData, '\n'); // average
+
+				studentList.push_back(loadStudent);
+				cnt++;
+			}
+		}
+		file.close();
+		return true;
+	}
+}
