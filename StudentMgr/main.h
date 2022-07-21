@@ -6,6 +6,7 @@
 #include "UI.h"
 #include <fstream>
 
+#define UP 
 
 class Engine
 {
@@ -17,7 +18,7 @@ public:
 	Engine() : studentManager(nullptr), mainUI(nullptr) 
 	{
 		studentManager = new studentMgr;
-		mainUI = new UI(studentManager);
+		mainUI = new UI;
 	};
 	~Engine() 
 	{
@@ -25,20 +26,25 @@ public:
 		delete mainUI;
 	};
 
-	studentMgr* getMgr() { return studentManager; };
+	studentMgr* getManager() { return studentManager; };
 	UI* getUI() { return mainUI; };
 
+	// 0. Insert
+	void insertNewStudent();
+	 
+	// 1. Erase
+	void eraseStudent();
+	
+	// 2. Find
+	
+	// 3. Sort
+	
+	// 4. Dummy
+	void makeDummyData();
+
+	// 5. Save
+	
+	// 6. Load
 	// file save, write data, file load, read data
-	
-	
-	// create dummy data for debug.
-	void makeDummyData(int _cnt);
-	//void insertStudent();
-	void findName();
-	
-	
+
 };
-
-//void keyInputThread(Engine* _Engine);
-
-

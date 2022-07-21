@@ -55,7 +55,7 @@
   <Class Name="UI">
     <Position X="11.5" Y="3.75" Width="1.5" />
     <NestedTypes>
-      <Enum Name="UI::EMAINMENU" Collapsed="true">
+      <Enum Name="UI::EMENU_MAIN" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>UI.h</NewMemberFileName>
         </TypeIdentifier>

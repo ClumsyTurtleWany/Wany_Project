@@ -7,162 +7,80 @@ int main()
 
 	//std::thread keyThread(keyInputThread, mainEngine);
 	//keyThread.join();
+	
+	//std::thread keyThread(testThread);
+	//keyThread.join();
+
 	UI* mainUI = mainEngine->getUI();
-	studentMgr* studentManager = mainEngine->getMgr();
-	mainUI->redraw();
+	studentMgr* studentManager = mainEngine->getManager();
+	
+	int x = 0;
+	int y = 0;
+
+	int selectedMenu = 0;
+
 	while (1)
 	{
-		int key = mainUI->getInputKey();
-		mainUI->redraw();
-		switch (key)
+		mainUI->displayClear();
+
+		if (selectedMenu == 0)
 		{
-		case UI::EMAINMENU::EN_INSERT_NEW_STUDENT + NUM_KEY:
-		{			
-			//mainUI->redraw();
-			student newStudent;
-			mainUI->getInputStudent(newStudent);
-			studentManager->insertStudent(newStudent);
-			mainUI->redraw();
-			break;
+			/*mainUI->printString(5, 0, "menu1");
+			mainUI->printString(5, 1, "menu2");
+			mainUI->printString(5, 2, "menu3");
+			mainUI->printString(5, 3, "menu4");
+			mainUI->printString(5, 4, "menu5");*/
+			mainUI->printTitle2("student Manager");
+			mainUI->printStudentElementList2();
+		}
+		else if (selectedMenu == 1)
+		{
+			mainUI->printString(5, 0, "sort-menu1");
+			mainUI->printString(5, 1, "sort-menu2");
+			mainUI->printString(5, 2, "sort-menu3");
 		}
 
-		case UI::EMAINMENU::EN_ERASE_STUDENT + NUM_KEY:
+		if (GetAsyncKeyState(VK_RETURN))
 		{
-			mainUI->redraw();
-			int id = mainUI->getInputEraseTarget();
-			if (!studentManager->eraseStudent(id))
-			{
-				std::cout << "Can't find id(" << id << ")." << std::endl;
-			}
-			else
-			{
-				mainUI->redraw();
-			}
-			break;
-		}
-
-		case UI::EMAINMENU::EN_FIND_STUDENT + NUM_KEY:
-			mainUI->printData();
-			mainEngine->findName();
-			
-			break;
-
-		case UI::EMAINMENU::EN_SORT_STUDENT + NUM_KEY:
-			mainUI->printData();
-			mainUI->printSortMenu();
-			break;
-
-		case UI::EMAINMENU::EN_MAKE_DUMMY + NUM_KEY:
-			mainUI->printData();
-			mainEngine->makeDummyData(1);
-			mainUI->redraw();
-			break;
-
-		case UI::EMAINMENU::EN_SAVE_FILE + NUM_KEY:
-			mainUI->printData();
-			studentManager->saveFile("test2.csv");
-			mainUI->redraw();
-			//mainUI->redraw();
-			break;
-
-		case UI::EMAINMENU::EN_LOAD_FILE + NUM_KEY:
-			mainUI->printData();
-			studentManager->loadFile("test2.csv");
-			mainUI->redraw();
-			//mainUI->redraw();
-			break;
-
-		case UI::EMAINMENU::EN_EXIT + NUM_KEY:
-			break;
-
-		default:
-			mainUI->redraw();
-			break;
-		}
-
-		//mainUI->redraw();
-
-		if (key == UI::EMAINMENU::EN_EXIT + NUM_KEY)
-		{
-			break;
+			selectedMenu = y;
 		}
 		else
 		{
-			//_Engine->getUI()->redraw();
-		}
-	}
+			if (GetAsyncKeyState(VK_DOWN))
+			{
+				if (y < 4)
+				{
+					y++;
+				}
+			}
 
+			if (GetAsyncKeyState(VK_UP))
+			{
+				if (y > 0)
+				{
+					y--;
+				}
+			}
+		}
+
+		mainUI->printString(x, y, ">");
+
+		Sleep(100);
+
+		mainUI->bufferSwitching();
+	}
 
 	delete mainEngine;
 	
 	return 0;
 }
 
-//void keyInputThread(Engine* _Engine)
-//{
-//	srand(time(NULL));
-//	_Engine->getUI()->redraw();
-//
-//	while (1)
-//	{
-//		int key = _getch();
-//		
-//		switch (key)
-//		{
-//			case UI::EMAINMENU::EN_INSERT_NEW_STUDENT + NUM_KEY:
-//				_Engine->getUI()->printData();
-//				_Engine->insertStudent();
-//				break;
-//
-//			case UI::EMAINMENU::EN_ERASE_STUDENT + NUM_KEY:
-//				_Engine->getUI()->printData();
-//				_Engine->getUI()->eraseStudent();
-//				break;
-//
-//			case UI::EMAINMENU::EN_FIND_STUDENT + NUM_KEY:
-//				_Engine->getUI()->printData();
-//				_Engine->findName();
-//				break;
-//
-//			case UI::EMAINMENU::EN_SORT_STUDENT + NUM_KEY:
-//				_Engine->getUI()->printData();
-//				_Engine->getUI()->printSortMenu();
-//				break;
-//
-//			case UI::EMAINMENU::EN_MAKE_DUMMY + NUM_KEY:
-//				_Engine->getUI()->printData();
-//				_Engine->makeDummyData(1);
-//				_Engine->getUI()->redraw();
-//				break;
-//
-//			case UI::EMAINMENU::EN_EXIT:
-//				break;
-//
-//			default:
-//				_Engine->getUI()->printData();
-//				_Engine->getUI()->printMainMenu();
-//				break;
-//		}
-//
-//		if (key == UI::EMAINMENU::EN_EXIT)
-//		{
-//			break;
-//		}
-//		else
-//		{
-//			//_Engine->getUI()->redraw();
-//		}
-//		
-//	}
-//}
-
-void Engine::makeDummyData(int _cnt)
+// create dummy data for test.
+void Engine::makeDummyData()
 {
-	for (int i = 0; i < _cnt; i++)
+	int cnt = mainUI->getInputNumber("Enter the number of students to create: ");
+	for (int i = 0; i < cnt; i++)
 	{
-		//char spell_1 = rand() % 25 + 65;
-		//char spell_2 = rand() % 25 + 65;
-		//char spell_3 = rand() % 25 + 65;
 		std::string name;
 		name.push_back(rand() % 25 + 65);
 		name.push_back(rand() % 25 + 65);
@@ -181,42 +99,65 @@ void Engine::makeDummyData(int _cnt)
 	}
 }
 
-void Engine::findName()
+void Engine::insertNewStudent()
 {
-	std::cout << " ============================================================= " << std::endl;
-	std::cout << "  Find Student                                           ===== " << std::endl;
-	std::cout << " ============================================================= " << std::endl;
-	std::cout << " name: ";
-	std::string name;
-	std::cin >> name;
+	student newStudent;
+	mainUI->getInputStudent(newStudent);
+	studentManager->insertStudent(newStudent);
+	mainUI->redraw();
+}
 
-	std::cout << std::endl;
-	std::cout << " ------------------------------------------------------------- " << std::endl;
-	std::cout << std::setw(5) << std::right << "ID";
-	std::cout << std::setw(7) << std::right << "Name";
-	std::cout << std::setw(6) << std::right << "Age";
-	std::cout << std::setw(6) << std::right << "Kor";
-	std::cout << std::setw(6) << std::right << "Eng";
-	std::cout << std::setw(6) << std::right << "Math";
-	std::cout << std::setw(6) << std::right << "Soci";
-	std::cout << std::setw(6) << std::right << "Sci";
-	std::cout << std::setw(7) << std::right << "Total";
-	std::cout << std::setw(7) << std::right << "Aver" << std::endl;
-	std::cout << " ------------------------------------------------------------- " << std::endl;
-
-	LL::List<student> findedNameList;
-	studentManager->findNameAll(name, findedNameList);
-
-	if (!findedNameList.empty())
+void Engine::eraseStudent()
+{
+	mainUI->redraw();
+	mainUI->printEraseMenu();
+	int key = mainUI->getInputKey();
+	switch (key)
 	{
-		for (auto it = findedNameList.begin(); it != findedNameList.end(); it++)
+		case UI::EMENU_ERASE::EN_ERASE_ID:
 		{
-			mainUI->printStudentData(*it);
+			int id = mainUI->getInputNumber("Input erase target ID: ");
+			if (id != NULL)
+			{
+				studentManager->eraseStudent(id);
+			}
+			break;
 		}
-		std::cout << " ------------------------------------------------------------- " << std::endl;
+		case UI::EMENU_ERASE::EN_ERASE_NAME:
+		{
+			std::string name = mainUI->getInputString("Input erase target Name: ");
+			
+			LL::List<student> targetList;
+			if (studentManager->findNameAll(name, targetList))
+			{
+				if (targetList.size() == 1)
+				{
+					auto it = targetList.begin();
+					studentManager->eraseStudent((*it).getID());
+					break;
+				}
+				else
+				{
+					mainUI->printStudentElementList();
+					for (auto it = targetList.begin(); it != targetList.end(); it++)
+					{
+						mainUI->printStudentData(*it);
+					}
+					mainUI->printSingleLine();
+
+					int id = mainUI->getInputNumber("Input erase target ID: ");
+					if (id != NULL)
+					{
+						studentManager->eraseStudent(id);
+					}
+					break;
+				}
+			}
+			else
+			{
+
+			}
+		}
 	}
-	else
-	{
-		std::cout << "Can't find " << name << std::endl;
-	}
+
 }
