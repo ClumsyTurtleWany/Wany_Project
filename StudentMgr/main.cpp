@@ -3,74 +3,25 @@
 int main()
 {
 	srand(static_cast<unsigned int>(time(NULL)));
-	Engine* mainEngine = new Engine;
+	//Engine* mainEngine = new Engine;
 
-	//std::thread keyThread(keyInputThread, mainEngine);
-	//keyThread.join();
-	
-	//std::thread keyThread(testThread);
-	//keyThread.join();
+	//UI* mainUI = mainEngine->getUI();
+	//studentMgr* studentManager = mainEngine->getManager();
 
-	UI* mainUI = mainEngine->getUI();
-	studentMgr* studentManager = mainEngine->getManager();
-	
-	int x = 0;
-	int y = 0;
+	studentMgr* studentManager = new studentMgr;
+	UI* mainUI = new UI(studentManager);
 
-	int selectedMenu = 0;
-
-	while (1)
+	for (int i = 0; i < 5; i++)
 	{
-		mainUI->displayClear();
-
-		if (selectedMenu == 0)
-		{
-			/*mainUI->printString(5, 0, "menu1");
-			mainUI->printString(5, 1, "menu2");
-			mainUI->printString(5, 2, "menu3");
-			mainUI->printString(5, 3, "menu4");
-			mainUI->printString(5, 4, "menu5");*/
-			mainUI->printTitle2("student Manager");
-			mainUI->printStudentElementList2();
-		}
-		else if (selectedMenu == 1)
-		{
-			mainUI->printString(5, 0, "sort-menu1");
-			mainUI->printString(5, 1, "sort-menu2");
-			mainUI->printString(5, 2, "sort-menu3");
-		}
-
-		if (GetAsyncKeyState(VK_RETURN))
-		{
-			selectedMenu = y;
-		}
-		else
-		{
-			if (GetAsyncKeyState(VK_DOWN))
-			{
-				if (y < 4)
-				{
-					y++;
-				}
-			}
-
-			if (GetAsyncKeyState(VK_UP))
-			{
-				if (y > 0)
-				{
-					y--;
-				}
-			}
-		}
-
-		mainUI->printString(x, y, ">");
-
-		Sleep(100);
-
-		mainUI->bufferSwitching();
+		//mainEngine->makeDummyData();
 	}
+	
 
-	delete mainEngine;
+	mainUI->runDisplay();
+	
+	WaitForSingleObject(mainUI->getExitThread(), INFINITE);
+
+	//delete mainEngine;
 	
 	return 0;
 }
@@ -78,8 +29,8 @@ int main()
 // create dummy data for test.
 void Engine::makeDummyData()
 {
-	int cnt = mainUI->getInputNumber("Enter the number of students to create: ");
-	for (int i = 0; i < cnt; i++)
+	//int cnt = mainUI->getInputNumber("Enter the number of students to create: ");
+	//for (int i = 0; i < cnt; i++)
 	{
 		std::string name;
 		name.push_back(rand() % 25 + 65);
@@ -104,13 +55,13 @@ void Engine::insertNewStudent()
 	student newStudent;
 	mainUI->getInputStudent(newStudent);
 	studentManager->insertStudent(newStudent);
-	mainUI->redraw();
+	//mainUI->redraw();
 }
 
 void Engine::eraseStudent()
 {
-	mainUI->redraw();
-	mainUI->printEraseMenu();
+	//mainUI->redraw();
+	//mainUI->printEraseMenu();
 	int key = mainUI->getInputKey();
 	switch (key)
 	{
@@ -138,12 +89,12 @@ void Engine::eraseStudent()
 				}
 				else
 				{
-					mainUI->printStudentElementList();
+					//mainUI->printStudentElementTable();
 					for (auto it = targetList.begin(); it != targetList.end(); it++)
 					{
-						mainUI->printStudentData(*it);
+						//mainUI->printStudentData(*it);
 					}
-					mainUI->printSingleLine();
+					//mainUI->printSingleLine();
 
 					int id = mainUI->getInputNumber("Input erase target ID: ");
 					if (id != NULL)

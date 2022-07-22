@@ -58,7 +58,10 @@ private:
 	int cnt_id = 0;
 
 public:
-	studentMgr() {};
+	studentMgr() 
+	{
+		srand(static_cast<unsigned int>(time(NULL)));
+	};
 	~studentMgr() {};
 
 	void insertStudent(student& _student);
@@ -92,5 +95,6 @@ public:
 	// File Management
 	bool saveFile(std::string _name);
 	bool loadFile(std::string _name);
-	// need findFile 
+	// need findFile 	
+
 };

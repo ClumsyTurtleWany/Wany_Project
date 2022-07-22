@@ -4,39 +4,54 @@
 #include <conio.h> // system("cls")
 #include <Windows.h>
 #include "StudentMgr.h"
+#include <thread>
+#include <sstream>
+#include <vector>
 
 #define NUM_KEY		(int)48 // ascii num 0 == 48
 #define ENTER_KEY	(int)13 // ascii enter == 13
 #define ESC_KEY		(int)27 // ascii escape == 27
 
-//static HANDLE displayBuffer[2];
-//static int bufferIdx = 0;
+class consoleUI
+{
+	//////////////////////////////////////////////////////////
+	// win api for console UI - double buffer
+private:
+	HANDLE displayBuffer[2];
+	int bufferIdx = 0;
+	
+public:
+	consoleUI();
+	virtual ~consoleUI();
 
-static int g_nScreenIndex;
-static HANDLE g_hScreen[2];
+	void initializeBuffer();
+	void releaseBuffer();
+	void bufferSwitching();
+	void displayClear();
+	void printString(int _x, int _y, std::string _string);
+	void moveCurPos(int _x, int _y);
+};
 
-class UI
+class UI : private consoleUI
 {
 private:
-	int width_ID = 5;
-	int width_Name = 7;
-	int width_Age = 6;
-	int width_Kor = 6;
-	int width_Eng = 6;
-	int width_Math = 6;
-	int width_Soci = 6;
-	int width_Sci = 6;
-	int width_Total = 7;
-	int width_Aver = 7;
-	int totalSize = 0;
 	int offset_x = 1;
 
 	int selectedMenu = -1;
 
 	struct menu
 	{
-		std::string key;
+		int x = 0;
+		int y = 0;
 		std::string name;
+	};
+
+	struct tableInfo
+	{
+		int width = 0;
+		int x = 1;
+		int y = 0;
+		std::string name = "";
 	};
 
 	menu* menuMain = nullptr;
@@ -44,6 +59,7 @@ private:
 	menu* menuSort = nullptr;
 	menu* menuSortType = nullptr;
 	menu* menuSortSubject = nullptr;
+	tableInfo* tableStudent = nullptr;
 
 public:
 
@@ -56,7 +72,6 @@ public:
 		EN_MAKE_DUMMY,
 		EN_SAVE_FILE,
 		EN_LOAD_FILE,
-		EN_EXIT,
 		MENU_MAIN_SIZE
 	};
 
@@ -93,7 +108,7 @@ public:
 		SUBJECT_SIZE
 	};
 
-	enum EELEMENT_STUDENT
+	enum ESTUDENT_TABLE
 	{
 		EN_ID = (int)0,
 		EN_NAME,
@@ -108,55 +123,45 @@ public:
 		STUDENT_ELEMENTS_SIZE
 	};
 
-private:
-	void printOffset();
+	std::vector<std::vector<std::string>> vecTable;
+	void updateTable();
 
 public:
 	UI() { initialize(); };
+	UI(studentMgr* _mgr) : studentManager(_mgr) { initialize(); };
 	~UI() { release(); };
 
 	// Common
 	void initialize();
 	void initializeMenu();
+	void initializeTable();
 	void release();
 
 	// Display
-	void printSingleLine();
-	void printDoubleLine();
-	void printTitleLine(std::string _title);
-	void printTitle(std::string _title);
-	void printStudentElementList();
-	void printMenuTitleLine(std::string _title);
-	void printMenuLine(std::string _key, std::string _title);
-	void redraw();
-
+	
+	
 	// Display - Menu
-	void printMenuMain();
-	void printMenuSort();
+	
 
 	// 0. Insert
 	void getInputStudent(student& _student);
 
 	// 1. Erase
-	void printEraseMenu();
 	
 	// 2. Find
-	void printFindeStudentMenu();
-	
 
 	// 3. Sort
-	void sortStudent();
 	
 	// 4. Dummy
-	
+	void makeDummyData();
+
 	// 5. Save
 	
 	// 6. Load
 
 
 	// Data
-	void printData();
-	void printStudentData(student& _student);
+	
 
 	// Input
 	int getInputKey();
@@ -167,22 +172,42 @@ public:
 	//////////////////////////////////////////////////////////
 	// win api for console UI - double buffer
 	private:
-		HANDLE displayBuffer[2];
-		int bufferIdx = 0;
-		int width = 70;
-		int studentElementListPos_y = 4;
+		int width = 60;
+		POINT tableStudentPos = {1, 4};
+		studentMgr* studentManager = nullptr;
 
 	public:
-		void initializeBuffer();
-		void releaseBuffer();
-		void bufferSwitching();
-		void displayClear();
-		void printString(int _x, int _y, std::string _string);
-		void moveCurPos(int _x, int _y);
-
+		
 		std::string makeStrLine(std::string _string, int _length = 0);
 		
-		void printTitle2(std::string _title);
-		void printStudentElementList2();
+		void printTitle(std::string _title);
+		void printStudentElementTable();
+		void printMenu();
+		
+		void printStudentData(student& _student);
+		void printStudentTable();
 
+		int menuCurPos_x = 63;
+		int menuCurPos_y = 3;
+		int max_page = 0;
+		double maxSizePage = 20;
+		int cur_page = 0;
+
+		int testx = 0;
+		int testy = 1;
+		
+
+		void display();
+
+
+		HANDLE threadHandle[2];
+		HANDLE runEvent;
+		HANDLE exitEvent;
+		static DWORD WINAPI displayThread(LPVOID lpParam);
+		static DWORD WINAPI keyboardThread(LPVOID lpParam);
+
+		void runDisplay();
+		void stopDisplay();
+		void exitThread();
+		HANDLE getExitThread();
 };
