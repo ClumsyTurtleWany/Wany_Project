@@ -60,14 +60,16 @@ void consoleUI::printString(int _x, int _y, std::string _string)
 {
 	DWORD dw;
 	moveCurPos(_x, _y);
-	WriteFile(displayBuffer[bufferIdx], _string.c_str(), _string.length(), &dw, NULL);
+	WriteFile(displayBuffer[bufferIdx], _string.c_str(), (DWORD)_string.length(), &dw, NULL);
 }
 
 void consoleUI::moveCurPos(int _x, int _y)
 {
-	COORD pos = { _x, _y };
-	if (SetConsoleCursorPosition(displayBuffer[bufferIdx], pos));
+	COORD pos = { (SHORT)_x, (SHORT)_y};
+	SetConsoleCursorPosition(displayBuffer[bufferIdx], pos);
 }
+
+//////////////////////////////////////
 
 
 
@@ -75,7 +77,7 @@ void consoleUI::moveCurPos(int _x, int _y)
 void UI::updateTable()
 {
 	vecTable.clear();
-	max_page = ceil(studentManager->getSize() / maxSizePage);
+	max_page = (int)ceil(studentManager->getSize() / (double)maxSizePage);
 	cur_page = max_page - 1;
 	for (auto it = studentManager->begin(); it != studentManager->end(); it++)
 	{
@@ -96,6 +98,8 @@ void UI::updateTable()
 		vecTable.push_back(vecStudent);
 	}
 }
+
+
 
 void UI::initialize()
 {
@@ -119,13 +123,34 @@ void UI::initializeMenu()
 {
 	// Main Menu
 	menuMain = new menu[EMENU_MAIN::MENU_MAIN_SIZE];
-	menuMain[EMENU_MAIN::EN_INSERT_NEW_STUDENT].name = "Insert Student";
-	menuMain[EMENU_MAIN::EN_ERASE_STUDENT].name = "Erase Student";
-	menuMain[EMENU_MAIN::EN_FIND_STUDENT].name = "Find Student";
-	menuMain[EMENU_MAIN::EN_SORT_STUDENT].name = "Sort Student";
+	menuMain[EMENU_MAIN::EN_INSERT].name = "Insert Student";
+	menuMain[EMENU_MAIN::EN_ERASE].name = "Erase Student";
+	menuMain[EMENU_MAIN::EN_FIND].name = "Find Student";
+	menuMain[EMENU_MAIN::EN_SORT].name = "Sort Student";
 	menuMain[EMENU_MAIN::EN_MAKE_DUMMY].name = "Make Dummy Student";
-	menuMain[EMENU_MAIN::EN_SAVE_FILE].name = "Save File";
-	menuMain[EMENU_MAIN::EN_LOAD_FILE].name = "Load File";
+	menuMain[EMENU_MAIN::EN_SAVE].name = "Save File";
+	menuMain[EMENU_MAIN::EN_LOAD].name = "Load File";
+	menuMain[EMENU_MAIN::EN_NEXT].name = "Next";
+	menuMain[EMENU_MAIN::EN_PREV].name = "Prev";
+
+	for (int i = 0; i < EMENU_MAIN::MENU_MAIN_SIZE; i++)
+	{
+		menuMain[i].x = 65;
+		menuMain[i].y = 3 + i;
+	}
+
+	menuMain[EMENU_MAIN::EN_NEXT].x = 40;
+	menuMain[EMENU_MAIN::EN_NEXT].y = 25;
+	menuMain[EMENU_MAIN::EN_NEXT].visible = false;
+	
+
+	menuMain[EMENU_MAIN::EN_PREV].x = 20;
+	menuMain[EMENU_MAIN::EN_PREV].y = 25;
+	menuMain[EMENU_MAIN::EN_PREV].visible = false;
+	
+
+	//menu insert(65, 3, "Insert Student", true);
+	//mainMenu.push_back(insert);
 
 	// 1. Erase Menu
 	menuErase = new menu[EMENU_ERASE::MENU_ERASE_SIZE];
@@ -134,10 +159,14 @@ void UI::initializeMenu()
 
 	// 3. Sort Menu
 	menuSort = new menu[EMENU_SORT::MENU_SORT_SIZE];
-	menuSort[EMENU_SORT::EN_SORT_ID].name = "Sort by ID";
-	menuSort[EMENU_SORT::EN_SORT_NAME].name = "Sort by Name";
-	menuSort[EMENU_SORT::EN_SORT_AGE].name = "Sort by Age";
-	menuSort[EMENU_SORT::EN_SORT_SCORE].name = "Sort by Score";
+	menuSort[EMENU_SORT::EN_ASCENDING_ID].name = "Sort by ID(Ascending)";
+	menuSort[EMENU_SORT::EN_ASCENDING_NAME].name = "Sort by Name(Ascending)";
+	menuSort[EMENU_SORT::EN_ASCENDING_AGE].name = "Sort by Age(Ascending)";
+	menuSort[EMENU_SORT::EN_DECENDING_KOR].name = "Sort by Kor(Decending)";
+	menuSort[EMENU_SORT::EN_DECENDING_ENG].name = "Sort by Eng(Decending)";
+	menuSort[EMENU_SORT::EN_DECENDING_MATH].name = "Sort by Math(Decending)";
+	menuSort[EMENU_SORT::EN_DECENDING_SOCI].name = "Sort by Soci(Decending)";
+	menuSort[EMENU_SORT::EN_DECENDING_SCI].name = "Sort by Sci(Decending)";
 	
 	// 3. Sort Menu - Sort Type
 	menuSortType = new menu[EMENU_SORT_TYPE::SORT_TYPE_SIZE];
@@ -232,106 +261,69 @@ void UI::release()
 	}	
 }
 
-std::string UI::getInputString(std::string _print)
+void UI::printFrame()
 {
-	std::cout << _print;
-	std::string data;
-	char ch;
-	while ((ch = _getch()) != ENTER_KEY)
-	{
-		if (ch == ESC_KEY)
-		{
-			data.clear();
-			break;
-		}
+	// Title Frame
+	std::string doubleLine = makeStrLine("=");
+	printString(0, 0, doubleLine);
+	printTitle("Student Manager");
+	printString(0, 2, doubleLine);
 
-		std::cout << ch;
-		data += ch;
+	// Student Element List
+	printStudentElementTable();
+	std::string singleLine = makeStrLine("-");
+	printString(0, 4, singleLine);
+
+	// Menu Frame
+	for (int i = 0; i < 26; i++)
+	{
+		printString(61, i, "|");
 	}
 
-	return data;
-}
-
-// Write explain word or sentence.
-// _print: cout << _print
-int UI::getInputNumber(std::string _print)
-{
-	std::cout << _print;
-	std::string data;
-	char ch;
-	while ((ch = _getch()) != ENTER_KEY)
+	for (int i = 0; i < 26; i++)
 	{
-		if (ch == ESC_KEY)
-		{
-			data.clear();
-			break;
-		}
-
-		if ((ch >= NUM_KEY) && (ch < (NUM_KEY + 10)))
-		{
-			std::cout << ch;
-			data += ch;
-		}
+		printString(90, i, "|");
 	}
 
-	if (!data.empty())
+	for (int i = 0; i < 28; i++)
 	{
-		return std::stoi(data);
+		printString(62 + i, 0, "=");
+		printString(62 + i, 2, "=");
+		printString(62 + i, 2 + EMENU_MAIN::MENU_MAIN_SIZE, "=");
+		printString(62 + i, 4 + EMENU_MAIN::MENU_MAIN_SIZE, "=");
 	}
-	else
-	{
-		return NULL;
-	}
+
+	// Bottom Line
+	std::string singleLineBottom = makeStrLine("-", 90);
+	printString(0, 26, singleLineBottom);
 }
 
-int UI::getInputKey()
-{
-	return _getch();
-}
 
-void UI::getInputStudent(student& _target)
-{
-	//printMenuTitleLine();
-	std::string name = getInputString("Name: ");
-	_target.setName(name);
 
-	int age = getInputNumber("Age: ");
-	_target.setAge(age);
-
-	int scoreKor = getInputNumber("Kor: ");
-	_target.setScore(ESUBJECT::EN_KOR, scoreKor);
-
-	int scoreEng = getInputNumber("Eng: ");
-	_target.setScore(ESUBJECT::EN_ENG, scoreEng);
-
-	int scoreMath = getInputNumber("Math: ");
-	_target.setScore(ESUBJECT::EN_MATH, scoreMath);
-
-	int scoreSoci = getInputNumber("Soci: ");
-	_target.setScore(ESUBJECT::EN_SOCI, scoreSoci);
-
-	int scoreSci = getInputNumber("Sci: ");
-	_target.setScore(ESUBJECT::EN_SCI, scoreSci);
-}
-
-void UI::makeDummyData()
-{
-	std::string name;
-	name.push_back(rand() % 25 + 65);
-	name.push_back(rand() % 25 + 65);
-	name.push_back(rand() % 25 + 65);
-
-	int age = rand() % 47 + 18;
-
-	student DummyStudent(name, age);
-	DummyStudent.setScore(ESUBJECT::EN_KOR, rand() % 101);
-	DummyStudent.setScore(ESUBJECT::EN_ENG, rand() % 101);
-	DummyStudent.setScore(ESUBJECT::EN_MATH, rand() % 101);
-	DummyStudent.setScore(ESUBJECT::EN_SOCI, rand() % 101);
-	DummyStudent.setScore(ESUBJECT::EN_SCI, rand() % 101);
-
-	studentManager->insertStudent(DummyStudent);
-}
+//void UI::getInputStudent(student& _target)
+//{
+//	//printMenuTitleLine();
+//	std::string name = getInputString("Name: ");
+//	_target.setName(name);
+//
+//	int age = getInputNumber("Age: ");
+//	_target.setAge(age);
+//
+//	int scoreKor = getInputNumber("Kor: ");
+//	_target.setScore(ESUBJECT::EN_KOR, scoreKor);
+//
+//	int scoreEng = getInputNumber("Eng: ");
+//	_target.setScore(ESUBJECT::EN_ENG, scoreEng);
+//
+//	int scoreMath = getInputNumber("Math: ");
+//	_target.setScore(ESUBJECT::EN_MATH, scoreMath);
+//
+//	int scoreSoci = getInputNumber("Soci: ");
+//	_target.setScore(ESUBJECT::EN_SOCI, scoreSoci);
+//
+//	int scoreSci = getInputNumber("Sci: ");
+//	_target.setScore(ESUBJECT::EN_SCI, scoreSci);
+//}
 
 std::string UI::makeStrLine(std::string _string, int _length)
 {
@@ -355,12 +347,8 @@ std::string UI::makeStrLine(std::string _string, int _length)
 
 void UI::printTitle(std::string _title)
 {
-	std::string doubleLine = makeStrLine("=");
-	printString(0, 0, doubleLine);
-
-	int x = (width - _title.length()) / 2;
+	int x = (width - (int)_title.length()) / 2;
 	printString(x, 1, _title);
-	printString(0, 2, doubleLine);
 }
 
 void UI::printStudentElementTable()
@@ -373,48 +361,43 @@ void UI::printStudentElementTable()
 	}
 	//tableStudentPos.y++;
 
-	std::string singleLine = makeStrLine("-");
-	printString(0, 4, singleLine);
-	std::string singleLineBottom = makeStrLine("-", 86);
-	printString(0, 26, singleLineBottom);
+	
 }
 
 void UI::printMenu()
 {
-	for (int i = 0; i < 26; i++)
-	{
-		printString(60, i, "|");
-	}
-
-	for (int i = 0; i < 26; i++)
-	{
-		printString(86, i, "|");
-	}
-
-	for (int i = 0; i < 25; i++)
-	{
-		printString(61 + i, 0, "=");
-		printString(61 + i, 2, "=");
-	}
-
-	printString(62, 1, "Menu");
-	for (int i = 0; i < EMENU_MAIN::MENU_MAIN_SIZE; i++)
-	{
-		printString(65, i +3, menuMain[i].name);
-	}
-
-
+	printString(65, 1, "Menu");
 
 	if (cur_page < (max_page - 1))
 	{
-		// next page
-		printString(65, EMENU_MAIN::MENU_MAIN_SIZE + 3, "Next");
+		menuMain[EMENU_MAIN::EN_NEXT].visible = true;
 	}
+	else
+	{
+		menuMain[EMENU_MAIN::EN_NEXT].visible = false;
+	}
+
 	if (cur_page > 0)
 	{
-		// prev page
-		printString(65, EMENU_MAIN::MENU_MAIN_SIZE + 4, "Prev");
+		menuMain[EMENU_MAIN::EN_PREV].visible = true;
 	}
+	else
+	{
+		menuMain[EMENU_MAIN::EN_PREV].visible = false;
+	}
+
+	for (int i = 0; i < EMENU_MAIN::MENU_MAIN_SIZE; i++)
+	{
+		if (menuMain[i].visible)
+		{
+			printString(menuMain[i].x, menuMain[i].y, menuMain[i].name);
+		}
+	}
+}
+
+void UI::printSubMenu()
+{
+	printString(65, 3 + EMENU_MAIN::MENU_MAIN_SIZE, menuMain[selectedMenu].name);	
 }
 
 void UI::printStudentData(student& _student)
@@ -434,6 +417,8 @@ void UI::printStudentData(student& _student)
 	std::string aver = stream.str();
 	printString(tableStudent[ESTUDENT_TABLE::EN_AVER].x, tableStudentPos.y, aver);
 }
+
+
 
 void UI::printStudentTable()
 {
@@ -473,12 +458,39 @@ void UI::printStudentTable()
 	}
 }
 
+void UI::moveCurMenuPos()
+{
+	POINT offset = { 2, 0 };
+	if (currentSubMenu < 0)
+	{
+		if (menuMain[currentMenu].visible)
+		{
+			if ((currentMenu >= 0) && (currentMenu < EMENU_MAIN::MENU_MAIN_SIZE))
+			{
+				cursor.x = menuMain[currentMenu].x - offset.x;
+				cursor.y = menuMain[currentMenu].y - offset.y;
+				printString(cursor.x, cursor.y, ">"); // menu selector - cursor
 
+			}
+		}
+	}
+	else
+	{
+		if (currentSubMenu < maxSubMenu)
+		{
+			cursor.x = subMenuPos.x - offset.x;
+			cursor.y = subMenuPos.y - offset.y + currentSubMenu;
+			printString(cursor.x, cursor.y, ">"); // menu selector - cursor
 
+		}
+	}
 
+}
 
 DWORD __stdcall UI::displayThread(LPVOID lpParam)
 {
+	srand(static_cast<unsigned int>(time(NULL)));
+
 	UI* ui = (UI*)lpParam;
 	if (ui == nullptr)
 	{
@@ -511,37 +523,201 @@ DWORD __stdcall UI::keyboardThread(LPVOID lpParam)
 
 	while (1)
 	{
-		if (GetAsyncKeyState(VK_RETURN))
+		bool bChange = false;
+		if (GetAsyncKeyState(VK_RETURN) & 0x8000)
 		{
-			ui->selectedMenu = ui->menuCurPos_y - 3;
+			// Sub Menu
+			if (ui->currentSubMenu >= 0)
+			{
+				ui->selectedSubMenu = ui->currentSubMenu;
 
-			ui->runDisplay();
+				if (ui->inputStrFlag)
+				{
+					ui->inputStrFlag = false;
+					ui->inputEndFlag = true;
+				}
+			}
+
+			// Main Menu
+			ui->selectedMenu = ui->currentMenu;
+			bChange = true;
 		}
 		else
 		{
-			if (GetAsyncKeyState(VK_ESCAPE))
+			if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
 			{
-				ui->exitThread();
-				break;
+				if (ui->currentSubMenu >= 0)
+				{
+					ui->selectedSubMenu = -1;
+					ui->currentSubMenu = -1;
+					ui->selectedMenu = -1;
+					ui->inputStrFlag = false;
+					ui->inputNumFlag = false;
+					for (int i = 0; i < ui->maxTempString; i++)
+					{
+						ui->tempString[i].clear();
+					}
+
+					bChange = true;
+				}
+				else
+				{
+					ui->exitThread();
+					break;
+				}
 			}
 
-			if (GetAsyncKeyState(VK_DOWN))
+			if (GetAsyncKeyState(VK_DOWN) & 0x8000)
 			{
-				if (ui->menuCurPos_y < 11)
+				// Sub Menu Control
+				if (ui->currentSubMenu != -1)
 				{
-					ui->menuCurPos_y++;
+					if (ui->currentSubMenu < (ui->maxSubMenu - 1))
+					{
+						ui->currentSubMenu++;
+						ui->inputStrFlag = false;
+						ui->inputNumFlag = false;
+					}
+					bChange = true;
 				}
-				ui->runDisplay();
+				// Main Menu Control
+				else
+				{
+					if (ui->currentMenu < EMENU_MAIN::EN_LOAD)
+					{
+						ui->currentMenu++;
+						bChange = true;
+					}
+				}
 			}
 
-			if (GetAsyncKeyState(VK_UP))
+			if (GetAsyncKeyState(VK_UP) & 0x8000)
 			{
-				if (ui->menuCurPos_y > 3)
+				// Sub Menu Control
+				if (ui->currentSubMenu > 0)
 				{
-					ui->menuCurPos_y--;
+					ui->currentSubMenu--;
+					ui->inputStrFlag = false;
+					ui->inputNumFlag = false;
+					bChange = true;
 				}
-				ui->runDisplay();
+				// Main Menu Control
+				else if(ui->currentSubMenu < 0)
+				{
+					if (ui->currentMenu > 0 && (ui->currentMenu < EMENU_MAIN::EN_NEXT))
+					{
+						ui->currentMenu--;
+						bChange = true;
+					}
+				}
 			}
+
+			if (GetAsyncKeyState(VK_LEFT) & 0x8000)
+			{
+				if (ui->currentSubMenu == -1)
+				{
+					if (ui->currentMenu < EMENU_MAIN::EN_NEXT)
+					{
+						if (ui->menuMain[EMENU_MAIN::EN_NEXT].visible)
+						{
+							ui->currentMenu = EMENU_MAIN::EN_NEXT;
+							bChange = true;
+						}
+						else if (ui->menuMain[EMENU_MAIN::EN_PREV].visible)
+						{
+							ui->currentMenu = EMENU_MAIN::EN_PREV;
+							bChange = true;
+						}
+					}
+					else if (ui->currentMenu == EMENU_MAIN::EN_NEXT)
+					{
+						if (ui->menuMain[EMENU_MAIN::EN_PREV].visible)
+						{
+							ui->currentMenu = EMENU_MAIN::EN_PREV;
+							bChange = true;
+						}
+					}
+				}
+				
+				//ui->runDisplay();
+			}
+
+			if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
+			{
+				if (ui->currentSubMenu == -1)
+				{
+					if (ui->currentMenu == EMENU_MAIN::EN_PREV)
+					{
+						if (ui->menuMain[EMENU_MAIN::EN_NEXT].visible)
+						{
+							ui->currentMenu = EMENU_MAIN::EN_NEXT;
+							bChange = true;
+						}
+						else
+						{
+							ui->currentMenu = EMENU_MAIN::EN_INSERT;
+							bChange = true;
+						}
+					}
+					else if (ui->currentMenu == EMENU_MAIN::EN_NEXT)
+					{
+						ui->currentMenu = EMENU_MAIN::EN_INSERT;
+						bChange = true;
+					}
+				}
+			}
+
+			if (ui->inputStrFlag)
+			{
+				if (GetAsyncKeyState(VK_BACK) & 0x8000)
+				{
+					if (!ui->tempString[ui->currentSubMenu].empty())
+					{
+						ui->tempString[ui->currentSubMenu].pop_back();
+						bChange = true;
+					}
+				}
+
+				for (int key = EKEY::A; key <= EKEY::Z; key++)
+				{
+					if (ui->tempString[ui->currentSubMenu].length() < 10)
+					{
+						if (GetAsyncKeyState(key) & 0x8000)
+						{
+							ui->tempString[ui->currentSubMenu].push_back(key);
+							bChange = true;
+						}
+					}
+				}
+			}
+			if (ui->inputNumFlag)
+			{
+				if (GetAsyncKeyState(VK_BACK) & 0x8000)
+				{
+					if (!ui->tempString[ui->currentSubMenu].empty())
+					{
+						ui->tempString[ui->currentSubMenu].pop_back();
+						bChange = true;
+					}
+				}
+
+				for (int key = 48; key <= 57; key++) // 47: 0 ~ 57 : 9
+				{
+					if (ui->tempString[ui->currentSubMenu].length() < 10)
+					{
+						if (GetAsyncKeyState(key) & 0x8000)
+						{
+							ui->tempString[ui->currentSubMenu].push_back(key);
+							bChange = true;
+						}
+					}
+				}
+			}
+		}
+
+		if (bChange)
+		{
+			ui->runDisplay();
 		}
 
 		Sleep(100);
@@ -574,61 +750,407 @@ HANDLE UI::getExitThread()
 
 void UI::display()
 {
-	printTitle("Student Manager");
-	printStudentElementTable();
-	printMenu();
-	printString(menuCurPos_x, menuCurPos_y, ">"); // menu selector - cursor
-
-
+	printFrame();
+	
 	switch (selectedMenu)
 	{
-	case EMENU_MAIN::EN_INSERT_NEW_STUDENT:
-	{
-		updateTable();
-		break;
-	}
-	case EMENU_MAIN::EN_ERASE_STUDENT:
-	{
-		updateTable();
-		break;
-	}
-	case EMENU_MAIN::EN_FIND_STUDENT:
-	{
-		break;
-	}
-	case EMENU_MAIN::EN_SORT_STUDENT:
-	{
-		updateTable();
-		break;
-	}
-	case EMENU_MAIN::EN_MAKE_DUMMY:
-	{
-		makeDummyData();
-		selectedMenu = -1;
-		updateTable();
-		break;
-	}
-	case EMENU_MAIN::EN_SAVE_FILE:
-	{
-		break;
-	}
-	case EMENU_MAIN::EN_LOAD_FILE:
-	{
-		updateTable();
-		break;
-	}	
+		case EMENU_MAIN::EN_INSERT:
+		{
+			student newStudent;
+			//getInputStudent(newStudent);
+			printSubMenu();
+			insertStudent();
+			updateTable();
+			break;
+		}
+		case EMENU_MAIN::EN_ERASE:
+		{
+			printSubMenu();
+			eraseStudent();
+			updateTable();
+			break;
+		}
+		case EMENU_MAIN::EN_FIND:
+		{
+			printSubMenu();
+			findStudent();
+			break;
+		}
+		case EMENU_MAIN::EN_SORT:
+		{
+			printSubMenu();
+			sortStudent();
+			updateTable();
+			break;
+		}
+		case EMENU_MAIN::EN_MAKE_DUMMY:
+		{
+			studentManager->insertDummyStudent();
+			selectedMenu = -1;
+			updateTable();
+			break;
+		}
+		case EMENU_MAIN::EN_SAVE:
+		{
+			saveFile();
+			selectedMenu = -1;
+			break;
+		}
+		case EMENU_MAIN::EN_LOAD:
+		{
+			printSubMenu();
+			loadFile();
+			updateTable();
+			//selectedMenu = -1;
+			break;
+		}	
 
-	case 7:
-	{
-		cur_page++;
-		break;
-	}
+		case EMENU_MAIN::EN_NEXT:
+		{
+			if (cur_page < (max_page - 1))
+			{
+				cur_page++;
+			}
 
-	case 8:
-	{
-		cur_page--;
-		break;
+			if (cur_page == (max_page - 1))
+			{
+				if (menuMain[EMENU_MAIN::EN_PREV].visible)
+				{
+					currentMenu = EMENU_MAIN::EN_PREV;
+				}
+				else
+				{
+					currentMenu = EMENU_MAIN::EN_INSERT;
+				}
+			}
+			selectedMenu = -1;
+			break;
+		}
+
+		case EMENU_MAIN::EN_PREV:
+		{
+			if(cur_page > 0)
+			{
+				cur_page--;
+			}
+
+			if (cur_page == 0)
+			{
+				if (menuMain[EMENU_MAIN::EN_NEXT].visible)
+				{
+					currentMenu = EMENU_MAIN::EN_NEXT;
+				}
+				else
+				{
+					currentMenu = EMENU_MAIN::EN_INSERT;
+				}
+			}
+			selectedMenu = -1;
+			break;
+		}
 	}
-	}
+	moveCurMenuPos();
+
+	printMenu();
 	printStudentTable();
+}
+
+///////////////////////////////////////////////////////////////////
+// Sub Menu
+///////////////////////////////////////////////////////////////////
+void UI::insertStudent()
+{
+	if (currentSubMenu < 0)
+	{
+		currentSubMenu = 0;
+	}
+
+	maxSubMenu = 8;
+
+	if (currentSubMenu == 0)
+	{
+		inputStrFlag = true;
+	}
+	else if (currentSubMenu > 0 && currentSubMenu < maxSubMenu)
+	{
+		inputNumFlag = true;
+	}
+
+	printString(subMenuPos.x, subMenuPos.y, "Name: ");
+	printString(subMenuPos.x + 6, subMenuPos.y, tempString[0]);
+
+	printString(subMenuPos.x, subMenuPos.y + 1, "Age: ");
+	printString(subMenuPos.x + 6, subMenuPos.y + 1, tempString[1]);
+
+	printString(subMenuPos.x, subMenuPos.y + 2, "Kor: ");
+	printString(subMenuPos.x + 6, subMenuPos.y + 2, tempString[2]);
+
+	printString(subMenuPos.x, subMenuPos.y + 3, "Eng: ");
+	printString(subMenuPos.x + 6, subMenuPos.y + 3, tempString[3]);
+
+	printString(subMenuPos.x, subMenuPos.y + 4, "Math: ");
+	printString(subMenuPos.x + 6, subMenuPos.y + 4, tempString[4]);
+
+	printString(subMenuPos.x, subMenuPos.y + 5, "Soci: ");
+	printString(subMenuPos.x + 6, subMenuPos.y + 5, tempString[5]);
+
+	printString(subMenuPos.x, subMenuPos.y + 6, "Sci: ");
+	printString(subMenuPos.x + 6, subMenuPos.y + 6, tempString[6]);
+	
+	printString(subMenuPos.x, subMenuPos.y + 7, "Insert");
+	
+	if (selectedSubMenu == 7)
+	{
+		selectedSubMenu = -1;
+		currentSubMenu = -1;
+		selectedMenu = -1;
+
+		student newStudent;
+		if (!tempString[0].empty())
+		{
+			newStudent.setName(tempString[0]);
+
+			if (!tempString[1].empty())
+			{
+				newStudent.setAge(std::stoi(tempString[1]));
+			}
+
+			if (!tempString[2].empty())
+			{
+				int score = std::stoi(tempString[2]);
+				score = score > 100 ? 100 : score;
+				newStudent.setScore(ESUBJECT::EN_KOR, score);
+			}
+
+			if (!tempString[3].empty())
+			{
+				int score = std::stoi(tempString[3]);
+				score = score > 100 ? 100 : score;
+				newStudent.setScore(ESUBJECT::EN_ENG, score);
+			}
+
+			if (!tempString[4].empty())
+			{
+				int score = std::stoi(tempString[4]);
+				score = score > 100 ? 100 : score;
+				newStudent.setScore(ESUBJECT::EN_MATH, score);
+			}
+
+			if (!tempString[5].empty())
+			{
+				int score = std::stoi(tempString[5]);
+				score = score > 100 ? 100 : score;
+				newStudent.setScore(ESUBJECT::EN_SOCI, score);
+			}
+
+			if (!tempString[6].empty())
+			{
+				int score = std::stoi(tempString[6]);
+				score = score > 100 ? 100 : score;
+				newStudent.setScore(ESUBJECT::EN_SCI, score);
+			}
+
+			studentManager->insertStudent(newStudent);
+		}
+
+		for (int i = 0; i < maxTempString; i++)
+		{
+			tempString[i].clear();
+		}
+	}
+}
+
+void UI::eraseStudent()
+{
+	if (currentSubMenu < 0)
+	{
+		currentSubMenu = 0;
+	}
+
+	maxSubMenu = 2;
+
+	if (currentSubMenu == 0)
+	{
+		inputNumFlag = true;
+	}
+
+	printString(subMenuPos.x, subMenuPos.y, "ID: ");
+	printString(subMenuPos.x + 6, subMenuPos.y, tempString[0]);
+
+	printString(subMenuPos.x, subMenuPos.y + 1, "Erase");
+
+	if (selectedSubMenu == 1)
+	{
+		selectedSubMenu = -1;
+		currentSubMenu = -1;
+		selectedMenu = -1;
+
+		int id = 0;
+		if (!tempString[0].empty())
+		{
+			id = std::stoi(tempString[0]);
+			studentManager->eraseStudent(id);
+		}
+
+		for (int i = 0; i < maxTempString; i++)
+		{
+			tempString[i].clear();
+		}
+	}
+}
+
+void UI::findStudent()
+{
+	if (currentSubMenu < 0)
+	{
+		currentSubMenu = 0;
+	}
+
+	maxSubMenu = 2;
+
+	if (currentSubMenu == 0)
+	{
+		inputStrFlag = true;
+	}
+
+	printString(subMenuPos.x, subMenuPos.y, "Name: ");
+	printString(subMenuPos.x + 6, subMenuPos.y, tempString[0]);
+
+	printString(subMenuPos.x, subMenuPos.y + 1, "Find");
+
+	if (selectedSubMenu == 1)
+	{
+		selectedSubMenu = -1;
+		currentSubMenu = -1;
+		selectedMenu = -1;
+
+		if (!tempString[0].empty())
+		{
+			LL::List<student> findedStudent;
+			studentManager->findNameAll(tempString[0], findedStudent);
+
+			if (findedStudent.size() > 0)
+			{
+				int lineNum = 3;
+				printString(subMenuPos.x, subMenuPos.y + 2, "Finded ID: ");
+				for (auto it = findedStudent.begin(); it != findedStudent.end(); it++)
+				{
+					printString(subMenuPos.x, subMenuPos.y + lineNum, std::to_string((*it).getID()));
+					lineNum++;
+				}
+			}
+			else
+			{
+				printString(subMenuPos.x, subMenuPos.y + 2, "Failed Find!");
+			}
+		}
+		else
+		{
+			printString(subMenuPos.x, subMenuPos.y + 2, "Failed Find!");
+		}
+
+		for (int i = 0; i < maxTempString; i++)
+		{
+			tempString[i].clear();
+		}
+	}
+}
+
+void UI::sortStudent()
+{
+	if (currentSubMenu < 0)
+	{
+		currentSubMenu = 0;
+	}
+
+	maxSubMenu = EMENU_SORT::MENU_SORT_SIZE;
+
+	for (int i = 0; i < EMENU_SORT::MENU_SORT_SIZE; i++)
+	{
+		printString(subMenuPos.x, subMenuPos.y + i, menuSort[i].name);
+	}
+
+	if (selectedSubMenu >= 0)
+	{
+		switch (selectedSubMenu)
+		{
+		case EMENU_SORT::EN_ASCENDING_ID:
+			studentManager->sortID();
+			break;
+		case EMENU_SORT::EN_ASCENDING_NAME:
+			studentManager->sortName();
+			break;
+		case EMENU_SORT::EN_ASCENDING_AGE:
+			studentManager->sortAge();
+			break;
+		case EMENU_SORT::EN_DECENDING_KOR:
+			studentManager->sortScore(ESUBJECT::EN_KOR);
+			break;
+		case EMENU_SORT::EN_DECENDING_ENG:
+			studentManager->sortScore(ESUBJECT::EN_ENG);
+			break;
+		case EMENU_SORT::EN_DECENDING_MATH:
+			studentManager->sortScore(ESUBJECT::EN_MATH);
+			break;
+		case EMENU_SORT::EN_DECENDING_SOCI:
+			studentManager->sortScore(ESUBJECT::EN_SOCI);
+			break;
+		case EMENU_SORT::EN_DECENDING_SCI:
+			studentManager->sortScore(ESUBJECT::EN_SCI);
+			break;
+		}
+
+		selectedSubMenu = -1;
+		currentSubMenu = -1;
+		selectedMenu = -1;
+	}
+}
+
+void UI::saveFile()
+{
+	if (!studentManager->empty())
+	{
+		time_t curTime = time(NULL);
+		struct tm t;
+		localtime_s(&t, &curTime);
+		std::string name = "Save_"
+			+ std::to_string(t.tm_year + 1900) + "-"
+			+ std::to_string(t.tm_mon + 1) + "-"
+			+ std::to_string(t.tm_mday) + "_"
+			+ std::to_string(t.tm_hour) + "-"
+			+ std::to_string(t.tm_min) + ".csv";
+		studentManager->saveFile(name);
+	}
+}
+
+void UI::loadFile()
+{
+	studentManager->findFile();
+	std::vector<std::string> fileList = studentManager->getFileList();
+	if (!fileList.empty())
+	{
+		size_t max = fileList.size() > 10 ? 10 : fileList.size();
+		for (size_t cnt = 0; cnt < max; cnt++)
+		{
+			printString(subMenuPos.x, subMenuPos.y + cnt, fileList[cnt]);
+		}
+
+		maxSubMenu = max;
+
+		if (currentSubMenu < 0)
+		{
+			currentSubMenu = 0;
+		}
+
+		if (selectedSubMenu >= 0)
+		{
+			studentManager->loadFile(fileList[selectedSubMenu]);
+			selectedSubMenu = -1;
+			currentSubMenu = -1;
+			selectedMenu = -1;
+		}
+	}
+
+	
+
 }

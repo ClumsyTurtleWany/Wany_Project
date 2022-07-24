@@ -71,7 +71,14 @@ double student::getAverageScore()
 {
 	double total = static_cast<double>(getTotalScore());
 	size_t size = subjects.size();
-	return (total / size);
+	if (total == 0)
+	{
+		return 0;
+	}
+	else
+	{
+		return (total / size);
+	}
 }
 
 bool student::eraseSubject(ESUBJECT _subject)
@@ -214,6 +221,18 @@ LL::List<student>::iterator studentMgr::end()
 const size_t studentMgr::getSize()
 {
 	return studentList.size();
+}
+
+bool studentMgr::empty()
+{
+	if (getSize() > 0)
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
 }
 
 void studentMgr::sortScore(ESUBJECT _subject, bool _ascending)
@@ -415,4 +434,68 @@ bool studentMgr::loadFile(std::string _name)
 		file.close();
 		return true;
 	}
+}
+
+bool studentMgr::findFile(std::string _extension)
+{
+	if (!fileList.empty())
+	{
+		fileList.clear();
+	}
+
+	std::filesystem::path path("./");
+	for (auto& file : std::filesystem::recursive_directory_iterator(path))
+	{
+		if (file.path().extension() == _extension)
+		{
+			fileList.push_back(file.path().filename().string());
+		}
+	}
+
+	if (!fileList.empty())
+	{
+		sortFile();
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool studentMgr::sortFile()
+{
+	if (!fileList.empty())
+	{
+		std::sort(fileList.begin(), fileList.end(), std::greater<std::string>());
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+const std::vector<std::string> studentMgr::getFileList()
+{
+	return fileList;
+}
+
+void studentMgr::insertDummyStudent()
+{
+	std::string name;
+	name.push_back(rand() % 25 + 65);
+	name.push_back(rand() % 25 + 65);
+	name.push_back(rand() % 25 + 65);
+
+	int age = rand() % 47 + 18;
+
+	student DummyStudent(name, age);
+	DummyStudent.setScore(ESUBJECT::EN_KOR, rand() % 101);
+	DummyStudent.setScore(ESUBJECT::EN_ENG, rand() % 101);
+	DummyStudent.setScore(ESUBJECT::EN_MATH, rand() % 101);
+	DummyStudent.setScore(ESUBJECT::EN_SOCI, rand() % 101);
+	DummyStudent.setScore(ESUBJECT::EN_SCI, rand() % 101);
+
+	insertStudent(DummyStudent);
 }

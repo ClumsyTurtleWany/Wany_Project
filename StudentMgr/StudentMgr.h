@@ -2,6 +2,8 @@
 #include <string>
 #include <fstream>
 #include "LinkedList.hpp"
+#include <filesystem> // c++ 17 std
+#include <algorithm>
 
 enum class ESUBJECT
 {
@@ -28,7 +30,7 @@ private:
 	int id;
 	std::string name;
 	int age;
-	LL::List<subject> subjects;	
+	LL::List<subject> subjects;
 
 public:
 	student(std::string _name = "", int _age = 0, int _id = NULL) : name(_name), age(_age), id(NULL) {};
@@ -56,6 +58,7 @@ class studentMgr
 private:
 	LL::List<student> studentList;
 	int cnt_id = 0;
+	std::vector<std::string> fileList;
 
 public:
 	studentMgr() 
@@ -75,6 +78,7 @@ public:
 	LL::List<student>::iterator end();
 
 	const size_t getSize();
+	bool empty();
 
 	// sort by subject score.
 	// default: decending. (true: ascending, false: decending)
@@ -95,6 +99,11 @@ public:
 	// File Management
 	bool saveFile(std::string _name);
 	bool loadFile(std::string _name);
+	bool findFile(std::string _extension = ".csv");
+	bool sortFile();
+	const std::vector<std::string> getFileList();
 	// need findFile 	
+
+	void insertDummyStudent();
 
 };
