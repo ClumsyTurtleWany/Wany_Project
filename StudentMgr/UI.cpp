@@ -640,7 +640,7 @@ DWORD __stdcall UI::keyboardThread(LPVOID lpParam)
 				}
 			}
 
-			if (ui->inputStrFlag)
+			if (ui->inputStrFlag && ui->currentSubMenu >= 0)
 			{
 				if (GetAsyncKeyState(VK_BACK) & 0x8000)
 				{
@@ -663,7 +663,7 @@ DWORD __stdcall UI::keyboardThread(LPVOID lpParam)
 					}
 				}
 			}
-			if (ui->inputNumFlag)
+			if (ui->inputNumFlag && ui->currentSubMenu >= 0)
 			{
 				if (GetAsyncKeyState(VK_BACK) & 0x8000)
 				{
