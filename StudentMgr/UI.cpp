@@ -143,14 +143,10 @@ void UI::initializeMenu()
 	menuMain[EMENU_MAIN::EN_NEXT].y = 25;
 	menuMain[EMENU_MAIN::EN_NEXT].visible = false;
 	
-
 	menuMain[EMENU_MAIN::EN_PREV].x = 20;
 	menuMain[EMENU_MAIN::EN_PREV].y = 25;
 	menuMain[EMENU_MAIN::EN_PREV].visible = false;
 	
-
-	//menu insert(65, 3, "Insert Student", true);
-	//mainMenu.push_back(insert);
 
 	// 1. Erase Menu
 	menuErase = new menu[EMENU_ERASE::MENU_ERASE_SIZE];
@@ -167,19 +163,6 @@ void UI::initializeMenu()
 	menuSort[EMENU_SORT::EN_DECENDING_MATH].name = "Sort by Math(Decending)";
 	menuSort[EMENU_SORT::EN_DECENDING_SOCI].name = "Sort by Soci(Decending)";
 	menuSort[EMENU_SORT::EN_DECENDING_SCI].name = "Sort by Sci(Decending)";
-	
-	// 3. Sort Menu - Sort Type
-	menuSortType = new menu[EMENU_SORT_TYPE::SORT_TYPE_SIZE];
-	menuSortType[EMENU_SORT_TYPE::EN_ASCENDING].name = "Ascending";
-	menuSortType[EMENU_SORT_TYPE::EN_DECENDING].name = "Decending";
-
-	// 3. Sort Menu - Sort Subject
-	menuSortSubject = new menu[EMENU_SORT_SUBJECT::SUBJECT_SIZE];
-	menuSortSubject[EMENU_SORT_SUBJECT::EN_SUB_KOR].name = "Korean";
-	menuSortSubject[EMENU_SORT_SUBJECT::EN_SUB_ENG].name = "English";
-	menuSortSubject[EMENU_SORT_SUBJECT::EN_SUB_MATH].name = "Math";
-	menuSortSubject[EMENU_SORT_SUBJECT::EN_SUB_SOCI].name = "Society";
-	menuSortSubject[EMENU_SORT_SUBJECT::EN_SUB_SCI].name = "Science";
 }
 
 void UI::initializeTable()
@@ -243,16 +226,6 @@ void UI::release()
 	{
 		delete[] menuSort;
 		menuSort = nullptr;
-	}
-	if (menuSortType != nullptr)
-	{
-		delete[] menuSortType;
-		menuSortType = nullptr;
-	}
-	if (menuSortSubject != nullptr)
-	{
-		delete[] menuSortSubject;
-		menuSortSubject = nullptr;
 	}
 	if (tableStudent != nullptr)
 	{
@@ -718,9 +691,10 @@ DWORD __stdcall UI::keyboardThread(LPVOID lpParam)
 		if (bChange)
 		{
 			ui->runDisplay();
+			Sleep(100);
 		}
 
-		Sleep(100);
+		//Sleep(100);
 	}
 
 
@@ -1113,12 +1087,19 @@ void UI::saveFile()
 		time_t curTime = time(NULL);
 		struct tm t;
 		localtime_s(&t, &curTime);
+		std::string year = std::to_string(t.tm_year + 1900);
+		std::string month = t.tm_mon + 1 < 10 ? "0" + std::to_string(t.tm_mon + 1) : std::to_string(t.tm_mon + 1);
+		std::string day = t.tm_mday < 10 ? "0" + std::to_string(t.tm_mday) : std::to_string(t.tm_mday);
+		std::string hour = t.tm_hour < 10 ? "0" + std::to_string(t.tm_hour) : std::to_string(t.tm_hour);
+		std::string min = t.tm_min < 10 ? "0" + std::to_string(t.tm_min) : std::to_string(t.tm_min);
+
 		std::string name = "Save_"
-			+ std::to_string(t.tm_year + 1900) + "-"
-			+ std::to_string(t.tm_mon + 1) + "-"
-			+ std::to_string(t.tm_mday) + "_"
-			+ std::to_string(t.tm_hour) + "-"
-			+ std::to_string(t.tm_min) + ".csv";
+			+ year
+			+ month
+			+ day + "_"
+			+ hour
+			+ min
+			+ ".csv";
 		studentManager->saveFile(name);
 	}
 }

@@ -110,8 +110,6 @@ private:
 	menu* menuMain = nullptr;
 	menu* menuErase = nullptr;
 	menu* menuSort = nullptr;
-	menu* menuSortType = nullptr;
-	menu* menuSortSubject = nullptr;
 	tableInfo* tableStudent = nullptr;
 	std::vector<std::vector<std::string>> vecTable;
 
@@ -152,23 +150,6 @@ public:
 		EN_DECENDING_SOCI,
 		EN_DECENDING_SCI,
 		MENU_SORT_SIZE
-	};
-
-	enum EMENU_SORT_TYPE
-	{
-		EN_ASCENDING = (int)0,
-		EN_DECENDING,
-		SORT_TYPE_SIZE
-	};
-
-	enum EMENU_SORT_SUBJECT
-	{
-		EN_SUB_KOR = (int)0,
-		EN_SUB_ENG,
-		EN_SUB_MATH,
-		EN_SUB_SOCI,
-		EN_SUB_SCI,
-		SUBJECT_SIZE
 	};
 
 	enum ESTUDENT_TABLE

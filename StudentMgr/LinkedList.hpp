@@ -453,8 +453,6 @@ namespace LL
 	template<typename T>
 	inline void List<T>::sort(iterator _first, iterator _last, std::function<bool(T&, T&)> _comparisonFunc)
 	{
-		bool bTest = false;
-
 		// Buble sort
 
 		iterator IterlastElement = _last;
@@ -462,18 +460,24 @@ namespace LL
 
 		for (iterator iter = _first; iter != _last; iter++)
 		{
+			bool isSwap = false;
 			for (iterator iter2 = _first; iter2 != IterlastElement; iter2++)
 			{
 				iterator next = iter2;
 				next++;
 				if (!_comparisonFunc(*iter2, *next))
 				{
+					isSwap = true;
 					T* temp = new T;
 					*temp = *iter2;
 					*iter2 = *next;
 					*next = *temp;
 					delete temp;
 				}
+			}
+			if (!isSwap)
+			{
+				break;
 			}
 		}
 	}
