@@ -231,7 +231,12 @@ void UI::release()
 	{
 		delete[] tableStudent;
 		tableStudent = nullptr;
-	}	
+	}
+
+	CloseHandle(threadHandle[0]);
+	CloseHandle(threadHandle[1]);
+	CloseHandle(runEvent);
+	CloseHandle(exitEvent);
 }
 
 void UI::printFrame()
@@ -653,7 +658,7 @@ DWORD __stdcall UI::keyboardThread(LPVOID lpParam)
 
 				for (int key = EKEY::A; key <= EKEY::Z; key++)
 				{
-					if (ui->tempString[ui->currentSubMenu].length() < 10)
+					if (ui->tempString[ui->currentSubMenu].length() < 5)
 					{
 						if (GetAsyncKeyState(key) & 0x8000)
 						{
@@ -676,7 +681,7 @@ DWORD __stdcall UI::keyboardThread(LPVOID lpParam)
 
 				for (int key = 48; key <= 57; key++) // 47: 0 ~ 57 : 9
 				{
-					if (ui->tempString[ui->currentSubMenu].length() < 10)
+					if (ui->tempString[ui->currentSubMenu].length() < 3)
 					{
 						if (GetAsyncKeyState(key) & 0x8000)
 						{

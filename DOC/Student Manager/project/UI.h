@@ -75,7 +75,7 @@ private:
 	bool inputStrFlag = false;
 	bool inputNumFlag = false;
 	bool inputEndFlag = false;
-
+	
 	POINT cursor = { 0, 0 };
 	POINT subMenuPos = { 65, 5 + EMENU_MAIN::MENU_MAIN_SIZE };
 	POINT tableStudentPos = { 1, 4 };
