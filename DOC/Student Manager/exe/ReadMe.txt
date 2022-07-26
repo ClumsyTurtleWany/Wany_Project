@@ -1,7 +1,7 @@
 Control Key
-Up: move cursor to above menu.
-Down: move cursor to under menu.
-Left: move cursor to page control.
-Right: move cursor to page control or main menu.
-Enter: select menu.
-Esc: escape sub menu or escape program.
+Up: 커서를 위로 이동.
+Down: 커서를 아래로 이동.
+Left: 커서를 페이지 위치로 이동.
+Right: 커서를 페이지 위치 및 메인 메뉴로 이동.
+Enter: 메뉴 선택.
+Esc: 서브 메뉴에서 탈출, 메인 메뉴에서 프로그램 종료.

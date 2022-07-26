@@ -231,7 +231,12 @@ void UI::release()
 	{
 		delete[] tableStudent;
 		tableStudent = nullptr;
-	}	
+	}
+
+	CloseHandle(threadHandle[0]);
+	CloseHandle(threadHandle[1]);
+	CloseHandle(runEvent);
+	CloseHandle(exitEvent);
 }
 
 void UI::printFrame()
