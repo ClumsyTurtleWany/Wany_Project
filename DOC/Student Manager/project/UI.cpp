@@ -679,7 +679,7 @@ DWORD __stdcall UI::keyboardThread(LPVOID lpParam)
 					}
 				}
 
-				for (int key = 48; key <= 57; key++) // 47: 0 ~ 57 : 9
+				for (int key = 48; key <= 57; key++) // 48: 0 ~ 57 : 9
 				{
 					if (ui->tempString[ui->currentSubMenu].length() < 3)
 					{
