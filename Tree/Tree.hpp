@@ -489,6 +489,10 @@ namespace TREE
 	template<typename K, typename T>
 	inline void BST<K, T>::erase(NODE* _target)
 	{
+		// target->child[0]->child[1] 과 target 교환
+		// 혹은 target->child[1]->child[0]과 교환
+		// child[0] == nullptr && child[1] == nullptr 인 노드까지 target이 도달했을 떄
+		// target 삭제.
 		if (_target != nullptr)
 		{
 			if (_target->isLeaf)
@@ -538,11 +542,52 @@ namespace TREE
 					{
 						swap(_target, targetChildLeft);
 						erase(_target);
+						return;
 					}
 				}
 
 				// search right
+				NODE* targetChildRight = _target->child[1];
+				if (targetChildRight != nullptr)
+				{
+					NODE* leafNode = targetChildRight->child[0];
+					if (leafNode != nullptr)
+					{
+						while (leafNode->child[0] != nullptr)
+						{
+							leafNode = leafNode->child[0];
+						}
 
+						swap(_target, leafNode);
+						NODE* parent = _target->parent;
+						if (parent->child[1] == _target)
+						{
+							parent->child[1] = nullptr;
+						}
+						else if (parent->child[0] == _target)
+						{
+							parent->child[0] = nullptr;
+						}
+
+						delete _target;
+						if (parent != nullptr)
+						{
+							if ((parent->child[0] == nullptr) && (parent->child[1] == nullptr))
+							{
+								parent->isLeaf = true;
+							}
+						}
+
+						cnt--;
+						return;
+					}
+					else
+					{
+						swap(_target, targetChildRight);
+						erase(_target);
+						return;
+					}
+				}
 
 
 			}
@@ -553,13 +598,6 @@ namespace TREE
 	template<typename K, typename T>
 	inline void BST<K, T>::erase(K _key)
 	{
-		// target->child[0]->child[1] 과 target 교환
-		// 혹은 target->child[1]->child[0]과 교환
-		// child[0] == nullptr && child[1] == nullptr 인 노드까지 target이 도달했을 떄
-		// target 삭제.
-		
-
-
 		NODE* target = find(_key, root);
 		if(target == nullptr)
 		{
@@ -570,66 +608,5 @@ namespace TREE
 			erase(target);
 			return;
 		}
-
-
-		//if (target != nullptr)
-		//{
-		//	if (target->isLeaf)
-		//	{
-		//		delete target;
-		//		cnt--;
-		//		return;
-		//	}
-		//	else
-		//	{
-		//		// search left
-		//		NODE* targetChildLeft = target->child[0];
-		//		if (targetChildLeft != nullptr)
-		//		{
-		//			NODE* leafNode = targetChildLeft->child[1];
-		//			if (leafNode != nullptr)
-		//			{
-		//				while (leafNode->child[1] != nullptr)
-		//				{
-		//					leafNode = leafNode->child[1];
-		//				}
-
-		//				swap(target, leafNode);
-		//				NODE* parent = target->parent;
-		//				if (parent->child[0] == target)
-		//				{
-		//					parent->child[0] = nullptr;
-		//				}
-		//				else if (parent->child[1] == target)
-		//				{
-		//					parent->child[1] = nullptr;
-		//				}
-
-		//				delete target;
-		//				if (parent != nullptr)
-		//				{
-		//					if ((parent->child[0] == nullptr) && (parent->child[1] == nullptr))
-		//					{
-		//						parent->isLeaf = true;
-		//					}
-		//				}
-		//				
-		//				cnt--;
-		//				return;
-		//			}
-		//			else
-		//			{
-		//				swap(target, targetChildLeft);
-		//				erase(target);
-		//			}
-		//		}
-
-		//		// search right
-		//		
-
-
-		//	}
-
-		//}
 	}
 }
