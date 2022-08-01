@@ -7,14 +7,20 @@ namespace TREE
 	// depth: parent size
 	// height: child depth
 	template <typename K, typename T>
-	struct node
+	class node
 	{
+	public:
 		K key = K();
 		T data = T();
 		int depth = 0;
 		int height = 0;
+		bool isLeaf = true;
 		node<K, T>* parent = nullptr;
 		node<K, T>* child[2] = { nullptr, };
+
+	public:
+		node() {};
+		~node() {};
 	};
 
 	template <typename K, typename T>
@@ -28,7 +34,10 @@ namespace TREE
 		int minKey = 0;
 		int maxKey = 0;
 
-		
+	private:
+		void insert(NODE* _node, NODE* _parent = nullptr);
+		bool swap(NODE* _first, NODE* _second);
+		node<K, T>* find(K _key, NODE* _parent);
 		
 	public:
 		BST() {};
@@ -168,20 +177,18 @@ namespace TREE
 			}
 		};
 
-		void insert(NODE* _node, NODE* _parent = nullptr);
 		void insert(K _key, T _data);
 
-		node<K, T>* find(K _key);
-		node<K, T>* find(K _key, NODE* _parent);
+		//node<K, T>* find(K _key);
+		T* find(K _key);
 		
-		iterator begin() { return iterator(find(minKey)); };
-		iterator end() { return iterator(find(maxKey)); };
-
-		bool swap(NODE* _first, NODE* _second);
+		iterator begin() { return iterator(find(minKey, root)); };
+		iterator end() { return iterator(find(maxKey, root)); };
 
 		int size() { return cnt; };
 
 		void erase(iterator _iter);
+		void erase(NODE* _target);
 		void erase(K _key);
 
 	};
@@ -210,6 +217,7 @@ namespace TREE
 					_node->parent = _parent;
 					_node->depth = _parent->depth + 1;
 					_parent->child[0] = _node;
+					_parent->isLeaf = false;
 					minKey = minKey < _node->key ? minKey : _node->key;
 					maxKey = maxKey < _node->key ? _node->key : maxKey;
 					cnt++;
@@ -226,6 +234,7 @@ namespace TREE
 					_node->parent = _parent;
 					_node->depth = _parent->depth + 1;
 					_parent->child[1] = _node;
+					_parent->isLeaf = false;
 					minKey = minKey < _node->key ? minKey : _node->key;
 					maxKey = maxKey < _node->key ? _node->key : maxKey;
 					cnt++;
@@ -283,7 +292,7 @@ namespace TREE
 		}
 	}
 	
-	template<typename K, typename T>
+	/*template<typename K, typename T>
 	inline node<K, T>* BST<K, T>::find(K _key)
 	{
 		if (root == nullptr)
@@ -306,6 +315,33 @@ namespace TREE
 				return temp;
 			}
 		}
+	}*/
+
+	template<typename K, typename T>
+	inline T* BST<K, T>::find(K _key)
+	{
+		if (root == nullptr)
+		{
+			return nullptr;
+		}
+		else
+		{
+			NODE* temp = root;
+			if (_key < temp->key)
+			{
+				NODE* rst = find(_key, temp->child[0]);
+				return rst != nullptr ? rst->data : nullptr;
+			}
+			else if (_key > temp->key)
+			{
+				NODE* rst = find(_key, temp->child[1]);
+				return rst != nullptr ? rst->data : nullptr;
+			}
+			else
+			{
+				return temp->data;
+			}
+		}
 	}
 
 	template<typename K, typename T>
@@ -313,8 +349,7 @@ namespace TREE
 	{
 		if (_first != nullptr && _second != nullptr)
 		{
-			
-			NODE temp = *_first;
+			NODE temp = *_second;
 			NODE* firstParent = _first->parent;
 			NODE* firstChildLeft = _first->child[0];
 			NODE* firstChildRight = _first->child[1];
@@ -322,68 +357,120 @@ namespace TREE
 			NODE* secondParent = _second->parent;
 			NODE* secondChildLeft = _second->child[0];
 			NODE* secondChildRight = _second->child[1];
+
+			if (firstParent != nullptr)
+			{
+				if (firstParent->child[0] == _first)
+				{
+					firstParent->child[0] = _second;
+				}
+				else if (firstParent->child[1] == _first)
+				{
+					firstParent->child[1] = _second;
+				}
+			}
+			else
+			{
+				root = _second;
+			}
+
+			if (firstChildLeft != nullptr)
+			{
+				firstChildLeft->parent = _second;
+			}
+
+			if (firstChildRight != nullptr)
+			{
+				firstChildRight->parent = _second;
+			}
+
+			if (firstParent != _second) // test
+			{
+				_second->parent = firstParent;
+			}
+			else
+			{
+				_second->parent = _first;
+			}
+
+			if (_second != _first->child[0])
+			{
+				_second->child[0] = _first->child[0];
+			}
+			else
+			{
+				_second->child[0] = _first;
+			}
+
+			if (_second != _first->child[1])
+			{
+				_second->child[1] = _first->child[1];
+			}
+			else
+			{
+				_second->child[1] = _first;
+			}
+			_second->depth = _first->depth;
+			_second->height = _first->height;
+			_second->isLeaf = _first->isLeaf;
+
 			
-			if (firstParent->child[0] == _first)
+			if (secondParent != nullptr)
 			{
-				firstParent->child[0] = _second;
+				if (secondParent->child[0] == _second)
+				{
+					secondParent->child[0] = _first;
+				}
+				else if (secondParent->child[1] == _second)
+				{
+					secondParent->child[1] = _first;
+				}
 			}
-			else if (firstParent->child[1] == _first)
+			else
 			{
-				firstParent->child[1] = _second;
+				root = _first;
 			}
 
-			if (secondParent->child[0] == _second)
+			if (secondChildLeft != nullptr)
 			{
-				secondParent->child[0] = _first;
+				secondChildLeft->parent = _first;
 			}
-			else if (secondParent->child[1] == _second)
+			
+			if (secondChildRight != nullptr)
 			{
-				secondParent->child[1] = _first;
+				secondChildRight->parent = _first;
+			}
+			
+			if (temp.parent != _first) // test
+			{
+				_first->parent = temp.parent;
+			}
+			else
+			{
+				_first->parent = _second;
 			}
 
-			if (secondChildLeft == nullptr)
-			{
 
+			if (_first != temp.child[0])
+			{
+				_first->child[0] = temp.child[0];
+			}
+			else
+			{
+				_first->child[0] = &temp;
 			}
 
-			/*template < class K, class T>
-			void	TTable<K, T>::erase(K k)
+			if (_first != temp.child[1])
 			{
-				m_pBstRoot = removeBst(k, m_pBstRoot);
+				_first->child[1] = temp.child[1];
 			}
-			template < class K, class T>
-			TBstNode<K, T>* TTable<K, T>::removeBst(K k, TBstNode<K, T>*t)
+			else
 			{
-				TBstNode<K, T>* temp;
-				if (t == NULL)
-				{
-					return NULL;
-				}
-				else if (k < t->m_key)
-				{
-					t->m_pChild[0] = removeBst(k, t->m_pChild[0]);
-				}
-				else if (k > t->m_key)
-				{
-					t->m_pChild[1] = removeBst(k, t->m_pChild[1]);
-				}
-				else if (t->m_pChild[0] && t->m_pChild[1])
-				{
-					temp = findMin(t->m_pChild[1]);
-					t->m_key = temp->m_key;
-					t->m_pChild[1] = removeBst(t->m_key, t->m_pChild[1]);
-				}
-				else
-				{
-					temp = t;
-					if (t->m_pChild[0] == NULL)
-						t = t->m_pChild[1];
-					else if (t->m_pChild[1] == NULL)
-						t = t->m_pChild[0];
-					delete temp;
-				}
-				return t;
-			}*/
+				_first->child[1] = &temp;
+			}
+			_first->depth = temp.depth;
+			_first->height = temp.height;
+			_first->isLeaf = temp.isLeaf;
 
 			return true;
 		}
@@ -400,23 +487,149 @@ namespace TREE
 	}
 
 	template<typename K, typename T>
+	inline void BST<K, T>::erase(NODE* _target)
+	{
+		if (_target != nullptr)
+		{
+			if (_target->isLeaf)
+			{
+				delete _target;
+				cnt--;
+				return;
+			}
+			else
+			{
+				// search left
+				NODE* targetChildLeft = _target->child[0];
+				if (targetChildLeft != nullptr)
+				{
+					NODE* leafNode = targetChildLeft->child[1];
+					if (leafNode != nullptr)
+					{
+						while (leafNode->child[1] != nullptr)
+						{
+							leafNode = leafNode->child[1];
+						}
+
+						swap(_target, leafNode);
+						NODE* parent = _target->parent;
+						if (parent->child[0] == _target)
+						{
+							parent->child[0] = nullptr;
+						}
+						else if (parent->child[1] == _target)
+						{
+							parent->child[1] = nullptr;
+						}
+
+						delete _target;
+						if (parent != nullptr)
+						{
+							if ((parent->child[0] == nullptr) && (parent->child[1] == nullptr))
+							{
+								parent->isLeaf = true;
+							}
+						}
+
+						cnt--;
+						return;
+					}
+					else
+					{
+						swap(_target, targetChildLeft);
+						erase(_target);
+					}
+				}
+
+				// search right
+
+
+
+			}
+
+		}
+	}
+
+	template<typename K, typename T>
 	inline void BST<K, T>::erase(K _key)
 	{
 		// target->child[0]->child[1] 과 target 교환
 		// 혹은 target->child[1]->child[0]과 교환
 		// child[0] == nullptr && child[1] == nullptr 인 노드까지 target이 도달했을 떄
 		// target 삭제.
+		
 
-		NODE* target = find(_key);
-		if (target != nullptr)
+
+		NODE* target = find(_key, root);
+		if(target == nullptr)
 		{
-			int a = 0;
-			swap(target, root);
-
-			
-
-
-
+			return;
 		}
+		else
+		{
+			erase(target);
+			return;
+		}
+
+
+		//if (target != nullptr)
+		//{
+		//	if (target->isLeaf)
+		//	{
+		//		delete target;
+		//		cnt--;
+		//		return;
+		//	}
+		//	else
+		//	{
+		//		// search left
+		//		NODE* targetChildLeft = target->child[0];
+		//		if (targetChildLeft != nullptr)
+		//		{
+		//			NODE* leafNode = targetChildLeft->child[1];
+		//			if (leafNode != nullptr)
+		//			{
+		//				while (leafNode->child[1] != nullptr)
+		//				{
+		//					leafNode = leafNode->child[1];
+		//				}
+
+		//				swap(target, leafNode);
+		//				NODE* parent = target->parent;
+		//				if (parent->child[0] == target)
+		//				{
+		//					parent->child[0] = nullptr;
+		//				}
+		//				else if (parent->child[1] == target)
+		//				{
+		//					parent->child[1] = nullptr;
+		//				}
+
+		//				delete target;
+		//				if (parent != nullptr)
+		//				{
+		//					if ((parent->child[0] == nullptr) && (parent->child[1] == nullptr))
+		//					{
+		//						parent->isLeaf = true;
+		//					}
+		//				}
+		//				
+		//				cnt--;
+		//				return;
+		//			}
+		//			else
+		//			{
+		//				swap(target, targetChildLeft);
+		//				erase(target);
+		//			}
+		//		}
+
+		//		// search right
+		//		
+
+
+		//	}
+
+		//}
 	}
 }
