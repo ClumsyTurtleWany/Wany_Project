@@ -408,6 +408,23 @@ namespace TREE
 									grandParent->parent = parent;
 								}
 							}
+							else
+							{
+								root = parent;
+								if (grandParent->child[0] == parent)
+								{
+									grandParent->child[0] = nullptr;
+								}
+								else
+								{
+									grandParent->child[1] = nullptr;
+								}
+								parent->child[1] = grandParent;
+								grandParent->parent = parent;
+								parent->color = COLOR::BLACK;
+								grandParent->color = COLOR::RED;
+
+							}
 						}
 						else
 						{
