@@ -6,6 +6,12 @@ namespace TREE
 	// node
 	// depth: parent size
 	// height: child depth
+	enum class COLOR
+	{
+		RED,
+		BLACK
+	};
+
 	template <typename K, typename T>
 	class node
 	{
@@ -15,6 +21,7 @@ namespace TREE
 		int depth = 0;
 		int height = 0;
 		bool isLeaf = true;
+		COLOR color = COLOR::RED;
 		node<K, T>* parent = nullptr;
 		node<K, T>* child[2] = { nullptr, };
 
@@ -23,8 +30,18 @@ namespace TREE
 		~node() {};
 	};
 
+	////////////////////////////////////////////////////////////////////////////////////////
+	// Red - Black Tree 규칙
+	// 1. 신규 노드는 Red
+	// 2. 삽입의 방법은 BST 알고리즘
+	// 3. 모든 노드는 Red 혹은 Black 이여야 한다.
+	// 4. 루트 노드는 반드시 Black 노드여야 한다.
+	// 5. 모든 리프노드는 Black이다.
+	// 6. 모든 Red 노드는 두 개의 Black 노드를 자식으로 갖는다. Red가 연속해서는 안됨.
+	// 7. 모든 노드에서 리프노드까지의 Black 노드의 수는 동일 해야 한다.
+	////////////////////////////////////////////////////////////////////////////////////////
 	template <typename K, typename T>
-	class BST
+	class RBT
 	{
 		using NODE = node<K, T>;
 	private:
@@ -38,10 +55,14 @@ namespace TREE
 		void insert(NODE* _node, NODE* _parent = nullptr);
 		bool swap(NODE* _first, NODE* _second);
 		node<K, T>* find(K _key, NODE* _parent);
+		void flipColor(NODE* _target);
+		void restruct(NODE* _target);
+		void rotateLeft(NODE* _target);
+		void rotateRight(NODE* _target);
 		
 	public:
-		BST() {};
-		~BST() {};
+		RBT() {};
+		~RBT() {};
 
 		class iterator
 		{
@@ -193,13 +214,14 @@ namespace TREE
 	};
 
 	template<typename K, typename T>
-	inline void BST<K, T>::insert(NODE* _node, NODE* _parent)
+	inline void RBT<K, T>::insert(NODE* _node, NODE* _parent)
 	{
 		if (root == nullptr)
 		{
 			root = _node;
 			minKey = _node->key;
 			maxKey = _node->key;
+			root->color = COLOR::BLACK;
 			cnt++;
 		}
 		else
@@ -254,16 +276,17 @@ namespace TREE
 	}
 
 	template<typename K, typename T>
-	inline void BST<K, T>::insert(K _key, T _data)
+	inline void RBT<K, T>::insert(K _key, T _data)
 	{
 		NODE* newNode = new NODE;
 		newNode->key = _key;
 		newNode->data = _data;
 		insert(newNode, root);
+		flipColor(newNode);
 	}
 
 	template<typename K, typename T>
-	inline node<K, T>* BST<K, T>::find(K _key, NODE* _parent)
+	inline node<K, T>* RBT<K, T>::find(K _key, NODE* _parent)
 	{
 		if (root == nullptr)
 		{
@@ -290,34 +313,206 @@ namespace TREE
 			}
 		}
 	}
-	
-	/*template<typename K, typename T>
-	inline node<K, T>* BST<K, T>::find(K _key)
+
+	template<typename K, typename T>
+	inline void RBT<K, T>::flipColor(NODE* _target)
 	{
-		if (root == nullptr)
+		if (_target == nullptr)
 		{
-			return nullptr;
+			return;
 		}
 		else
 		{
-			NODE* temp = root;
-			if (_key < temp->key)
+			NODE* parent = _target->parent;
+			if (parent != nullptr)
 			{
-				return find(_key, temp->child[0]);
+				if (parent->color == COLOR::RED)
+				{
+					NODE* grandParent = parent->parent;
+					if (grandParent != nullptr)
+					{
+						NODE* uncle = grandParent->child[0] == parent ? grandParent->child[1] : grandParent->child[0];
+						// Check Double Red
+						if (uncle != nullptr)
+						{
+							if (uncle->color == COLOR::RED)
+							{
+								// Color
+								uncle->color = COLOR::BLACK;
+								parent->color = COLOR::BLACK;
+								grandParent->color = COLOR::RED;
+								flipColor(grandParent);
+							}
+							else
+							{
+								// Restruct
+								restruct(_target);
+
+							}
+						}
+						else
+						{
+							// Restruct
+							restruct(_target);
+						}
+					}
+				}
 			}
-			else if (_key > temp->key)
+
+			if (root != nullptr)
 			{
-				return find(_key, temp->child[1]);
-			}
-			else
-			{
-				return temp;
+				root->color = COLOR::BLACK;
 			}
 		}
-	}*/
+	}
 
 	template<typename K, typename T>
-	inline T* BST<K, T>::find(K _key)
+	inline void RBT<K, T>::restruct(NODE* _target)
+	{
+		if (_target == nullptr)
+		{
+			return;
+		}
+		else
+		{
+			NODE* parent = _target->parent;
+			if (parent != nullptr)
+			{
+				NODE* grandParent = parent->parent;
+				if (grandParent != nullptr)
+				{
+					if (grandParent->key > parent->key)
+					{
+						// gp->child[0] == parent
+						if(parent->key > _target->key)
+						{
+							// gp   4 
+							// p   3
+							// t  2
+							// RR Rotate
+							NODE* GPP = grandParent->parent;
+							if (GPP != nullptr)
+							{
+								if (GPP->child[0] == grandParent)
+								{
+									GPP->child[0] = parent;
+									parent->parent = GPP;
+									parent->child[1] = grandParent;
+									grandParent->parent = parent;
+								}
+								else
+								{
+									GPP->child[1] = parent;
+									parent->parent = GPP;
+									parent->child[1] = grandParent;
+									grandParent->parent = parent;
+								}
+							}
+						}
+						else
+						{
+							// gp   4 
+							// p   2
+							// t    3
+							// LR Rotate(LL + RR)
+							NODE* GPP = grandParent->parent;
+							if (GPP != nullptr)
+							{
+								if (GPP->child[0] == grandParent)
+								{
+									GPP->child[0] = _target;
+									_target->parent = GPP;
+									_target->child[1] = grandParent;
+									_target->child[0] = parent;
+									parent->child[1] = nullptr;
+									parent->parent = _target;
+									grandParent->parent = _target;
+								}
+								else
+								{
+									GPP->child[1] = _target;
+									_target->parent = GPP;
+									_target->child[1] = grandParent;
+									_target->child[0] = parent;
+									parent->child[1] = nullptr;
+									parent->parent = _target;
+									grandParent->parent = _target;
+								}
+							}
+
+							rotateLeft(_target);
+						}
+					}
+					else if(grandParent->key < parent->key)
+					{
+						// gp->child[1] == parent
+						if (parent->key < _target->key)
+						{
+							// gp   4 
+							// p     5
+							// t      6
+							// LL Rotate
+
+						}
+						else
+						{
+							// gp   4 
+							// p     6
+							// t    5
+							// RL Rotate(RR + LL)
+						}
+					}
+
+				}
+			}
+		}
+	}
+
+	template<typename K, typename T>
+	inline void RBT<K, T>::rotateLeft(NODE* _target)
+	{
+		if (_target == nullptr)
+		{
+			return;
+		}
+		else
+		{
+			NODE* parent = _target->parent;
+			if (parent != nullptr)
+			{
+				if (parent->key < _target->key)
+				{
+					NODE* grandParent = parent->parent;
+					if (grandParent != nullptr)
+					{
+						if (grandParent->key < parent->key)
+						{
+							// gp  4
+							// p    5
+							// t     6
+							NODE* GPP = grandParent->parent;
+							parent->child[0] = grandParent;
+							
+						}
+						else
+						{
+							// gp    7
+							// p    5
+							// t     6
+						}
+					}
+				}
+			}
+		}
+	}
+
+	template<typename K, typename T>
+	inline void RBT<K, T>::rotateRight(NODE* _target)
+	{
+	}
+
+	template<typename K, typename T>
+	inline T* RBT<K, T>::find(K _key)
 	{
 		if (root == nullptr)
 		{
@@ -344,7 +539,7 @@ namespace TREE
 	}
 
 	template<typename K, typename T>
-	inline bool BST<K, T>::swap(NODE* _first, NODE* _second)
+	inline bool RBT<K, T>::swap(NODE* _first, NODE* _second)
 	{
 		if (_first != nullptr && _second != nullptr)
 		{
@@ -480,7 +675,7 @@ namespace TREE
 	}
 
 	template<typename K, typename T>
-	inline void BST<K, T>::erase(NODE* _target)
+	inline void RBT<K, T>::erase(NODE* _target)
 	{
 		// target->child[0]->child[1] 과 target 교환
 		// 혹은 target->child[1]->child[0]과 교환
@@ -590,7 +785,7 @@ namespace TREE
 	}
 
 	template<typename K, typename T>
-	inline void BST<K, T>::erase(K _key)
+	inline void RBT<K, T>::erase(K _key)
 	{
 		NODE* target = find(_key, root);
 		if(target == nullptr)

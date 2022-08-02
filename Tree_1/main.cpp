@@ -4,7 +4,7 @@
 
 void main()
 {
-	TREE::BST<int, std::string> binTree;
+	TREE::RBT<int, std::string> binTree;
 
 	binTree.insert(25, "1");
 	binTree.insert(7, "2");
