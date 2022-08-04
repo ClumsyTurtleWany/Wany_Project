@@ -46,7 +46,7 @@ namespace TREE
 	// 2. 삽입의 방법은 BST 알고리즘
 	// 3. 모든 노드는 Red 혹은 Black 이여야 한다.
 	// 4. 루트 노드는 반드시 Black 노드여야 한다.
-	// 5. 모든 리프노드는 Black이다.
+	// 5. 모든 리프노드는 Black이다. (child == nullptr)
 	// 6. 모든 Red 노드는 두 개의 Black 노드를 자식으로 갖는다. Red가 연속해서는 안됨.
 	// 7. 모든 노드에서 리프노드까지의 Black 노드의 수는 동일 해야 한다.
 	////////////////////////////////////////////////////////////////////////////////////////
@@ -343,7 +343,7 @@ namespace TREE
 						{
 							if (uncle->color == COLOR::RED)
 							{
-								// Color
+								// Color Change
 								uncle->color = COLOR::BLACK;
 								parent->color = COLOR::BLACK;
 								grandParent->color = COLOR::RED;
@@ -353,7 +353,6 @@ namespace TREE
 							{
 								// Restruct
 								restruct(_target);
-
 							}
 						}
 						else
@@ -390,7 +389,7 @@ namespace TREE
 					if (grandParent->key > parent->key)
 					{
 						// gp->child[0] == parent
-						if(parent->key > _target->key)
+						if (parent->key > _target->key)
 						{
 							// gp   4 
 							// p   3
@@ -399,64 +398,34 @@ namespace TREE
 							NODE* GPP = grandParent->parent;
 							if (GPP != nullptr)
 							{
-								if (GPP->child[0] == grandParent)
-								{
-									GPP->child[0] = parent;
-								}
-								else
-								{
-									GPP->child[1] = parent;
-								}
+								GPP->child[0] == grandParent ?
+									GPP->child[0] = parent : GPP->child[1] = parent;
 
 								parent->parent = GPP;
-								grandParent->child[0] = parent->child[1];
-								NODE* temp = parent->child[1];
-								if (temp != nullptr)
-								{
-									temp->parent = grandParent;
-								}
-								parent->child[1] = grandParent;
-								grandParent->parent = parent;
-
-								if (grandParent->child[0] == parent)
-								{
-									grandParent->child[0] = nullptr;
-								}
-								else
-								{
-									grandParent->child[1] = nullptr;
-								}
-
-								parent->color = COLOR::BLACK;
-								grandParent->color = COLOR::RED;
-								_target->color = COLOR::RED;
 							}
 							else
 							{
 								root = parent;
 								root->parent = nullptr;
-								if (grandParent->child[0] == parent)
-								{
-									grandParent->child[0] = nullptr;
-								}
-								else
-								{
-									grandParent->child[1] = nullptr;
-								}
-
-								grandParent->child[0] = parent->child[1];
-								NODE* temp = parent->child[1];
-								if (temp != nullptr)
-								{
-									temp->parent = grandParent;
-								}
-								parent->child[1] = grandParent;
-								grandParent->parent = parent;
-								parent->color = COLOR::BLACK;
-								grandParent->color = COLOR::RED;
-								_target->color = COLOR::RED;
-
 							}
+							
+							// parent node의 right child를 grand parent의 left child로 이전
+							grandParent->child[0] = parent->child[1];
+							NODE* temp = parent->child[1];
+							if (temp != nullptr)
+							{
+								temp->parent = grandParent;
+							}
+
+							grandParent->child[0] == parent ?
+								grandParent->child[0] = nullptr : grandParent->child[1] = nullptr;
+
+							parent->child[1] = grandParent;
+							grandParent->parent = parent;
+
+							parent->color = COLOR::BLACK;
+							grandParent->color = COLOR::RED;
+							_target->color = COLOR::RED;
 						}
 						else
 						{
@@ -464,14 +433,14 @@ namespace TREE
 							// p   2
 							// t    3
 							// LR Rotate(LL + RR)
-							
+
 							swap(parent, _target);
 							_target->child[0] = _target->child[1];
 							_target->child[1] = nullptr;
 							restruct(parent);
 						}
 					}
-					else if(grandParent->key < parent->key)
+					else if (grandParent->key < parent->key)
 					{
 						// gp->child[1] == parent
 						if (parent->key < _target->key)
@@ -483,59 +452,44 @@ namespace TREE
 							NODE* GPP = grandParent->parent;
 							if (GPP != nullptr)
 							{
-								if (GPP->child[0] == grandParent)
-								{
-									GPP->child[0] = parent;
-								}
-								else
-								{
-									GPP->child[1] = parent;
-								}
+								GPP->child[0] == grandParent ?
+									GPP->child[0] = parent : GPP->child[1] = parent;
+
 								parent->parent = GPP;
-								grandParent->child[1] = parent->child[0];
-								NODE* temp = parent->child[0];
-								if (temp != nullptr)
-								{
-									temp->parent = grandParent;
-								}
-								parent->child[0] = grandParent;
-								grandParent->parent = parent;
-								if (grandParent->child[0] == parent)
-								{
-									grandParent->child[0] = nullptr;
-								}
-								else
-								{
-									grandParent->child[1] = nullptr;
-								}
-								parent->color = COLOR::BLACK;
-								grandParent->color = COLOR::RED;
-								_target->color = COLOR::RED;
+								//grandParent->child[0] = parent->child[1];
 							}
 							else
 							{
 								root = parent;
 								root->parent = nullptr;
-								if (grandParent->child[0] == parent)
-								{
-									grandParent->child[0] = nullptr;
-								}
-								else
-								{
-									grandParent->child[1] = nullptr;
-								}
-								grandParent->child[1] = parent->child[0];
-								NODE* temp = parent->child[0];
-								if (temp != nullptr)
-								{
-									temp->parent = grandParent;
-								}
-								parent->child[1] = grandParent;
-								grandParent->parent = parent;
-								parent->color = COLOR::BLACK;
-								grandParent->color = COLOR::RED;
-								_target->color = COLOR::RED;
 							}
+
+							//4
+							grandParent->child[1] = parent->child[0];
+							NODE* temp = parent->child[0];
+							if (temp != nullptr)
+							{
+								temp->parent = grandParent;
+							}
+
+							//3
+							if (grandParent->child[0] == parent)
+							{
+								grandParent->child[0] = nullptr;
+							}
+							else
+							{
+								grandParent->child[1] = nullptr;
+							}
+
+							//2
+							parent->child[0] = grandParent;
+							grandParent->parent = parent;
+
+							//1
+							parent->color = COLOR::BLACK;
+							grandParent->color = COLOR::RED;
+							_target->color = COLOR::RED;
 						}
 						else
 						{
