@@ -14,13 +14,16 @@ namespace TREE
 		T data = T();
 		int depth = 0;
 		int height = 0;
-		bool isLeaf = true;
 		node<K, T>* parent = nullptr;
 		node<K, T>* child[2] = { nullptr, };
 
 	public:
 		node() {};
 		~node() {};
+		bool isLeaf()
+		{
+			return ((child[0] == nullptr) && (child[1] == nullptr)) ? true : false;
+		}
 	};
 
 	template <typename K, typename T>
@@ -216,7 +219,6 @@ namespace TREE
 					_node->parent = _parent;
 					_node->depth = _parent->depth + 1;
 					_parent->child[0] = _node;
-					_parent->isLeaf = false;
 					minKey = minKey < _node->key ? minKey : _node->key;
 					maxKey = maxKey < _node->key ? _node->key : maxKey;
 					cnt++;
@@ -233,7 +235,6 @@ namespace TREE
 					_node->parent = _parent;
 					_node->depth = _parent->depth + 1;
 					_parent->child[1] = _node;
-					_parent->isLeaf = false;
 					minKey = minKey < _node->key ? minKey : _node->key;
 					maxKey = maxKey < _node->key ? _node->key : maxKey;
 					cnt++;
@@ -411,8 +412,6 @@ namespace TREE
 			}
 			_second->depth = _first->depth;
 			_second->height = _first->height;
-			_second->isLeaf = _first->isLeaf;
-
 			
 			if (secondParent != nullptr)
 			{
@@ -469,7 +468,6 @@ namespace TREE
 			}
 			_first->depth = temp.depth;
 			_first->height = temp.height;
-			_first->isLeaf = temp.isLeaf;
 
 			return true;
 		}
@@ -489,7 +487,7 @@ namespace TREE
 		// target->child[0] 혹은 target->child[1] 와 swap하여 다시 탐색 반복.
 		if (_target != nullptr)
 		{
-			if (_target->isLeaf)
+			if (_target->isLeaf())
 			{
 				delete _target;
 				cnt--;
@@ -521,14 +519,6 @@ namespace TREE
 						}
 
 						delete _target;
-						if (parent != nullptr)
-						{
-							if ((parent->child[0] == nullptr) && (parent->child[1] == nullptr))
-							{
-								parent->isLeaf = true;
-							}
-						}
-
 						cnt--;
 						return;
 					}
@@ -564,14 +554,6 @@ namespace TREE
 						}
 
 						delete _target;
-						if (parent != nullptr)
-						{
-							if ((parent->child[0] == nullptr) && (parent->child[1] == nullptr))
-							{
-								parent->isLeaf = true;
-							}
-						}
-
 						cnt--;
 						return;
 					}
