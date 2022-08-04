@@ -20,7 +20,6 @@ namespace TREE
 		T data = T();
 		int depth = 0;
 		int height = 0;
-		bool isLeaf = true;
 		COLOR color = COLOR::RED;
 		node<K, T>* parent = nullptr;
 		node<K, T>* child[2] = { nullptr, };
@@ -28,6 +27,17 @@ namespace TREE
 	public:
 		node() {};
 		~node() {};
+		bool isLeaf()
+		{
+			if ((child[0] == nullptr) && (child[1] == nullptr))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
 	};
 
 	////////////////////////////////////////////////////////////////////////////////////////
@@ -57,8 +67,6 @@ namespace TREE
 		node<K, T>* find(K _key, NODE* _parent);
 		void flipColor(NODE* _target);
 		void restruct(NODE* _target);
-		void rotateLeft(NODE* _target);
-		void rotateRight(NODE* _target);
 		
 	public:
 		RBT() {};
@@ -238,7 +246,6 @@ namespace TREE
 					_node->parent = _parent;
 					_node->depth = _parent->depth + 1;
 					_parent->child[0] = _node;
-					_parent->isLeaf = false;
 					minKey = minKey < _node->key ? minKey : _node->key;
 					maxKey = maxKey < _node->key ? _node->key : maxKey;
 					cnt++;
@@ -255,7 +262,6 @@ namespace TREE
 					_node->parent = _parent;
 					_node->depth = _parent->depth + 1;
 					_parent->child[1] = _node;
-					_parent->isLeaf = false;
 					minKey = minKey < _node->key ? minKey : _node->key;
 					maxKey = maxKey < _node->key ? _node->key : maxKey;
 					cnt++;
@@ -396,21 +402,22 @@ namespace TREE
 								if (GPP->child[0] == grandParent)
 								{
 									GPP->child[0] = parent;
-									parent->parent = GPP;
-									parent->child[1] = grandParent;
-									grandParent->parent = parent;
 								}
 								else
 								{
 									GPP->child[1] = parent;
-									parent->parent = GPP;
-									parent->child[1] = grandParent;
-									grandParent->parent = parent;
 								}
-							}
-							else
-							{
-								root = parent;
+
+								parent->parent = GPP;
+								grandParent->child[0] = parent->child[1];
+								NODE* temp = parent->child[1];
+								if (temp != nullptr)
+								{
+									temp->parent = grandParent;
+								}
+								parent->child[1] = grandParent;
+								grandParent->parent = parent;
+
 								if (grandParent->child[0] == parent)
 								{
 									grandParent->child[0] = nullptr;
@@ -419,10 +426,35 @@ namespace TREE
 								{
 									grandParent->child[1] = nullptr;
 								}
+
+								parent->color = COLOR::BLACK;
+								grandParent->color = COLOR::RED;
+								_target->color = COLOR::RED;
+							}
+							else
+							{
+								root = parent;
+								root->parent = nullptr;
+								if (grandParent->child[0] == parent)
+								{
+									grandParent->child[0] = nullptr;
+								}
+								else
+								{
+									grandParent->child[1] = nullptr;
+								}
+
+								grandParent->child[0] = parent->child[1];
+								NODE* temp = parent->child[1];
+								if (temp != nullptr)
+								{
+									temp->parent = grandParent;
+								}
 								parent->child[1] = grandParent;
 								grandParent->parent = parent;
 								parent->color = COLOR::BLACK;
 								grandParent->color = COLOR::RED;
+								_target->color = COLOR::RED;
 
 							}
 						}
@@ -432,32 +464,11 @@ namespace TREE
 							// p   2
 							// t    3
 							// LR Rotate(LL + RR)
-							NODE* GPP = grandParent->parent;
-							if (GPP != nullptr)
-							{
-								if (GPP->child[0] == grandParent)
-								{
-									GPP->child[0] = _target;
-									_target->parent = GPP;
-									_target->child[1] = grandParent;
-									_target->child[0] = parent;
-									parent->child[1] = nullptr;
-									parent->parent = _target;
-									grandParent->parent = _target;
-								}
-								else
-								{
-									GPP->child[1] = _target;
-									_target->parent = GPP;
-									_target->child[1] = grandParent;
-									_target->child[0] = parent;
-									parent->child[1] = nullptr;
-									parent->parent = _target;
-									grandParent->parent = _target;
-								}
-							}
-
-							rotateLeft(_target);
+							
+							swap(parent, _target);
+							_target->child[0] = _target->child[1];
+							_target->child[1] = nullptr;
+							restruct(parent);
 						}
 					}
 					else if(grandParent->key < parent->key)
@@ -469,7 +480,62 @@ namespace TREE
 							// p     5
 							// t      6
 							// LL Rotate
-
+							NODE* GPP = grandParent->parent;
+							if (GPP != nullptr)
+							{
+								if (GPP->child[0] == grandParent)
+								{
+									GPP->child[0] = parent;
+								}
+								else
+								{
+									GPP->child[1] = parent;
+								}
+								parent->parent = GPP;
+								grandParent->child[1] = parent->child[0];
+								NODE* temp = parent->child[0];
+								if (temp != nullptr)
+								{
+									temp->parent = grandParent;
+								}
+								parent->child[0] = grandParent;
+								grandParent->parent = parent;
+								if (grandParent->child[0] == parent)
+								{
+									grandParent->child[0] = nullptr;
+								}
+								else
+								{
+									grandParent->child[1] = nullptr;
+								}
+								parent->color = COLOR::BLACK;
+								grandParent->color = COLOR::RED;
+								_target->color = COLOR::RED;
+							}
+							else
+							{
+								root = parent;
+								root->parent = nullptr;
+								if (grandParent->child[0] == parent)
+								{
+									grandParent->child[0] = nullptr;
+								}
+								else
+								{
+									grandParent->child[1] = nullptr;
+								}
+								grandParent->child[1] = parent->child[0];
+								NODE* temp = parent->child[0];
+								if (temp != nullptr)
+								{
+									temp->parent = grandParent;
+								}
+								parent->child[1] = grandParent;
+								grandParent->parent = parent;
+								parent->color = COLOR::BLACK;
+								grandParent->color = COLOR::RED;
+								_target->color = COLOR::RED;
+							}
 						}
 						else
 						{
@@ -477,55 +543,17 @@ namespace TREE
 							// p     6
 							// t    5
 							// RL Rotate(RR + LL)
+
+							swap(parent, _target);
+							_target->child[1] = _target->child[0];
+							_target->child[0] = nullptr;
+							restruct(parent);
 						}
 					}
 
 				}
 			}
 		}
-	}
-
-	template<typename K, typename T>
-	inline void RBT<K, T>::rotateLeft(NODE* _target)
-	{
-		if (_target == nullptr)
-		{
-			return;
-		}
-		else
-		{
-			NODE* parent = _target->parent;
-			if (parent != nullptr)
-			{
-				if (parent->key < _target->key)
-				{
-					NODE* grandParent = parent->parent;
-					if (grandParent != nullptr)
-					{
-						if (grandParent->key < parent->key)
-						{
-							// gp  4
-							// p    5
-							// t     6
-							NODE* GPP = grandParent->parent;
-							parent->child[0] = grandParent;
-							
-						}
-						else
-						{
-							// gp    7
-							// p    5
-							// t     6
-						}
-					}
-				}
-			}
-		}
-	}
-
-	template<typename K, typename T>
-	inline void RBT<K, T>::rotateRight(NODE* _target)
-	{
 	}
 
 	template<typename K, typename T>
@@ -623,8 +651,6 @@ namespace TREE
 			}
 			_second->depth = _first->depth;
 			_second->height = _first->height;
-			_second->isLeaf = _first->isLeaf;
-
 			
 			if (secondParent != nullptr)
 			{
@@ -681,7 +707,6 @@ namespace TREE
 			}
 			_first->depth = temp.depth;
 			_first->height = temp.height;
-			_first->isLeaf = temp.isLeaf;
 
 			return true;
 		}
@@ -701,8 +726,14 @@ namespace TREE
 		// target->child[0] 혹은 target->child[1] 와 swap하여 다시 탐색 반복.
 		if (_target != nullptr)
 		{
-			if (_target->isLeaf)
+			if (_target->isLeaf())
 			{
+				NODE* parent = _target->parent;
+				if (parent != nullptr)
+				{
+					parent->child[0] == _target ? 
+						parent->child[0] = nullptr : parent->child[1] = nullptr;
+				}
 				delete _target;
 				cnt--;
 				return;
@@ -723,24 +754,13 @@ namespace TREE
 
 						swap(_target, leafNode);
 						NODE* parent = _target->parent;
-						if (parent->child[0] == _target)
+						if (parent != nullptr)
 						{
-							parent->child[0] = nullptr;
-						}
-						else if (parent->child[1] == _target)
-						{
-							parent->child[1] = nullptr;
+							parent->child[0] == _target ?
+								parent->child[0] = nullptr : parent->child[1] = nullptr;
 						}
 
 						delete _target;
-						if (parent != nullptr)
-						{
-							if ((parent->child[0] == nullptr) && (parent->child[1] == nullptr))
-							{
-								parent->isLeaf = true;
-							}
-						}
-
 						cnt--;
 						return;
 					}
@@ -766,24 +786,13 @@ namespace TREE
 
 						swap(_target, leafNode);
 						NODE* parent = _target->parent;
-						if (parent->child[1] == _target)
+						if (parent != nullptr)
 						{
-							parent->child[1] = nullptr;
-						}
-						else if (parent->child[0] == _target)
-						{
-							parent->child[0] = nullptr;
+							parent->child[0] == _target ?
+								parent->child[0] = nullptr : parent->child[1] = nullptr;
 						}
 
 						delete _target;
-						if (parent != nullptr)
-						{
-							if ((parent->child[0] == nullptr) && (parent->child[1] == nullptr))
-							{
-								parent->isLeaf = true;
-							}
-						}
-
 						cnt--;
 						return;
 					}
