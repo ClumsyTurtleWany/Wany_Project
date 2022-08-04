@@ -29,14 +29,7 @@ namespace TREE
 		~node() {};
 		bool isLeaf()
 		{
-			if ((child[0] == nullptr) && (child[1] == nullptr))
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
+			return ((child[0] == nullptr) && (child[1] == nullptr)) ? true : false;
 		}
 	};
 
@@ -56,10 +49,7 @@ namespace TREE
 		using NODE = node<K, T>;
 	private:
 		NODE* root = nullptr;
-		int degree = 0;
 		int cnt = 0;
-		int minKey = 0;
-		int maxKey = 0;
 
 	private:
 		void insert(NODE* _node, NODE* _parent = nullptr);
@@ -67,6 +57,8 @@ namespace TREE
 		node<K, T>* find(K _key, NODE* _parent);
 		void flipColor(NODE* _target);
 		void restruct(NODE* _target);
+		K findMinKey();
+		K findMaxKey();
 		
 	public:
 		RBT() {};
@@ -211,8 +203,8 @@ namespace TREE
 		//node<K, T>* find(K _key);
 		T* find(K _key);
 		
-		iterator begin() { return iterator(find(minKey, root)); };
-		iterator end() { return iterator(find(maxKey, root)); };
+		iterator begin() { return iterator(find(findMinKey(), root)); };
+		iterator end() { return iterator(find(findMaxKey(), root)); };
 
 		int size() { return cnt; };
 
@@ -227,8 +219,6 @@ namespace TREE
 		if (root == nullptr)
 		{
 			root = _node;
-			minKey = _node->key;
-			maxKey = _node->key;
 			root->color = COLOR::BLACK;
 			cnt++;
 		}
@@ -246,8 +236,6 @@ namespace TREE
 					_node->parent = _parent;
 					_node->depth = _parent->depth + 1;
 					_parent->child[0] = _node;
-					minKey = minKey < _node->key ? minKey : _node->key;
-					maxKey = maxKey < _node->key ? _node->key : maxKey;
 					cnt++;
 				}
 				else
@@ -262,8 +250,6 @@ namespace TREE
 					_node->parent = _parent;
 					_node->depth = _parent->depth + 1;
 					_parent->child[1] = _node;
-					minKey = minKey < _node->key ? minKey : _node->key;
-					maxKey = maxKey < _node->key ? _node->key : maxKey;
 					cnt++;
 				}
 				else
@@ -275,8 +261,6 @@ namespace TREE
 			{
 				_parent->key = _node->key;
 				_parent->data = _node->data;
-				minKey = minKey < _node->key ? minKey : _node->key;
-				maxKey = maxKey < _node->key ? _node->key : maxKey;
 			}
 		}
 	}
@@ -456,7 +440,6 @@ namespace TREE
 									GPP->child[0] = parent : GPP->child[1] = parent;
 
 								parent->parent = GPP;
-								//grandParent->child[0] = parent->child[1];
 							}
 							else
 							{
@@ -472,21 +455,12 @@ namespace TREE
 								temp->parent = grandParent;
 							}
 
-							//3
-							if (grandParent->child[0] == parent)
-							{
-								grandParent->child[0] = nullptr;
-							}
-							else
-							{
-								grandParent->child[1] = nullptr;
-							}
+							grandParent->child[0] == parent ? 
+								grandParent->child[0] = nullptr : grandParent->child[1] = nullptr;
 
-							//2
 							parent->child[0] = grandParent;
 							grandParent->parent = parent;
 
-							//1
 							parent->color = COLOR::BLACK;
 							grandParent->color = COLOR::RED;
 							_target->color = COLOR::RED;
@@ -507,6 +481,54 @@ namespace TREE
 
 				}
 			}
+		}
+	}
+
+	template<typename K, typename T>
+	inline K RBT<K, T>::findMinKey()
+	{
+		if (root != nullptr)
+		{
+			K minKey = root->key;
+			NODE* temp = root;
+			while (temp != nullptr)
+			{
+				temp = temp->child[0];
+				if (temp != nullptr)
+				{
+					minKey = temp->key;
+				}
+			}
+
+			return minKey;
+		}
+		else
+		{
+			return K();
+		}
+	}
+
+	template<typename K, typename T>
+	inline K RBT<K, T>::findMaxKey()
+	{
+		if (root != nullptr)
+		{
+			K maxKey = root->key;
+			NODE* temp = root;
+			while (temp != nullptr)
+			{
+				temp = temp->child[1];
+				if (temp != nullptr)
+				{
+					maxKey = temp->key;
+				}
+			}
+
+			return maxKey;
+		}
+		else
+		{
+			return K();
 		}
 	}
 
