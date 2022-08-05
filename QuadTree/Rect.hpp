@@ -25,6 +25,40 @@ public:
 		RB.y = _y + _h;
 	}
 
+	bool operator ==(const Rect _rect)
+	{
+		if ((x == _rect.x) &&
+			(y == _rect.y) &&
+			(width == _rect.width) &&
+			(height == _rect.height) &&
+			(LT == _rect.LT) &&
+			(RB == _rect.RB))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	bool operator !=(const Rect _rect)
+	{
+		if ((x != _rect.x) ||
+			(y != _rect.y) ||
+			(width != _rect.width) ||
+			(height != _rect.height) ||
+			(LT != _rect.LT) ||
+			(RB != _rect.RB))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 	bool ptInRect(const Point _pt) const
 	{
 		if (_pt.x < LT.x) return false;
