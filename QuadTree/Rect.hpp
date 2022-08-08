@@ -54,8 +54,8 @@ public:
 	T right()		const { return RB.x; }
 	T top()			const { return LT.y; }
 	T bottom()		const { return RB.y; }
-	T width()		const { return RB.x - LT.x + 1; }
-	T height()		const { return RB.y - LT.y + 1; }
+	T width()		const { return static_cast<T>(fabs(RB.x - LT.x + 1)); }
+	T height()		const { return static_cast<T>(fabs(RB.y - LT.y + 1)); }
 	T area()		const { return width() * height(); }
 
 	void offset(const Point_<T> _offset)
