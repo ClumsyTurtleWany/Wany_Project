@@ -4,7 +4,7 @@
 int main()
 {
 	QuadTree quadTree;
-	quadTree.create(0, 0, 100, 100);
+	quadTree.create(0, 0, 128, 128);
 
 	object player(Rect(50, 50, 20, 20), OBJECT_TYPE::DYNAMIC_OBJECT);
 	quadTree.addObject(&player);

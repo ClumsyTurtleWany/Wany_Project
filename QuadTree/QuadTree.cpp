@@ -148,13 +148,14 @@ bool QuadTree::getCollisionObject(node* _node, object* _src, std::vector<object*
 	}
 	else
 	{
+		bool isCollision = false;
 		if (!_node->objList.empty())
 		{
 			for (auto it : _node->objList)
 			{
 				if (!_src->rect.RectInRect(it->rect))
 				{
-					bool isCollision = _src->rect.intersectRect(it->rect);
+					isCollision = _src->rect.intersectRect(it->rect);
 					if (isCollision)
 					{
 						_dst->push_back(it);
@@ -167,8 +168,10 @@ bool QuadTree::getCollisionObject(node* _node, object* _src, std::vector<object*
 		{
 			for (int cnt = 0; cnt < CHILD_NODE_CNT; cnt++)
 			{
-				getCollisionObject(_node->child[cnt], _src, _dst);
+				isCollision = getCollisionObject(_node->child[cnt], _src, _dst);
 			}
 		}
+
+		return isCollision;
 	}
 }
