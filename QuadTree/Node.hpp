@@ -10,8 +10,7 @@ public:
 	Rect rect;
 	int depth = 0;
 
-	std::vector<object*> stObjList;
-	std::vector<object*> dyObjList;
+	std::vector<object*> objList;
 	node* parent = nullptr;
 	node* child[CHILD_NODE_CNT] = { nullptr, };
 
@@ -38,22 +37,13 @@ public:
 
 	~node()
 	{
-		if (!stObjList.empty())
+		if (!objList.empty())
 		{
-			for (auto& it : stObjList)
+			for (auto& it : objList)
 			{
 				delete it;
 			}
-			stObjList.clear();
-		}
-
-		if (!dyObjList.empty())
-		{
-			for (auto& it : dyObjList)
-			{
-				delete it;
-			}
-			dyObjList.clear();
+			objList.clear();
 		}
 
 		for (int i = 0; i < CHILD_NODE_CNT; i++)
@@ -63,6 +53,21 @@ public:
 				delete child[i];
 				child[i] = nullptr;
 			}
+		}
+	}
+
+	bool isLeaf()
+	{
+		if (child[0] == nullptr && 
+			child[1] == nullptr &&
+			child[2] == nullptr &&
+			child[3] == nullptr)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
 		}
 	}
 };

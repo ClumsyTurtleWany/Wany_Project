@@ -10,7 +10,7 @@ QuadTree::~QuadTree()
 
 void QuadTree::create(Rect _rect)
 {
-	create(_rect.x, _rect.y, _rect.width, _rect.height);
+	create(_rect.LT.x, _rect.LT.y, _rect.width(), _rect.height());
 }
 
 void QuadTree::create(int _x, int _y, int _width, int _height)
@@ -49,33 +49,33 @@ void QuadTree::buildTree(node* _parent)
 	{
 		return;
 	}
-	if (_parent->rect.width < 1 || _parent->rect.height < 1)
+	if (_parent->rect.width() < 1 || _parent->rect.height() < 1)
 	{
 		return;
 	}
 
-	int width = static_cast<int>(_parent->rect.width / 2.0f);
-	int height = static_cast<int>(_parent->rect.height / 2.0f);
-	_parent->child[0] = createNode(	_parent->rect.x, 
-									_parent->rect.y, 
+	int width = static_cast<int>(_parent->rect.width() / 2.0f);
+	int height = static_cast<int>(_parent->rect.height() / 2.0f);
+	_parent->child[0] = createNode(	_parent->rect.LT.x, 
+									_parent->rect.LT.y, 
 									width,
 									height,
 									_parent);
 
-	_parent->child[1] = createNode(	_parent->rect.x + width,
-									_parent->rect.y,
+	_parent->child[1] = createNode(	_parent->rect.LT.x + width,
+									_parent->rect.LT.y,
 									width,
 									height,
 									_parent);
 
-	_parent->child[2] = createNode(	_parent->rect.x,
-									_parent->rect.y + height,
+	_parent->child[2] = createNode(	_parent->rect.LT.x,
+									_parent->rect.LT.y + height,
 									width,
 									height,
 									_parent);
 
-	_parent->child[3] = createNode(	_parent->rect.x + width,
-									_parent->rect.y + height,
+	_parent->child[3] = createNode(	_parent->rect.LT.x + width,
+									_parent->rect.LT.y + height,
 									width,
 									height,
 									_parent);
@@ -96,7 +96,7 @@ node* QuadTree::findNode(node* _parent, object* _obj)
 		{
 			if (temp->child[i] != nullptr)
 			{
-				if (temp->child[i]->rect.rectInRect(_obj->rect))
+				if (temp->child[i]->rect.RectInRect(_obj->rect))
 				{
 					isIn = true;
 					temp = temp->child[i];
@@ -113,18 +113,62 @@ node* QuadTree::findNode(node* _parent, object* _obj)
 	return temp;
 }
 
+node* QuadTree::getNode(object* _obj)
+{
+	return findNode(root, _obj);
+}
+
 void QuadTree::addObject(object* _obj)
 {
 	node* target = findNode(root, _obj);
 	if (target != nullptr)
 	{
-		if (_obj->type == OBJECT_TYPE::STATIC_OBJECT)
+		target->objList.push_back(_obj);
+	}
+}
+
+bool QuadTree::Collision(object* _src, std::vector<object*>* _dst)
+{
+	if (root == nullptr || _src == nullptr)
+	{
+		return false;
+	}
+	else
+	{
+		bool isExist = getCollisionObject(root, _src, _dst);
+		return isExist;
+	}
+}
+
+bool QuadTree::getCollisionObject(node* _node, object* _src, std::vector<object*>* _dst)
+{
+	if (_node == nullptr)
+	{
+		return false;
+	}
+	else
+	{
+		if (!_node->objList.empty())
 		{
-			target->stObjList.push_back(_obj);
+			for (auto it : _node->objList)
+			{
+				if (!_src->rect.RectInRect(it->rect))
+				{
+					bool isCollision = _src->rect.intersectRect(it->rect);
+					if (isCollision)
+					{
+						_dst->push_back(it);
+					}
+				}
+			}
 		}
-		else
+
+		if (!_node->isLeaf())
 		{
-			target->dyObjList.push_back(_obj);
+			for (int cnt = 0; cnt < CHILD_NODE_CNT; cnt++)
+			{
+				getCollisionObject(_node->child[cnt], _src, _dst);
+			}
 		}
 	}
 }

@@ -18,5 +18,8 @@ public:
 	node* createNode(int _x, int _y, int _width, int _height, node* _parent = nullptr);
 	void buildTree(node* _parent);
 	node* findNode(node* _parent, object* _obj);
+	node* getNode(object* _obj);
 	void addObject(object* _obj);
+	bool Collision(object* _src, std::vector<object*>* _dst);
+	bool getCollisionObject(node* _node, object* _src, std::vector<object*>* _dst);
 };
