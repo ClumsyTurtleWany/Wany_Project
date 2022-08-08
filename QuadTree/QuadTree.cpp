@@ -127,7 +127,7 @@ void QuadTree::addObject(object* _obj)
 	}
 }
 
-bool QuadTree::Collision(object* _src, std::vector<object*>* _dst)
+bool QuadTree::Collision(object* _src, std::vector<object*>* _dst, std::vector<Rect>* _dstSection)
 {
 	if (root == nullptr || _src == nullptr)
 	{
@@ -135,12 +135,12 @@ bool QuadTree::Collision(object* _src, std::vector<object*>* _dst)
 	}
 	else
 	{
-		bool isExist = getCollisionObject(root, _src, _dst);
+		bool isExist = getCollisionObject(root, _src, _dst, _dstSection);
 		return isExist;
 	}
 }
 
-bool QuadTree::getCollisionObject(node* _node, object* _src, std::vector<object*>* _dst)
+bool QuadTree::getCollisionObject(node* _node, object* _src, std::vector<object*>* _dst, std::vector<Rect>* _dstSection)
 {
 	if (_node == nullptr)
 	{
@@ -155,10 +155,15 @@ bool QuadTree::getCollisionObject(node* _node, object* _src, std::vector<object*
 			{
 				if (!_src->rect.RectInRect(it->rect))
 				{
-					isCollision = _src->rect.intersectRect(it->rect);
+					Rect intersection;
+					isCollision = _src->rect.intersectRect(it->rect, &intersection);
 					if (isCollision)
 					{
 						_dst->push_back(it);
+						if (_dstSection != nullptr)
+						{
+							_dstSection->push_back(intersection);
+						}
 					}
 				}
 			}
@@ -168,7 +173,7 @@ bool QuadTree::getCollisionObject(node* _node, object* _src, std::vector<object*
 		{
 			for (int cnt = 0; cnt < CHILD_NODE_CNT; cnt++)
 			{
-				isCollision = getCollisionObject(_node->child[cnt], _src, _dst);
+				isCollision = getCollisionObject(_node->child[cnt], _src, _dst, _dstSection);
 			}
 		}
 

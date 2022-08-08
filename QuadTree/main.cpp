@@ -20,7 +20,8 @@ int main()
 	quadTree.addObject(&player2);
 	
 	std::vector<object*> collisionObject;
-	if (quadTree.Collision(&player, &collisionObject))
+	std::vector<Rect> intersectionArea;
+	if (quadTree.Collision(&player, &collisionObject, &intersectionArea))
 	{
 		if (!collisionObject.empty())
 		{

@@ -20,6 +20,6 @@ public:
 	node* findNode(node* _parent, object* _obj);
 	node* getNode(object* _obj);
 	void addObject(object* _obj);
-	bool Collision(object* _src, std::vector<object*>* _dst);
-	bool getCollisionObject(node* _node, object* _src, std::vector<object*>* _dst);
+	bool Collision(object* _src, std::vector<object*>* _dst, std::vector<Rect>* _dstSection = nullptr);
+	bool getCollisionObject(node* _node, object* _src, std::vector<object*>* _dst, std::vector<Rect>* _dstSection = nullptr);
 };
