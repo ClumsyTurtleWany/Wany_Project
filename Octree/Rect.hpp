@@ -139,15 +139,24 @@ public:
 	Point3D_<T> corner[4];
 	float theta = 0.0f;
 	float pi = 0.0f;
+	T width;
+	T height;
+	Point3D_<T> center;
+	
 
 public:
 	Rect3D_() {};
-	Rect3D_(Point3D_<T> _c, Point3D_<T> _c2, Point3D_<T> _c3, Point3D_<T> _c4)
+	Rect3D_(Point3D_<T> _c1, Point3D_<T> _c2, Point3D_<T> _c3, Point3D_<T> _c4)
 	{
 		corner[0] = _c1;
-		corner[1] = _c1;
-		corner[2] = _c1;
-		corner[3] = _c1;
+		corner[1] = _c2;
+		corner[2] = _c3;
+		corner[3] = _c4;
+	}
+
+	Rect3D_(Point3D_<T> _c, T _width, T _height, float _theta = 0.0f, float _pi = 0.0f)
+	{
+		//corner[0] = _c
 	}
 
 	bool operator ==(const Rect3D_<T>& _rect)
