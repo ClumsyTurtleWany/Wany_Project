@@ -1,4 +1,4 @@
-#include "QuadTree.hpp"
+#include "Octree.hpp"
 
 QuadTree::QuadTree()
 {
@@ -45,7 +45,7 @@ void QuadTree::buildTree(node* _parent)
 	{
 		return;
 	}
-	if (_parent->depth >=  3)
+	if (_parent->depth >= 3)
 	{
 		return;
 	}
@@ -56,30 +56,30 @@ void QuadTree::buildTree(node* _parent)
 
 	int width = static_cast<int>(_parent->rect.width() / 2.0f);
 	int height = static_cast<int>(_parent->rect.height() / 2.0f);
-	_parent->child[0] = createNode(	_parent->rect.LT.x, 
-									_parent->rect.LT.y, 
-									width,
-									height,
-									_parent);
+	_parent->child[0] = createNode(_parent->rect.LT.x,
+		_parent->rect.LT.y,
+		width,
+		height,
+		_parent);
 
-	_parent->child[1] = createNode(	_parent->rect.LT.x + width,
-									_parent->rect.LT.y,
-									width,
-									height,
-									_parent);
+	_parent->child[1] = createNode(_parent->rect.LT.x + width,
+		_parent->rect.LT.y,
+		width,
+		height,
+		_parent);
 
-	_parent->child[2] = createNode(	_parent->rect.LT.x,
-									_parent->rect.LT.y + height,
-									width,
-									height,
-									_parent);
+	_parent->child[2] = createNode(_parent->rect.LT.x,
+		_parent->rect.LT.y + height,
+		width,
+		height,
+		_parent);
 
-	_parent->child[3] = createNode(	_parent->rect.LT.x + width,
-									_parent->rect.LT.y + height,
-									width,
-									height,
-									_parent);
-	
+	_parent->child[3] = createNode(_parent->rect.LT.x + width,
+		_parent->rect.LT.y + height,
+		width,
+		height,
+		_parent);
+
 	for (int i = 0; i < CHILD_NODE_CNT; i++)
 	{
 		buildTree(_parent->child[i]);
@@ -109,7 +109,7 @@ node* QuadTree::findNode(node* _parent, object* _obj)
 			break;
 		}
 	}
-	
+
 	return temp;
 }
 

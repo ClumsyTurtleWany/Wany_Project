@@ -10,7 +10,7 @@ public:
 public:
 	Point_() {};
 	Point_(T _x, T _y) : x(_x), y(_y) {};
-
+	
 	void operator =(const Point_<T>& _pt)
 	{
 		x = _pt.x;
@@ -136,8 +136,8 @@ public:
 	}
 };
 
-using Point = Point_<int>;
-using Point2D = Point_<int>;
-using Point2f = Point_<float>;
-using Point3D = Point3D_<int>;
-using Point3f = Point3D_<float>;
+using Point		= Point_<int>;
+using Point2D	= Point_<int>;
+using Point2f	= Point_<float>;
+using Point3D	= Point3D_<int>;
+using Point3f	= Point3D_<float>;
