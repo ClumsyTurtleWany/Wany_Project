@@ -25,5 +25,5 @@ public:
 	void resetDynamicObject(node* _target);
 	void updateDynamicObject();
 	void updateDynamicObject(node* _target, ObjectList* _list);
-	bool isBoundaryHit(object* _obj);
+	bool isHitBoundary(object* _obj);
 };

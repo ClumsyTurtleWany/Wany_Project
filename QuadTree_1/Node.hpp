@@ -81,4 +81,42 @@ public:
 			return false;
 		}
 	}
+
+	bool isHitBoundary(object* _obj, bool _move = false)
+	{
+		bool isHit = false;
+		if (_obj->rect.right() > rect.right())
+		{
+			if (_move)
+			{
+				_obj->moveTo(rect.right() - _obj->rect.width(), _obj->rect.top());
+			}
+			isHit = true;
+		}
+		if (_obj->rect.left() < rect.left())
+		{
+			if (_move)
+			{
+				_obj->moveTo(rect.left(), _obj->rect.top());
+			}
+			isHit = true;
+		}
+		if (_obj->rect.bottom() > rect.bottom())
+		{
+			if (_move)
+			{
+				_obj->moveTo(_obj->rect.left(), rect.bottom() - _obj->rect.height());
+			}
+			isHit = true;
+		}
+		if (_obj->rect.top() < rect.top())
+		{
+			if (_move)
+			{
+				_obj->moveTo(_obj->rect.left(), rect.top());
+			}
+			isHit = true;
+		}
+		return isHit;
+	}
 };

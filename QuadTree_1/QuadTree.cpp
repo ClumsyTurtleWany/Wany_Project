@@ -272,28 +272,7 @@ void QuadTree::updateDynamicObject(node* _target, ObjectList* _list)
 	}
 }
 
-bool QuadTree::isBoundaryHit(object* _obj)
+bool QuadTree::isHitBoundary(object* _obj)
 {
-	bool isHit = false;
-	if (_obj->rect.right() > root->rect.right())
-	{
-		_obj->moveTo(root->rect.right() - _obj->rect.width(), _obj->rect.top());
-		isHit = true;
-	}
-	if (_obj->rect.left() < root->rect.left())
-	{
-		_obj->moveTo(root->rect.left(), _obj->rect.top());
-		isHit = true;
-	}
-	if (_obj->rect.bottom() > root->rect.bottom())
-	{
-		_obj->moveTo(_obj->rect.left(), root->rect.bottom() - _obj->rect.height());
-		isHit = true;
-	}
-	if (_obj->rect.top() < root->rect.top())
-	{
-		_obj->moveTo(_obj->rect.left(), root->rect.top());
-		isHit = true;
-	}
-	return isHit;
+	return root->isHitBoundary(_obj, true);
 }

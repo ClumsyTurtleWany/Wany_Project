@@ -94,7 +94,7 @@ int main()
 
 		for (auto it : dynamicObjectList)
 		{
-			if (quadTree.isBoundaryHit(it))
+			if (quadTree.isHitBoundary(it))
 			{
 				it->direction.x *= -1;
 				it->direction.y *= -1;
