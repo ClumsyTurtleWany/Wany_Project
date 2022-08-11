@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{da444ef7-9782-438c-ae6b-6b6ad7a733fd}</ProjectGuid>
-    <RootNamespace>Octree</RootNamespace>
+    <ProjectGuid>{6aff9787-01f5-4f37-abb1-14ebf40cf608}</ProjectGuid>
+    <RootNamespace>QuadTree1</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -78,13 +78,13 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>../../output/Debug/Octree/</OutDir>
-    <IntDir>../../output/Debug/Octree/</IntDir>
+    <OutDir>../../output/Release/QuadTree/</OutDir>
+    <IntDir>../../output/Release/QuadTree/</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>../../output/Release/Octree/</OutDir>
-    <IntDir>../../output/Release/Octree/</IntDir>
+    <OutDir>../../output/Release/QuadTree/</OutDir>
+    <IntDir>../../output/Release/QuadTree/</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -147,11 +147,11 @@
   <ItemGroup>
     <ClInclude Include="Node.hpp" />
     <ClInclude Include="Object.hpp" />
-    <ClInclude Include="Octree.hpp" />
+    <ClInclude Include="QuadTree.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Octree.cpp" />
+    <ClCompile Include="QuadTree.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,7 +1,5 @@
 #pragma once
-
 #include "Point.hpp"
-#define PI (float)3.141592
 
 template <typename T>
 class Circle_
@@ -22,7 +20,7 @@ public:
 	{
 		// Circumscribed circle
 		c = _src.center();
-		T diameter = sqrt(pow(_src.width(), 2) + pow(_src.height(), 2));
+		T diameter = static_cast<T>(ceil(sqrt(pow(_src.width(), 2) + pow(_src.height(), 2))));
 		radius = static_cast<T>(diameter / 2.0f);
 	}
 	~Circle_() {};
@@ -66,7 +64,9 @@ public:
 
 	bool intersectCircle(const Circle_<T>& _src)
 	{
-		T distance = sqrt(pow(_src.c.x - c.x, 2) + pow(_src.c.y - c.y, 2));
+		double x = static_cast<double>(_src.c.x) - static_cast<double>(c.x);
+		double y = static_cast<double>(_src.c.y) - static_cast<double>(c.y);
+		T distance = static_cast<T>(sqrt(pow(x, 2.0) + pow(y, 2.0)));
 		if (distance <= (radius + _src.radius))
 		{
 			return true;

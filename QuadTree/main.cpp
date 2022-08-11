@@ -1,5 +1,6 @@
 #include <iostream>
 #include "QuadTree.hpp"
+#include "Vector.hpp"
 
 int main()
 {
@@ -35,6 +36,8 @@ int main()
 			}
 		}
 	}
+
+	Vector2D_<int> v1;
 
 	return 0;
 }
