@@ -1,18 +1,17 @@
 #pragma once
 #include "Point.hpp"
 
+template <typename T>
 class Cube
 {
 public:
-	
-	int width = 0;
-	int depth = 0;
-	int height = 0;
+	Point3D_<T> pos;
+	T size = 0;
+	float theta = 0.0f;
+	float pi = 0.0f;
 
 public:
 	Cube() {};
-	Cube(Point3D _pos, int _size) : c(_pos), width(_size), depth(_size), height(_size) {};
-	Cube(Point3D _pos, int _width, int _depth, int _height) : c(_pos), width(_width), depth(_depth), height(_height) {};
 	~Cube() {};
 
 
