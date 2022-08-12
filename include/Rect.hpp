@@ -254,3 +254,4 @@ public:
 //};
 
 using Rect = Rect_<int>;
+using Rect2f = Rect_<float>;

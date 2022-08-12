@@ -145,13 +145,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Core.hpp" />
     <ClInclude Include="Node.hpp" />
+    <ClInclude Include="NPC.hpp" />
     <ClInclude Include="Object.hpp" />
+    <ClInclude Include="Obstacle.hpp" />
+    <ClInclude Include="Player.hpp" />
     <ClInclude Include="QuadTree.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="QuadTree.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

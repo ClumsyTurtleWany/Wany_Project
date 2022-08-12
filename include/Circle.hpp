@@ -155,4 +155,5 @@ public:
 
 
 using Circle = Circle_<int>;
+using Circle_f = Circle_<float>;
 using Sphere = Sphere_<int>;
