@@ -15,7 +15,7 @@ public:
 	Matrix() {};
 	Matrix(int _x, int _y) : x(_x), y(_y)
 	{
-		arry = new float[y];
+		arry = new float*[y];
 		for (int i = 0; i < x; i++)
 		{
 			arry[i] = new float[x];
@@ -26,7 +26,6 @@ public:
 public:
 	void release()
 	{
-		if(x)
 	}
 };
 
