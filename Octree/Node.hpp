@@ -2,13 +2,14 @@
 #include <vector>
 #include "Object.hpp"
 
-#define CHILD_NODE_CNT (int)4
+#define CHILD_NODE_CNT (int)8
 
 template <typename T>
 class node
 {
 public:
-	Rect_<T> rect;
+	Cube_<T> cube;
+
 	int depth = 0;
 
 	std::vector<object<T>*> stObjList;
@@ -17,9 +18,9 @@ public:
 	node<T>* child[CHILD_NODE_CNT] = { nullptr, };
 
 public:
-	node(Rect_<T> _rect, node<T>* _parent = nullptr)
+	node(Cube_<T> _cube, node<T>* _parent = nullptr)
 	{
-		rect = _rect;
+		cube = _cube;
 		if (_parent != nullptr)
 		{
 			parent = _parent;
@@ -27,9 +28,19 @@ public:
 		}
 	}
 
-	node(T _x, T _y, T _w, T _h, node<T>* _parent = nullptr)
+	node(Point3D_<T> _pos, T _size, float _theta, float _pi, node<T>* _parent = nullptr)
 	{
-		rect = Rect_<T>(_x, _y, _w, _h);
+		cube = Cube_<T>(_pos, _size, _theta, _pi);
+		if (_parent != nullptr)
+		{
+			parent = _parent;
+			depth = _parent->depth + 1;
+		}
+	}
+
+	node(T _x, T _y, T _z, T _size, float _theta, float _pi, node<T>* _parent = nullptr)
+	{
+		cube = Cube_<T>(_x, _y, _z, _size, _theta, _pi);
 		if (_parent != nullptr)
 		{
 			parent = _parent;
@@ -85,11 +96,11 @@ public:
 	bool isHitLeft(object<T>* _obj, bool _move = false)
 	{
 		bool isHit = false;
-		if (_obj->rect.left() < rect.left())
+		if (_obj->cube.left() < cube.left())
 		{
 			if (_move)
 			{
-				_obj->moveTo(rect.left(), _obj->rect.top());
+				_obj->moveTo(cube.left(), _obj->cube.top());
 			}
 			isHit = true;
 		}
@@ -99,11 +110,11 @@ public:
 	bool isHitRight(object<T>* _obj, bool _move = false)
 	{
 		bool isHit = false;
-		if (_obj->rect.right() > rect.right())
+		if (_obj->cube.right() > cube.right())
 		{
 			if (_move)
 			{
-				_obj->moveTo(rect.right() - _obj->rect.width(), _obj->rect.top());
+				_obj->moveTo(cube.right() - _obj->cube.width(), _obj->cube.top());
 			}
 			isHit = true;
 		}
@@ -113,11 +124,11 @@ public:
 	bool isHitTop(object<T>* _obj, bool _move = false)
 	{
 		bool isHit = false;
-		if (_obj->rect.top() < rect.top())
+		if (_obj->cube.top() < cube.top())
 		{
 			if (_move)
 			{
-				_obj->moveTo(_obj->rect.left(), rect.top());
+				_obj->moveTo(_obj->cube.left(), cube.top());
 			}
 			isHit = true;
 		}
@@ -128,11 +139,11 @@ public:
 	{
 		bool isHit = false;
 		
-		if (_obj->rect.bottom() > rect.bottom())
+		if (_obj->cube.bottom() > cube.bottom())
 		{
 			if (_move)
 			{
-				_obj->moveTo(_obj->rect.left(), rect.bottom() - _obj->rect.height());
+				_obj->moveTo(_obj->cube.left(), cube.bottom() - _obj->cube.height());
 			}
 			isHit = true;
 		}

@@ -1,5 +1,6 @@
 #pragma once
 #include "Rect.hpp"
+#include "Cube.hpp"
 #include "Vector.hpp"
 #include "Circle.hpp"
 #include <string>

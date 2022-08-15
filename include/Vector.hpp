@@ -234,7 +234,6 @@ public:
 	}
 };
 
-
 using Vector = Vector2D_<int>;
 using Vector2D = Vector2D_<int>;
 using Vector2f = Vector2D_<float>;

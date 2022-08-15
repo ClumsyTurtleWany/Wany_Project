@@ -34,9 +34,6 @@ public:
 	bool isHitBoundary(object<T>* _obj);
 };
 
-
-#include "QuadTree.hpp"
-
 template <typename T>
 QuadTree<T>::QuadTree()
 {

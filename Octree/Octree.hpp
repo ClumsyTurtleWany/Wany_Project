@@ -1,21 +1,21 @@
 #pragma once
 #include "Node.hpp"
 
-// 공간 분할(Space Division) 알고리즘을 위한 Quad Tree
+// 공간 분할(Space Division) 알고리즘을 위한 Octree
 
 template <typename T>
-class QuadTree
+class Octree
 {
 public:
 	node<T>* root = nullptr;
 
 public:
-	QuadTree();
-	~QuadTree();
+	Octree();
+	~Octree();
 	void create(Rect_<T> _rect);
 	void create(T _width, T _height);
 	void create(T _x, T _y, T _width, T _height);
-	
+
 	node<T>* createNode(T _x, T _y, T _width, T _height, node<T>* _parent = nullptr);
 	void buildTree(node<T>* _parent);
 	node<T>* findNode(node<T>* _parent, object<T>* _obj);
@@ -35,12 +35,12 @@ public:
 };
 
 template <typename T>
-QuadTree<T>::QuadTree()
+Octree<T>::Octree()
 {
 }
 
 template <typename T>
-QuadTree<T>::~QuadTree()
+Octree<T>::~Octree()
 {
 	if (root != nullptr)
 	{
@@ -49,13 +49,13 @@ QuadTree<T>::~QuadTree()
 }
 
 template <typename T>
-void QuadTree<T>::create(Rect_<T> _rect)
+void Octree<T>::create(Rect_<T> _rect)
 {
 	create(_rect.LT.x, _rect.LT.y, _rect.width(), _rect.height());
 }
 
 template <typename T>
-void QuadTree<T>::create(T _x, T _y, T _width, T _height)
+void Octree<T>::create(T _x, T _y, T _width, T _height)
 {
 	if (root == nullptr)
 	{
@@ -71,20 +71,20 @@ void QuadTree<T>::create(T _x, T _y, T _width, T _height)
 }
 
 template <typename T>
-void QuadTree<T>::create(T _width, T _height)
+void Octree<T>::create(T _width, T _height)
 {
 	create(0, 0, _width, _height);
 }
 
 template <typename T>
-node<T>* QuadTree<T>::createNode(T _x, T _y, T _width, T _height, node<T>* _parent)
+node<T>* Octree<T>::createNode(T _x, T _y, T _width, T _height, node<T>* _parent)
 {
 	node<T>* newNode = new node<T>(_x, _y, _width, _height, _parent);
 	return newNode;
 }
 
 template <typename T>
-void QuadTree<T>::buildTree(node<T>* _parent)
+void Octree<T>::buildTree(node<T>* _parent)
 {
 	if (_parent == nullptr)
 	{
@@ -132,7 +132,7 @@ void QuadTree<T>::buildTree(node<T>* _parent)
 }
 
 template <typename T>
-node<T>* QuadTree<T>::findNode(node<T>* _parent, object<T>* _obj)
+node<T>* Octree<T>::findNode(node<T>* _parent, object<T>* _obj)
 {
 	node<T>* temp = _parent;
 	while (temp != nullptr)
@@ -160,13 +160,13 @@ node<T>* QuadTree<T>::findNode(node<T>* _parent, object<T>* _obj)
 }
 
 template <typename T>
-node<T>* QuadTree<T>::getNode(object<T>* _obj)
+node<T>* Octree<T>::getNode(object<T>* _obj)
 {
 	return findNode(root, _obj);
 }
 
 template <typename T>
-void QuadTree<T>::addObject(object<T>* _obj)
+void Octree<T>::addObject(object<T>* _obj)
 {
 	node<T>* target = findNode(root, _obj);
 	if (target != nullptr)
@@ -183,7 +183,7 @@ void QuadTree<T>::addObject(object<T>* _obj)
 }
 
 template <typename T>
-bool QuadTree<T>::Collision(object<T>* _src, std::vector<object<T>*>* _dst, std::vector<Rect_<T>>* _dstSection)
+bool Octree<T>::Collision(object<T>* _src, std::vector<object<T>*>* _dst, std::vector<Rect_<T>>* _dstSection)
 {
 	if (root == nullptr || _src == nullptr)
 	{
@@ -198,7 +198,7 @@ bool QuadTree<T>::Collision(object<T>* _src, std::vector<object<T>*>* _dst, std:
 }
 
 template <typename T>
-bool QuadTree<T>::getCollisionObject(node<T>* _node, object<T>* _src, std::vector<object<T>*>* _dst, std::vector<Rect_<T>>* _dstSection)
+bool Octree<T>::getCollisionObject(node<T>* _node, object<T>* _src, std::vector<object<T>*>* _dst, std::vector<Rect_<T>>* _dstSection)
 {
 	if (_node == nullptr)
 	{
@@ -272,7 +272,7 @@ bool QuadTree<T>::getCollisionObject(node<T>* _node, object<T>* _src, std::vecto
 }
 
 template <typename T>
-void QuadTree<T>::resetDynamicObject(node<T>* _target)
+void Octree<T>::resetDynamicObject(node<T>* _target)
 {
 	if (_target == nullptr)
 	{
@@ -287,7 +287,7 @@ void QuadTree<T>::resetDynamicObject(node<T>* _target)
 }
 
 template <typename T>
-void QuadTree<T>::updateDynamicObject()
+void Octree<T>::updateDynamicObject()
 {
 	std::vector<object<T>*> objList;
 	updateDynamicObject(root, &objList);
@@ -299,7 +299,7 @@ void QuadTree<T>::updateDynamicObject()
 }
 
 template <typename T>
-void QuadTree<T>::updateDynamicObject(node<T>* _target, std::vector<object<T>*>* _list)
+void Octree<T>::updateDynamicObject(node<T>* _target, std::vector<object<T>*>* _list)
 {
 	if (_target == nullptr)
 	{
@@ -322,31 +322,31 @@ void QuadTree<T>::updateDynamicObject(node<T>* _target, std::vector<object<T>*>*
 }
 
 template<typename T>
-inline bool QuadTree<T>::isHitLeft(object<T>* _obj)
+inline bool Octree<T>::isHitLeft(object<T>* _obj)
 {
 	return root->isHitLeft(_obj, true);
 }
 
 template<typename T>
-inline bool QuadTree<T>::isHitRight(object<T>* _obj)
+inline bool Octree<T>::isHitRight(object<T>* _obj)
 {
 	return root->isHitRight(_obj, true);
 }
 
 template<typename T>
-inline bool QuadTree<T>::isHitTop(object<T>* _obj)
+inline bool Octree<T>::isHitTop(object<T>* _obj)
 {
 	return root->isHitTop(_obj, true);
 }
 
 template<typename T>
-inline bool QuadTree<T>::isHitBottom(object<T>* _obj)
+inline bool Octree<T>::isHitBottom(object<T>* _obj)
 {
 	return root->isHitBottom(_obj, true);
 }
 
 template <typename T>
-bool QuadTree<T>::isHitBoundary(object<T>* _obj)
+bool Octree<T>::isHitBoundary(object<T>* _obj)
 {
 	return root->isHitBoundary(_obj, true);
 }
