@@ -44,7 +44,7 @@ void Core::initialize()
 
 	NPC3D* npc2 = new NPC3D("NPC_2", Box(Point3f(100, 100, 100), 30, 30, 30), OBJECT_TYPE::DYNAMIC_OBJECT);
 	npc2->mass = 200.0f;
-	npc2->force = Vector3f(200, 200, 100);
+	npc2->force = Vector3f(200, 200, 0);
 	worldMap.addObject(npc2);
 	NPCList.push_back(npc2);
 
@@ -54,7 +54,13 @@ void Core::initialize()
 	worldMap.addObject(npc3);
 	NPCList.push_back(npc3);
 
-	for (int i = 0; i < 10; i++)
+	NPC3D* npc4 = new NPC3D("NPC_4", Box(Point3f(10, 50, 10), 30, 30, 30), OBJECT_TYPE::DYNAMIC_OBJECT);
+	npc4->mass = 200.0f;
+	npc4->force = Vector3f(0, 400, 0);
+	worldMap.addObject(npc4);
+	NPCList.push_back(npc4);
+
+	for (int i = 0; i < 20; i++)
 	{
 		Obstacle3D* obj = new Obstacle3D;
 		obj->Random();

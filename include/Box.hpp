@@ -5,11 +5,10 @@ template <typename T>
 class Box_
 {
 public:
-	Point3D_<T> pos;
-	Point3D_<T> corner[8];
-	T width;
-	T height;
-	T depth;
+	Point3D_<T> pos = Point3D_<T>();
+	T width = 0.0;
+	T height = 0.0;
+	T depth = 0.0;
 	float theta = 0.0f;
 	float pi = 0.0f;
 

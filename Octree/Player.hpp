@@ -17,7 +17,7 @@ public:
 	{
 		accel = force / mass;
 		velocity += accel * _dt;
-		float resistCoef = -0.1;
+		float resistCoef = -0.1f;
 		Vector2f resistForce = force * resistCoef * _dt;
 		force += resistForce;
 
@@ -42,7 +42,7 @@ public:
 	{
 		accel = force / mass;
 		velocity += accel * _dt;
-		float resistCoef = -0.1;
+		float resistCoef = -0.1f;
 		Vector3f resistForce = force * resistCoef * _dt;
 		force += resistForce;
 

@@ -83,12 +83,12 @@ class Sphere_
 {
 public:
 	Point3D_<T> c;
-	T radius = 0;
+	double radius = 0;
 
 public:
 	Sphere_() {};
-	Sphere_(Point3D_<T> _pos, T _rad) : c(_pos), radius(_rad) {};
-	Sphere_(T _x, T _y, T _z, T _rad)
+	Sphere_(Point3D_<T> _pos, double _rad) : c(_pos), radius(_rad) {};
+	Sphere_(T _x, T _y, T _z, double _rad)
 	{
 		c = (_x, _y, _z);
 		radius = _rad;
@@ -128,8 +128,8 @@ public:
 		}
 	}
 
-	T diameter()	const { return static_cast<T>(radius * 2.0f); }
-	T area()		const { return static_cast<T>(4 * PI * radius * radius); }
+	double diameter()	const { return (radius * 2.0); }
+	double area()		const { return (4.0 * PI * radius * radius); }
 
 	void offset(const Point3D_<T>& _offset)
 	{
@@ -143,7 +143,7 @@ public:
 
 	bool intersectSphere(const Sphere_<T>& _src)
 	{
-		T distance = sqrt(pow(_src.c.x - c.x, 2) + pow(_src.c.y - c.y, 2) + pow(_src.c.z - c.z, 2));
+		double distance = sqrt(pow(_src.c.x - c.x, 2) + pow(_src.c.y - c.y, 2) + pow(_src.c.z - c.z, 2));
 		if (distance <= (radius + _src.radius))
 		{
 			return true;
