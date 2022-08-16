@@ -21,7 +21,7 @@ public:
 		Vector2f resistForce = force * resistCoef * _dt;
 		force += resistForce;
 
-		rect.offset(velocity.x, velocity.y);
+		rect.offset(velocity.dx, velocity.dy);
 		circle = Circle_f(rect);
 	}
 };

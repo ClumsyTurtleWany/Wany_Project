@@ -8,19 +8,19 @@ template <typename T>
 class node
 {
 public:
-	Cube_<T> cube;
+	Box_<T> box;
 
 	int depth = 0;
 
-	std::vector<object<T>*> stObjList;
-	std::vector<object<T>*> dyObjList;
+	std::vector<object3D<T>*> stObjList;
+	std::vector<object3D<T>*> dyObjList;
 	node<T>* parent = nullptr;
 	node<T>* child[CHILD_NODE_CNT] = { nullptr, };
 
 public:
-	node(Cube_<T> _cube, node<T>* _parent = nullptr)
+	node(Box_<T> _box, node<T>* _parent = nullptr)
 	{
-		cube = _cube;
+		box = _box;
 		if (_parent != nullptr)
 		{
 			parent = _parent;
@@ -28,25 +28,15 @@ public:
 		}
 	}
 
-	node(Point3D_<T> _pos, T _size, float _theta, float _pi, node<T>* _parent = nullptr)
+	node(Point3D_<T> _pos, T _width, T _height, T _depth , node<T>* _parent = nullptr)
 	{
-		cube = Cube_<T>(_pos, _size, _theta, _pi);
+		box = Box_<T>(_pos, _width, _height, _depth);
 		if (_parent != nullptr)
 		{
 			parent = _parent;
 			depth = _parent->depth + 1;
 		}
 	}
-
-	node(T _x, T _y, T _z, T _size, float _theta, float _pi, node<T>* _parent = nullptr)
-	{
-		cube = Cube_<T>(_x, _y, _z, _size, _theta, _pi);
-		if (_parent != nullptr)
-		{
-			parent = _parent;
-			depth = _parent->depth + 1;
-		}
-	};
 
 	~node()
 	{
@@ -80,83 +70,122 @@ public:
 
 	bool isLeaf()
 	{
-		if (child[0] == nullptr && 
-			child[1] == nullptr &&
-			child[2] == nullptr &&
-			child[3] == nullptr)
+		bool bIsLeaf = true;
+		for (int cnt = 0; cnt < CHILD_NODE_CNT; cnt++)
 		{
-			return true;
+			bIsLeaf &= (child[cnt] == nullptr);
 		}
-		else
-		{
-			return false;
-		}
+		
+		return bIsLeaf;
 	}
 
-	bool isHitLeft(object<T>* _obj, bool _move = false)
+	bool isHitMinX(object3D<T>* _obj, bool _move = false)
 	{
 		bool isHit = false;
-		if (_obj->cube.left() < cube.left())
+		if (_obj->box.pos.x < box.pos.x)
 		{
 			if (_move)
 			{
-				_obj->moveTo(cube.left(), _obj->cube.top());
+				_obj->moveTo(box.pos.x, 
+					_obj->box.pos.y, 
+					_obj->box.pos.z);
 			}
 			isHit = true;
 		}
 		return isHit;
 	}
 
-	bool isHitRight(object<T>* _obj, bool _move = false)
+	bool isHitMaxX(object3D<T>* _obj, bool _move = false)
 	{
 		bool isHit = false;
-		if (_obj->cube.right() > cube.right())
+		if (_obj->box.maxp().x > box.maxp().x)
 		{
 			if (_move)
 			{
-				_obj->moveTo(cube.right() - _obj->cube.width(), _obj->cube.top());
+				_obj->moveTo(box.maxp().x - _obj->box.width, 
+					_obj->box.pos.y, 
+					_obj->box.pos.z);
 			}
 			isHit = true;
 		}
 		return isHit;
 	}
 
-	bool isHitTop(object<T>* _obj, bool _move = false)
+	bool isHitMinY(object3D<T>* _obj, bool _move = false)
 	{
 		bool isHit = false;
-		if (_obj->cube.top() < cube.top())
+		if (_obj->box.pos.y < box.pos.y)
 		{
 			if (_move)
 			{
-				_obj->moveTo(_obj->cube.left(), cube.top());
+				_obj->moveTo(_obj->box.pos.x, 
+					box.pos.y, 
+					_obj->box.pos.z);
 			}
 			isHit = true;
 		}
 		return isHit;
 	}
 
-	bool isHitBottom(object<T>* _obj, bool _move = false)
+	bool isHitMaxY(object3D<T>* _obj, bool _move = false)
 	{
 		bool isHit = false;
 		
-		if (_obj->cube.bottom() > cube.bottom())
+		if (_obj->box.maxp().y > box.maxp().y)
 		{
 			if (_move)
 			{
-				_obj->moveTo(_obj->cube.left(), cube.bottom() - _obj->cube.height());
+				_obj->moveTo(_obj->box.pos.x, 
+					box.maxp().y - _obj->box.height,
+					_obj->box.pos.z);
+			}
+			isHit = true;
+		}
+		return isHit;
+	}
+
+	bool isHitMinZ(object3D<T>* _obj, bool _move = false)
+	{
+		bool isHit = false;
+		if (_obj->box.pos.z < box.pos.z)
+		{
+			if (_move)
+			{
+				_obj->moveTo(_obj->box.pos.x,
+					_obj->box.pos.y,
+					box.pos.z);
+			}
+			isHit = true;
+		}
+		return isHit;
+	}
+
+	bool isHitMaxZ(object3D<T>* _obj, bool _move = false)
+	{
+		bool isHit = false;
+
+		if (_obj->box.maxp().z > box.maxp().z)
+		{
+			if (_move)
+			{
+				_obj->moveTo(_obj->box.pos.x,
+					_obj->box.pos.y,
+					box.maxp().z - _obj->box.depth);
 			}
 			isHit = true;
 		}
 		return isHit;
 	}
 	
-	bool isHitBoundary(object<T>* _obj, bool _move = false)
+	bool isHitBoundary(object3D<T>* _obj, bool _move = false)
 	{
 		bool isHit = false;
-		isHit |= isHitLeft(_obj, _move);
-		isHit |= isHitRight(_obj, _move);
-		isHit |= isHitTop(_obj, _move);
-		isHit |= isHitBottom(_obj, _move);
+		isHit |= isHitMinX(_obj, _move);
+		isHit |= isHitMaxX(_obj, _move);
+		isHit |= isHitMinY(_obj, _move);
+		isHit |= isHitMaxY(_obj, _move);
+		isHit |= isHitMinZ(_obj, _move);
+		isHit |= isHitMaxZ(_obj, _move);
 		
 		return isHit;
 	}

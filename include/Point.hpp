@@ -87,6 +87,54 @@ public:
 			return false;
 		}
 	}
+
+	bool operator <(const Point_<T>& _pt)
+	{
+		if ((x < _pt.x) && (y < _pt.y))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	bool operator >(const Point_<T>& _pt)
+	{
+		if ((x > _pt.x) && (y > _pt.y))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	bool operator <=(const Point_<T>& _pt)
+	{
+		if ((x <= _pt.x) && (y <= _pt.y))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	bool operator >=(const Point_<T>& _pt)
+	{
+		if ((x >= _pt.x) && (y >= _pt.y))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 };
 
 template <typename T>
@@ -173,6 +221,54 @@ public:
 	{
 		//if ((x != _pt.x) || (y != _pt.y) || (z != _pt.z))
 		if ((fabs(x - _pt.x) > 0.001) || (fabs(y - _pt.y) < 0.001) || (fabs(z - _pt.z) < 0.001))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	bool operator <(const Point3D_<T>& _pt)
+	{
+		if ((x < _pt.x) && (y < _pt.y) && (z < _pt.z))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	bool operator >(const Point3D_<T>& _pt)
+	{
+		if ((x > _pt.x) && (y > _pt.y) && (z > _pt.z))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	bool operator <=(const Point3D_<T>& _pt)
+	{
+		if ((x <= _pt.x) && (y <= _pt.y) && (z <= _pt.z))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	bool operator >=(const Point3D_<T>& _pt)
+	{
+		if ((x >= _pt.x) && (y >= _pt.y) && (z >= _pt.z))
 		{
 			return true;
 		}

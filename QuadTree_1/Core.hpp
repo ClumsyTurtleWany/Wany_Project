@@ -72,13 +72,13 @@ void Core::frame(float _dt)
 	{
 		if (worldMap.isHitLeft(it) || worldMap.isHitRight(it))
 		{
-			it->force.x *= -1;
-			it->velocity.x = 0;
+			it->force.dx *= -1;
+			it->velocity.dx = 0;
 		}
 		if (worldMap.isHitTop(it) || worldMap.isHitBottom(it))
 		{
-			it->force.y *= -1;
-			it->velocity.y = 0;
+			it->force.dy *= -1;
+			it->velocity.dy = 0;
 		}
 
 		it->frame(_dt);
@@ -86,13 +86,13 @@ void Core::frame(float _dt)
 
 	if (worldMap.isHitLeft(user) || worldMap.isHitRight(user))
 	{
-		user->force.x *= -1;
-		user->velocity.x = 0;
+		user->force.dx *= -1;
+		user->velocity.dx = 0;
 	}
 	if (worldMap.isHitTop(user) || worldMap.isHitBottom(user))
 	{
-		user->force.y *= -1;
-		user->velocity.y = 0;
+		user->force.dy *= -1;
+		user->velocity.dy = 0;
 	}
 	user->frame(_dt);
 

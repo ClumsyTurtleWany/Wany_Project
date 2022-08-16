@@ -1,19 +1,19 @@
 #pragma once
 #include <iostream>
 #include <windows.h>
-#include "QuadTree.hpp"
+#include "Octree.hpp"
 #include "Vector.hpp"
 #include "Player.hpp"
 #include "NPC.hpp"
 #include "Obstacle.hpp"
 
-using Map = QuadTree<float>;
-using ObjectList = std::vector<object<float>*>;
+using Map = Octree<float>;
+using ObjectList = std::vector<object3D<float>*>;
 class Core
 {
 private:
 	Map worldMap;
-	Player* user = nullptr;
+	Player3D* user = nullptr;
 	ObjectList NPCList;
 	ObjectList obstacleList;
 	ObjectList renderList;
@@ -29,34 +29,34 @@ public:
 void Core::initialize()
 {
 	srand(static_cast<unsigned int>(time(NULL)));
-	worldMap.create(0, 0, 128, 128);
+	worldMap.create(128.0f, 128.0f, 128.0f);
 
-	user = new Player("User", Rect2f(50, 50, 30, 30), OBJECT_TYPE::DYNAMIC_OBJECT);
+	user = new Player3D("User", Box(Point3f(50, 50, 50), 30, 30, 30), OBJECT_TYPE::DYNAMIC_OBJECT);
 	user->mass = 100.0f;
-	user->force = Vector2f(200, 100);
+	user->force = Vector3f(200, 100, 100);
 	worldMap.addObject(user);
 
-	NPC* npc1 = new NPC("NPC_1", Rect2f(60, 60, 30, 30), OBJECT_TYPE::DYNAMIC_OBJECT);
+	NPC3D* npc1 = new NPC3D("NPC_1", Box(Point3f(60, 60, 60), 30, 30, 30), OBJECT_TYPE::DYNAMIC_OBJECT);
 	npc1->mass = 100.0f;
-	npc1->force = Vector2f(100, 200);
+	npc1->force = Vector3f(100, 200, 200);
 	worldMap.addObject(npc1);
 	NPCList.push_back(npc1);
 
-	NPC* npc2 = new NPC("NPC_2", Rect2f(60, 60, 30, 30), OBJECT_TYPE::DYNAMIC_OBJECT);
+	NPC3D* npc2 = new NPC3D("NPC_2", Box(Point3f(100, 100, 100), 30, 30, 30), OBJECT_TYPE::DYNAMIC_OBJECT);
 	npc2->mass = 200.0f;
-	npc2->force = Vector2f(200, 200);
+	npc2->force = Vector3f(200, 200, 100);
 	worldMap.addObject(npc2);
 	NPCList.push_back(npc2);
 
-	NPC* npc3 = new NPC("NPC_3", Rect2f(60, 60, 30, 30), OBJECT_TYPE::DYNAMIC_OBJECT);
+	NPC3D* npc3 = new NPC3D("NPC_3", Box(Point3f(10, 10, 10), 30, 30, 30), OBJECT_TYPE::DYNAMIC_OBJECT);
 	npc3->mass = 250.0f;
-	npc3->force = Vector2f(500, 0);
+	npc3->force = Vector3f(500, 0, 0);
 	worldMap.addObject(npc3);
 	NPCList.push_back(npc3);
 
 	for (int i = 0; i < 10; i++)
 	{
-		Obstacle* obj = new Obstacle;
+		Obstacle3D* obj = new Obstacle3D;
 		obj->Random();
 		obj->name = "Obj" + std::to_string(i + 1);
 		worldMap.addObject(obj);
@@ -70,52 +70,66 @@ void Core::frame(float _dt)
 
 	for (auto it : NPCList)
 	{
-		if (worldMap.isHitLeft(it) || worldMap.isHitRight(it))
+		if (worldMap.isHitMinX(it) || worldMap.isHitMaxX(it))
 		{
-			it->force.x *= -1;
-			it->velocity.x = 0;
+			it->force.dx *= -1;
+			it->velocity.dx = 0;
 		}
-		if (worldMap.isHitTop(it) || worldMap.isHitBottom(it))
+		if (worldMap.isHitMinY(it) || worldMap.isHitMaxY(it))
 		{
-			it->force.y *= -1;
-			it->velocity.y = 0;
+			it->force.dy *= -1;
+			it->velocity.dy = 0;
+		}
+		if (worldMap.isHitMinZ(it) || worldMap.isHitMaxZ(it))
+		{
+			it->force.dz *= -1;
+			it->velocity.dz = 0;
 		}
 
 		it->frame(_dt);
 	}
 
-	if (worldMap.isHitLeft(user) || worldMap.isHitRight(user))
+	if (worldMap.isHitMinX(user) || worldMap.isHitMaxX(user))
 	{
-		user->force.x *= -1;
-		user->velocity.x = 0;
+		user->force.dx *= -1;
+		user->velocity.dx = 0;
 	}
-	if (worldMap.isHitTop(user) || worldMap.isHitBottom(user))
+	if (worldMap.isHitMinY(user) || worldMap.isHitMaxY(user))
 	{
-		user->force.y *= -1;
-		user->velocity.y = 0;
+		user->force.dy *= -1;
+		user->velocity.dy = 0;
+	}
+	if (worldMap.isHitMinZ(user) || worldMap.isHitMaxZ(user))
+	{
+		user->force.dz *= -1;
+		user->velocity.dz = 0;
 	}
 	user->frame(_dt);
-
+	
 	worldMap.Collision(user, &renderList);
 }
 
 void Core::render()
 {
-	std::cout << "Player - ";
-	std::cout << "L: " << user->rect.left() << ", ";
-	std::cout << "T: " << user->rect.top() << ", ";
-	std::cout << "R: " << user->rect.right() << ", ";
-	std::cout << "B: " << user->rect.bottom() << std::endl;
+	std::cout << "Player3D - ";
+	std::cout << "Pos[x]: " << user->box.pos.x << ", ";
+	std::cout << "Pos[y]: " << user->box.pos.y << ", ";
+	std::cout << "Pos[z]: " << user->box.pos.z << ", ";
+	std::cout << "width: " << user->box.width << ", ";
+	std::cout << "height: " << user->box.height << ", ";
+	std::cout << "depth: " << user->box.depth << std::endl;
 
 	if (!renderList.empty())
 	{
 		for (auto it : renderList)
 		{
 			std::cout << "[ " << it->name << " ] - ";
-			std::cout << "L: " << it->rect.left() << ", ";
-			std::cout << "T: " << it->rect.top() << ", ";
-			std::cout << "R: " << it->rect.right() << ", ";
-			std::cout << "B: " << it->rect.bottom() << std::endl;
+			std::cout << "Pos[x]: " << it->box.pos.x << ", ";
+			std::cout << "Pos[y]: " << it->box.pos.y << ", ";
+			std::cout << "Pos[z]: " << it->box.pos.z << ", ";
+			std::cout << "width: " << it->box.width << ", ";
+			std::cout << "height: " << it->box.height << ", ";
+			std::cout << "depth: " << it->box.depth << std::endl;
 		}
 	}
 }
@@ -130,7 +144,8 @@ void Core::run()
 	initialize();
 	float delay = 100.0f;
 	float globalTime = 0.0f;
-	while (globalTime < 60.0f)
+	float endTime = 60.0f;
+	while (globalTime < endTime)
 	{
 		frame(delay / 1000.0f);
 		render();

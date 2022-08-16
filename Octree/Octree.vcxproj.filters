@@ -33,9 +33,6 @@
     <ClInclude Include="Player.hpp">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="QuadTree.hpp">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Octree.hpp">
       <Filter>헤더 파일</Filter>
     </ClInclude>

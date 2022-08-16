@@ -93,13 +93,15 @@ public:
 		c = (_x, _y, _z);
 		radius = _rad;
 	};
-	//Sphere_(const Rect3D_<T>& _src)
-	//{
-	//	// Circumscribed circle
-	//	/*c = _src.center();
-	//	T diameter = sqrt(pow(_src.width(), 2) + pow(_src.height(), 2));
-	//	radius = static_cast<T>(diameter / 2.0f);*/
-	//}
+	Sphere_(const Box_<T>& _src)
+	{
+		c = _src.center();
+		radius = _src.length() / 2.0f;
+		// Circumscribed circle
+		/*c = _src.center();
+		T diameter = sqrt(pow(_src.width(), 2) + pow(_src.height(), 2));
+		radius = static_cast<T>(diameter / 2.0f);*/
+	}
 	~Sphere_() {};
 
 	bool operator ==(const Sphere_<T>& _sphere)
@@ -139,7 +141,7 @@ public:
 		c += (_x, _y, _z);
 	}
 
-	bool intersectCircle(const Sphere_<T>& _src)
+	bool intersectSphere(const Sphere_<T>& _src)
 	{
 		T distance = sqrt(pow(_src.c.x - c.x, 2) + pow(_src.c.y - c.y, 2) + pow(_src.c.z - c.z, 2));
 		if (distance <= (radius + _src.radius))

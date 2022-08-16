@@ -12,7 +12,7 @@ enum class OBJECT_TYPE
 };
 
 template <typename T>
-class object
+class object2D
 {
 public:
 	std::string name;
@@ -27,9 +27,9 @@ public:
 	OBJECT_TYPE type = OBJECT_TYPE::STATIC_OBJECT;
 
 public:
-	object() {};
-	object(Rect_<T> _rect, OBJECT_TYPE _type = OBJECT_TYPE::STATIC_OBJECT) : rect(_rect), circle(_rect), type(_type), mass(0.0f) {};
-	~object() {};
+	object2D() {};
+	object2D(Rect_<T> _rect, OBJECT_TYPE _type = OBJECT_TYPE::STATIC_OBJECT) : rect(_rect), circle(_rect), type(_type), mass(0.0f) {};
+	~object2D() {};
 
 public:
 	void Random()
@@ -53,6 +53,55 @@ public:
 		if (type == OBJECT_TYPE::DYNAMIC_OBJECT)
 		{
 			moveTo(Point_<T>(_x, _y));
+		}
+	}
+
+public:
+	virtual void frame(float _dt) {};
+};
+
+template <typename T>
+class object3D
+{
+public:
+	std::string name;
+	Box_<T> box;
+	Sphere_<T> sphere;
+
+	Vector3D_<T> force;
+	Vector3D_<T> accel;
+	Vector3D_<T> velocity;
+	float mass = 0.0f;
+
+	OBJECT_TYPE type = OBJECT_TYPE::STATIC_OBJECT;
+
+public:
+	object3D() {};
+	object3D(Box_<T> _box, OBJECT_TYPE _type = OBJECT_TYPE::STATIC_OBJECT) : box(_box), sphere(_box), type(_type), mass(0.0f) {};
+	~object3D() {};
+
+public:
+	void Random()
+	{
+		box = Box_<T>(Point3D_<T>(20 + rand() % 80, 20 + rand() % 80, 20 + rand() % 80), 2 + (rand() % 20), 2 + (rand() % 20), 2 + (rand() % 20));
+		sphere = Sphere_<T>(box);
+	}
+
+	void moveTo(Point3D_<T> _pos)
+	{
+		if (type == OBJECT_TYPE::DYNAMIC_OBJECT)
+		{
+			Point3D_<T> offset = _pos - box.pos;
+			box.offset(offset);
+			sphere = Sphere_<T>(box);
+		}
+	}
+
+	void moveTo(int _x, int _y, int _z)
+	{
+		if (type == OBJECT_TYPE::DYNAMIC_OBJECT)
+		{
+			moveTo(Point3D_<T>(_x, _y, _z));
 		}
 	}
 

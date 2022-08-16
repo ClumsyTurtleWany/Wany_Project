@@ -12,26 +12,28 @@ public:
 public:
 	Octree();
 	~Octree();
-	void create(Rect_<T> _rect);
-	void create(T _width, T _height);
-	void create(T _x, T _y, T _width, T _height);
+	void create(Box_<T> _box);
+	void create(T _width, T _height, T _depth);
+	void create(Point3D_<T> _pos, T _width, T _height, T _depth);
 
-	node<T>* createNode(T _x, T _y, T _width, T _height, node<T>* _parent = nullptr);
+	node<T>* createNode(Point3D_<T> _pos, T _width, T _height, T _depth, node<T>* _parent = nullptr);
 	void buildTree(node<T>* _parent);
-	node<T>* findNode(node<T>* _parent, object<T>* _obj);
-	node<T>* getNode(object<T>* _obj);
-	void addObject(object<T>* _obj);
-	bool Collision(object<T>* _src, std::vector<object<T>*>* _dst, std::vector<Rect_<T>>* _dstSection = nullptr);
-	bool getCollisionObject(node<T>* _node, object<T>* _src, std::vector<object<T>*>* _dst, std::vector<Rect_<T>>* _dstSection = nullptr);
+	node<T>* findNode(node<T>* _parent, object3D<T>* _obj);
+	node<T>* getNode(object3D<T>* _obj);
+	void addObject(object3D<T>* _obj);
+	bool Collision(object3D<T>* _src, std::vector<object3D<T>*>* _dst, std::vector<Box_<T>>* _dstSection = nullptr);
+	bool getCollisionObject(node<T>* _node, object3D<T>* _src, std::vector<object3D<T>*>* _dst, std::vector<Box_<T>>* _dstSection = nullptr);
 	void resetDynamicObject(node<T>* _target);
 	void updateDynamicObject();
-	void updateDynamicObject(node<T>* _target, std::vector<object<T>*>* _list);
-
-	bool isHitLeft(object<T>* _obj);
-	bool isHitRight(object<T>* _obj);
-	bool isHitTop(object<T>* _obj);
-	bool isHitBottom(object<T>* _obj);
-	bool isHitBoundary(object<T>* _obj);
+	void updateDynamicObject(node<T>* _target, std::vector<object3D<T>*>* _list);
+	
+	bool isHitMinX(object3D<T>* _obj);
+	bool isHitMaxX(object3D<T>* _obj);
+	bool isHitMinY(object3D<T>* _obj);
+	bool isHitMaxY(object3D<T>* _obj);
+	bool isHitMinZ(object3D<T>* _obj);
+	bool isHitMaxZ(object3D<T>* _obj);
+	bool isHitBoundary(object3D<T>* _obj);
 };
 
 template <typename T>
@@ -45,41 +47,42 @@ Octree<T>::~Octree()
 	if (root != nullptr)
 	{
 		delete root;
+		root = nullptr;
 	}
 }
 
 template <typename T>
-void Octree<T>::create(Rect_<T> _rect)
+void Octree<T>::create(Box_<T> _box)
 {
-	create(_rect.LT.x, _rect.LT.y, _rect.width(), _rect.height());
+	create(_box.pos, _box.width, _box.height, _box.depth);
 }
 
 template <typename T>
-void Octree<T>::create(T _x, T _y, T _width, T _height)
+void Octree<T>::create(T _width, T _height, T _depth)
+{
+	create(Point3D_<T>(0, 0, 0), _width, _height, _depth);
+}
+
+template <typename T>
+void Octree<T>::create(Point3D_<T> _pos, T _width, T _height, T _depth)
 {
 	if (root == nullptr)
 	{
-		root = createNode(_x, _y, _width, _height);
+		root = createNode(_pos, _width, _height, _depth);
 		buildTree(root);
 	}
 	else
 	{
 		delete root;
-		root = createNode(_x, _y, _width, _height);
+		root = createNode(_pos, _width, _height, _depth);
 		buildTree(root);
 	}
 }
 
 template <typename T>
-void Octree<T>::create(T _width, T _height)
+node<T>* Octree<T>::createNode(Point3D_<T> _pos, T _width, T _height, T _depth, node<T>* _parent)
 {
-	create(0, 0, _width, _height);
-}
-
-template <typename T>
-node<T>* Octree<T>::createNode(T _x, T _y, T _width, T _height, node<T>* _parent)
-{
-	node<T>* newNode = new node<T>(_x, _y, _width, _height, _parent);
+	node<T>* newNode = new node<T>(_pos, _width, _height, _depth, _parent);
 	return newNode;
 }
 
@@ -94,36 +97,82 @@ void Octree<T>::buildTree(node<T>* _parent)
 	{
 		return;
 	}
-	if (_parent->rect.width() < 1 || _parent->rect.height() < 1)
-	{
-		return;
-	}
 
-	T width = static_cast<int>(_parent->rect.width() / 2.0f);
-	T height = static_cast<int>(_parent->rect.height() / 2.0f);
-	_parent->child[0] = createNode(_parent->rect.LT.x,
-		_parent->rect.LT.y,
+	T width = static_cast<T>(_parent->box.width / 2.0f);
+	T height = static_cast<T>(_parent->box.height / 2.0f);
+	T depth = static_cast<T>(_parent->box.height / 2.0f);
+	_parent->child[0] = createNode(
+		Point3D_<T>(_parent->box.pos.x,	
+					_parent->box.pos.y, 
+					_parent->box.pos.z),
 		width,
 		height,
+		depth,
 		_parent);
 
-	_parent->child[1] = createNode(_parent->rect.LT.x + width,
-		_parent->rect.LT.y,
+	_parent->child[1] = createNode(
+		Point3D_<T>(_parent->box.pos.x + width,
+					_parent->box.pos.y,
+					_parent->box.pos.z),
 		width,
 		height,
+		depth,
 		_parent);
 
-	_parent->child[2] = createNode(_parent->rect.LT.x,
-		_parent->rect.LT.y + height,
+	_parent->child[2] = createNode(
+		Point3D_<T>(_parent->box.pos.x,
+					_parent->box.pos.y + height,
+					_parent->box.pos.z),
 		width,
 		height,
+		depth,
 		_parent);
 
-	_parent->child[3] = createNode(_parent->rect.LT.x + width,
-		_parent->rect.LT.y + height,
+	_parent->child[3] = createNode(
+		Point3D_<T>(_parent->box.pos.x + width,
+					_parent->box.pos.y + height,
+					_parent->box.pos.z),
 		width,
 		height,
+		depth,
 		_parent);
+
+	_parent->child[4] = createNode(
+		Point3D_<T>(_parent->box.pos.x,
+			_parent->box.pos.y,
+			_parent->box.pos.z + depth),
+		width,
+		height,
+		depth,
+		_parent);
+
+	_parent->child[5] = createNode(
+		Point3D_<T>(_parent->box.pos.x + width,
+			_parent->box.pos.y,
+			_parent->box.pos.z + depth),
+		width,
+		height,
+		depth,
+		_parent);
+
+	_parent->child[6] = createNode(
+		Point3D_<T>(_parent->box.pos.x,
+			_parent->box.pos.y + height,
+			_parent->box.pos.z + depth),
+		width,
+		height,
+		depth,
+		_parent);
+
+	_parent->child[7] = createNode(
+		Point3D_<T>(_parent->box.pos.x + width,
+			_parent->box.pos.y + height,
+			_parent->box.pos.z + depth),
+		width,
+		height,
+		depth,
+		_parent);
+
 
 	for (int i = 0; i < CHILD_NODE_CNT; i++)
 	{
@@ -132,7 +181,7 @@ void Octree<T>::buildTree(node<T>* _parent)
 }
 
 template <typename T>
-node<T>* Octree<T>::findNode(node<T>* _parent, object<T>* _obj)
+node<T>* Octree<T>::findNode(node<T>* _parent, object3D<T>* _obj)
 {
 	node<T>* temp = _parent;
 	while (temp != nullptr)
@@ -142,7 +191,7 @@ node<T>* Octree<T>::findNode(node<T>* _parent, object<T>* _obj)
 		{
 			if (temp->child[i] != nullptr)
 			{
-				if (temp->child[i]->rect.RectInRect(_obj->rect))
+				if (temp->child[i]->box.BoxInBox(_obj->box))
 				{
 					isIn = true;
 					temp = temp->child[i];
@@ -160,13 +209,13 @@ node<T>* Octree<T>::findNode(node<T>* _parent, object<T>* _obj)
 }
 
 template <typename T>
-node<T>* Octree<T>::getNode(object<T>* _obj)
+node<T>* Octree<T>::getNode(object3D<T>* _obj)
 {
 	return findNode(root, _obj);
 }
 
 template <typename T>
-void Octree<T>::addObject(object<T>* _obj)
+void Octree<T>::addObject(object3D<T>* _obj)
 {
 	node<T>* target = findNode(root, _obj);
 	if (target != nullptr)
@@ -183,7 +232,7 @@ void Octree<T>::addObject(object<T>* _obj)
 }
 
 template <typename T>
-bool Octree<T>::Collision(object<T>* _src, std::vector<object<T>*>* _dst, std::vector<Rect_<T>>* _dstSection)
+bool Octree<T>::Collision(object3D<T>* _src, std::vector<object3D<T>*>* _dst, std::vector<Box_<T>>* _dstSection)
 {
 	if (root == nullptr || _src == nullptr)
 	{
@@ -198,7 +247,7 @@ bool Octree<T>::Collision(object<T>* _src, std::vector<object<T>*>* _dst, std::v
 }
 
 template <typename T>
-bool Octree<T>::getCollisionObject(node<T>* _node, object<T>* _src, std::vector<object<T>*>* _dst, std::vector<Rect_<T>>* _dstSection)
+bool Octree<T>::getCollisionObject(node<T>* _node, object3D<T>* _src, std::vector<object3D<T>*>* _dst, std::vector<Box_<T>>* _dstSection)
 {
 	if (_node == nullptr)
 	{
@@ -217,10 +266,10 @@ bool Octree<T>::getCollisionObject(node<T>* _node, object<T>* _src, std::vector<
 					continue;
 				}
 
-				if (_src->circle.intersectCircle(it->circle))
+				if (_src->sphere.intersectSphere(it->sphere))
 				{
-					Rect_<T> intersection;
-					isCollision = _src->rect.intersectRect(it->rect, &intersection);
+					Box_<T> intersection;
+					isCollision = _src->box.intersectBox(it->box, &intersection);
 					if (isCollision)
 					{
 						_dst->push_back(it);
@@ -243,10 +292,10 @@ bool Octree<T>::getCollisionObject(node<T>* _node, object<T>* _src, std::vector<
 					continue;
 				}
 
-				if (_src->circle.intersectCircle(it->circle))
+				if (_src->sphere.intersectSphere(it->sphere))
 				{
-					Rect_<T> intersection;
-					isCollision = _src->rect.intersectRect(it->rect, &intersection);
+					Box_<T> intersection;
+					isCollision = _src->box.intersectBox(it->box, &intersection);
 					if (isCollision)
 					{
 						_dst->push_back(it);
@@ -289,7 +338,7 @@ void Octree<T>::resetDynamicObject(node<T>* _target)
 template <typename T>
 void Octree<T>::updateDynamicObject()
 {
-	std::vector<object<T>*> objList;
+	std::vector<object3D<T>*> objList;
 	updateDynamicObject(root, &objList);
 
 	for (auto it : objList)
@@ -299,7 +348,7 @@ void Octree<T>::updateDynamicObject()
 }
 
 template <typename T>
-void Octree<T>::updateDynamicObject(node<T>* _target, std::vector<object<T>*>* _list)
+void Octree<T>::updateDynamicObject(node<T>* _target, std::vector<object3D<T>*>* _list)
 {
 	if (_target == nullptr)
 	{
@@ -322,31 +371,43 @@ void Octree<T>::updateDynamicObject(node<T>* _target, std::vector<object<T>*>* _
 }
 
 template<typename T>
-inline bool Octree<T>::isHitLeft(object<T>* _obj)
+inline bool Octree<T>::isHitMinX(object3D<T>* _obj)
 {
-	return root->isHitLeft(_obj, true);
+	return root->isHitMinX(_obj, true);
 }
 
 template<typename T>
-inline bool Octree<T>::isHitRight(object<T>* _obj)
+inline bool Octree<T>::isHitMaxX(object3D<T>* _obj)
 {
-	return root->isHitRight(_obj, true);
+	return root->isHitMaxX(_obj, true);
 }
 
 template<typename T>
-inline bool Octree<T>::isHitTop(object<T>* _obj)
+inline bool Octree<T>::isHitMinY(object3D<T>* _obj)
 {
-	return root->isHitTop(_obj, true);
+	return root->isHitMinY(_obj, true);
 }
 
 template<typename T>
-inline bool Octree<T>::isHitBottom(object<T>* _obj)
+inline bool Octree<T>::isHitMaxY(object3D<T>* _obj)
 {
-	return root->isHitBottom(_obj, true);
+	return root->isHitMaxY(_obj, true);
 }
 
-template <typename T>
-bool Octree<T>::isHitBoundary(object<T>* _obj)
+template<typename T>
+inline bool Octree<T>::isHitMinZ(object3D<T>* _obj)
+{
+	return root->isHitMinZ(_obj, true);
+}
+
+template<typename T>
+inline bool Octree<T>::isHitMaxZ(object3D<T>* _obj)
+{
+	return root->isHitMaxZ(_obj, true);
+}
+
+template<typename T>
+inline bool Octree<T>::isHitBoundary(object3D<T>* _obj)
 {
 	return root->isHitBoundary(_obj, true);
 }
