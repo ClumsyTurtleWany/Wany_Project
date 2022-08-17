@@ -55,6 +55,7 @@ public:
 	T width()		const { return static_cast<T>(fabs(static_cast<double>(RB.x) - static_cast<double>(LT.x) + 1)); }
 	T height()		const { return static_cast<T>(fabs(static_cast<double>(RB.y) - static_cast<double>(LT.y) + 1)); }
 	T area()		const { return width() * height(); }
+	T length()		const { return sqrt(pow(width(), 2) + pow(height(), 2)); }
 	T cx()			const {	return static_cast<T>((static_cast<double>(RB.x) + static_cast<double>(LT.x)) / 2.0f); }
 	T cy()			const {	return static_cast<T>((static_cast<double>(RB.y) + static_cast<double>(LT.y)) / 2.0f); }
 	Point_<T> center() const { return Point_<T>(cx(), cy()); }

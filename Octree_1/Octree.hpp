@@ -1,7 +1,8 @@
 #pragma once
-#include "Node.hpp"
+#include "SpaceDivision.hpp"
 
 // 공간 분할(Space Division) 알고리즘을 위한 Octree
+static const int OctreeChildNum = 8;
 
 template <typename T>
 class Octree
@@ -12,21 +13,26 @@ public:
 public:
 	Octree();
 	~Octree();
+
+public:
 	void create(Box_<T> _box);
 	void create(T _width, T _height, T _depth);
 	void create(Point3D_<T> _pos, T _width, T _height, T _depth);
 
+	void addObject(object3D<T>* _obj);
+	bool Collision(object3D<T>* _src, std::vector<object3D<T>*>* _dst, std::vector<Box_<T>>* _dstSection = nullptr);
+	void updateDynamicObject();
+
+private:
 	node<T>* createNode(Point3D_<T> _pos, T _width, T _height, T _depth, node<T>* _parent = nullptr);
 	void buildTree(node<T>* _parent);
 	node<T>* findNode(node<T>* _parent, object3D<T>* _obj);
 	node<T>* getNode(object3D<T>* _obj);
-	void addObject(object3D<T>* _obj);
-	bool Collision(object3D<T>* _src, std::vector<object3D<T>*>* _dst, std::vector<Box_<T>>* _dstSection = nullptr);
 	bool getCollisionObject(node<T>* _node, object3D<T>* _src, std::vector<object3D<T>*>* _dst, std::vector<Box_<T>>* _dstSection = nullptr);
 	void resetDynamicObject(node<T>* _target);
-	void updateDynamicObject();
 	void updateDynamicObject(node<T>* _target, std::vector<object3D<T>*>* _list);
 	
+public:
 	bool isHitMinX(object3D<T>* _obj);
 	bool isHitMaxX(object3D<T>* _obj);
 	bool isHitMinY(object3D<T>* _obj);
@@ -83,6 +89,7 @@ template <typename T>
 node<T>* Octree<T>::createNode(Point3D_<T> _pos, T _width, T _height, T _depth, node<T>* _parent)
 {
 	node<T>* newNode = new node<T>(_pos, _width, _height, _depth, _parent);
+	newNode->child.assign(OctreeChildNum, nullptr);
 	return newNode;
 }
 
@@ -174,7 +181,7 @@ void Octree<T>::buildTree(node<T>* _parent)
 		_parent);
 
 
-	for (int i = 0; i < CHILD_NODE_CNT; i++)
+	for (int i = 0; i < OctreeChildNum; i++)
 	{
 		buildTree(_parent->child[i]);
 	}
@@ -187,7 +194,7 @@ node<T>* Octree<T>::findNode(node<T>* _parent, object3D<T>* _obj)
 	while (temp != nullptr)
 	{
 		bool isIn = false;
-		for (int i = 0; i < CHILD_NODE_CNT; i++)
+		for (int i = 0; i < OctreeChildNum; i++)
 		{
 			if (temp->child[i] != nullptr)
 			{
@@ -310,7 +317,7 @@ bool Octree<T>::getCollisionObject(node<T>* _node, object3D<T>* _src, std::vecto
 
 		if (!_node->isLeaf())
 		{
-			for (int cnt = 0; cnt < CHILD_NODE_CNT; cnt++)
+			for (int cnt = 0; cnt < OctreeChildNum; cnt++)
 			{
 				isCollision |= getCollisionObject(_node->child[cnt], _src, _dst, _dstSection);
 			}
@@ -329,7 +336,7 @@ void Octree<T>::resetDynamicObject(node<T>* _target)
 	}
 
 	_target->dyObjList.clear();
-	for (int cnt = 0; cnt < CHILD_NODE_CNT; cnt++)
+	for (int cnt = 0; cnt < OctreeChildNum; cnt++)
 	{
 		resetDynamicObject(_target->child[cnt]);
 	}
@@ -364,7 +371,7 @@ void Octree<T>::updateDynamicObject(node<T>* _target, std::vector<object3D<T>*>*
 	}
 	_target->dyObjList.clear();
 
-	for (int cnt = 0; cnt < CHILD_NODE_CNT; cnt++)
+	for (int cnt = 0; cnt < OctreeChildNum; cnt++)
 	{
 		updateDynamicObject(_target->child[cnt], _list);
 	}

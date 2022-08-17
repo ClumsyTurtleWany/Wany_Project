@@ -154,7 +154,7 @@ bool QuadTree::getCollisionObject(node* _node, object* _src, std::vector<object*
 			for (auto it : _node->objList)
 			{
 				//if (!_src->rect.RectInRect(it->rect))
-				if (_src->circle.intersectCircle(it->circle))
+				if (_src->getCircle().intersectCircle(it->getCircle()))
 				{
 					Rect intersection;
 					isCollision = _src->rect.intersectRect(it->rect, &intersection);

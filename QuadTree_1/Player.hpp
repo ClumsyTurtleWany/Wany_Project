@@ -22,6 +22,5 @@ public:
 		force += resistForce;
 
 		rect.offset(velocity.dx, velocity.dy);
-		circle = Circle_f(rect);
 	}
 };

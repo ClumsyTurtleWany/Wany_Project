@@ -53,6 +53,11 @@ public:
 		}
 	}
 
+	Circle_<T> getCircle()
+	{
+		return Circle_<T>(rect.center(), rect.length() / 2.0f);
+	}
+
 public:
 	virtual void frame(float _dt) {};
 };
@@ -107,3 +112,5 @@ public:
 public:
 	virtual void frame(float _dt) {};
 };
+
+using Object = object3D<float>;

@@ -12,19 +12,17 @@ class object
 {
 public:
 	Rect rect;
-	Circle circle;
 
 	OBJECT_TYPE type = OBJECT_TYPE::STATIC_OBJECT;
 
 public:
 	object() {};
-	object(Rect _rect, OBJECT_TYPE _type = OBJECT_TYPE::STATIC_OBJECT) : rect(_rect), circle(_rect), type(_type) {};
+	object(Rect _rect, OBJECT_TYPE _type = OBJECT_TYPE::STATIC_OBJECT) : rect(_rect), type(_type) {};
 	~object() {};
 
 	void Random()
 	{
 		rect = Rect(20 + rand() % 80, 20 + rand() % 80, 2 + (rand() % 20), 2 + (rand() % 20));
-		circle = Circle(rect);
 	}
 
 	void moveTo(Point _pos)
@@ -33,7 +31,11 @@ public:
 		{
 			Point offset = _pos - rect.LT;
 			rect.offset(offset);
-			circle.offset(offset);
 		}
+	}
+
+	Circle getCircle()
+	{
+		return Circle(rect.center(), rect.length() / 2.0f);
 	}
 };

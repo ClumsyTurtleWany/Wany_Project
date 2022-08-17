@@ -1,5 +1,4 @@
 #pragma once
-#include "Geometry.hpp"
 #include "Point.hpp"
 
 template <typename T>

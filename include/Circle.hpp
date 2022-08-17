@@ -16,13 +16,6 @@ public:
 		c = (_x, _y);
 		radius = _rad;
 	};
-	Circle_(const Rect_<T>& _src)
-	{
-		// Circumscribed circle
-		c = _src.center();
-		T diameter = static_cast<T>(ceil(sqrt(pow(_src.width(), 2) + pow(_src.height(), 2))));
-		radius = static_cast<T>(diameter / 2.0f);
-	}
 	~Circle_() {};
 
 	bool operator ==(const Circle_<T>& _circle)
@@ -93,15 +86,6 @@ public:
 		c = (_x, _y, _z);
 		radius = _rad;
 	};
-	Sphere_(const Box_<T>& _src)
-	{
-		c = _src.center();
-		radius = _src.length() / 2.0f;
-		// Circumscribed circle
-		/*c = _src.center();
-		T diameter = sqrt(pow(_src.width(), 2) + pow(_src.height(), 2));
-		radius = static_cast<T>(diameter / 2.0f);*/
-	}
 	~Sphere_() {};
 
 	bool operator ==(const Sphere_<T>& _sphere)

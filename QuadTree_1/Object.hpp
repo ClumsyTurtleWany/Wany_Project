@@ -16,7 +16,6 @@ class object
 public:
 	std::string name;
 	Rect_<T> rect;
-	Circle_<T> circle;
 
 	Vector2D_<T> force;
 	Vector2D_<T> accel;
@@ -27,14 +26,13 @@ public:
 
 public:
 	object() {};
-	object(Rect_<T> _rect, OBJECT_TYPE _type = OBJECT_TYPE::STATIC_OBJECT) : rect(_rect), circle(_rect), type(_type), mass(0.0f) {};
+	object(Rect_<T> _rect, OBJECT_TYPE _type = OBJECT_TYPE::STATIC_OBJECT) : rect(_rect), type(_type), mass(0.0f) {};
 	~object() {};
 
 public:
 	void Random()
 	{
 		rect = Rect_<T>(20 + rand() % 80, 20 + rand() % 80, 2 + (rand() % 20), 2 + (rand() % 20));
-		circle = Circle_<T>(rect);
 	}
 
 	void moveTo(Point_<T> _pos)
@@ -43,7 +41,6 @@ public:
 		{
 			Point_<T> offset = _pos - rect.LT;
 			rect.offset(offset);
-			circle = Circle_<T>(rect);
 		}
 	}
 
@@ -53,6 +50,11 @@ public:
 		{
 			moveTo(Point_<T>(_x, _y));
 		}
+	}
+
+	Circle_<T> getCircle()
+	{
+		return Circle_<T>(rect.center(), rect.length() / 2.0f);
 	}
 
 public:
