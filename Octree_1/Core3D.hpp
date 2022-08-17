@@ -1,11 +1,5 @@
 #pragma once
-#include <iostream>
-#include <windows.h>
-#include "Octree.hpp"
-#include "Vector.hpp"
-#include "Player.hpp"
-#include "NPC.hpp"
-#include "Obstacle.hpp"
+
 #include "Core.hpp"
 
 using Map3D = Octree<float>;

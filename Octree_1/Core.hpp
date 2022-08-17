@@ -1,4 +1,12 @@
 #pragma once
+#include <iostream>
+#include <windows.h>
+#include "Octree.hpp"
+#include "QuadTree.hpp"
+#include "Vector.hpp"
+#include "Player.hpp"
+#include "NPC.hpp"
+#include "Obstacle.hpp"
 
 class Core
 {
