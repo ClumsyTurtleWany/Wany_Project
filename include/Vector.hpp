@@ -69,7 +69,7 @@ public:
 
 	bool operator ==(const Vector2D_<T>& _v)
 	{
-		if ((pos == _v.pos) && (dx == _v.dx) && (dy == _v.dy))
+		if ((dx == _v.dx) && (dy == _v.dy))
 		{
 			return true;
 		}
@@ -81,7 +81,7 @@ public:
 
 	bool operator !=(const Vector2D_<T>& _v)
 	{
-		if ((pos != _v.pos) || (dx != _v.dx) || (dy != _v.dy))
+		if ((dx != _v.dx) || (dy != _v.dy))
 		{
 			return true;
 		}
@@ -237,7 +237,7 @@ public:
 
 	bool operator ==(const Vector3D_<T>& _v)
 	{
-		if ((pos == _v.pos) && (dx == _v.dx) && (dy == _v.dy) && (dz == _v.dz))
+		if ((dx == _v.dx) && (dy == _v.dy) && (dz == _v.dz))
 		{
 			return true;
 		}
@@ -249,7 +249,7 @@ public:
 
 	bool operator !=(const Vector3D_<T>& _v)
 	{
-		if ((pos != _v.pos) || (dx != _v.dx) || (dy != _v.dy) || (dz != _v.dz))
+		if ((dx != _v.dx) || (dy != _v.dy) || (dz != _v.dz))
 		{
 			return true;
 		}
