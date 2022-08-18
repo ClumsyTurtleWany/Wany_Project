@@ -1,13 +1,17 @@
 #pragma once
-
 #include "Core.hpp"
+#include "QuadTree.hpp"
+#include "Player2D.hpp"
+#include "NPC2D.hpp"
+#include "Obstacle2D.hpp"
 
 using Map2D = QuadTree<float>;
 using ObjectList2D = std::vector<object2D<float>*>;
 class Core2D : public Core
 {
 private:
-	Map2D* worldMap;
+	//Map2D* worldMap;
+	QuadTree<float>* worldMap;
 	Player2D* user = nullptr;
 	ObjectList2D NPCList;
 	ObjectList2D obstacleList;

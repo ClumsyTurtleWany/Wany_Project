@@ -8,7 +8,7 @@ template <typename T>
 class Octree
 {
 public:
-	node<T>* root = nullptr;
+	node3D<T>* root = nullptr;
 
 public:
 	Octree();
@@ -24,13 +24,13 @@ public:
 	void updateDynamicObject();
 
 private:
-	node<T>* createNode(Point3D_<T> _pos, T _width, T _height, T _depth, node<T>* _parent = nullptr);
-	void buildTree(node<T>* _parent);
-	node<T>* findNode(node<T>* _parent, object3D<T>* _obj);
-	node<T>* getNode(object3D<T>* _obj);
-	bool getCollisionObject(node<T>* _node, object3D<T>* _src, std::vector<object3D<T>*>* _dst, std::vector<Box_<T>>* _dstSection = nullptr);
-	void resetDynamicObject(node<T>* _target);
-	void updateDynamicObject(node<T>* _target, std::vector<object3D<T>*>* _list);
+	node3D<T>* createNode(Point3D_<T> _pos, T _width, T _height, T _depth, node3D<T>* _parent = nullptr);
+	void buildTree(node3D<T>* _parent);
+	node3D<T>* findNode(node3D<T>* _parent, object3D<T>* _obj);
+	node3D<T>* getNode(object3D<T>* _obj);
+	bool getCollisionObject(node3D<T>* _node, object3D<T>* _src, std::vector<object3D<T>*>* _dst, std::vector<Box_<T>>* _dstSection = nullptr);
+	void resetDynamicObject(node3D<T>* _target);
+	void updateDynamicObject(node3D<T>* _target, std::vector<object3D<T>*>* _list);
 	
 public:
 	bool isHitMinX(object3D<T>* _obj);
@@ -86,15 +86,15 @@ void Octree<T>::create(Point3D_<T> _pos, T _width, T _height, T _depth)
 }
 
 template <typename T>
-node<T>* Octree<T>::createNode(Point3D_<T> _pos, T _width, T _height, T _depth, node<T>* _parent)
+node3D<T>* Octree<T>::createNode(Point3D_<T> _pos, T _width, T _height, T _depth, node3D<T>* _parent)
 {
-	node<T>* newNode = new node<T>(_pos, _width, _height, _depth, _parent);
+	node3D<T>* newNode = new node3D<T>(_pos, _width, _height, _depth, _parent);
 	newNode->child.assign(OctreeChildNum, nullptr);
 	return newNode;
 }
 
 template <typename T>
-void Octree<T>::buildTree(node<T>* _parent)
+void Octree<T>::buildTree(node3D<T>* _parent)
 {
 	if (_parent == nullptr)
 	{
@@ -188,9 +188,9 @@ void Octree<T>::buildTree(node<T>* _parent)
 }
 
 template <typename T>
-node<T>* Octree<T>::findNode(node<T>* _parent, object3D<T>* _obj)
+node3D<T>* Octree<T>::findNode(node3D<T>* _parent, object3D<T>* _obj)
 {
-	node<T>* temp = _parent;
+	node3D<T>* temp = _parent;
 	while (temp != nullptr)
 	{
 		bool isIn = false;
@@ -216,7 +216,7 @@ node<T>* Octree<T>::findNode(node<T>* _parent, object3D<T>* _obj)
 }
 
 template <typename T>
-node<T>* Octree<T>::getNode(object3D<T>* _obj)
+node3D<T>* Octree<T>::getNode(object3D<T>* _obj)
 {
 	return findNode(root, _obj);
 }
@@ -224,7 +224,7 @@ node<T>* Octree<T>::getNode(object3D<T>* _obj)
 template <typename T>
 void Octree<T>::addObject(object3D<T>* _obj)
 {
-	node<T>* target = findNode(root, _obj);
+	node3D<T>* target = findNode(root, _obj);
 	if (target != nullptr)
 	{
 		if (_obj->type == OBJECT_TYPE::STATIC_OBJECT)
@@ -254,7 +254,7 @@ bool Octree<T>::Collision(object3D<T>* _src, std::vector<object3D<T>*>* _dst, st
 }
 
 template <typename T>
-bool Octree<T>::getCollisionObject(node<T>* _node, object3D<T>* _src, std::vector<object3D<T>*>* _dst, std::vector<Box_<T>>* _dstSection)
+bool Octree<T>::getCollisionObject(node3D<T>* _node, object3D<T>* _src, std::vector<object3D<T>*>* _dst, std::vector<Box_<T>>* _dstSection)
 {
 	if (_node == nullptr)
 	{
@@ -328,7 +328,7 @@ bool Octree<T>::getCollisionObject(node<T>* _node, object3D<T>* _src, std::vecto
 }
 
 template <typename T>
-void Octree<T>::resetDynamicObject(node<T>* _target)
+void Octree<T>::resetDynamicObject(node3D<T>* _target)
 {
 	if (_target == nullptr)
 	{
@@ -355,7 +355,7 @@ void Octree<T>::updateDynamicObject()
 }
 
 template <typename T>
-void Octree<T>::updateDynamicObject(node<T>* _target, std::vector<object3D<T>*>* _list)
+void Octree<T>::updateDynamicObject(node3D<T>* _target, std::vector<object3D<T>*>* _list)
 {
 	if (_target == nullptr)
 	{

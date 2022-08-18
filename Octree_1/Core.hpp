@@ -1,12 +1,13 @@
 #pragma once
 #include <iostream>
 #include <windows.h>
-#include "Octree.hpp"
-#include "QuadTree.hpp"
 #include "Vector.hpp"
-#include "Player.hpp"
-#include "NPC.hpp"
-#include "Obstacle.hpp"
+
+enum class CORE_TYPE
+{
+	GAME_2D,
+	GAME_3D
+};
 
 class Core
 {

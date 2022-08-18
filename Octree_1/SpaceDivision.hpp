@@ -1,5 +1,5 @@
 #pragma once
-#include "Node.hpp"
+#include "Node3D.hpp"
 #include "Node2D.hpp"
 
 template <typename T>

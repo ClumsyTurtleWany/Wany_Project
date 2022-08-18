@@ -1,9 +1,9 @@
 #pragma once
 #include <vector>
-#include "Object.hpp"
+#include "Object3D.hpp"
 
 template <typename T>
-class node
+class node3D
 {
 public:
 	Box_<T> box;
@@ -11,11 +11,11 @@ public:
 
 	std::vector<object3D<T>*> stObjList;
 	std::vector<object3D<T>*> dyObjList;
-	node<T>* parent = nullptr;
-	std::vector<node<T>*> child;
+	node3D<T>* parent = nullptr;
+	std::vector<node3D<T>*> child;
 
 public:
-	node(Box_<T> _box, node<T>* _parent = nullptr)
+	node3D(Box_<T> _box, node3D<T>* _parent = nullptr)
 	{
 		box = _box;
 		if (_parent != nullptr)
@@ -25,7 +25,7 @@ public:
 		}
 	}
 
-	node(Point3D_<T> _pos, T _width, T _height, T _depth , node<T>* _parent = nullptr)
+	node3D(Point3D_<T> _pos, T _width, T _height, T _depth , node3D<T>* _parent = nullptr)
 	{
 		box = Box_<T>(_pos, _width, _height, _depth);
 		if (_parent != nullptr)
@@ -35,7 +35,7 @@ public:
 		}
 	}
 
-	~node()
+	~node3D()
 	{
 		if (!stObjList.empty())
 		{

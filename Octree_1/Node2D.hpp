@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "Object.hpp"
+#include "Object2D.hpp"
 
 template <typename T>
 class node2D

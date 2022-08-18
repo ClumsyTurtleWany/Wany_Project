@@ -13,57 +13,99 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Object">
-      <UniqueIdentifier>{b2c2c492-59b5-4ad9-a55c-08f968c9130c}</UniqueIdentifier>
+    <Filter Include="헤더 파일\3D">
+      <UniqueIdentifier>{d838b3ae-eefe-47c9-b872-48b758bd5864}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core">
+    <Filter Include="헤더 파일\3D\Core">
       <UniqueIdentifier>{98f660bb-7c47-40cf-873a-514a582dff31}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Map">
+    <Filter Include="헤더 파일\3D\Map">
       <UniqueIdentifier>{70d293f2-98d7-429b-a224-471e1694fea9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\3D\Object">
+      <UniqueIdentifier>{b2c2c492-59b5-4ad9-a55c-08f968c9130c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\2D">
+      <UniqueIdentifier>{a2004271-70dc-4e8a-ab98-32fefa270a91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\2D\Core">
+      <UniqueIdentifier>{01acbf9c-41f4-4454-913a-6b385f533700}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\2D\Map">
+      <UniqueIdentifier>{5bbd71a0-08fb-442e-b229-79d332cdc1fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\2D\Object">
+      <UniqueIdentifier>{411aaaac-7b8d-48fd-9a80-f3ddff5fd846}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Engine">
+      <UniqueIdentifier>{e61c98fb-441a-469a-a6b7-d75111327110}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Common">
+      <UniqueIdentifier>{9503a11f-f69b-44f3-a4b2-8a9119df43b3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="NPC.hpp">
-      <Filter>Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Object.hpp">
-      <Filter>Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Obstacle.hpp">
-      <Filter>Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.hpp">
-      <Filter>Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Core.hpp">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="SpaceDivision.hpp">
-      <Filter>Map</Filter>
-    </ClInclude>
-    <ClInclude Include="Node.hpp">
-      <Filter>Map</Filter>
-    </ClInclude>
-    <ClInclude Include="Node2D.hpp">
-      <Filter>Map</Filter>
+    <ClInclude Include="Node3D.hpp">
+      <Filter>헤더 파일\3D\Map</Filter>
     </ClInclude>
     <ClInclude Include="Octree.hpp">
-      <Filter>Map</Filter>
-    </ClInclude>
-    <ClInclude Include="QuadTree.hpp">
-      <Filter>Map</Filter>
+      <Filter>헤더 파일\3D\Map</Filter>
     </ClInclude>
     <ClInclude Include="Core3D.hpp">
-      <Filter>Core</Filter>
+      <Filter>헤더 파일\3D\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Obstacle3D.hpp">
+      <Filter>헤더 파일\3D\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Player3D.hpp">
+      <Filter>헤더 파일\3D\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC3D.hpp">
+      <Filter>헤더 파일\3D\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Object3D.hpp">
+      <Filter>헤더 파일\3D\Object</Filter>
     </ClInclude>
     <ClInclude Include="Core2D.hpp">
-      <Filter>Core</Filter>
+      <Filter>헤더 파일\2D\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Node2D.hpp">
+      <Filter>헤더 파일\2D\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="QuadTree.hpp">
+      <Filter>헤더 파일\2D\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC2D.hpp">
+      <Filter>헤더 파일\2D\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Object2D.hpp">
+      <Filter>헤더 파일\2D\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Obstacle2D.hpp">
+      <Filter>헤더 파일\2D\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Player2D.hpp">
+      <Filter>헤더 파일\2D\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Core.hpp">
+      <Filter>헤더 파일\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="SpaceDivision.hpp">
+      <Filter>헤더 파일\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.hpp">
+      <Filter>헤더 파일\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.hpp">
+      <Filter>헤더 파일\Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

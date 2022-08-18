@@ -1,13 +1,17 @@
 #pragma once
-
 #include "Core.hpp"
+#include "Octree.hpp"
+#include "Player3D.hpp"
+#include "NPC3D.hpp"
+#include "Obstacle3D.hpp"
 
 using Map3D = Octree<float>;
 using ObjectList3D = std::vector<Object*>;
 class Core3D : public Core
 {
 private:
-	Map3D* worldMap = nullptr;
+	//Map3D* worldMap = nullptr;
+	Octree<float>* worldMap = nullptr;
 	Player3D* user = nullptr;
 	ObjectList3D NPCList;
 	ObjectList3D obstacleList;
@@ -179,7 +183,7 @@ void Core3D::run()
 	initialize();
 	float delay = 100.0f;
 	float globalTime = 0.0f;
-	float endTime = 1.0f;
+	float endTime = 60.0f;
 	while (globalTime < endTime)
 	{
 		frame(delay / 1000.0f);

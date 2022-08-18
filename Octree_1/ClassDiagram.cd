@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Core3D">
+    <Position X="8" Y="2.5" Width="1.5" />
+    <Members>
+      <Method Name="~Core3D" Hidden="true" />
+      <Method Name="Core3D" Hidden="true" />
+      <Method Name="frame" Hidden="true" />
+      <Method Name="initialize" Hidden="true" />
+      <Method Name="release" Hidden="true" />
+      <Method Name="render" Hidden="true" />
+      <Method Name="run" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>EgAAEgAAAAAAAAAAAAEgAIAAAAAAAAAAAQAAAQAYAQA=</HashCode>
+      <FileName>Core3D.hpp</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="worldMap" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="node3D&lt;T&gt;" Collapsed="true">
+    <Position X="5.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAIAACAABAAACAAgAAABAAAQAAIAAAKAAAACA=</HashCode>
+      <FileName>Node3D.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Octree&lt;T&gt;" Collapsed="true">
+    <Position X="5.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAABEAAAIAQBAAAAAAkAAAAAABAARQAAAFACIAAAAA=</HashCode>
+      <FileName>Octree.hpp</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="root" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Obstacle3D" Collapsed="true">
+    <Position X="6.25" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Obstacle3D.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Player3D" Collapsed="true">
+    <Position X="8" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAQAAAAA=</HashCode>
+      <FileName>Player3D.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NPC3D" Collapsed="true">
+    <Position X="4.5" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>NPC3D.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="object3D&lt;T&gt;" Collapsed="true">
+    <Position X="6.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAAAAABAAAEgAgAAAABAAACAQAAQAAAgA=</HashCode>
+      <FileName>Object3D.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Core2D">
+    <Position X="10.5" Y="2.5" Width="1.5" />
+    <Members>
+      <Method Name="frame" Hidden="true" />
+      <Method Name="initialize" Hidden="true" />
+      <Method Name="release" Hidden="true" />
+      <Method Name="render" Hidden="true" />
+      <Method Name="run" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>EgAAAgAAAAAAAAAAAAEgAIAAAAAAAAAAAAAAAQAYAQA=</HashCode>
+      <FileName>Core2D.hpp</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="worldMap" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="node2D&lt;T&gt;" Collapsed="true">
+    <Position X="13.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAACAABAQACQIAAAAhAAAAAAIAAAKAAAEDA=</HashCode>
+      <FileName>Node2D.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="QuadTree&lt;T&gt;" Collapsed="true">
+    <Position X="13.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAIAQBAAAAAA0AAAAAgBAABQEAAFACACAEBA=</HashCode>
+      <FileName>QuadTree.hpp</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="root" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="NPC2D" Collapsed="true">
+    <Position X="10.5" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>NPC2D.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="object2D&lt;T&gt;" Collapsed="true">
+    <Position X="12.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAAAAAAAAAIAAgAAAABAAACAQAASAAAAA=</HashCode>
+      <FileName>Object2D.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Obstacle2D" Collapsed="true">
+    <Position X="12.25" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Obstacle2D.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Player2D" Collapsed="true">
+    <Position X="14" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAQAAAAA=</HashCode>
+      <FileName>Player2D.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Core" Collapsed="true">
+    <Position X="9.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAgAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAQAQAAA=</HashCode>
+      <FileName>Core.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="objectBase" Collapsed="true">
+    <Position X="9.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAAFAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Object.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Engine" Collapsed="true">
+    <Position X="9.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EIAAAAAAAAQAAAAAAAAAgAAAAAAAAAQABAAAAAQAAAA=</HashCode>
+      <FileName>Engine.hpp</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="gameCore" />
+    </ShowAsAssociation>
+  </Class>
+  <Font Name="맑은 고딕" Size="9" />
+</ClassDiagram>

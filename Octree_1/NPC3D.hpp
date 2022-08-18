@@ -1,30 +1,5 @@
 #pragma once
-#include "Object.hpp"
-
-class NPC2D : public object2D<float>
-{
-public:
-	NPC2D() {};
-	NPC2D(std::string _name, Rect2f _rect, OBJECT_TYPE _type = OBJECT_TYPE::DYNAMIC_OBJECT)
-	{
-		name = _name;
-		rect = _rect;
-		type = _type;
-	}
-
-public:
-	void frame(float _dt) override
-	{
-		accel = force / mass;
-		velocity += accel * _dt;
-		float resistCoef = -0.2f;
-		Vector2f resistForce = force * resistCoef * _dt;
-		force += resistForce;
-
-		rect.offset(velocity.dx, velocity.dy);
-	}
-};
-
+#include "Object3D.hpp"
 
 class NPC3D : public object3D<float>
 {

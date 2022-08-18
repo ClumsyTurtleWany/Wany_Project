@@ -1,13 +1,16 @@
-#include "Core3D.hpp"
-#include "Core2D.hpp"
+#include "Engine.hpp"
+//#define GameMode3D
 
 int main()
 {
-	/*Core* GameCore = new Core2D;
-	GameCore->run();
-	return 0;*/
+#ifdef GameMode3D
+	Engine* engine = Engine::getEngine(CORE_TYPE::GAME_3D);
+#else
+	Engine* engine = Engine::getEngine(CORE_TYPE::GAME_2D);
+#endif
 
-	Core* GameCore = new Core3D;
+	Core* GameCore = engine->getCore();
 	GameCore->run();
+
 	return 0;
 }

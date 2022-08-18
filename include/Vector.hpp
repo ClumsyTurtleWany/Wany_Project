@@ -161,7 +161,7 @@ public:
 		Vector2D_<T> b = _v.unit();
 		float cosTheta = a.dx * b.dx + a.dy * b.dy; // 내적
 		float degree = RadianToDegree(acos(cosTheta));
-		return angle;
+		return degree;
 	}
 };
 
@@ -329,7 +329,7 @@ public:
 		Vector3D_<T> b = _v.unit();
 		float cosTheta = a.dx * b.dx + a.dy * b.dy + a.dz * b.dz; // 내적
 		float degree = RadianToDegree(acos(cosTheta));
-		return angle;
+		return degree;
 	}
 };
 

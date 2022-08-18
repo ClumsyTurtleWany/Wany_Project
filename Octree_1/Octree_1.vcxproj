@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -148,18 +148,27 @@
     <ClInclude Include="Core.hpp" />
     <ClInclude Include="Core2D.hpp" />
     <ClInclude Include="Core3D.hpp" />
-    <ClInclude Include="Node.hpp" />
+    <ClInclude Include="Engine.hpp" />
+    <ClInclude Include="Node3D.hpp" />
     <ClInclude Include="Node2D.hpp" />
-    <ClInclude Include="NPC.hpp" />
+    <ClInclude Include="NPC3D.hpp" />
+    <ClInclude Include="NPC2D.hpp" />
     <ClInclude Include="Object.hpp" />
-    <ClInclude Include="Obstacle.hpp" />
+    <ClInclude Include="Object3D.hpp" />
+    <ClInclude Include="Object2D.hpp" />
+    <ClInclude Include="Obstacle2D.hpp" />
+    <ClInclude Include="Obstacle3D.hpp" />
     <ClInclude Include="Octree.hpp" />
-    <ClInclude Include="Player.hpp" />
+    <ClInclude Include="Player2D.hpp" />
+    <ClInclude Include="Player3D.hpp" />
     <ClInclude Include="QuadTree.hpp" />
     <ClInclude Include="SpaceDivision.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

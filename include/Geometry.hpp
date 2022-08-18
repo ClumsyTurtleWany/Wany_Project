@@ -60,3 +60,9 @@ public:
 //	_dst.arry[0][0] = temp.arry[0][0];
 //	_dst.arry[0][1] = temp.arry[0][1];
 //}
+
+class figure
+{
+public:
+	virtual bool intersect(figure* _fig) = 0;
+};
