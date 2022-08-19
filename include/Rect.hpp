@@ -1,5 +1,6 @@
 #pragma once
 #include "Point.hpp"
+#include "Vector.hpp"
 
 template <typename T>
 class Rect_
@@ -64,6 +65,12 @@ public:
 	{
 		LT += _offset;
 		RB += _offset;
+	}
+
+	void offset(const Vector2D_<T>& _offset)
+	{
+		LT += Point_<T>(_offset.x, _offset.y);
+		RB += Point_<T>(_offset.x, _offset.y);
 	}
 
 	void offset(const T& _x, const T& _y)

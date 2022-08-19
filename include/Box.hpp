@@ -1,5 +1,6 @@
 #pragma once
 #include "Point.hpp"
+#include "Vector.hpp"
 
 template <typename T>
 class Box_
@@ -91,6 +92,11 @@ public:
 	void offset(Point3D_<T> _offset)
 	{
 		pos += _offset;
+	}
+
+	void offset(Vector3D_<T> _offset)
+	{
+		pos += Point3D_<T>(_offset.x, _offset.y, _offset.z);
 	}
 
 	void offset(T _dx, T _dy, T _dz)

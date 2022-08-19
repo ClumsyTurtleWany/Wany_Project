@@ -8,7 +8,7 @@ public:
 	NPC2D(std::string _name, Rect2f _rect, OBJECT_TYPE _type = OBJECT_TYPE::DYNAMIC_OBJECT)
 	{
 		name = _name;
-		rect = _rect;
+		shape = _rect;
 		type = _type;
 	}
 
@@ -21,10 +21,9 @@ public:
 		Vector2f resistForce = force * resistCoef * _dt;
 		force += resistForce;
 
-		rect.offset(velocity.x, velocity.y);
+		shape.offset(velocity.x, velocity.y);
 	}
 };
-
 
 class NPC3D : public object3D<float>
 {
@@ -33,7 +32,7 @@ public:
 	NPC3D(std::string _name, Box_<float> _box, OBJECT_TYPE _type = OBJECT_TYPE::DYNAMIC_OBJECT)
 	{
 		name = _name;
-		box = _box;
+		shape = _box;
 		type = _type;
 	}
 
@@ -46,6 +45,6 @@ public:
 		Vector3f resistForce = force * resistCoef * _dt;
 		force += resistForce;
 
-		box.offset(velocity.x, velocity.y, velocity.z);
+		shape.offset(velocity.x, velocity.y, velocity.z);
 	}
 };

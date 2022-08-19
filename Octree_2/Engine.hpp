@@ -1,6 +1,5 @@
 #pragma once
-#include "Core2D.hpp"
-#include "Core3D.hpp"
+#include "Core.hpp"
 
 class Engine
 {
@@ -8,7 +7,7 @@ private:
 	static Engine* engine;
 
 private:
-	Core* gameCore = nullptr;
+	CoreBase* gameCore = nullptr;
 
 private:
 	Engine() {};
@@ -24,11 +23,11 @@ public:
 			{
 				if (_type == CORE_TYPE::GAME_2D)
 				{
-					engine->gameCore = new Core2D;
+					engine->gameCore = new Core<Rect_<float>, object2D<float>>;
 				}
 				else if (_type == CORE_TYPE::GAME_3D)
 				{
-					engine->gameCore = new Core3D;
+					engine->gameCore = new Core<Box_<float>, object3D<float>>;
 				}
 				else
 				{
@@ -39,7 +38,7 @@ public:
 		return engine;
 	}
 	
-	Core* getCore()
+	CoreBase* getCore()
 	{
 		return gameCore;
 	}

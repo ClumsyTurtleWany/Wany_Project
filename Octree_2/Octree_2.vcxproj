@@ -26,18 +26,12 @@
     <ClInclude Include="Core2D.hpp" />
     <ClInclude Include="Core3D.hpp" />
     <ClInclude Include="Engine.hpp" />
-    <ClInclude Include="Node2D.hpp" />
-    <ClInclude Include="Node3D.hpp" />
-    <ClInclude Include="NPC2D.hpp" />
-    <ClInclude Include="NPC3D.hpp" />
+    <ClInclude Include="Node.hpp" />
+    <ClInclude Include="NPC.hpp" />
     <ClInclude Include="Object.hpp" />
-    <ClInclude Include="Object2D.hpp" />
-    <ClInclude Include="Object3D.hpp" />
-    <ClInclude Include="Obstacle2D.hpp" />
-    <ClInclude Include="Obstacle3D.hpp" />
+    <ClInclude Include="Obstacle.hpp" />
     <ClInclude Include="Octree.hpp" />
-    <ClInclude Include="Player2D.hpp" />
-    <ClInclude Include="Player3D.hpp" />
+    <ClInclude Include="Player.hpp" />
     <ClInclude Include="QuadTree.hpp" />
     <ClInclude Include="SpaceDivision.hpp" />
   </ItemGroup>

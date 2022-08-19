@@ -5,7 +5,7 @@
 static const int QuadTreeChildNum = 8;
 
 template <typename T>
-class QuadTree
+class QuadTree : public SpaceDivision<Rect_<T>, object2D<T>>
 {
 public:
 	node2D<T>* root = nullptr;
@@ -15,13 +15,13 @@ public:
 	~QuadTree();
 
 public:
-	void create(Rect_<T> _rect);
+	void create(Rect_<T> _rect) override;
 	void create(T _width, T _height);
 	void create(T _x, T _y, T _width, T _height);
 
-	void addObject(object2D<T>* _obj);
-	bool Collision(object2D<T>* _src, std::vector<object2D<T>*>* _dst, std::vector<Rect_<T>>* _dstSection = nullptr);
-	void updateDynamicObject();
+	void addObject(object2D<T>* _obj) override;
+	bool Collision(object2D<T>* _src, std::vector<object2D<T>*>* _dst, std::vector<Rect_<T>>* _dstSection = nullptr) override;
+	void updateDynamicObject() override;
 	
 public:
 	node2D<T>* createNode(T _x, T _y, T _width, T _height, node2D<T>* _parent = nullptr);

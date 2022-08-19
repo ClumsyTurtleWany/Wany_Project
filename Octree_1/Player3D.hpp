@@ -21,6 +21,6 @@ public:
 		Vector3f resistForce = force * resistCoef * _dt;
 		force += resistForce;
 
-		box.offset(velocity.dx, velocity.dy, velocity.dz);
+		box.offset(velocity.x, velocity.y, velocity.z);
 	}
 };

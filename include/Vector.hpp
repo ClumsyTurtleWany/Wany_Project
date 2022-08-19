@@ -5,71 +5,76 @@ template <typename T>
 class Vector2D_
 {
 public:
-	Point_<T> pos;
 	union
 	{
 		struct
 		{
-			T dx;
-			T dy;
+			T x;
+			T y;
 		};
 		T v[2];
 	};
 	
 public:
-	Vector2D_() : pos(Point_<T>()), dx(0), dy(0) {};
-	Vector2D_(const T& _dx, const T& _dy) : dx(_dx), dy(_dy) {};
-	Vector2D_(const Point_<T>& _pos, const T& _dx, const T& _dy) : pos(_pos), dx(_dx), dy(_dy) {};
-	Vector2D_(const Vector2D_<T>& _v) : pos(_v.pos), dx(_v.dx), dy(_v.dy) {};
+	Vector2D_() : x(0), y(0) {};
+	Vector2D_(const T& _dx, const T& _dy) : x(_dx), y(_dy) {};
+	Vector2D_(const Point_<T>& _pos) : x(_pos.x), y(_pos.y) {};
+	Vector2D_(const Vector2D_<T>& _v) : x(_v.x), y(_v.y) {};
 	~Vector2D_() {};
 
 	Vector2D_<T> operator +(const Vector2D_<T>& _v)
 	{
-		return Vector2D_<T>(dx + _v.dx, dy + _v.dy);
+		return Vector2D_<T>(x + _v.x, y + _v.y);
 	}
 
 	Vector2D_<T> operator - (const Vector2D_<T>& _v)
 	{
-		return Vector2D_<T>(dx - _v.dx, dy - _v.dy);
+		return Vector2D_<T>(x - _v.x, y - _v.y);
 	}
 
 	Vector2D_<T> operator *(const T& _val)
 	{
-		return Vector2D_<T>(dx * _val, dy * _val);
+		return Vector2D_<T>(x * _val, y * _val);
 	}
 
 	Vector2D_<T> operator /(const T& _val)
 	{
-		return Vector2D_<T>(dx / _val, dy / _val);
+		return Vector2D_<T>(x / _val, y / _val);
+	}
+
+	void operator =(const Point_<T>& _v)
+	{
+		x += _v.x;
+		y += _v.y;
 	}
 
 	void operator +=(const Vector2D_<T>& _v)
 	{
-		dx += _v.dx;
-		dy += _v.dy;
+		x += _v.x;
+		y += _v.y;
 	}
 
 	void operator -=(const Vector2D_<T>& _v)
 	{
-		dx -= _v.dx;
-		dy -= _v.dy;
+		x -= _v.x;
+		y -= _v.y;
 	}
 
 	void operator *=(const T& _val)
 	{
-		dx *= _val;
-		dy *= _val;
+		x *= _val;
+		y *= _val;
 	}
 
 	void operator /=(const T& _val)
 	{
-		dx /= _val;
-		dy /= _val;
+		x /= _val;
+		y /= _val;
 	}
 
 	bool operator ==(const Vector2D_<T>& _v)
 	{
-		if ((dx == _v.dx) && (dy == _v.dy))
+		if ((x == _v.x) && (y == _v.y))
 		{
 			return true;
 		}
@@ -81,7 +86,7 @@ public:
 
 	bool operator !=(const Vector2D_<T>& _v)
 	{
-		if ((dx != _v.dx) || (dy != _v.dy))
+		if ((x != _v.x) || (y != _v.y))
 		{
 			return true;
 		}
@@ -93,7 +98,7 @@ public:
 
 	bool operator <(const Vector2D_<T>& _v)
 	{
-		if ((dx < _v.dx) && (dy < _v.dy))
+		if ((x < _v.x) && (y < _v.y))
 		{
 			return true;
 		}
@@ -105,7 +110,7 @@ public:
 
 	bool operator >(const Vector2D_<T>& _v)
 	{
-		if ((dx > _v.dx) && (dy > _v.dy))
+		if ((x > _v.x) && (y > _v.y))
 		{
 			return true;
 		}
@@ -117,7 +122,7 @@ public:
 
 	bool operator <=(const Vector2D_<T>& _v)
 	{
-		if ((dx <= _v.dx) && (dy <= _v.dy))
+		if ((x <= _v.x) && (y <= _v.y))
 		{
 			return true;
 		}
@@ -129,7 +134,7 @@ public:
 
 	bool operator >=(const Vector2D_<T>& _v)
 	{
-		if ((dx >= _v.dx) && (dy >= _v.dy))
+		if ((x >= _v.x) && (y >= _v.y))
 		{
 			return true;
 		}
@@ -142,7 +147,7 @@ public:
 public:
 	float length()
 	{
-		return sqrt(static_cast<float>(dx * dx + dy * dy));
+		return sqrt(static_cast<float>(x * x + y * y));
 	}
 	// 정규화: 단위벡터(자신을) 계산
 	void normalized()
@@ -152,14 +157,14 @@ public:
 	// 단위벡터 반환 normal == unit
 	const Vector2D_<T> unit()
 	{
-		return Vector2D_<T>(dx / dx, dy / dy);
+		return Vector2D_<T>(x / x, y / y);
 	}
 
 	float angle(const Vector2D_<T>& _v)
 	{
 		Vector2D_<T> a = unit();
 		Vector2D_<T> b = _v.unit();
-		float cosTheta = a.dx * b.dx + a.dy * b.dy; // 내적
+		float cosTheta = a.x * b.x + a.y * b.y; // 내적
 		float degree = RadianToDegree(acos(cosTheta));
 		return degree;
 	}
@@ -169,75 +174,98 @@ template <typename T>
 class Vector3D_
 {
 public:
-	Point3D_<T> pos;
 	union
 	{
 		struct
 		{
-			T dx;
-			T dy;
-			T dz;
+			T x;
+			T y;
+			T z;
 		};
 		T v[3];
 	};
 
 public:
-	Vector3D_() : pos(Point3D_<T>()), dx(0), dy(0), dz(0) {};
-	Vector3D_(const T& _dx, const T& _dy, const T& _dz) : dx(_dx), dy(_dy), dz(_dz) {};
-	Vector3D_(const Vector3D_<T>& _v) : dx(_v.dx), dy(_v.dy), dz(_v.dz) {};
+	Vector3D_() : x(0), y(0), z(0) {};
+	Vector3D_(const T& _dx, const T& _dy, const T& _dz) : x(_dx), y(_dy), z(_dz) {};
+	Vector3D_(const Point_<T>& _pos) : x(_pos.x), y(_pos.y), z(0) {};
+	Vector3D_(const Point3D_<T>& _pos) : x(_pos.x), y(_pos.y), z(_pos.z) {};
+	Vector3D_(const Vector2D_<T>& _v) : x(_v.x), y(_v.y), z(0) {};
+	Vector3D_(const Vector3D_<T>& _v) : x(_v.x), y(_v.y), z(_v.z) {};
 	~Vector3D_() {};
 
 	Vector3D_<T> operator +(const Vector3D_<T>& _v)
 	{
-		return Vector3D_<T>(dx + _v.dx, dy + _v.dy, dz + _v.dz);
+		return Vector3D_<T>(x + _v.x, y + _v.y, z + _v.z);
 	}
 
 	Vector3D_<T> operator - (const Vector3D_<T>& _v)
 	{
-		return Vector3D_<T>(dx - _v.dx, dy - _v.dy, dz - _v.dz);
+		return Vector3D_<T>(x - _v.x, y - _v.y, z - _v.z);
 	}
 
 	Vector3D_<T> operator *(const T& _val)
 	{
-		return Vector3D_<T>(dx * _val, dy * _val, dz * _val);
+		return Vector3D_<T>(x * _val, y * _val, z * _val);
 	}
 
 	Vector3D_<T> operator /(const T& _val)
 	{
-		return Vector3D_<T>(dx / _val, dy / _val, dz / _val);
+		return Vector3D_<T>(x / _val, y / _val, z / _val);
+	}
+
+	void operator =(const Point_<T>& _v)
+	{
+		x = _v.x;
+		y = _v.y;
+		z = 0;
+	}
+
+	void operator =(const Point3D_<T>& _v)
+	{
+		x = _v.x;
+		y = _v.y;
+		z = _v.z;
+	}
+
+	void operator =(const Vector2D_<T>& _v)
+	{
+		x = _v.x;
+		y = _v.y;
+		z = 0;
 	}
 
 	void operator +=(const Vector3D_<T>& _v)
 	{
-		dx += _v.dx;
-		dy += _v.dy;
-		dz += _v.dz;
+		x += _v.x;
+		y += _v.y;
+		z += _v.z;
 	}
 
 	void operator -=(const Vector3D_<T>& _v)
 	{
-		dx -= _v.dx;
-		dy -= _v.dy;
-		dz -= _v.dz;
+		x -= _v.x;
+		y -= _v.y;
+		z -= _v.z;
 	}
 
 	void operator *=(const T& _val)
 	{
-		dx *= _val;
-		dy *= _val;
-		dz *= _val;
+		x *= _val;
+		y *= _val;
+		z *= _val;
 	}
 
 	void operator /=(const T& _val)
 	{
-		dx /= _val;
-		dy /= _val;
-		dz /= _val;
+		x /= _val;
+		y /= _val;
+		z /= _val;
 	}
 
 	bool operator ==(const Vector3D_<T>& _v)
 	{
-		if ((dx == _v.dx) && (dy == _v.dy) && (dz == _v.dz))
+		if ((x == _v.x) && (y == _v.y) && (z == _v.z))
 		{
 			return true;
 		}
@@ -249,7 +277,7 @@ public:
 
 	bool operator !=(const Vector3D_<T>& _v)
 	{
-		if ((dx != _v.dx) || (dy != _v.dy) || (dz != _v.dz))
+		if ((x != _v.x) || (y != _v.y) || (z != _v.z))
 		{
 			return true;
 		}
@@ -261,7 +289,7 @@ public:
 
 	bool operator <(const Vector3D_<T>& _v)
 	{
-		if ((dx < _v.dx) && (dy < _v.dy) && (dz < _v.dz))
+		if ((x < _v.x) && (y < _v.y) && (z < _v.z))
 		{
 			return true;
 		}
@@ -273,7 +301,7 @@ public:
 
 	bool operator >(const Vector3D_<T>& _v)
 	{
-		if ((dx > _v.dx) && (dy > _v.dy) && (dz > _v.dz))
+		if ((x > _v.x) && (y > _v.y) && (z > _v.z))
 		{
 			return true;
 		}
@@ -285,7 +313,7 @@ public:
 
 	bool operator <=(const Vector3D_<T>& _v)
 	{
-		if ((dx <= _v.dx) && (dy <= _v.dy) && (dz <= _v.dz))
+		if ((x <= _v.x) && (y <= _v.y) && (z <= _v.z))
 		{
 			return true;
 		}
@@ -297,7 +325,7 @@ public:
 
 	bool operator >=(const Vector3D_<T>& _v)
 	{
-		if ((dx >= _v.dx) && (dy >= _v.dy) && (dz >= _v.dz))
+		if ((x >= _v.x) && (y >= _v.y) && (z >= _v.z))
 		{
 			return true;
 		}
@@ -310,7 +338,7 @@ public:
 public:
 	float length()
 	{
-		return sqrt(static_cast<float>(dx * dx + dy * dy + dz * dz));
+		return sqrt(static_cast<float>(x * x + y * y + z * z));
 	}
 	// 정규화: 단위벡터(자신을) 계산
 	void normalized()
@@ -320,14 +348,14 @@ public:
 	// 단위벡터 반환 normal == unit
 	const Vector3D_<T> unit()
 	{
-		return Vector3D_<T>(dx / dx, dy / dy, dz / dz);
+		return Vector3D_<T>(x / x, y / y, z / z);
 	}
 
 	float angle(const Vector3D_<T>& _v)
 	{
 		Vector3D_<T> a = unit();
 		Vector3D_<T> b = _v.unit();
-		float cosTheta = a.dx * b.dx + a.dy * b.dy + a.dz * b.dz; // 내적
+		float cosTheta = a.x * b.x + a.y * b.y + a.z * b.z; // 내적
 		float degree = RadianToDegree(acos(cosTheta));
 		return degree;
 	}

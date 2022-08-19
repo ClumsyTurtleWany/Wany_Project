@@ -13,6 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="헤더 파일\Core">
+      <UniqueIdentifier>{42e63b6c-b833-48d5-80f4-3b1188387e19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Map">
+      <UniqueIdentifier>{51f9b8dd-be0d-4e9d-921f-3cab9a0704e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Object">
+      <UniqueIdentifier>{8233ad97-da83-49ee-92e1-b0bb78bc17f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Engine">
+      <UniqueIdentifier>{efe031fe-2c4d-4dac-951b-871594637134}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -21,58 +33,40 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.hpp">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Core2D.hpp">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\Core</Filter>
     </ClInclude>
     <ClInclude Include="Core3D.hpp">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Engine.hpp">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Node2D.hpp">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Node3D.hpp">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="NPC2D.hpp">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="NPC3D.hpp">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Object.hpp">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Object2D.hpp">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Object3D.hpp">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Obstacle2D.hpp">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Obstacle3D.hpp">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="Node.hpp">
+      <Filter>헤더 파일\Map</Filter>
     </ClInclude>
     <ClInclude Include="Octree.hpp">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Player2D.hpp">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Player3D.hpp">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\Map</Filter>
     </ClInclude>
     <ClInclude Include="QuadTree.hpp">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\Map</Filter>
     </ClInclude>
     <ClInclude Include="SpaceDivision.hpp">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC.hpp">
+      <Filter>헤더 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.hpp">
+      <Filter>헤더 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Obstacle.hpp">
+      <Filter>헤더 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.hpp">
+      <Filter>헤더 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.hpp">
+      <Filter>헤더 파일\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Core2D.hpp">
+      <Filter>헤더 파일\Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

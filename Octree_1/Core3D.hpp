@@ -92,18 +92,18 @@ void Core3D::frame(float _dt)
 	{
 		if (worldMap->isHitMinX(it) || worldMap->isHitMaxX(it))
 		{
-			it->force.dx *= -1;
-			it->velocity.dx = 0;
+			it->force.x *= -1;
+			it->velocity.x = 0;
 		}
 		if (worldMap->isHitMinY(it) || worldMap->isHitMaxY(it))
 		{
-			it->force.dy *= -1;
-			it->velocity.dy = 0;
+			it->force.y *= -1;
+			it->velocity.y = 0;
 		}
 		if (worldMap->isHitMinZ(it) || worldMap->isHitMaxZ(it))
 		{
-			it->force.dz *= -1;
-			it->velocity.dz = 0;
+			it->force.z *= -1;
+			it->velocity.z = 0;
 		}
 
 		it->frame(_dt);
@@ -111,18 +111,18 @@ void Core3D::frame(float _dt)
 
 	if (worldMap->isHitMinX(user) || worldMap->isHitMaxX(user))
 	{
-		user->force.dx *= -1;
-		user->velocity.dx = 0;
+		user->force.x *= -1;
+		user->velocity.x = 0;
 	}
 	if (worldMap->isHitMinY(user) || worldMap->isHitMaxY(user))
 	{
-		user->force.dy *= -1;
-		user->velocity.dy = 0;
+		user->force.y *= -1;
+		user->velocity.y = 0;
 	}
 	if (worldMap->isHitMinZ(user) || worldMap->isHitMaxZ(user))
 	{
-		user->force.dz *= -1;
-		user->velocity.dz = 0;
+		user->force.z *= -1;
+		user->velocity.z = 0;
 	}
 	user->frame(_dt);
 

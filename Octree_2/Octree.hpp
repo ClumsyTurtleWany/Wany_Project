@@ -5,7 +5,7 @@
 static const int OctreeChildNum = 8;
 
 template <typename T>
-class Octree
+class Octree : public SpaceDivision<Box_<T>, object3D<T>>
 {
 public:
 	node3D<T>* root = nullptr;
@@ -15,13 +15,13 @@ public:
 	~Octree();
 
 public:
-	void create(Box_<T> _box);
+	void create(Box_<T> _box) override;
 	void create(T _width, T _height, T _depth);
 	void create(Point3D_<T> _pos, T _width, T _height, T _depth);
 
-	void addObject(object3D<T>* _obj);
-	bool Collision(object3D<T>* _src, std::vector<object3D<T>*>* _dst, std::vector<Box_<T>>* _dstSection = nullptr);
-	void updateDynamicObject();
+	void addObject(object3D<T>* _obj) override;
+	bool Collision(object3D<T>* _src, std::vector<object3D<T>*>* _dst, std::vector<Box_<T>>* _dstSection = nullptr) override;
+	void updateDynamicObject() override;
 
 private:
 	node3D<T>* createNode(Point3D_<T> _pos, T _width, T _height, T _depth, node3D<T>* _parent = nullptr);
@@ -32,14 +32,14 @@ private:
 	void resetDynamicObject(node3D<T>* _target);
 	void updateDynamicObject(node3D<T>* _target, std::vector<object3D<T>*>* _list);
 	
-public:
-	bool isHitMinX(object3D<T>* _obj);
-	bool isHitMaxX(object3D<T>* _obj);
-	bool isHitMinY(object3D<T>* _obj);
-	bool isHitMaxY(object3D<T>* _obj);
-	bool isHitMinZ(object3D<T>* _obj);
-	bool isHitMaxZ(object3D<T>* _obj);
-	bool isHitBoundary(object3D<T>* _obj);
+//public:
+//	bool isHitMinX(object3D* _obj);
+//	bool isHitMaxX(object3D* _obj);
+//	bool isHitMinY(object3D* _obj);
+//	bool isHitMaxY(object3D* _obj);
+//	bool isHitMinZ(object3D* _obj);
+//	bool isHitMaxZ(object3D* _obj);
+//	bool isHitBoundary(object3D* _obj);
 };
 
 template <typename T>
@@ -88,7 +88,7 @@ void Octree<T>::create(Point3D_<T> _pos, T _width, T _height, T _depth)
 template <typename T>
 node3D<T>* Octree<T>::createNode(Point3D_<T> _pos, T _width, T _height, T _depth, node3D<T>* _parent)
 {
-	node3D<T>* newNode = new node3D<T>(_pos, _width, _height, _depth, _parent);
+	node3D* newNode = new node3D(_pos, _width, _height, _depth, _parent);
 	newNode->child.assign(OctreeChildNum, nullptr);
 	return newNode;
 }
@@ -198,7 +198,7 @@ node3D<T>* Octree<T>::findNode(node3D<T>* _parent, object3D<T>* _obj)
 		{
 			if (temp->child[i] != nullptr)
 			{
-				if (temp->child[i]->box.BoxInBox(_obj->box))
+				if (temp->child[i]->shape.BoxInBox(_obj->shape))
 				{
 					isIn = true;
 					temp = temp->child[i];
@@ -377,44 +377,44 @@ void Octree<T>::updateDynamicObject(node3D<T>* _target, std::vector<object3D<T>*
 	}
 }
 
-template<typename T>
-inline bool Octree<T>::isHitMinX(object3D<T>* _obj)
-{
-	return root->isHitMinX(_obj, true);
-}
-
-template<typename T>
-inline bool Octree<T>::isHitMaxX(object3D<T>* _obj)
-{
-	return root->isHitMaxX(_obj, true);
-}
-
-template<typename T>
-inline bool Octree<T>::isHitMinY(object3D<T>* _obj)
-{
-	return root->isHitMinY(_obj, true);
-}
-
-template<typename T>
-inline bool Octree<T>::isHitMaxY(object3D<T>* _obj)
-{
-	return root->isHitMaxY(_obj, true);
-}
-
-template<typename T>
-inline bool Octree<T>::isHitMinZ(object3D<T>* _obj)
-{
-	return root->isHitMinZ(_obj, true);
-}
-
-template<typename T>
-inline bool Octree<T>::isHitMaxZ(object3D<T>* _obj)
-{
-	return root->isHitMaxZ(_obj, true);
-}
-
-template<typename T>
-inline bool Octree<T>::isHitBoundary(object3D<T>* _obj)
-{
-	return root->isHitBoundary(_obj, true);
-}
+//template<typename T>
+//inline bool Octree<T>::isHitMinX(object3D* _obj)
+//{
+//	return root->isHitMinX(_obj, true);
+//}
+//
+//template<typename T>
+//inline bool Octree<T>::isHitMaxX(object3D* _obj)
+//{
+//	return root->isHitMaxX(_obj, true);
+//}
+//
+//template<typename T>
+//inline bool Octree<T>::isHitMinY(object3D* _obj)
+//{
+//	return root->isHitMinY(_obj, true);
+//}
+//
+//template<typename T>
+//inline bool Octree<T>::isHitMaxY(object3D* _obj)
+//{
+//	return root->isHitMaxY(_obj, true);
+//}
+//
+//template<typename T>
+//inline bool Octree<T>::isHitMinZ(object3D* _obj)
+//{
+//	return root->isHitMinZ(_obj, true);
+//}
+//
+//template<typename T>
+//inline bool Octree<T>::isHitMaxZ(object3D* _obj)
+//{
+//	return root->isHitMaxZ(_obj, true);
+//}
+//
+//template<typename T>
+//inline bool Octree<T>::isHitBoundary(object3D* _obj)
+//{
+//	return root->isHitBoundary(_obj, true);
+//}
