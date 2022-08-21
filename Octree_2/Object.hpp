@@ -30,6 +30,7 @@ public:
 	~objectBase() {};
 
 public:
+	virtual void Random() = 0;
 	virtual void frame(float _dt) = 0;
 	virtual void moveTo(VectorDimension _pos) = 0;
 	virtual void render() = 0;
@@ -52,6 +53,8 @@ public:
 	void Random()
 	{
 		this->shape = Rect_<T>(20 + rand() % 80, 20 + rand() % 80, 2 + (rand() % 20), 2 + (rand() % 20));
+		this->mass = rand() % 200;
+		this->force = Vector2D_<T>(rand() % 200, rand() % 200);
 	}
 
 	void moveTo(Vector2D_<T> _pos) override
@@ -86,7 +89,7 @@ public:
 	}
 
 public:
-	virtual void frame(float _dt) {};
+	virtual void frame(float _dt);
 	virtual void render()
 	{
 		std::cout << "[ " << this->name << " ] - ";
@@ -114,6 +117,8 @@ public:
 	void Random()
 	{
 		this->shape = Box_<T>(Point3D_<T>(20 + rand() % 80, 20 + rand() % 80, 20 + rand() % 80), 2 + (rand() % 20), 2 + (rand() % 20), 2 + (rand() % 20));
+		this->mass = rand() % 200;
+		this->force = Vector3D_<T>(rand() % 200, rand() % 200, rand() % 200);
 	}
 
 	void moveTo(Vector3D_<T> _pos) override

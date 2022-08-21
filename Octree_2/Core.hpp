@@ -21,6 +21,7 @@ public:
 	virtual void render() = 0;
 	virtual void release() = 0;
 	virtual void run() = 0;
+	virtual void* getMap() = 0;
 };
 
 template <class Shape, class ObjectDimension>
@@ -44,6 +45,10 @@ public:
 	void render() override;
 	void release() override;
 	void run() override;
+	void* getMap() override
+	{
+		return map;
+	}
 };
 
 template <class Shape, class ObjectDimension>
@@ -61,132 +66,53 @@ Core<Shape, ObjectDimension>::~Core()
 template <class Shape, class ObjectDimension>
 void Core<Shape, ObjectDimension>::initialize()
 {
-	/*srand(static_cast<unsigned int>(time(NULL)));
-	worldMap = new Map3D;
-	worldMap->create(128.0f, 128.0f, 128.0f);
+	srand(static_cast<unsigned int>(time(NULL)));
 
-	user = new Player3D("User", Box(Point3f(50, 50, 50), 30, 30, 30), OBJECT_TYPE::DYNAMIC_OBJECT);
-	user->mass = 100.0f;
-	user->force = Vector3f(200, 100, 100);
-	worldMap->addObject(user);
+	if (map == nullptr)
+	{
+		return;
+	}
 
-	NPC3D* npc1 = new NPC3D("NPC_1", Box(Point3f(60, 60, 60), 30, 30, 30), OBJECT_TYPE::DYNAMIC_OBJECT);
-	npc1->mass = 100.0f;
-	npc1->force = Vector3f(100, 200, 200);
-	worldMap->addObject(npc1);
-	NPCList.push_back(npc1);
-
-	NPC3D* npc2 = new NPC3D("NPC_2", Box(Point3f(100, 100, 100), 30, 30, 30), OBJECT_TYPE::DYNAMIC_OBJECT);
-	npc2->mass = 200.0f;
-	npc2->force = Vector3f(200, 200, 0);
-	worldMap->addObject(npc2);
-	NPCList.push_back(npc2);
-
-	NPC3D* npc3 = new NPC3D("NPC_3", Box(Point3f(10, 10, 10), 30, 30, 30), OBJECT_TYPE::DYNAMIC_OBJECT);
-	npc3->mass = 250.0f;
-	npc3->force = Vector3f(500, 0, 0);
-	worldMap->addObject(npc3);
-	NPCList.push_back(npc3);
-
-	NPC3D* npc4 = new NPC3D("NPC_4", Box(Point3f(10, 50, 10), 30, 30, 30), OBJECT_TYPE::DYNAMIC_OBJECT);
-	npc4->mass = 200.0f;
-	npc4->force = Vector3f(0, 400, 0);
-	worldMap->addObject(npc4);
-	NPCList.push_back(npc4);
+	for (int i = 0; i < 5; i++)
+	{
+		ObjectDimension* obj = map->newNPC();
+		obj->Random();
+		obj->name = "NPC_" + std::to_string(i + 1);
+		map->addObject(obj);
+		NPCList.push_back(obj);
+	}
 
 	for (int i = 0; i < 20; i++)
 	{
-		Obstacle3D* obj = new Obstacle3D;
+		ObjectDimension* obj = map->newObstacle();
 		obj->Random();
 		obj->name = "Obj" + std::to_string(i + 1);
-		worldMap->addObject(obj);
-		obstacleList.push_back(obj);
-	}*/
-
-	/*srand(static_cast<unsigned int>(time(NULL)));
-	worldMap = new Map3D;
-	worldMap->create(128.0f, 128.0f, 128.0f);*/
-
-
-	/*NPC3D* npc1 = new NPC3D("NPC_1", Box(Point3f(60, 60, 60), 30, 30, 30), OBJECT_TYPE::DYNAMIC_OBJECT);
-	npc1->mass = 100.0f;
-	npc1->force = Vector3f(100, 200, 200);
-	worldMap->addObject(npc1);
-	NPCList.push_back(npc1);
-
-	NPC3D* npc2 = new NPC3D("NPC_2", Box(Point3f(100, 100, 100), 30, 30, 30), OBJECT_TYPE::DYNAMIC_OBJECT);
-	npc2->mass = 200.0f;
-	npc2->force = Vector3f(200, 200, 0);
-	worldMap->addObject(npc2);
-	NPCList.push_back(npc2);
-
-	NPC3D* npc3 = new NPC3D("NPC_3", Box(Point3f(10, 10, 10), 30, 30, 30), OBJECT_TYPE::DYNAMIC_OBJECT);
-	npc3->mass = 250.0f;
-	npc3->force = Vector3f(500, 0, 0);
-	worldMap->addObject(npc3);
-	NPCList.push_back(npc3);
-
-	NPC3D* npc4 = new NPC3D("NPC_4", Box(Point3f(10, 50, 10), 30, 30, 30), OBJECT_TYPE::DYNAMIC_OBJECT);
-	npc4->mass = 200.0f;
-	npc4->force = Vector3f(0, 400, 0);
-	worldMap->addObject(npc4);
-	NPCList.push_back(npc4);*/
-	map->create()
-
-	for (int i = 0; i < 20; i++)
-	{
-		Obstacle<ObjectDimension>* obj = new Obstacle3D;
-		obj->Random();
-		obj->name = "Obj" + std::to_string(i + 1);
-		worldMap->addObject(obj);
+		map->addObject(obj);
 		obstacleList.push_back(obj);
 	}
 }
 
 template <class Shape, class ObjectDimension>
+void createMap()
+{
+
+}
+
+template <class Shape, class ObjectDimension>
 void Core<Shape, ObjectDimension>::frame(float _dt)
 {
-	/*worldMap->updateDynamicObject();
+	map->updateDynamicObject();
 
 	for (auto it : NPCList)
 	{
-		if (worldMap->isHitMinX(it) || worldMap->isHitMaxX(it))
-		{
-			it->force.x *= -1;
-			it->velocity.x = 0;
-		}
-		if (worldMap->isHitMinY(it) || worldMap->isHitMaxY(it))
-		{
-			it->force.y *= -1;
-			it->velocity.y = 0;
-		}
-		if (worldMap->isHitMinZ(it) || worldMap->isHitMaxZ(it))
-		{
-			it->force.z *= -1;
-			it->velocity.z = 0;
-		}
-
+		map->checkBorder(it);
 		it->frame(_dt);
 	}
 
-	if (worldMap->isHitMinX(user) || worldMap->isHitMaxX(user))
-	{
-		user->force.x *= -1;
-		user->velocity.x = 0;
-	}
-	if (worldMap->isHitMinY(user) || worldMap->isHitMaxY(user))
-	{
-		user->force.y *= -1;
-		user->velocity.y = 0;
-	}
-	if (worldMap->isHitMinZ(user) || worldMap->isHitMaxZ(user))
-	{
-		user->force.z *= -1;
-		user->velocity.z = 0;
-	}
+	map->checkBorder(user->getObject());
 	user->frame(_dt);
 
-	worldMap->Collision(user, &renderList);*/
+	map->Collision(user->getObject(), &renderList);
 }
 
 template <class Shape, class ObjectDimension>
@@ -213,6 +139,15 @@ void Core<Shape, ObjectDimension>::render()
 			std::cout << "depth: " << it->box.depth << std::endl;
 		}
 	}*/
+
+	user->getObject()->render();
+	if (!renderList.empty())
+	{
+		for (auto it : renderList)
+		{
+			it->render();
+		}
+	}
 }
 
 template <class Shape, class ObjectDimension>
@@ -243,7 +178,7 @@ void Core<Shape, ObjectDimension>::release()
 template <class Shape, class ObjectDimension>
 void Core<Shape, ObjectDimension>::run()
 {
-	/*initialize();
+	initialize();
 	float delay = 100.0f;
 	float globalTime = 0.0f;
 	float endTime = 60.0f;
@@ -257,5 +192,5 @@ void Core<Shape, ObjectDimension>::run()
 		globalTime += delay / 1000.0f;
 	}
 
-	release();*/
+	release();
 }

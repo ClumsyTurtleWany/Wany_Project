@@ -11,7 +11,7 @@ class Core2D : public Core
 {
 private:
 	//Map2D* worldMap;
-	QuadTree<float>* worldMap;
+	QuadTree<float>* worldMap = nullptr;
 	Player2D* user = nullptr;
 	ObjectList2D NPCList;
 	ObjectList2D obstacleList;

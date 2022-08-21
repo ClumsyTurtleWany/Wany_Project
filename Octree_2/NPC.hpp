@@ -1,50 +1,52 @@
 #pragma once
 #include "Object.hpp"
 
-class NPC2D : public object2D<float>
+template <typename T>
+class NPC2D : public object2D<T>
 {
 public:
 	NPC2D() {};
-	NPC2D(std::string _name, Rect2f _rect, OBJECT_TYPE _type = OBJECT_TYPE::DYNAMIC_OBJECT)
+	NPC2D(std::string _name, Rect_<T> _rect, OBJECT_TYPE _type = OBJECT_TYPE::DYNAMIC_OBJECT)
 	{
-		name = _name;
-		shape = _rect;
-		type = _type;
+		this->name = _name;
+		this->shape = _rect;
+		this->type = _type;
 	}
 
 public:
 	void frame(float _dt) override
 	{
-		accel = force / mass;
-		velocity += accel * _dt;
+		this->accel = this->force / this->mass;
+		this->velocity += this->accel * _dt;
 		float resistCoef = -0.2f;
-		Vector2f resistForce = force * resistCoef * _dt;
-		force += resistForce;
+		Vector2D_<T> resistForce = this->force * resistCoef * _dt;
+		this->force += resistForce;
 
-		shape.offset(velocity.x, velocity.y);
+		this->shape.offset(this->velocity.x, this->velocity.y);
 	}
 };
 
-class NPC3D : public object3D<float>
+template <typename T>
+class NPC3D : public object3D<T>
 {
 public:
 	NPC3D() {};
-	NPC3D(std::string _name, Box_<float> _box, OBJECT_TYPE _type = OBJECT_TYPE::DYNAMIC_OBJECT)
+	NPC3D(std::string _name, Box_<T> _box, OBJECT_TYPE _type = OBJECT_TYPE::DYNAMIC_OBJECT)
 	{
-		name = _name;
-		shape = _box;
-		type = _type;
+		this->name = _name;
+		this->shape = _box;
+		this->type = _type;
 	}
 
 public:
 	void frame(float _dt) override
 	{
-		accel = force / mass;
-		velocity += accel * _dt;
+		this->accel = this->force / this->mass;
+		this->velocity += this->accel * _dt;
 		float resistCoef = -0.2f;
-		Vector3f resistForce = force * resistCoef * _dt;
-		force += resistForce;
+		Vector3D_<T> resistForce = this->force * resistCoef * _dt;
+		this->force += resistForce;
 
-		shape.offset(velocity.x, velocity.y, velocity.z);
+		this->shape.offset(this->velocity.x, this->velocity.y, this->velocity.z);
 	}
 };

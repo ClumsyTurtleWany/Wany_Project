@@ -35,9 +35,6 @@
     <ClInclude Include="Core.hpp">
       <Filter>헤더 파일\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Core3D.hpp">
-      <Filter>헤더 파일\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Node.hpp">
       <Filter>헤더 파일\Map</Filter>
     </ClInclude>
@@ -64,9 +61,6 @@
     </ClInclude>
     <ClInclude Include="Engine.hpp">
       <Filter>헤더 파일\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Core2D.hpp">
-      <Filter>헤더 파일\Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

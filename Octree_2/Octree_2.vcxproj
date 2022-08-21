@@ -23,8 +23,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.hpp" />
-    <ClInclude Include="Core2D.hpp" />
-    <ClInclude Include="Core3D.hpp" />
     <ClInclude Include="Engine.hpp" />
     <ClInclude Include="Node.hpp" />
     <ClInclude Include="NPC.hpp" />
@@ -59,7 +57,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
