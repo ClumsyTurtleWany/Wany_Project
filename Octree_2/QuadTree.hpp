@@ -103,40 +103,40 @@ void QuadTree<T>::buildTree(node2D<T>* _parent)
 	{
 		return;
 	}
-	if (_parent->rect.width() < 1 || _parent->rect.height() < 1)
+	if (_parent->shape.width() < 1 || _parent->shape.height() < 1)
 	{
 		return;
 	}
 
-	T width = static_cast<int>(_parent->rect.width() / 2.0f);
-	T height = static_cast<int>(_parent->rect.height() / 2.0f);
-	_parent->child[0] = createNode(_parent->rect.LT.x,
-		_parent->rect.LT.y,
+	T width = static_cast<int>(_parent->shape.width() / 2.0f);
+	T height = static_cast<int>(_parent->shape.height() / 2.0f);
+	_parent->child[0] = createNode(_parent->shape.LT.x,
+		_parent->shape.LT.y,
 		width,
 		height,
 		_parent);
 
-	_parent->child[1] = createNode(_parent->rect.LT.x + width,
-		_parent->rect.LT.y,
+	_parent->child[1] = createNode(_parent->shape.LT.x + width,
+		_parent->shape.LT.y,
 		width,
 		height,
 		_parent);
 
-	_parent->child[2] = createNode(_parent->rect.LT.x,
-		_parent->rect.LT.y + height,
+	_parent->child[2] = createNode(_parent->shape.LT.x,
+		_parent->shape.LT.y + height,
 		width,
 		height,
 		_parent);
 
-	_parent->child[3] = createNode(_parent->rect.LT.x + width,
-		_parent->rect.LT.y + height,
+	_parent->child[3] = createNode(_parent->shape.LT.x + width,
+		_parent->shape.LT.y + height,
 		width,
 		height,
 		_parent);
 
 	for (int i = 0; i < QuadTreeChildNum; i++)
 	{
-		buildTree(_parent->child[i]);
+		buildTree(static_cast<node2D<T>*>(_parent->child[i]));
 	}
 }
 
@@ -154,7 +154,7 @@ node2D<T>* QuadTree<T>::findNode(node2D<T>* _parent, object2D<T>* _obj)
 				if (temp->child[i]->shape.RectInRect(_obj->shape))
 				{
 					isIn = true;
-					temp = temp->child[i];
+					temp = static_cast<node2D<T>*>(temp->child[i]);
 					break;
 				}
 			}
@@ -286,7 +286,7 @@ bool QuadTree<T>::getCollisionObject(node2D<T>* _node, object2D<T>* _src, std::v
 		{
 			for (int cnt = 0; cnt < QuadTreeChildNum; cnt++)
 			{
-				isCollision |= getCollisionObject(_node->child[cnt], _src, _dst, _dstSection);
+				isCollision |= getCollisionObject(static_cast<node2D<T>*>(_node->child[cnt]), _src, _dst, _dstSection);
 			}
 		}
 
@@ -340,7 +340,7 @@ void QuadTree<T>::updateDynamicObject(node2D<T>* _target, std::vector<object2D<T
 
 	for (int cnt = 0; cnt < QuadTreeChildNum; cnt++)
 	{
-		updateDynamicObject(_target->child[cnt], _list);
+		updateDynamicObject(static_cast<node2D<T>*>(_target->child[cnt]), _list);
 	}
 }
 

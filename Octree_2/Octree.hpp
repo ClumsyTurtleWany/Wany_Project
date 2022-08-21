@@ -90,7 +90,7 @@ void Octree<T>::create(Point3D_<T> _pos, T _width, T _height, T _depth)
 template <typename T>
 node3D<T>* Octree<T>::createNode(Point3D_<T> _pos, T _width, T _height, T _depth, node3D<T>* _parent)
 {
-	node3D* newNode = new node3D(_pos, _width, _height, _depth, _parent);
+	node3D<T>* newNode = new node3D<T>(_pos, _width, _height, _depth, _parent);
 	newNode->child.assign(OctreeChildNum, nullptr);
 	return newNode;
 }
@@ -107,76 +107,76 @@ void Octree<T>::buildTree(node3D<T>* _parent)
 		return;
 	}
 
-	T width = static_cast<T>(_parent->box.width / 2.0f);
-	T height = static_cast<T>(_parent->box.height / 2.0f);
-	T depth = static_cast<T>(_parent->box.height / 2.0f);
+	T width = static_cast<T>(_parent->shape.width / 2.0f);
+	T height = static_cast<T>(_parent->shape.height / 2.0f);
+	T depth = static_cast<T>(_parent->shape.height / 2.0f);
 	_parent->child[0] = createNode(
-		Point3D_<T>(_parent->box.pos.x,	
-					_parent->box.pos.y, 
-					_parent->box.pos.z),
+		Point3D_<T>(_parent->shape.pos.x,
+					_parent->shape.pos.y,
+					_parent->shape.pos.z),
 		width,
 		height,
 		depth,
 		_parent);
 
 	_parent->child[1] = createNode(
-		Point3D_<T>(_parent->box.pos.x + width,
-					_parent->box.pos.y,
-					_parent->box.pos.z),
+		Point3D_<T>(_parent->shape.pos.x + width,
+					_parent->shape.pos.y,
+					_parent->shape.pos.z),
 		width,
 		height,
 		depth,
 		_parent);
 
 	_parent->child[2] = createNode(
-		Point3D_<T>(_parent->box.pos.x,
-					_parent->box.pos.y + height,
-					_parent->box.pos.z),
+		Point3D_<T>(_parent->shape.pos.x,
+					_parent->shape.pos.y + height,
+					_parent->shape.pos.z),
 		width,
 		height,
 		depth,
 		_parent);
 
 	_parent->child[3] = createNode(
-		Point3D_<T>(_parent->box.pos.x + width,
-					_parent->box.pos.y + height,
-					_parent->box.pos.z),
+		Point3D_<T>(_parent->shape.pos.x + width,
+					_parent->shape.pos.y + height,
+					_parent->shape.pos.z),
 		width,
 		height,
 		depth,
 		_parent);
 
 	_parent->child[4] = createNode(
-		Point3D_<T>(_parent->box.pos.x,
-			_parent->box.pos.y,
-			_parent->box.pos.z + depth),
+		Point3D_<T>(_parent->shape.pos.x,
+			_parent->shape.pos.y,
+			_parent->shape.pos.z + depth),
 		width,
 		height,
 		depth,
 		_parent);
 
 	_parent->child[5] = createNode(
-		Point3D_<T>(_parent->box.pos.x + width,
-			_parent->box.pos.y,
-			_parent->box.pos.z + depth),
+		Point3D_<T>(_parent->shape.pos.x + width,
+			_parent->shape.pos.y,
+			_parent->shape.pos.z + depth),
 		width,
 		height,
 		depth,
 		_parent);
 
 	_parent->child[6] = createNode(
-		Point3D_<T>(_parent->box.pos.x,
-			_parent->box.pos.y + height,
-			_parent->box.pos.z + depth),
+		Point3D_<T>(_parent->shape.pos.x,
+			_parent->shape.pos.y + height,
+			_parent->shape.pos.z + depth),
 		width,
 		height,
 		depth,
 		_parent);
 
 	_parent->child[7] = createNode(
-		Point3D_<T>(_parent->box.pos.x + width,
-			_parent->box.pos.y + height,
-			_parent->box.pos.z + depth),
+		Point3D_<T>(_parent->shape.pos.x + width,
+			_parent->shape.pos.y + height,
+			_parent->shape.pos.z + depth),
 		width,
 		height,
 		depth,
@@ -185,7 +185,7 @@ void Octree<T>::buildTree(node3D<T>* _parent)
 
 	for (int i = 0; i < OctreeChildNum; i++)
 	{
-		buildTree(_parent->child[i]);
+		buildTree(static_cast<node3D<T>*>(_parent->child[i]));
 	}
 }
 
@@ -203,7 +203,7 @@ node3D<T>* Octree<T>::findNode(node3D<T>* _parent, object3D<T>* _obj)
 				if (temp->child[i]->shape.BoxInBox(_obj->shape))
 				{
 					isIn = true;
-					temp = temp->child[i];
+					temp = static_cast<node3D<T>*>(temp->child[i]);
 					break;
 				}
 			}
@@ -335,7 +335,7 @@ bool Octree<T>::getCollisionObject(node3D<T>* _node, object3D<T>* _src, std::vec
 		{
 			for (int cnt = 0; cnt < OctreeChildNum; cnt++)
 			{
-				isCollision |= getCollisionObject(_node->child[cnt], _src, _dst, _dstSection);
+				isCollision |= getCollisionObject(static_cast<node3D<T>*>(_node->child[cnt]), _src, _dst, _dstSection);
 			}
 		}
 
@@ -389,7 +389,7 @@ void Octree<T>::updateDynamicObject(node3D<T>* _target, std::vector<object3D<T>*
 
 	for (int cnt = 0; cnt < OctreeChildNum; cnt++)
 	{
-		updateDynamicObject(_target->child[cnt], _list);
+		updateDynamicObject(static_cast<node3D<T>*>(_target->child[cnt]), _list);
 	}
 }
 
