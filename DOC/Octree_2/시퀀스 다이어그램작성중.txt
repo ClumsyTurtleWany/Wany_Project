@@ -1,0 +1,40 @@
+title Sequence
+
+actor User
+User->+Engine : getCore()
+Engine->+Core : create
+Core->+SpaceDivision : create
+SpaceDivision-->-Core : void
+Core-->-Engine : void 
+Engine->-User : return Core
+
+
+User->Core : run()
+
+Core->Core : initialize()
+Core->+SpaceDivision : new Object
+SpaceDivision->-Core : return Object
+
+loop while(t < 60)	
+	
+Core->+Core : frame()
+Core->+SpaceDivision : updateDynamicObject()
+SpaceDivision-->-Core : void
+
+Core->SpaceDivision : checkBorder()
+SpaceDivision->Object : frame()
+Object-->SpaceDivision : void
+SpaceDivision-->Core : void
+
+Core->SpaceDivision : Collision()
+SpaceDivision->-Core : return renderList
+
+Core->Object : render()
+Object->UI : display
+UI-->Object : void
+Object-->-Core: void
+
+End
+
+Core->Core : release()
+Core-->-User : void 
