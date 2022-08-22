@@ -5,7 +5,8 @@
 int main()
 {
 	Engine* engine = Engine::getEngine(CORE_TYPE::GAME_3D);
-	CoreBase* GameCore = engine->getCore();
+	//Engine* engine = Engine::getEngine(CORE_TYPE::GAME_2D);
+	Core* GameCore = engine->getCore();
 	GameCore->run();
 
 	return 0;

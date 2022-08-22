@@ -5,26 +5,34 @@
 static const int QuadTreeChildNum = 8;
 
 template <typename T>
-class QuadTree : public SpaceDivision<Rect_<T>, object2D<T>>
+class QuadTree : public SpaceDivision //: public SpaceDivision<Rect_<T>, object2D<T>>
 {
-public:
-	node2D<T>* castingRoot;
+private:
+	node2D<T>* root = nullptr;
 
 public:
 	QuadTree();
 	~QuadTree();
 
 public:
-	void create(Rect_<T> _rect) override;
+	void create(void* _shape) override;
+	void addObject(objectBase* _obj) override;
+	objectBase* newPlayer() override;
+	objectBase* newNPC() override;
+	objectBase* newObstacle() override;
+	bool Collision(objectBase* _src, std::vector<objectBase*>* _dst, std::vector<void*>* _dstSection = nullptr) override;
+	bool checkBorder(objectBase* _target) override;
+	void updateDynamicObject() override;
+
+public:
+	void create(Rect_<T> _rect);
 	void create(T _width, T _height);
 	void create(T _x, T _y, T _width, T _height);
 
-	void addObject(object2D<T>* _obj) override;
-	object2D<T>* newNPC() override;
-	object2D<T>* newObstacle()  override;
-	bool Collision(object2D<T>* _src, std::vector<object2D<T>*>* _dst, std::vector<Rect_<T>>* _dstSection = nullptr) override;
-	void updateDynamicObject() override;
-	bool checkBorder(object2D<T>* _target) override;
+	void addObject(object2D<T>* _obj);
+	bool Collision(object2D<T>* _src, std::vector<object2D<T>*>* _dst, std::vector<Rect_<T>>* _dstSection = nullptr);
+	
+	bool checkBorder(object2D<T>* _target);
 	
 private:
 	node2D<T>* createNode(T _x, T _y, T _width, T _height, node2D<T>* _parent = nullptr);
@@ -44,15 +52,14 @@ private:
 template <typename T>
 QuadTree<T>::QuadTree()
 {
-	castingRoot = static_cast<node2D<T>*>(this->root);
 }
 
 template <typename T>
 QuadTree<T>::~QuadTree()
 {
-	if (castingRoot != nullptr)
+	if (this->root != nullptr)
 	{
-		delete castingRoot;
+		delete this->root;
 	}
 }
 
@@ -65,16 +72,16 @@ void QuadTree<T>::create(Rect_<T> _rect)
 template <typename T>
 void QuadTree<T>::create(T _x, T _y, T _width, T _height)
 {
-	if (castingRoot == nullptr)
+	if (this->root == nullptr)
 	{
-		castingRoot = createNode(_x, _y, _width, _height);
-		buildTree(castingRoot);
+		this->root = createNode(_x, _y, _width, _height);
+		buildTree(this->root);
 	}
 	else
 	{
-		delete castingRoot;
-		castingRoot = createNode(_x, _y, _width, _height);
-		buildTree(castingRoot);
+		delete this->root;
+		this->root = createNode(_x, _y, _width, _height);
+		buildTree(this->root);
 	}
 }
 
@@ -87,7 +94,7 @@ void QuadTree<T>::create(T _width, T _height)
 template <typename T>
 node2D<T>* QuadTree<T>::createNode(T _x, T _y, T _width, T _height, node2D<T>* _parent)
 {
-	node2D<T>* newNode = new node2D<T>(_x, _y, _width, _height, _parent);
+	node2D<T>* newNode = new node2D<T>(Rect_<T>(_x, _y, _width, _height), _parent);
 	newNode->child.assign(QuadTreeChildNum, nullptr);
 	return newNode;
 }
@@ -151,7 +158,8 @@ node2D<T>* QuadTree<T>::findNode(node2D<T>* _parent, object2D<T>* _obj)
 		{
 			if (temp->child[i] != nullptr)
 			{
-				if (temp->child[i]->shape.RectInRect(_obj->shape))
+				object2D<T>* obj = dynamic_cast<object2D<T>*>(_obj);
+				if (temp->child[i]->shape.RectInRect(obj->shape))
 				{
 					isIn = true;
 					temp = static_cast<node2D<T>*>(temp->child[i]);
@@ -171,13 +179,13 @@ node2D<T>* QuadTree<T>::findNode(node2D<T>* _parent, object2D<T>* _obj)
 template <typename T>
 node2D<T>* QuadTree<T>::getNode(object2D<T>* _obj)
 {
-	return findNode(castingRoot, _obj);
+	return findNode(this->root, _obj);
 }
 
 template <typename T>
 void QuadTree<T>::addObject(object2D<T>* _obj)
 {
-	node2D<T>* target = findNode(castingRoot, _obj);
+	node2D<T>* target = findNode(this->root, _obj);
 	if (target != nullptr)
 	{
 		if (_obj->type == OBJECT_TYPE::STATIC_OBJECT)
@@ -192,30 +200,16 @@ void QuadTree<T>::addObject(object2D<T>* _obj)
 }
 
 template <typename T>
-object2D<T>* QuadTree<T>::newNPC()
-{
-	NPC2D<T>* npc = new NPC2D<T>;
-	return dynamic_cast<object2D<T>*>(npc);
-}
-
-template <typename T>
-object2D<T>* QuadTree<T>::newObstacle()
-{
-	Obstacle2D<T>* obs = new Obstacle2D<T>;
-	return dynamic_cast<object2D<T>*>(obs);
-}
-
-template <typename T>
 bool QuadTree<T>::Collision(object2D<T>* _src, std::vector<object2D<T>*>* _dst, std::vector<Rect_<T>>* _dstSection)
 {
-	if (castingRoot == nullptr || _src == nullptr)
+	if (this->root == nullptr || _src == nullptr)
 	{
 		return false;
 	}
 	else
 	{
 		bool isExist = false;
-		isExist |= getCollisionObject(castingRoot, _src, _dst, _dstSection);
+		isExist |= getCollisionObject(this->root, _src, _dst, _dstSection);
 		return isExist;
 	}
 }
@@ -313,7 +307,7 @@ template <typename T>
 void QuadTree<T>::updateDynamicObject()
 {
 	std::vector<object2D<T>*> objList;
-	updateDynamicObject(castingRoot, &objList);
+	updateDynamicObject(this->root, &objList);
 
 	for (auto it : objList)
 	{
@@ -348,10 +342,10 @@ template <typename T>
 bool QuadTree<T>::checkBorder(object2D<T>* _target)
 {
 	bool isHitBorder = false;
-	isHitBorder |= isHitLeft(castingRoot, _target, true);
-	isHitBorder |= isHitRight(castingRoot, _target, true);
-	isHitBorder |= isHitTop(castingRoot, _target, true);
-	isHitBorder |= isHitBottom(castingRoot, _target, true);
+	isHitBorder |= isHitLeft(this->root, _target, true);
+	isHitBorder |= isHitRight(this->root, _target, true);
+	isHitBorder |= isHitTop(this->root, _target, true);
+	isHitBorder |= isHitBottom(this->root, _target, true);
 
 	return isHitBorder;
 }
@@ -366,6 +360,9 @@ bool QuadTree<T>::isHitLeft(node2D<T>* _border, object2D<T>* _target, bool _move
 		if (_move)
 		{
 			_target->moveTo(rect.left(), _target->shape.top());
+
+			_target->velocity.x = 0;
+			_target->force.x *= -1;
 		}
 		isHit = true;
 	}
@@ -382,6 +379,9 @@ bool QuadTree<T>::isHitRight(node2D<T>* _border, object2D<T>* _target, bool _mov
 		if (_move)
 		{
 			_target->moveTo(rect.right() - _target->shape.width(), _target->shape.top());
+
+			_target->velocity.x = 0;
+			_target->force.x *= -1;
 		}
 		isHit = true;
 	}
@@ -398,6 +398,9 @@ bool QuadTree<T>::isHitTop(node2D<T>* _border, object2D<T>* _target, bool _move)
 		if (_move)
 		{
 			_target->moveTo(_target->shape.left(), rect.top());
+
+			_target->velocity.y = 0;
+			_target->force.y *= -1;
 		}
 		isHit = true;
 	}
@@ -414,8 +417,69 @@ bool QuadTree<T>::isHitBottom(node2D<T>* _border, object2D<T>* _target, bool _mo
 		if (_move)
 		{
 			_target->moveTo(_target->shape.left(), rect.bottom() - _target->shape.height());
+
+			_target->velocity.y = 0;
+			_target->force.y *= -1;
 		}
 		isHit = true;
 	}
 	return isHit;
+}
+
+template <typename T>
+void QuadTree<T>::create(void* _shape)
+{
+	create(*(Rect_<T>*)_shape);
+}
+
+template <typename T>
+void QuadTree<T>::addObject(objectBase* _obj)
+{
+	addObject(static_cast<object2D<T>*>(_obj));
+}
+
+template <typename T>
+objectBase* QuadTree<T>::newPlayer()
+{
+	return new Player2D<T>;
+}
+
+template <typename T>
+objectBase* QuadTree<T>::newNPC()
+{
+	return new NPC2D<T>;
+}
+
+template <typename T>
+objectBase* QuadTree<T>::newObstacle()
+{
+	return new Obstacle2D<T>;
+}
+
+template <typename T>
+bool QuadTree<T>::Collision(objectBase* _src, std::vector<objectBase*>* _dst, std::vector<void*>* _dstSection)
+{
+	if (this->root == nullptr || _src == nullptr)
+	{
+		return false;
+	}
+	else
+	{
+		bool isExist = false;
+		object2D<T>* src = dynamic_cast<object2D<T>*>(_src);
+		std::vector<object2D<T>*> dst;
+		std::vector<Rect_<T>> dstSection;
+		isExist |= getCollisionObject(this->root, src, &dst, &dstSection);
+		for (auto it : dst)
+		{
+			_dst->push_back(it);
+		}
+		return isExist;
+	}
+}
+
+template <typename T>
+bool QuadTree<T>::checkBorder(objectBase* _target)
+{
+	return checkBorder(static_cast<object2D<T>*>(_target));
 }

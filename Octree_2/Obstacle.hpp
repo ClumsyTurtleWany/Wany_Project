@@ -2,7 +2,7 @@
 #include "Object.hpp"
 
 template <typename T>
-class Obstacle2D : object2D<T>
+class Obstacle2D : public object2D<T>
 {
 public:
 	Obstacle2D() {};
@@ -17,7 +17,7 @@ public:
 };
 
 template <typename T>
-class Obstacle3D : object3D<T>
+class Obstacle3D : public object3D<T>
 {
 public:
 	Obstacle3D() {};

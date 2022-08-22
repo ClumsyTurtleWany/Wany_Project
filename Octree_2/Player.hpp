@@ -1,85 +1,61 @@
 #pragma once
 #include "Object.hpp"
 
-template <class ObjectDimension>
-class Player
-{
-protected: 
-	ObjectDimension* obj = nullptr;
-
-public:
-	ObjectDimension* getObject()
-	{
-		return obj;
-	}
-
-	virtual void frame(float _dt) = 0;
-};
-
 template <typename T>
-class Player2D : public Player<object2D<T>>
+class Player2D : public object2D<T> //: public Player<object2D<T>>
 {
 public:
-	Player2D() {};
+	Player2D() 
+	{
+		this->type = OBJECT_TYPE::DYNAMIC_OBJECT;
+	};
 	Player2D(std::string _name, Rect_<T> _rect, OBJECT_TYPE _type = OBJECT_TYPE::DYNAMIC_OBJECT)
 	{
-		this->obj = new object2D<T>;
-		this->obj->name = _name;
-		this->obj->shape = _rect;
-		this->obj->type = _type;
+		this->name = _name;
+		this->shape = _rect;
+		this->type = _type;
 	}
-	~Player2D()
-	{
-		if (this->obj != nullptr)
-		{
-			delete this->obj;
-			this->obj = nullptr;
-		}
-	}
+	~Player2D() {};
 
 public:
 	void frame(float _dt) override
 	{
-		this->obj->accel = this->obj->force / this->obj->mass;
-		this->obj->velocity += this->obj->accel * _dt;
+		this->accel = this->force / this->mass;
+		this->velocity += this->accel * _dt;
 		float resistCoef = -0.1f;
-		Vector2D_<T> resistForce = this->obj->force * resistCoef * _dt;
-		this->obj->force += resistForce;
+		Vector2D_<T> resistForce = this->force * resistCoef * _dt;
+		this->force += resistForce;
 
-		this->obj->shape.offset(this->obj->velocity.x, this->obj->velocity.y);
+		this->shape.offset(this->velocity.x, this->velocity.y);
 	}
 };
 
 template <typename T>
-class Player3D : public Player<object3D<T>>
+class Player3D : public object3D<T> //: public Player<object3D<T>>
 {
 public:
-	Player3D() {};
+	Player3D()
+	{
+		this->type = OBJECT_TYPE::DYNAMIC_OBJECT;
+	};
+
 	Player3D(std::string _name, Box_<T> _box, OBJECT_TYPE _type = OBJECT_TYPE::DYNAMIC_OBJECT)
 	{
-		this->obj = new object3D<T>;
-		this->obj->name = _name;
-		this->obj->shape = _box;
-		this->obj->type = _type;
+		this->name = _name;
+		this->shape = _box;
+		this->type = _type;
 	}
-	~Player3D()
-	{
-		if (this->obj != nullptr)
-		{
-			delete this->obj;
-			this->obj = nullptr;
-		}
-	};
+	~Player3D() {};
 
 public:
 	void frame(float _dt) override
 	{
-		this->obj->accel = this->obj->force / this->obj->mass;
-		this->obj->velocity += this->obj->accel * _dt;
+		this->accel = this->force / this->mass;
+		this->velocity += this->accel * _dt;
 		float resistCoef = -0.1f;
-		Vector3D_<T> resistForce = this->obj->force * resistCoef * _dt;
-		this->obj->force += resistForce;
+		Vector3D_<T> resistForce = this->force * resistCoef * _dt;
+		this->force += resistForce;
 
-		this->obj->shape.offset(this->obj->velocity.x, this->obj->velocity.y, this->obj->velocity.z);
+		this->shape.offset(this->velocity.x, this->velocity.y, this->velocity.z);
 	}
 };

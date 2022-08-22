@@ -1,0 +1,289 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Core" Collapsed="true">
+    <Position X="5" Y="1.5" Width="1.5" />
+    <Members>
+      <Method Name="~Core" Hidden="true" />
+      <Method Name="Core" Hidden="true" />
+      <Method Name="frame" Hidden="true" />
+      <Method Name="initialize" Hidden="true" />
+      <Method Name="release" Hidden="true" />
+      <Method Name="render" Hidden="true" />
+      <Method Name="run" Hidden="true" />
+    </Members>
+    <AssociationLine Name="map" Type="SpaceDivision" FixedToPoint="true">
+      <Path>
+        <Point X="5.75" Y="2.062" />
+        <Point X="5.75" Y="2.5" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>EgAAEgAAAAAAAAAAAAEgAIAAEAACAAAAAAEAAQAYAQA=</HashCode>
+      <FileName>Core.hpp</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="map" />
+      <Field Name="user" />
+      <Field Name="NPC" />
+      <Field Name="OBSTACLE" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="node&lt;Shape, ObjectDimension&gt;" Collapsed="true">
+    <Position X="5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAACAAAAAAAABAAACAAAAAABAAAAAAIAAAIAAABCA=</HashCode>
+      <FileName>Node.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="node2D&lt;T&gt;" Collapsed="true">
+    <Position X="4" Y="6" Width="1.5" />
+    <AssociationLine Name="list" Type="object2D&lt;T&gt;" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="4.75" Y="6.691" />
+        <Point X="4.75" Y="7.021" />
+        <Point X="10.5" Y="7.021" />
+        <Point X="10.5" Y="4.691" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Node.hpp</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="list" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="node3D&lt;T&gt;" Collapsed="true">
+    <Position X="6" Y="6" Width="1.5" />
+    <AssociationLine Name="list" Type="object3D&lt;T&gt;" ManuallyRouted="true">
+      <Path>
+        <Point X="7.5" Y="6.346" />
+        <Point X="7.875" Y="6.346" />
+        <Point X="7.875" Y="3.358" />
+        <Point X="9.344" Y="3.358" Type="JumpStart" />
+        <Point X="9.51" Y="3.358" Type="JumpEnd" />
+        <Point X="10.5" Y="3.358" />
+        <Point X="10.5" Y="2.191" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Node.hpp</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="list" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Octree&lt;T&gt;" Collapsed="true">
+    <Position X="6" Y="3.75" Width="1.5" />
+    <Members>
+      <Method Name="~Octree" Hidden="true" />
+      <Method Name="addObject" Hidden="true" />
+      <Method Name="buildTree" Hidden="true" />
+      <Method Name="checkBorder" Hidden="true" />
+      <Method Name="Collision" Hidden="true" />
+      <Method Name="create" Hidden="true" />
+      <Method Name="createNode" Hidden="true" />
+      <Method Name="findNode" Hidden="true" />
+      <Method Name="getCollisionObject" Hidden="true" />
+      <Method Name="getNode" Hidden="true" />
+      <Method Name="isHitMaxX" Hidden="true" />
+      <Method Name="isHitMaxY" Hidden="true" />
+      <Method Name="isHitMaxZ" Hidden="true" />
+      <Method Name="isHitMinX" Hidden="true" />
+      <Method Name="isHitMinY" Hidden="true" />
+      <Method Name="isHitMinZ" Hidden="true" />
+      <Method Name="newNPC" Hidden="true" />
+      <Method Name="newObstacle" Hidden="true" />
+      <Method Name="newPlayer" Hidden="true" />
+      <Method Name="Octree" Hidden="true" />
+      <Method Name="resetDynamicObject" Hidden="true" />
+      <Method Name="updateDynamicObject" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>BAAIBEAAAIAQBAAAAAAkAAAAAgBAARQAAAlAAIAAAAA=</HashCode>
+      <FileName>Octree.hpp</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="root" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="QuadTree&lt;T&gt;" Collapsed="true">
+    <Position X="4" Y="3.75" Width="1.5" />
+    <Members>
+      <Method Name="~QuadTree" Hidden="true" />
+      <Method Name="addObject" Hidden="true" />
+      <Method Name="buildTree" Hidden="true" />
+      <Method Name="checkBorder" Hidden="true" />
+      <Method Name="Collision" Hidden="true" />
+      <Method Name="create" Hidden="true" />
+      <Method Name="createNode" Hidden="true" />
+      <Method Name="findNode" Hidden="true" />
+      <Method Name="getCollisionObject" Hidden="true" />
+      <Method Name="getNode" Hidden="true" />
+      <Method Name="isHitBottom" Hidden="true" />
+      <Method Name="isHitLeft" Hidden="true" />
+      <Method Name="isHitRight" Hidden="true" />
+      <Method Name="isHitTop" Hidden="true" />
+      <Method Name="newNPC" Hidden="true" />
+      <Method Name="newObstacle" Hidden="true" />
+      <Method Name="newPlayer" Hidden="true" />
+      <Method Name="QuadTree" Hidden="true" />
+      <Method Name="resetDynamicObject" Hidden="true" />
+      <Method Name="updateDynamicObject" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAIBEAAAIAQBAAAAAA0AAAAAgBAABQEAAlAAACAEBA=</HashCode>
+      <FileName>QuadTree.hpp</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="root" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="SpaceDivision" Collapsed="true">
+    <Position X="5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAEAAEKAQAAAAAAAEAAAAAgAAAAAAAAhAAAAAAAA=</HashCode>
+      <FileName>SpaceDivision.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NPC2D&lt;T&gt;" Collapsed="true">
+    <Position X="12.25" Y="4" Width="1.5" />
+    <InheritanceLine Type="object2D&lt;T&gt;" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="11.25" Y="4.375" />
+        <Point X="12.25" Y="4.375" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>NPC.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NPC3D&lt;T&gt;" Collapsed="true">
+    <Position X="12.25" Y="1.5" Width="1.5" />
+    <InheritanceLine Type="object3D&lt;T&gt;" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="11.25" Y="1.812" />
+        <Point X="12.25" Y="1.812" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>NPC.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="objectBase" Collapsed="true">
+    <Position X="7.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAgAAAAAAAAAFBABAAAAAAQAQAAA=</HashCode>
+      <FileName>Object.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="object2D&lt;T&gt;" Collapsed="true">
+    <Position X="9.75" Y="4" Width="1.5" />
+    <InheritanceLine Type="objectBase" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="9" Y="1.812" />
+        <Point X="9.427" Y="1.812" />
+        <Point X="9.427" Y="4.312" />
+        <Point X="9.75" Y="4.312" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAAAAAAAAAIAAgAAAABAAACAQAASAQBAA=</HashCode>
+      <FileName>Object.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="object3D&lt;T&gt;" Collapsed="true">
+    <Position X="9.75" Y="1.5" Width="1.5" />
+    <InheritanceLine Type="objectBase" FixedFromPoint="true">
+      <Path>
+        <Point X="9" Y="1.813" />
+        <Point X="9.75" Y="1.813" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAAAAABAAAEAAgAAAABAAACAQAAQAQBgA=</HashCode>
+      <FileName>Object.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Obstacle2D&lt;T&gt;" Collapsed="true">
+    <Position X="12.25" Y="5.5" Width="1.5" />
+    <InheritanceLine Type="object2D&lt;T&gt;" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="11.25" Y="4.375" />
+        <Point X="11.625" Y="4.375" />
+        <Point X="11.625" Y="5.875" />
+        <Point X="12.25" Y="5.875" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Obstacle.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Obstacle3D&lt;T&gt;" Collapsed="true">
+    <Position X="12.25" Y="3" Width="1.5" />
+    <InheritanceLine Type="object3D&lt;T&gt;" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="11.25" Y="1.812" />
+        <Point X="11.625" Y="1.812" />
+        <Point X="11.625" Y="3.375" />
+        <Point X="12.25" Y="3.375" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Obstacle.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Player2D&lt;T&gt;" Collapsed="true">
+    <Position X="12.25" Y="4.75" Width="1.5" />
+    <InheritanceLine Type="object2D&lt;T&gt;" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="11.25" Y="4.375" />
+        <Point X="11.625" Y="4.375" />
+        <Point X="11.625" Y="5.125" />
+        <Point X="12.25" Y="5.125" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAQAAAAA=</HashCode>
+      <FileName>Player.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Player3D&lt;T&gt;" Collapsed="true">
+    <Position X="12.25" Y="2.25" Width="1.5" />
+    <InheritanceLine Type="object3D&lt;T&gt;" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="11.25" Y="1.812" />
+        <Point X="11.625" Y="1.812" />
+        <Point X="11.625" Y="2.625" />
+        <Point X="12.25" Y="2.625" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAgAAAAQAAAAA=</HashCode>
+      <FileName>Player.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Engine" Collapsed="true">
+    <Position X="5" Y="0.5" Width="1.5" />
+    <Members>
+      <Method Name="~Engine" Hidden="true" />
+      <Method Name="Engine" Hidden="true" />
+      <Method Name="getCore" Hidden="true" />
+      <Method Name="getEngine" Hidden="true" />
+      <Method Name="release" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>EIAAAAAAAAQAAAAAAAAAgAAAAAAAAAQABAAAAAQAAAA=</HashCode>
+      <FileName>Engine.hpp</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="gameCore" />
+    </ShowAsAssociation>
+  </Class>
+  <Font Name="맑은 고딕" Size="9" />
+</ClassDiagram>

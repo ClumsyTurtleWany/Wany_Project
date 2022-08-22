@@ -5,26 +5,34 @@
 static const int OctreeChildNum = 8;
 
 template <typename T>
-class Octree : public SpaceDivision<Box_<T>, object3D<T>>
+class Octree : public SpaceDivision //: public SpaceDivision<Box_<T>, object3D<T>>
 {
-public:
-	node3D<T>* castingRoot;
+private:
+	node3D<T>* root = nullptr;
 
 public:
 	Octree();
 	~Octree();
 
 public:
-	void create(Box_<T> _box) override;
+	void create(void* _shape) override;
+	void addObject(objectBase* _obj) override;
+	objectBase* newPlayer() override;
+	objectBase* newNPC() override;
+	objectBase* newObstacle() override;
+	bool Collision(objectBase* _src, std::vector<objectBase*>* _dst, std::vector<void*>* _dstSection = nullptr) override;
+	bool checkBorder(objectBase* _target) override;
+	void updateDynamicObject() override;
+
+public:
+	void create(Box_<T> _box);
 	void create(T _width, T _height, T _depth);
 	void create(Point3D_<T> _pos, T _width, T _height, T _depth);
+	void addObject(object3D<T>* _obj);
 
-	void addObject(object3D<T>* _obj) override;
-	object3D<T>* newNPC() override;
-	object3D<T>* newObstacle() override;
-	bool Collision(object3D<T>* _src, std::vector<object3D<T>*>* _dst, std::vector<Box_<T>>* _dstSection = nullptr) override;
-	void updateDynamicObject() override;
-	bool checkBorder(object3D<T>* _target) override;
+	bool Collision(object3D<T>* _src, std::vector<object3D<T>*>* _dst, std::vector<Box_<T>>* _dstSection = nullptr);
+	
+	bool checkBorder(object3D<T>* _target);
 
 private:
 	node3D<T>* createNode(Point3D_<T> _pos, T _width, T _height, T _depth, node3D<T>* _parent = nullptr);
@@ -46,16 +54,15 @@ private:
 template <typename T>
 Octree<T>::Octree()
 {
-	castingRoot = static_cast<node3D<T>*>(this->root);
 }
 
 template <typename T>
 Octree<T>::~Octree()
 {
-	if (castingRoot != nullptr)
+	if (this->root != nullptr)
 	{
-		delete castingRoot;
-		castingRoot = nullptr;
+		delete this->root;
+		this->root = nullptr;
 	}
 }
 
@@ -74,23 +81,23 @@ void Octree<T>::create(T _width, T _height, T _depth)
 template <typename T>
 void Octree<T>::create(Point3D_<T> _pos, T _width, T _height, T _depth)
 {
-	if (castingRoot == nullptr)
+	if (this->root == nullptr)
 	{
-		castingRoot = createNode(_pos, _width, _height, _depth);
-		buildTree(castingRoot);
+		this->root = createNode(_pos, _width, _height, _depth);
+		buildTree(this->root);
 	}
 	else
 	{
-		delete castingRoot;
-		castingRoot = createNode(_pos, _width, _height, _depth);
-		buildTree(castingRoot);
+		delete this->root;
+		this->root = createNode(_pos, _width, _height, _depth);
+		buildTree(this->root);
 	}
 }
 
 template <typename T>
 node3D<T>* Octree<T>::createNode(Point3D_<T> _pos, T _width, T _height, T _depth, node3D<T>* _parent)
 {
-	node3D<T>* newNode = new node3D<T>(_pos, _width, _height, _depth, _parent);
+	node3D<T>* newNode = new node3D<T>(Box_<T>(_pos, _width, _height, _depth), _parent);
 	newNode->child.assign(OctreeChildNum, nullptr);
 	return newNode;
 }
@@ -220,13 +227,13 @@ node3D<T>* Octree<T>::findNode(node3D<T>* _parent, object3D<T>* _obj)
 template <typename T>
 node3D<T>* Octree<T>::getNode(object3D<T>* _obj)
 {
-	return findNode(castingRoot, _obj);
+	return findNode(this->root, _obj);
 }
 
 template <typename T>
 void Octree<T>::addObject(object3D<T>* _obj)
 {
-	node3D<T>* target = findNode(castingRoot, _obj);
+	node3D<T>* target = findNode(this->root, _obj);
 	if (target != nullptr)
 	{
 		if (_obj->type == OBJECT_TYPE::STATIC_OBJECT)
@@ -241,30 +248,16 @@ void Octree<T>::addObject(object3D<T>* _obj)
 }
 
 template <typename T>
-object3D<T>* Octree<T>::newNPC()
-{
-	NPC3D<T>* npc = new NPC3D<T>;
-	return dynamic_cast<object3D<T>*>(npc);
-}
-
-template <typename T>
-object3D<T>* Octree<T>::newObstacle()
-{
-	Obstacle3D<T>* obs = new Obstacle3D<T>;
-	return dynamic_cast<object3D<T>*>(obs);
-}
-
-template <typename T>
 bool Octree<T>::Collision(object3D<T>* _src, std::vector<object3D<T>*>* _dst, std::vector<Box_<T>>* _dstSection)
 {
-	if (castingRoot == nullptr || _src == nullptr)
+	if (this->root == nullptr || _src == nullptr)
 	{
 		return false;
 	}
 	else
 	{
 		bool isExist = false;
-		isExist |= getCollisionObject(castingRoot, _src, _dst, _dstSection);
+		isExist |= getCollisionObject(this->root, _src, _dst, _dstSection);
 		return isExist;
 	}
 }
@@ -362,7 +355,7 @@ template <typename T>
 void Octree<T>::updateDynamicObject()
 {
 	std::vector<object3D<T>*> objList;
-	updateDynamicObject(castingRoot, &objList);
+	updateDynamicObject(this->root, &objList);
 
 	for (auto it : objList)
 	{
@@ -397,12 +390,12 @@ template <typename T>
 bool Octree<T>::checkBorder(object3D<T>* _target)
 {
 	bool isHitBorder = false;
-	isHitBorder |= isHitMinX(castingRoot, _target, true);
-	isHitBorder |= isHitMaxX(castingRoot, _target, true);
-	isHitBorder |= isHitMinY(castingRoot, _target, true);
-	isHitBorder |= isHitMaxY(castingRoot, _target, true);
-	isHitBorder |= isHitMinZ(castingRoot, _target, true);
-	isHitBorder |= isHitMaxZ(castingRoot, _target, true);
+	isHitBorder |= isHitMinX(this->root, _target, true);
+	isHitBorder |= isHitMaxX(this->root, _target, true);
+	isHitBorder |= isHitMinY(this->root, _target, true);
+	isHitBorder |= isHitMaxY(this->root, _target, true);
+	isHitBorder |= isHitMinZ(this->root, _target, true);
+	isHitBorder |= isHitMaxZ(this->root, _target, true);
 
 	return isHitBorder;
 }
@@ -419,6 +412,9 @@ bool Octree<T>::isHitMinX(node3D<T>* _border, object3D<T>* _target, bool _move)
 			_target->moveTo(box.pos.x,
 				_target->shape.pos.y,
 				_target->shape.pos.z);
+
+			_target->velocity.x = 0;
+			_target->force.x *= -1;
 		}
 		isHit = true;
 	}
@@ -437,6 +433,9 @@ bool Octree<T>::isHitMaxX(node3D<T>* _border, object3D<T>* _target, bool _move)
 			_target->moveTo(box.maxp().x - _target->shape.width,
 				_target->shape.pos.y,
 				_target->shape.pos.z);
+
+			_target->velocity.x = 0;
+			_target->force.x *= -1;
 		}
 		isHit = true;
 	}
@@ -455,6 +454,9 @@ bool Octree<T>::isHitMinY(node3D<T>* _border, object3D<T>* _target, bool _move)
 			_target->moveTo(_target->shape.pos.x,
 				box.pos.y,
 				_target->shape.pos.z);
+
+			_target->velocity.y = 0;
+			_target->force.y *= -1;
 		}
 		isHit = true;
 	}
@@ -473,6 +475,9 @@ bool Octree<T>::isHitMaxY(node3D<T>* _border, object3D<T>* _target, bool _move)
 			_target->moveTo(_target->shape.pos.x,
 				box.maxp().y - _target->shape.height,
 				_target->shape.pos.z);
+
+			_target->velocity.y = 0;
+			_target->force.y *= -1;
 		}
 		isHit = true;
 	}
@@ -491,6 +496,9 @@ bool Octree<T>::isHitMinZ(node3D<T>* _border, object3D<T>* _target, bool _move)
 			_target->moveTo(_target->shape.pos.x,
 				_target->shape.pos.y,
 				box.pos.z);
+
+			_target->velocity.z = 0;
+			_target->force.z *= -1;
 		}
 		isHit = true;
 	}
@@ -509,8 +517,73 @@ bool Octree<T>::isHitMaxZ(node3D<T>* _border, object3D<T>* _target, bool _move)
 			_target->moveTo(_target->shape.pos.x,
 				_target->shape.pos.y,
 				box.maxp().z - _target->shape.depth);
+
+			_target->velocity.z = 0;
+			_target->force.z *= -1;
 		}
 		isHit = true;
 	}
 	return isHit;
+}
+
+
+
+
+template <typename T>
+void Octree<T>::create(void* _shape)
+{
+	create(*(Box_<T>*)_shape);
+}
+
+template <typename T>
+void Octree<T>::addObject(objectBase* _obj)
+{
+	addObject(static_cast<object3D<T>*>(_obj));
+}
+
+template <typename T>
+objectBase* Octree<T>::newPlayer()
+{
+	return new Player3D<T>;
+}
+
+template <typename T>
+objectBase* Octree<T>::newNPC()
+{
+	return new NPC3D<T>;
+}
+
+template <typename T>
+objectBase* Octree<T>::newObstacle()
+{
+	return new Obstacle3D<T>;
+}
+
+template <typename T>
+bool Octree<T>::Collision(objectBase* _src, std::vector<objectBase*>* _dst, std::vector<void*>* _dstSection)
+{
+	if (this->root == nullptr || _src == nullptr)
+	{
+		return false;
+	}
+	else
+	{
+		bool isExist = false;
+		object3D<T>* src = dynamic_cast<object3D<T>*>(_src);
+		std::vector<object3D<T>*> dst;
+		std::vector<Box_<T>> dstSection;
+		isExist |= getCollisionObject(this->root, src, &dst, &dstSection);
+		for (auto it : dst)
+		{
+			_dst->push_back(it);
+		}
+
+		return isExist;
+	}
+}
+
+template <typename T>
+bool Octree<T>::checkBorder(objectBase* _target)
+{
+	return checkBorder(static_cast<object3D<T>*>(_target));
 }

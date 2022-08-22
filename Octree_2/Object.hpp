@@ -11,7 +11,6 @@ enum class OBJECT_TYPE
 	DYNAMIC_OBJECT
 };
 
-template <class Shape, class VectorDimension>
 class objectBase
 {
 public:
@@ -20,11 +19,6 @@ public:
 	float mass = 0.0f;
 	OBJECT_TYPE type = OBJECT_TYPE::STATIC_OBJECT;
 
-	Shape shape;
-	VectorDimension force;
-	VectorDimension accel;
-	VectorDimension velocity;
-
 public:
 	objectBase() {};
 	~objectBase() {};
@@ -32,18 +26,24 @@ public:
 public:
 	virtual void Random() = 0;
 	virtual void frame(float _dt) = 0;
-	virtual void moveTo(VectorDimension _pos) = 0;
+	//virtual void moveTo(VectorDimension _pos) = 0;
 	virtual void render() = 0;
 };
 
 template <typename T>
-class object2D : public objectBase<Rect_<T>, Vector2D_<T>>
+class object2D : public objectBase
 {
+public:
+	Rect_<T> shape;
+	Vector2D_<T> force;
+	Vector2D_<T> accel;
+	Vector2D_<T> velocity;
+
 public:
 	object2D() {};
 	object2D(Rect_<T> _rect, OBJECT_TYPE _type = OBJECT_TYPE::STATIC_OBJECT)
 	{
-		this->shape = _rect;
+		shape = _rect;
 		this->type = _type;
 		this->mass = 0.0f;
 	};
@@ -52,35 +52,26 @@ public:
 public:
 	void Random()
 	{
-		this->shape = Rect_<T>(20 + rand() % 80, 20 + rand() % 80, 2 + (rand() % 20), 2 + (rand() % 20));
-		this->mass = rand() % 200;
-		this->force = Vector2D_<T>(rand() % 200, rand() % 200);
+		shape = Rect_<T>(30 + rand() % 70, 30 + rand() % 70, 20 + (rand() % 10), 20 + (rand() % 10));
+		this->mass = 50 + rand() % 150;
+		this->force = Vector2D_<T>(100 + rand() % 200, 100 + rand() % 200);
 	}
 
-	void moveTo(Vector2D_<T> _pos) override
+	void moveTo(Vector2D_<T> _pos)
 	{
-		if (this->type == OBJECT_TYPE::DYNAMIC_OBJECT)
-		{
-			Vector2D_<T> offset = _pos - this->shape.LT;
-			this->shape.offset(offset);
-		}
+		Vector2D_<T> offset = _pos - this->shape.LT;
+		this->shape.offset(offset);
 	}
 
 	void moveTo(Point_<T> _pos)
 	{
-		if (this->type == OBJECT_TYPE::DYNAMIC_OBJECT)
-		{
-			Point_<T> offset = _pos - this->shape.LT;
-			this->shape.offset(offset);
-		}
+		Point_<T> offset = _pos - this->shape.LT;
+		this->shape.offset(offset);
 	}
 
 	void moveTo(int _x, int _y)
 	{
-		if (this->type == OBJECT_TYPE::DYNAMIC_OBJECT)
-		{
-			moveTo(Point_<T>(_x, _y));
-		}
+		moveTo(Point_<T>(_x, _y));
 	}
 
 	Circle_<T> getCircle()
@@ -89,8 +80,8 @@ public:
 	}
 
 public:
-	virtual void frame(float _dt);
-	virtual void render()
+	virtual void frame(float _dt) {};
+	void render() override
 	{
 		std::cout << "[ " << this->name << " ] - ";
 		std::cout << "L: " << this->shape.left() << ", ";
@@ -101,8 +92,14 @@ public:
 };
 
 template <typename T>
-class object3D : public objectBase<Box_<T>, Vector3D_<T>>
+class object3D : public objectBase
 {
+public:
+	Box_<T> shape;
+	Vector3D_<T> force;
+	Vector3D_<T> accel;
+	Vector3D_<T> velocity;
+
 public:
 	object3D() {};
 	object3D(Box_<T> _box, OBJECT_TYPE _type = OBJECT_TYPE::STATIC_OBJECT)
@@ -116,35 +113,26 @@ public:
 public:
 	void Random()
 	{
-		this->shape = Box_<T>(Point3D_<T>(20 + rand() % 80, 20 + rand() % 80, 20 + rand() % 80), 2 + (rand() % 20), 2 + (rand() % 20), 2 + (rand() % 20));
-		this->mass = rand() % 200;
-		this->force = Vector3D_<T>(rand() % 200, rand() % 200, rand() % 200);
+		this->shape = Box_<T>(Point3D_<T>(30 + rand() % 70, 30 + rand() % 70, 30 + rand() % 70), 20 + (rand() % 10), 20 + (rand() % 10), 20 + (rand() % 10));
+		this->mass = 50 + rand() % 150;
+		this->force = Vector3D_<T>(100 + rand() % 200, 100 + rand() % 200, 100 + rand() % 200);
 	}
 
-	void moveTo(Vector3D_<T> _pos) override
+	void moveTo(Vector3D_<T> _pos)
 	{
-		if (this->type == OBJECT_TYPE::DYNAMIC_OBJECT)
-		{
-			Vector3D_<T> offset = _pos - this->shape.pos;
-			this->shape.offset(offset);
-		}
+		Vector3D_<T> offset = _pos - this->shape.pos;
+		this->shape.offset(offset);
 	}
 
 	void moveTo(Point3D_<T> _pos)
 	{
-		if (this->type == OBJECT_TYPE::DYNAMIC_OBJECT)
-		{
-			Point3D_<T> offset = _pos - this->shape.pos;
-			this->shape.offset(offset);
-		}
+		Point3D_<T> offset = _pos - this->shape.pos;
+		this->shape.offset(offset);
 	}
 
 	void moveTo(int _x, int _y, int _z)
 	{
-		if (this->type == OBJECT_TYPE::DYNAMIC_OBJECT)
-		{
-			moveTo(Point3D_<T>(_x, _y, _z));
-		}
+		moveTo(Point3D_<T>(_x, _y, _z));
 	}
 
 	Sphere_<T> getSphere()
@@ -154,7 +142,7 @@ public:
 
 public:
 	virtual void frame(float _dt) {};
-	virtual void render()
+	void render() override
 	{
 		std::cout << "[ " << this->name << " ] - ";
 		std::cout << "Pos[x]: " << this->shape.pos.x << ", ";
@@ -165,5 +153,3 @@ public:
 		std::cout << "depth: " << this->shape.depth << std::endl;
 	}
 };
-
-using Object = object3D<float>;

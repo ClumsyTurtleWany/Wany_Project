@@ -13,58 +13,43 @@ enum class CORE_TYPE
 	GAME_3D
 };
 
-class CoreBase
+class Core
 {
 public:
-	virtual void initialize() = 0;
-	virtual void frame(float _dt) = 0;
-	virtual void render() = 0;
-	virtual void release() = 0;
-	virtual void run() = 0;
-	virtual void* getMap() = 0;
-};
+	//SpaceDivision<Shape, ObjectDimension>* map = nullptr;
+	SpaceDivision* map = nullptr;
+	objectBase* user = nullptr;
 
-template <class Shape, class ObjectDimension>
-class Core : public CoreBase
-{
-public:
-	SpaceDivision<Shape, ObjectDimension>* map = nullptr;
-	Player<ObjectDimension>* user = nullptr;
+	objectBase* NPC;
+	objectBase* OBSTACLE;
 
 private:
-	std::vector<ObjectDimension*> NPCList;
-	std::vector<ObjectDimension*> obstacleList;
-	std::vector<ObjectDimension*> renderList;
+	std::vector<objectBase*> NPCList;
+	std::vector<objectBase*> obstacleList;
+	std::vector<objectBase*> renderList;
 
 public:
 	Core();
 	~Core();
 public:
-	void initialize() override;
-	void frame(float _dt) override;
-	void render() override;
-	void release() override;
-	void run() override;
-	void* getMap() override
-	{
-		return map;
-	}
+	void initialize();
+	void frame(float _dt);
+	void render();
+	void release();
+	void run();
 };
 
-template <class Shape, class ObjectDimension>
-Core<Shape, ObjectDimension>::Core()
+Core::Core()
 {
 
 }
 
-template <class Shape, class ObjectDimension>
-Core<Shape, ObjectDimension>::~Core()
+Core::~Core()
 {
 	release();
 }
 
-template <class Shape, class ObjectDimension>
-void Core<Shape, ObjectDimension>::initialize()
+void Core::initialize()
 {
 	srand(static_cast<unsigned int>(time(NULL)));
 
@@ -73,9 +58,16 @@ void Core<Shape, ObjectDimension>::initialize()
 		return;
 	}
 
+	if (user == nullptr)
+	{
+		user = map->newPlayer();
+		user->Random();
+		user->name = "Player";
+	}
+
 	for (int i = 0; i < 5; i++)
 	{
-		ObjectDimension* obj = map->newNPC();
+		objectBase* obj = map->newNPC();
 		obj->Random();
 		obj->name = "NPC_" + std::to_string(i + 1);
 		map->addObject(obj);
@@ -84,7 +76,7 @@ void Core<Shape, ObjectDimension>::initialize()
 
 	for (int i = 0; i < 20; i++)
 	{
-		ObjectDimension* obj = map->newObstacle();
+		objectBase* obj = map->newObstacle();
 		obj->Random();
 		obj->name = "Obj" + std::to_string(i + 1);
 		map->addObject(obj);
@@ -92,15 +84,13 @@ void Core<Shape, ObjectDimension>::initialize()
 	}
 }
 
-template <class Shape, class ObjectDimension>
-void createMap()
+void Core::frame(float _dt)
 {
+	if (map == nullptr)
+	{
+		return;
+	}
 
-}
-
-template <class Shape, class ObjectDimension>
-void Core<Shape, ObjectDimension>::frame(float _dt)
-{
 	map->updateDynamicObject();
 
 	for (auto it : NPCList)
@@ -109,14 +99,17 @@ void Core<Shape, ObjectDimension>::frame(float _dt)
 		it->frame(_dt);
 	}
 
-	map->checkBorder(user->getObject());
-	user->frame(_dt);
+	map->checkBorder(user);
 
-	map->Collision(user->getObject(), &renderList);
+	if (user != nullptr)
+	{
+		user->frame(_dt);
+	}
+
+	map->Collision(user, &renderList);
 }
 
-template <class Shape, class ObjectDimension>
-void Core<Shape, ObjectDimension>::render()
+void Core::render()
 {
 	/*std::cout << "Player3D - ";
 	std::cout << "Pos[x]: " << user->box.pos.x << ", ";
@@ -140,7 +133,11 @@ void Core<Shape, ObjectDimension>::render()
 		}
 	}*/
 
-	user->getObject()->render();
+	if (user != nullptr)
+	{
+		user->render();
+	}
+	
 	if (!renderList.empty())
 	{
 		for (auto it : renderList)
@@ -150,8 +147,7 @@ void Core<Shape, ObjectDimension>::render()
 	}
 }
 
-template <class Shape, class ObjectDimension>
-void Core<Shape, ObjectDimension>::release()
+void Core::release()
 {
 	/*if (worldMap != nullptr)
 	{
@@ -175,8 +171,7 @@ void Core<Shape, ObjectDimension>::release()
 	}*/
 }
 
-template <class Shape, class ObjectDimension>
-void Core<Shape, ObjectDimension>::run()
+void Core::run()
 {
 	initialize();
 	float delay = 100.0f;
