@@ -4,37 +4,73 @@ actor User
 User->+Engine : getCore()
 Engine->+Core : create
 Core->+SpaceDivision : create
-SpaceDivision-->-Core : void
+
+alt Quad Tree
+    SpaceDivision->+QuadTree : new
+    QuadTree->-SpaceDivision : return QuadTree
+else Octree
+    SpaceDivision->+Octree : new
+    Octree->-SpaceDivision : return Octree
+end
+
+SpaceDivision->-Core : return map
 Core-->-Engine : void 
 Engine->-User : return Core
 
 
-User->Core : run()
+User->+Core : run()
 
-Core->Core : initialize()
-Core->+SpaceDivision : new Object
+Core->+SpaceDivision  : new Object
+
+alt Quad Tree
+    SpaceDivision->+QuadTree : new Object
+    QuadTree->Object2D : new
+    Object2D->QuadTree : return this
+    QuadTree->-SpaceDivision : return 2D-Object 
+else Octree
+    SpaceDivision->+Octree : new Object
+    Octree->Object3D : new
+    Object3D->Octree : return this
+    Octree->-SpaceDivision : return 3D-Object
+end
+
 SpaceDivision->-Core : return Object
+
 
 loop while(t < 60)	
 	
-Core->+Core : frame()
-Core->+SpaceDivision : updateDynamicObject()
+Core->+SpaceDivision : updateObject()
 SpaceDivision-->-Core : void
 
-Core->SpaceDivision : checkBorder()
-SpaceDivision->Object : frame()
-Object-->SpaceDivision : void
-SpaceDivision-->Core : void
+Core->+SpaceDivision : checkBorder()
 
-Core->SpaceDivision : Collision()
+
+alt Quad Tree
+    SpaceDivision->+QuadTree : checkBorder()
+    QuadTree->-SpaceDivision : return 2D-Object 
+else Octree
+    SpaceDivision->+Octree : checkBorder()
+    Octree->-SpaceDivision : return 3D-Object
+end
+
+
+SpaceDivision->+Object : frame()
+
+Object-->-SpaceDivision : void
+
+SpaceDivision-->-Core : void
+
+Core->+SpaceDivision : Collision()
 SpaceDivision->-Core : return renderList
 
-Core->Object : render()
-Object->UI : display
-UI-->Object : void
+Core->+Object : render()
 Object-->-Core: void
 
 End
 
-Core->Core : release()
 Core-->-User : void 
+
+
+
+
+
