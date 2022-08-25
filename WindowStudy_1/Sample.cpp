@@ -4,7 +4,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
 {
     //WindowUI ui;
     TestUI ui;
-    ui.createWindow(hInstance, L"Test Name", 1024, 768);
+    ui.createWindow(hInstance, L"TestName", 1024, 768);
     ui.run();
    
     return 1;

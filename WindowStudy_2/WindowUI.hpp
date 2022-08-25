@@ -1,16 +1,12 @@
 #pragma once
 #include <windows.h>
-#include <gdiplus.h>
-
-#pragma comment (lib, "Gdiplus.lib")
 
 class WindowUI
 {
 public:
 	HINSTANCE	hInstance;
 	HWND		hWnd;
-	Gdiplus::GdiplusStartupInput gdiplusStartupInput;
-	ULONG_PTR	gdiplusToken;
+	WNDCLASSEXW wcex;
 	
 public:
 	BOOL initInstance(const WCHAR* _title, UINT _width, UINT _height);
@@ -47,7 +43,7 @@ BOOL WindowUI::initInstance(const WCHAR* _title, UINT _width, UINT _height)
 	UINT x = (monitorWidth - clientWidth) * 0.5f;
 	UINT y = (monitorHeight - clientHeight) * 0.5f;
 
-	hWnd = CreateWindowExW(0, L"WindowUI", _title, WS_OVERLAPPEDWINDOW, x, y, clientWidth, clientHeight, nullptr, nullptr, hInstance, nullptr);
+	hWnd = CreateWindowExW(0, wcex.lpszClassName, _title, WS_OVERLAPPEDWINDOW, x, y, clientWidth, clientHeight, nullptr, nullptr, hInstance, nullptr);
 
 	if (!hWnd)
 	{
@@ -64,15 +60,18 @@ ATOM WindowUI::MyRegisterClass()
 {
 	// Wany
 	// 운영체제에게 해당 윈도우를 생성 등록 요청하는 함수.
-	// WND: window, Class, EX: extension, W: wide(unicode)
-	WNDCLASSEXW wcex;
+	// WNDCLASSEXW ==	WND: window, Class, EX: extension, W: wide(unicode)
+	// lpfnWndProc ==	lp: pointer, fn: function, Wnd: window, Proc: procedure, 규격 정해져있음. 가장 중요.
+	//					윈도우 메세지를 받을 함수를 지정.
+	//					전역 함수나 Static만 입력 가능.
+	// lpszClassName == 없으면 생성 실패. hWnd = CreateWindow 할 때의 이름과 같아야 함. 
+	//					Create 할 Window의 이름을 미리 등록해야 생성 가능함.
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	ZeroMemory(&wcex, sizeof(WNDCLASSEXW));
 	wcex.cbSize = sizeof(WNDCLASSEX);
 	wcex.style = CS_HREDRAW | CS_VREDRAW;
-	// Wany
-	// lp: pointer, fn: function, Wnd: window, Proc: procedure, 규격 정해져있음. 가장 중요
-	// 윈도우 메세지를 받을 함수를 지정.
-	wcex.lpfnWndProc = WndProc; // 전역 함수나 Static만 입력 가능.
+	wcex.lpfnWndProc = WndProc;
 	//wcex.cbClsExtra = 0;
 	//wcex.cbWndExtra = 0;
 	wcex.hInstance = hInstance;
@@ -80,7 +79,7 @@ ATOM WindowUI::MyRegisterClass()
 	wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
 	wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 	//wcex.lpszMenuName = MAKEINTRESOURCEW(IDC_WINDOWSTUDY0);
-	wcex.lpszClassName = L"WindowUI"; // 없으면 생성 실패... hWnd = CreateWindow 할 때의 이름과 같아야 함.
+	wcex.lpszClassName = L"WindowUI";
 	//wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
 
 	return RegisterClassExW(&wcex);
@@ -89,20 +88,13 @@ ATOM WindowUI::MyRegisterClass()
 bool WindowUI::createWindow(HINSTANCE _hInstance, const WCHAR* _title, UINT _width, UINT _height)
 {
 	hInstance = _hInstance;
-	Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+
 	WORD rst = MyRegisterClass();
 	if (!initInstance(_title, _width, _height))
 	{
 		return false;
 	}
 	return true;
-}
-
-void WindowUI::OnPaint(HDC _hdc)
-{
-	Gdiplus::Graphics graphics(_hdc);
-	Gdiplus::Pen pen(Gdiplus::Color(255, 0, 0, 255));
-	graphics.DrawLine(&pen, 0, 0, 200, 100);
 }
 
 bool WindowUI::run()
@@ -157,14 +149,14 @@ LRESULT WindowUI::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	//	}
 	//}
 	//break;
-	/*case WM_PAINT:
+	case WM_PAINT:
 	{
 		PAINTSTRUCT ps;
 		HDC hdc = BeginPaint(hWnd, &ps);
-		
+		// TODO: 여기에 hdc를 사용하는 그리기 코드를 추가합니다...
 		EndPaint(hWnd, &ps);
 	}
-	break;*/
+	break;
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;
@@ -190,36 +182,6 @@ bool WindowUI::render()
 }
 
 bool WindowUI::release()
-{
-	Gdiplus::GdiplusShutdown(gdiplusToken);
-	return true;
-}
-
-
-
-
-class TestUI : public WindowUI
-{
-public:
-	bool initialize() override;
-	bool frame() override;
-	bool render() override;
-	bool release() override;
-};
-
-bool TestUI::initialize()
-{
-	return true;
-}
-bool TestUI::frame()
-{
-	return true;
-}
-bool TestUI::render()
-{
-	return true;
-}
-bool TestUI::release()
 {
 	return true;
 }
