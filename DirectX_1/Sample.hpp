@@ -1,5 +1,6 @@
 #pragma once
 #include "DXDevice.hpp"
+#include "Define.hpp"
 
 class Sample : public DXDevice
 {

@@ -1,8 +1,6 @@
 #pragma once
 #include "WindowUI.hpp"
-#include <d3d11.h>
-#pragma comment(lib, "d3d11.lib")
-#pragma comment(lib, "dxgi.lib")
+#include "Define.hpp"
 
 
 class DXDevice : public WindowUI
@@ -12,9 +10,10 @@ class DXDevice : public WindowUI
 	// 리소스의 생성과 관련된 작업에 사용. 디바이스 장치 혹은 디바이스 객체라 부름
 	ID3D11Device* m_pd3dDevice = nullptr;
 
-	// 생성된 리소스들을 사용하여 랜더링 처리 및 제어
+	// 생성된 리소스들을 사용하여 랜더링 처리 및 제어, 즉시 랜더링
 	ID3D11DeviceContext* m_pImmediateContext = nullptr;
 
+	// Swap Chain의 생성과 관련된 작업에 사용.
 	IDXGIFactory* m_pGIFactory = nullptr;
 
 	// 전면 버퍼 및 후면 버퍼들을 생성 및 제어.
@@ -108,26 +107,32 @@ bool DXDevice::release()
 	if (m_pd3dDevice != nullptr)
 	{
 		m_pd3dDevice->Release();
+		m_pd3dDevice = nullptr;
 	}
 
 	if (m_pImmediateContext != nullptr)
 	{
+		m_pImmediateContext->ClearState();
 		m_pImmediateContext->Release();
+		m_pImmediateContext = nullptr;
 	}
 
 	if (m_pGIFactory != nullptr)
 	{
 		m_pGIFactory->Release();
+		m_pGIFactory = nullptr;
 	}
 
 	if (m_pSwapChain != nullptr)
 	{
 		m_pSwapChain->Release();
+		m_pSwapChain = nullptr;
 	}
 
 	if (m_pRTV != nullptr)
 	{
 		m_pRTV->Release();
+		m_pRTV = nullptr;
 	}
 	return true;
 }
@@ -141,7 +146,6 @@ HRESULT DXDevice::createDevice()
 	//////////////////////////////////////////////////////////////////////
 	//
 	// HRESULT rst; // Dx의 모든 반환값은 HRESULT 사용
-	// D3D_FEATURE_LEVEL* pFeatureLevel = nullptr; // 안받아도 됨.
 	// IDXGIAdapter* pAdapter = nullptr; // 그래픽 카드, nullptr을 넣으면 현재 사용 중인 그래픽 카드 사용 하겠다
 	// D3D_DRIVER_TYPE DriverType = D3D_DRIVER_TYPE_HARDWARE; // 기본은 D3D_DRIVER_TYPE_HARDWARE (GPU 처리)를 쓰는데 그래픽 카드가 성능이 좋지 않거나 기능을 지원하지 않으면, Software(CPU 처리) 등을 사용
 	// HMODULE Software = NULL; // DirverType과 마찬가지로 CPU 처리를 위한 것. NULL은 사용 안함.
@@ -150,6 +154,7 @@ HRESULT DXDevice::createDevice()
 	// UINT FeatureLevels = 2; // pFeatureLevels 인자 갯수
 	// UINT SDKVersion = D3D11_SDK_VERSION; // 무조건 최신으로 넣을 것
 	// ID3D11Device** ppDevice;
+	// D3D_FEATURE_LEVEL* pFeatureLevel = nullptr; // 안받아도 됨.
 	// rst = D3D11CreateDevice(pAdapter, DriverType, Software, Flags, pFeatureLevels, FeatureLevels, SDKVersion, &m_pd3dDevice, pFeatureLevel, &m_pImmediateContext); // 디바이스 생성
 
 	// 축약 버전
@@ -186,6 +191,7 @@ HRESULT DXDevice::createSwapChain()
 	// DXGI_SWAP_CHAIN_DESC* pDesc,
 	// IDXGISwapChain** ppSwapChain
 	// 후면버퍼(백버퍼) 생성 <-> 전면 버퍼
+
 	DXGI_SWAP_CHAIN_DESC Desc;
 	// DXGI_SWAP_CHAIN_DESC 구조체
 	// DXGI_MODE_DESC BufferDesc;
@@ -206,11 +212,13 @@ HRESULT DXDevice::createSwapChain()
 	Desc.BufferDesc.Width = clientRect.right; // 클라이언트 Width
 	Desc.BufferDesc.Height = clientRect.bottom; // 클라이언트 Height
 	Desc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // 32비트 RGBA 사용
-	Desc.BufferDesc.RefreshRate.Numerator = 60; // 모니터 주사율, Frame Per Second, 게임 내의 FPS와는 다르게 생각 
-	Desc.BufferDesc.RefreshRate.Denominator = 1; // 분모 60 / 1 == 60 frame
+	Desc.BufferDesc.RefreshRate.Numerator = 60; // 모니터 주사율
+	Desc.BufferDesc.RefreshRate.Denominator = 1; // 분모, Numerator / Denominator == 60 / 1 == 60 Hz
 
 	// DXGI_USAGE BufferUsage;
-	Desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT; // 위의 버퍼가 랜더링 대상이라는 것을 지정.
+	// 위의 버퍼가 랜더링 대상이라는 것을 지정. 
+	// 스왑체인의 버퍼를 생성하려면 반드시 DXGI_USAGE_RENDER_TARGET_OUTPUT 이어야 함.
+	Desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT; 
 
 	// HWND OutputWindow;
 	Desc.OutputWindow = hWnd; // 해당 윈도우에 출력
@@ -228,7 +236,10 @@ HRESULT DXDevice::createSwapChain()
 	Desc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
 	// DXGI_SWAP_EFFECT SwapEffect;
-	// ??
+	// 페이지 플립핑 이후 백 버퍼를 삭제할지 보존할지 결정하는 클래그
+	// DXGI_SWAP_EFFECT_DISCARD = 0 : Present 호출 시 백 버퍼 내용 삭제
+	// DXGI_SWAP_EFFECT_SEQUENTIAL = 1 : Present 호출 시 백 버퍼 내용 보존
+	// 플래그는 멀티 샘플링과 함께 사용 불가!
 
 	return m_pGIFactory->CreateSwapChain(m_pd3dDevice, &Desc, &m_pSwapChain);;
 

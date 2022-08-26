@@ -65,7 +65,7 @@ void Core::initialize()
 		user->name = "Player";
 	}
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		objectBase* obj = map->newNPC();
 		obj->Random();
@@ -74,7 +74,7 @@ void Core::initialize()
 		NPCList.push_back(obj);
 	}
 
-	for (int i = 0; i < 20; i++)
+	for (int i = 0; i < 50; i++)
 	{
 		objectBase* obj = map->newObstacle();
 		obj->Random();
@@ -149,10 +149,10 @@ void Core::render()
 
 void Core::release()
 {
-	/*if (worldMap != nullptr)
+	if (map != nullptr)
 	{
-		delete worldMap;
-		worldMap = nullptr;
+		delete map;
+		map = nullptr;
 	}
 
 	if (!NPCList.empty())
@@ -168,7 +168,7 @@ void Core::release()
 	if (!renderList.empty())
 	{
 		renderList.clear();
-	}*/
+	}
 }
 
 void Core::run()

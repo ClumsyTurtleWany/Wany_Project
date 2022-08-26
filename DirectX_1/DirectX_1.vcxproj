@@ -143,7 +143,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Define.hpp" />
     <ClInclude Include="DXDevice.hpp" />
+    <ClInclude Include="DXWinUI.hpp" />
     <ClInclude Include="Sample.hpp" />
     <ClInclude Include="WindowUI.hpp" />
   </ItemGroup>
