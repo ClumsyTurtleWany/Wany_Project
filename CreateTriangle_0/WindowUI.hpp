@@ -8,7 +8,7 @@ public:
 	HWND		hWnd;
 
 	RECT clientRect;
-
+	
 public:
 	BOOL initInstance(const WCHAR* _title, UINT _width, UINT _height);
 	ATOM MyRegisterClass();
@@ -21,21 +21,21 @@ public:
 	static LRESULT WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 public:
-	virtual bool initialize();
-	virtual bool frame();
-	virtual bool render();
-	virtual bool release();
-
+	virtual bool CoreInitialize();
+	virtual bool CoreFrame();
+	virtual bool CoreRender();
+	virtual bool CoreRelease();
+	
 };
 
 BOOL WindowUI::initInstance(const WCHAR* _title, UINT _width, UINT _height)
 {
-	// Wany
-	// 운영체제에 등록한(RegisterWindow) 윈도우를 생성한다.
+   // Wany
+   // 운영체제에 등록한(RegisterWindow) 윈도우를 생성한다.
 	DWORD csStyle = WS_OVERLAPPEDWINDOW;
-	RECT rc = { 0, 0, _width, _height };
+	RECT rc = {0, 0, _width, _height };
 	AdjustWindowRect(&rc, csStyle, FALSE);
-
+	
 	UINT clientWidth = rc.right - rc.left;
 	UINT clientHeight = rc.bottom - rc.top;
 	UINT monitorWidth = GetSystemMetrics(SM_CXFULLSCREEN);
@@ -97,7 +97,7 @@ bool WindowUI::createWindow(HINSTANCE _hInstance, const WCHAR* _title, UINT _wid
 
 bool WindowUI::run()
 {
-	if (initialize())
+	if (CoreInitialize())
 	{
 		MSG msg;
 		ZeroMemory(&msg, sizeof(MSG));
@@ -110,11 +110,11 @@ bool WindowUI::run()
 			}
 			else
 			{
-				frame();
-				render();
+				CoreFrame();
+				CoreRender();
 			}
 		}
-		release();
+		CoreRelease();
 
 		return true;
 	}
@@ -128,38 +128,38 @@ LRESULT WindowUI::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
 	{
-		//case WM_COMMAND:
-		//{
-		//	int wmId = LOWORD(wParam);
-		//	// 메뉴 선택을 구문 분석합니다:
-		//	switch (wmId)
-		//	{
-		//	case IDM_ABOUT:
-		//		DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
-		//		break;
-		//	case IDM_EXIT:
-		//		DestroyWindow(hWnd);
-		//		break;
-		//	default:
-		//		// Wany
-		//		// DefWindowProc: 메세지 직접 처리 불가, 대신 처리 해 주는 함수.
-		//		return DefWindowProc(hWnd, message, wParam, lParam);
-		//	}
-		//}
-		//break;
-		/*case WM_PAINT:
-		{
-			PAINTSTRUCT ps;
-			HDC hdc = BeginPaint(hWnd, &ps);
-
-			EndPaint(hWnd, &ps);
-		}
-		break;*/
-	case WM_SIZE:
+	//case WM_COMMAND:
+	//{
+	//	int wmId = LOWORD(wParam);
+	//	// 메뉴 선택을 구문 분석합니다:
+	//	switch (wmId)
+	//	{
+	//	case IDM_ABOUT:
+	//		DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
+	//		break;
+	//	case IDM_EXIT:
+	//		DestroyWindow(hWnd);
+	//		break;
+	//	default:
+	//		// Wany
+	//		// DefWindowProc: 메세지 직접 처리 불가, 대신 처리 해 주는 함수.
+	//		return DefWindowProc(hWnd, message, wParam, lParam);
+	//	}
+	//}
+	//break;
+	/*case WM_PAINT:
 	{
-
+		PAINTSTRUCT ps;
+		HDC hdc = BeginPaint(hWnd, &ps);
+		
+		EndPaint(hWnd, &ps);
 	}
-	break;
+	break;*/
+	case WM_SIZE:
+		{
+			
+		}
+		break;
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;
@@ -169,22 +169,22 @@ LRESULT WindowUI::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-bool WindowUI::initialize()
+bool WindowUI::CoreInitialize()
 {
 	return true;
 }
 
-bool WindowUI::frame()
+bool WindowUI::CoreFrame()
 {
 	return true;
 }
 
-bool WindowUI::render()
+bool WindowUI::CoreRender()
 {
 	return true;
 }
 
-bool WindowUI::release()
+bool WindowUI::CoreRelease()
 {
 	return true;
 }

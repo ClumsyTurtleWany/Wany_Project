@@ -15,6 +15,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Define.hpp">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
     <ClInclude Include="DXDevice.hpp">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -24,7 +27,7 @@
     <ClInclude Include="WindowUI.hpp">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Define.hpp">
+    <ClInclude Include="Vertex.hpp">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -32,5 +35,9 @@
     <ClCompile Include="Sample.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="VertexShader.txt" />
+    <Text Include="PixelShader.txt" />
   </ItemGroup>
 </Project>
