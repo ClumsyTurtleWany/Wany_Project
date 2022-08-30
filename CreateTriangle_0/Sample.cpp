@@ -1,4 +1,4 @@
-#include "Sample.hpp"
+#include "SampleShader.hpp"
 
 
 int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)

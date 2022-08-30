@@ -1,10 +1,17 @@
 #pragma once
-#include "BaseObject.hpp"
+#include "DXDevice.hpp"
 #include "Define.hpp"
 
-class Sample : public DXDevice
+class SampleShader : public DXDevice
 {
-	BaseObject* baseObject = nullptr;
+	ID3D11Buffer* m_pVertexBuffer;
+	ID3D11InputLayout* m_pVertexLayout;
+
+	ID3D11VertexShader* m_pVertexShader;
+	ID3D11PixelShader* m_pPixelShader;
+
+	ID3DBlob* m_pVertexShaderCode = nullptr;
+	ID3DBlob* m_pPixelShaderCode = nullptr;
 
 public:
 	bool initialize();
@@ -19,7 +26,7 @@ public:
 	HRESULT CreatePixelSharder();
 };
 
-bool Sample::initialize()
+bool SampleShader::initialize()
 {
 	if (FAILED(CreateVertexBuffer()))
 	{
@@ -40,20 +47,20 @@ bool Sample::initialize()
 	{
 		return false;
 	}
-	
+
 	return true;
 }
 
-bool Sample::frame()
+bool SampleShader::frame()
 {
 	return true;
 }
 
-bool Sample::render()
+bool SampleShader::render()
 {
 	// 삼각형 랜더링
 	// 1) Input-Assember Stage
-	
+
 	// IASetVertexBuffers() Param
 	// UINT StartSlot, : 레지스터리
 	// UINT NumBuffers, : 버퍼 갯수
@@ -92,7 +99,7 @@ bool Sample::render()
 	return true;
 }
 
-bool Sample::release()
+bool SampleShader::release()
 {
 	if (m_pVertexBuffer != nullptr)
 	{
@@ -133,7 +140,7 @@ bool Sample::release()
 	return true;
 }
 
-HRESULT Sample::CreateVertexBuffer()
+HRESULT SampleShader::CreateVertexBuffer()
 {
 	HRESULT result;
 	// NDC 좌표계 공간
@@ -179,10 +186,10 @@ HRESULT Sample::CreateVertexBuffer()
 
 }
 
-HRESULT Sample::CreateVertexLayout()
+HRESULT SampleShader::CreateVertexLayout()
 {
 	HRESULT result;
-	
+
 	// CreateInputLayout() Param
 	// D3D11_INPUT_ELEMENT_DESC* pInputElementDescs
 	// UINT NumElements
@@ -217,7 +224,7 @@ HRESULT Sample::CreateVertexLayout()
 	return result;
 }
 
-HRESULT Sample::CreateVertexSharder()
+HRESULT SampleShader::CreateVertexSharder()
 {
 	// 정점 레이아웃은 정점 쉐이더와 밀접한 관련이 있다.
 	// 정점 레이아웃 생성 시 사전에 정점 쉐이더 생성이 필요함. VertexShader.txt 참고.
@@ -262,7 +269,7 @@ HRESULT Sample::CreateVertexSharder()
 
 }
 
-HRESULT Sample::CreatePixelSharder()
+HRESULT SampleShader::CreatePixelSharder()
 {
 	// Pixel Shader Create
 	HRESULT result;

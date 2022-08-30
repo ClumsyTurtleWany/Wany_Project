@@ -1,10 +1,36 @@
 #pragma once
-#include "BaseObject.hpp"
+#include "DXDevice.hpp"
 #include "Define.hpp"
 
-class Sample : public DXDevice
+class DXShader
 {
-	BaseObject* baseObject = nullptr;
+private:
+	// Device
+	ID3D11Device* m_pd3dDevice = nullptr;
+	ID3D11DeviceContext* m_pImmediateContext = nullptr;
+
+private:
+	// Shader
+	ID3D11Buffer* m_pVertexBuffer;
+	ID3D11InputLayout* m_pVertexLayout;
+
+	ID3D11VertexShader* m_pVertexShader;
+	ID3D11PixelShader* m_pPixelShader;
+
+	ID3DBlob* m_pVertexShaderCode = nullptr;
+	ID3DBlob* m_pPixelShaderCode = nullptr;
+
+private:
+	std::vector<Vertex> m_VertexList;
+
+private:
+	bool isCreated = false;
+
+private:
+	HRESULT CreateVertexBuffer();
+	HRESULT CreateVertexLayout();
+	HRESULT CreateVertexSharder();
+	HRESULT CreatePixelSharder();
 
 public:
 	bool initialize();
@@ -13,14 +39,34 @@ public:
 	bool release();
 
 public:
-	HRESULT CreateVertexBuffer();
-	HRESULT CreateVertexLayout();
-	HRESULT CreateVertexSharder();
-	HRESULT CreatePixelSharder();
+	void setDevice(ID3D11Device* _device, ID3D11DeviceContext* _context);
+	void setVertexList(const std::vector<Vertex>& _target)
+	{
+		if (!_target.empty())
+		{
+			m_VertexList.clear();
+			m_VertexList.assign(_target.begin(), _target.end());
+		}
+	}
 };
 
-bool Sample::initialize()
+bool DXShader::initialize()
 {
+	if (isCreated)
+	{
+		return false;
+	}
+
+	if (m_pd3dDevice == nullptr)
+	{
+		return false;
+	}
+
+	if (m_pImmediateContext == nullptr)
+	{
+		return false;
+	}
+
 	if (FAILED(CreateVertexBuffer()))
 	{
 		return false;
@@ -40,20 +86,35 @@ bool Sample::initialize()
 	{
 		return false;
 	}
-	
+
+	isCreated = true;
+
 	return true;
 }
 
-bool Sample::frame()
+bool DXShader::frame()
 {
+	if (!isCreated)
+	{
+		return false;
+	}
+
 	return true;
 }
 
-bool Sample::render()
+bool DXShader::render()
 {
+	if (!isCreated)
+	{
+		return false;
+	}
+
+	// GPU Update
+	m_pImmediateContext->UpdateSubresource(m_pVertexBuffer, 0, NULL, &m_VertexList.at(0), 0, 0);
+
 	// 삼각형 랜더링
 	// 1) Input-Assember Stage
-	
+
 	// IASetVertexBuffers() Param
 	// UINT StartSlot, : 레지스터리
 	// UINT NumBuffers, : 버퍼 갯수
@@ -87,13 +148,18 @@ bool Sample::render()
 
 	// Draw 명령이 호출되면 위의 파이프라인 순서대로 타고 내려옴. 셋팅 할 때의 순서는 상관 없으나
 	// 셋팅이 안되있으면 문제가 생김.
-	m_pImmediateContext->Draw(6, 0);
+	m_pImmediateContext->Draw(m_VertexList.size(), 0);
 
 	return true;
 }
 
-bool Sample::release()
+bool DXShader::release()
 {
+	if (!isCreated)
+	{
+		return false;
+	}
+
 	if (m_pVertexBuffer != nullptr)
 	{
 		m_pVertexBuffer->Release();
@@ -133,32 +199,35 @@ bool Sample::release()
 	return true;
 }
 
-HRESULT Sample::CreateVertexBuffer()
+HRESULT DXShader::CreateVertexBuffer()
 {
 	HRESULT result;
 	// NDC 좌표계 공간
 	// x: -1 ~ +1
 	// y: -1 ~ +1
 	// z: 0 ~ +1
-	Vertex vertices[] =
-	{
-		// 반드시 시계 방향(앞면) 으로 구성해야 한다.
-		// 시계 반대 방향(뒷면)은 랜더링 안함.
-		// Position				// Color
-		-0.5f, 0.5f, 0.0f,		0.0f, 0.0f, 1.0f, 0.0f, // v0
-		+0.5f, 0.0f, 0.0f,		0.0f, 1.0f, 0.0f, 0.0f, // v1
-		-0.5f, -0.5f, 0.0f,		1.0f, 0.0f, 0.0f, 0.0f, // v2
+	
+	m_VertexList.assign(6, Vertex());
+	m_VertexList[0].pos = { -0.25f, +0.25f, 0.0f }; // p1-LT
+	m_VertexList[1].pos = { +0.25f, +0.25f, 0.0f }; // p2-RT
+	m_VertexList[2].pos = { -0.25f, -0.25f, 0.0f }; // p3-LB
+	m_VertexList[3].pos = { -0.25f, -0.25f, 0.0f }; // p4-LB
+	m_VertexList[4].pos = { +0.25f, +0.25f, 0.0f }; // p5-RT
+	m_VertexList[5].pos = { +0.25f, -0.25f, 0.0f }; // p6-RB
 
-		-0.5f, -0.0f, 0.0f,		1.0f, 0.0f, 0.0f, 0.0f, // v2
-		+0.5f, 0.5f, 0.0f,		0.0f, 1.0f, 0.0f, 0.0f, // v1
-		+0.5f, -0.5f, 0.0f,		1.0f, 0.0f, 0.0f, 0.0f, // v4		
-	};
+	m_VertexList[0].color = { 1.0f, 0.0f, 0.0f, 0.0f }; // p1-LT
+	m_VertexList[1].color = { 1.0f, 0.0f, 0.0f, 0.0f }; // p2-RT
+	m_VertexList[2].color = { 1.0f, 0.0f, 0.0f, 0.0f }; // p3-LB
+	m_VertexList[3].color = { 1.0f, 0.0f, 0.0f, 0.0f }; // p4-LB
+	m_VertexList[4].color = { 1.0f, 0.0f, 0.0f, 0.0f }; // p5-RT
+	m_VertexList[5].color = { 1.0f, 0.0f, 0.0f, 0.0f }; // p6-RB
+
 
 	// CreateBuffer() Param
 	// D3D11_BUFFER_DESC* pDesc,
 	// D3D11_SUBRESOURCE_DATA* pInitialData,
 	// ID3D11Buffer** ppBuffer
-	UINT NumVertex = sizeof(vertices) / sizeof(vertices[0]);
+	UINT NumVertex = m_VertexList.size();
 	D3D11_BUFFER_DESC desc;
 	ZeroMemory(&desc, sizeof(desc));
 	desc.ByteWidth = sizeof(Vertex) * NumVertex; // 바이트 용량
@@ -170,7 +239,7 @@ HRESULT Sample::CreateVertexBuffer()
 
 	D3D11_SUBRESOURCE_DATA initialData;
 	ZeroMemory(&initialData, sizeof(initialData));
-	initialData.pSysMem = vertices;
+	initialData.pSysMem = &m_VertexList.at(0);
 
 	return m_pd3dDevice->CreateBuffer(
 		&desc, // 버퍼 할당 
@@ -179,10 +248,10 @@ HRESULT Sample::CreateVertexBuffer()
 
 }
 
-HRESULT Sample::CreateVertexLayout()
+HRESULT DXShader::CreateVertexLayout()
 {
 	HRESULT result;
-	
+
 	// CreateInputLayout() Param
 	// D3D11_INPUT_ELEMENT_DESC* pInputElementDescs
 	// UINT NumElements
@@ -217,7 +286,7 @@ HRESULT Sample::CreateVertexLayout()
 	return result;
 }
 
-HRESULT Sample::CreateVertexSharder()
+HRESULT DXShader::CreateVertexSharder()
 {
 	// 정점 레이아웃은 정점 쉐이더와 밀접한 관련이 있다.
 	// 정점 레이아웃 생성 시 사전에 정점 쉐이더 생성이 필요함. VertexShader.txt 참고.
@@ -262,7 +331,7 @@ HRESULT Sample::CreateVertexSharder()
 
 }
 
-HRESULT Sample::CreatePixelSharder()
+HRESULT DXShader::CreatePixelSharder()
 {
 	// Pixel Shader Create
 	HRESULT result;
@@ -292,4 +361,10 @@ HRESULT Sample::CreatePixelSharder()
 	{
 		return result;
 	}
+}
+
+void DXShader::setDevice(ID3D11Device* _device, ID3D11DeviceContext* _context)
+{
+	m_pd3dDevice = _device;
+	m_pImmediateContext = _context;
 }
