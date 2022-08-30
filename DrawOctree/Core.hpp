@@ -75,7 +75,7 @@ void Core::initialize()
 		user->initialize();
 	}
 
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 5; i++)
 	{
 		objectBase* obj = map->newNPC();
 		obj->Random();
@@ -86,7 +86,7 @@ void Core::initialize()
 		NPCList.push_back(obj);
 	}
 
-	for (int i = 0; i < 20; i++)
+	for (int i = 0; i < 0; i++)
 	{
 		objectBase* obj = map->newObstacle();
 		obj->Random();
@@ -108,6 +108,12 @@ void Core::frame(float _dt)
 	map->updateDynamicObject();
 
 	for (auto it : NPCList)
+	{
+		map->checkBorder(it);
+		it->frame(_dt);
+	}
+
+	for (auto it : obstacleList)
 	{
 		map->checkBorder(it);
 		it->frame(_dt);
