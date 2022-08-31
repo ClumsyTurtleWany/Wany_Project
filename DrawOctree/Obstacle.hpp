@@ -15,7 +15,6 @@ public:
 
 	bool frame(float _dt) 
 	{ 
-		this->updateShader();
 		return true; 
 	};
 };

@@ -28,8 +28,6 @@ public:
 
 		this->shape.offset(this->velocity.x, this->velocity.y);
 
-		this->updateShader();
-
 		return true;
 	}
 };

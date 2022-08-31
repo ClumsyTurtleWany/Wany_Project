@@ -117,6 +117,7 @@ public:
 	virtual bool frame(float _dt) { return true; };
 	bool render() override
 	{
+		updateShader();
 		shader.render();
 		std::cout << "[ " << this->name << " ] - ";
 		std::cout << "L: " << this->shape.left() << ", ";

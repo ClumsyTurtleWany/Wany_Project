@@ -86,7 +86,7 @@ void Core::initialize()
 		NPCList.push_back(obj);
 	}
 
-	for (int i = 0; i < 0; i++)
+	for (int i = 0; i < 5; i++)
 	{
 		objectBase* obj = map->newObstacle();
 		obj->Random();
@@ -109,22 +109,21 @@ void Core::frame(float _dt)
 
 	for (auto it : NPCList)
 	{
-		map->checkBorder(it);
 		it->frame(_dt);
+		map->checkBorder(it);
 	}
 
 	for (auto it : obstacleList)
 	{
-		map->checkBorder(it);
 		it->frame(_dt);
+		map->checkBorder(it);
 	}
-
-	map->checkBorder(user);
 
 	if (user != nullptr)
 	{
 		user->frame(_dt);
 	}
+	map->checkBorder(user);
 
 	map->Collision(user, &renderList);
 }
