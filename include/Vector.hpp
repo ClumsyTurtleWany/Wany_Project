@@ -42,7 +42,13 @@ public:
 		return Vector2D_<T>(x / _val, y / _val);
 	}
 
-	void operator =(const Point_<T>& _v)
+	/*void operator =(const Point_<T>& _v)
+	{
+		x += _v.x;
+		y += _v.y;
+	}*/
+
+	void operator =(const Vector2D_<T>& _v)
 	{
 		x += _v.x;
 		y += _v.y;

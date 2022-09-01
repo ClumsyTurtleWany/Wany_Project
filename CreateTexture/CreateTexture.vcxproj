@@ -169,6 +169,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="PixelShader.txt" />
+    <Text Include="ShapeShader.txt" />
     <Text Include="VertexShader.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

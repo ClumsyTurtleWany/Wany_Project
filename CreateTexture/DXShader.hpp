@@ -21,6 +21,11 @@ private:
 	ID3DBlob* m_pPixelShaderCode = nullptr;
 
 private:
+	// Texture
+	ID3D11ShaderResourceView* m_pTextureView;
+	ID3D11Resource* m_pTexture;
+
+private:
 	std::vector<Vertex> m_VertexList;
 
 private:
@@ -31,6 +36,7 @@ private:
 	HRESULT CreateVertexLayout();
 	HRESULT CreateVertexSharder();
 	HRESULT CreatePixelSharder();
+	HRESULT LoadTexture(std::wstring _filename);
 
 public:
 	bool initialize();
@@ -83,6 +89,11 @@ bool DXShader::initialize()
 	}
 
 	if (FAILED(CreateVertexLayout()))
+	{
+		return false;
+	}
+
+	if (FAILED(LoadTexture(L"../../resource/KGCABK.bmp")))
 	{
 		return false;
 	}
@@ -146,6 +157,9 @@ bool DXShader::render()
 	// 이러한 셋팅도 있는데 디폴트 값으로 이미 들어 있었다.
 	m_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
+	// Texture - Pixel Shader에 Texture 넘김
+	m_pImmediateContext->PSSetShaderResources(0, 1, &m_pTextureView); // 레지스터 0번
+
 	// Draw 명령이 호출되면 위의 파이프라인 순서대로 타고 내려옴. 셋팅 할 때의 순서는 상관 없으나
 	// 셋팅이 안되있으면 문제가 생김.
 	m_pImmediateContext->Draw(m_VertexList.size(), 0);
@@ -196,6 +210,18 @@ bool DXShader::release()
 		m_pPixelShaderCode = nullptr;
 	}
 
+	if (m_pTextureView != nullptr)
+	{
+		m_pTextureView->Release();
+		m_pTextureView = nullptr;
+	}
+
+	if (m_pTexture != nullptr)
+	{
+		m_pTexture->Release();
+		m_pTexture = nullptr;
+	}
+
 	return true;
 }
 
@@ -222,6 +248,12 @@ HRESULT DXShader::CreateVertexBuffer()
 	m_VertexList[4].color = { 1.0f, 0.0f, 0.0f, 0.0f }; // p5-RT
 	m_VertexList[5].color = { 1.0f, 0.0f, 0.0f, 0.0f }; // p6-RB
 
+	m_VertexList[0].texture = { 0.0f, 0.0f }; // p1-LT
+	m_VertexList[1].texture = { 1.0f, 0.0f }; // p2-RT
+	m_VertexList[2].texture = { 0.0f, 1.0f }; // p3-LB
+	m_VertexList[3].texture = { 0.0f, 1.0f }; // p4-LB
+	m_VertexList[4].texture = { 1.0f, 0.0f }; // p5-RT
+	m_VertexList[5].texture = { 1.0f, 1.0f }; // p6-RB
 
 	// CreateBuffer() Param
 	// D3D11_BUFFER_DESC* pDesc,
@@ -273,6 +305,7 @@ HRESULT DXShader::CreateVertexLayout()
 	{
 		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0}, // 12 == float * 3
+		{"TEXTURE", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 28, D3D11_INPUT_PER_VERTEX_DATA, 0} // 28 == float * 28
 	};
 
 	UINT NumElements = sizeof(InputElementDescs) / sizeof(InputElementDescs[0]);
@@ -361,6 +394,22 @@ HRESULT DXShader::CreatePixelSharder()
 	{
 		return result;
 	}
+}
+
+HRESULT DXShader::LoadTexture(std::wstring _filename)
+{
+	// Texture
+	// ID3D11Device* d3dDevice
+	// const wchar_t* fileName
+	// ID3D11Resource** texture
+	// ID3D11ShaderResourceView** textureView
+	HRESULT rst = DirectX::CreateWICTextureFromFile(m_pd3dDevice, L"../../resource/KGCABK.bmp", &m_pTexture, &m_pTextureView);
+	if (FAILED(rst))
+	{
+		return rst;
+	}
+
+	return rst;
 }
 
 void DXShader::setDevice(ID3D11Device* _device, ID3D11DeviceContext* _context)

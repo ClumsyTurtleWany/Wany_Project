@@ -10,10 +10,6 @@ private:
 private:
 	Core gameCore;
 
-	// Texture
-	ID3D11ShaderResourceView* m_pTextureView;
-	ID3D11Resource* m_pTexture;
-
 private:
 	Engine() {};
 	~Engine() {};
@@ -56,17 +52,6 @@ public:
 	{
 		gameCore.setDevice(m_pd3dDevice, m_pImmediateContext);
 		gameCore.initialize();
-
-		// Texture
-		// ID3D11Device* d3dDevice,
-		// const wchar_t* fileName,
-		// ID3D11Resource** texture,
-		// ID3D11ShaderResourceView** textureView,
-		HRESULT rst = DirectX::CreateWICTextureFromFile(m_pd3dDevice, L"../../resource/KGCABK.bmp", &m_pTexture, &m_pTextureView);
-		if (FAILED(rst))
-		{
-			return false;
-		}
 
 		return true;
 	}

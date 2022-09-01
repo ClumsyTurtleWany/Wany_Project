@@ -12,6 +12,7 @@
 #include <d3dcompiler.h> // D3DCompileFromFile
 #pragma comment(lib, "d3dCompiler.lib")
 
+// Direct X -> Texture Tool Kit
 #include "DXTK/WICTextureLoader.h"
 #include "DXTK/DDSTextureLoader.h"
 #pragma comment(lib, "DirectXTK.lib")

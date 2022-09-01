@@ -157,6 +157,14 @@ public:
 		list[3].color = { 0.0f, 1.0f, 0.0f, 0.0f};
 		list[4].color = { 0.0f, 1.0f, 0.0f, 0.0f};
 		list[5].color = { 0.0f, 1.0f, 0.0f, 0.0f};
+
+		list[0].texture = { 0.0f, 0.0f }; // p1-LT
+		list[1].texture = { 1.0f, 0.0f }; // p2-RT
+		list[2].texture = { 0.0f, 1.0f }; // p3-LB
+		list[3].texture = { 0.0f, 1.0f }; // p4-LB
+		list[4].texture = { 1.0f, 0.0f }; // p5-RT
+		list[5].texture = { 1.0f, 1.0f }; // p6-RB
+
 		shader.setVertexList(list);
 	}
 

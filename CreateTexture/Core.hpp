@@ -157,14 +157,14 @@ void Core::render()
 		user->render();
 	}
 	
-	if (!renderList.empty())
+	/*if (!renderList.empty())
 	{
 		for (auto it : renderList)
 		{
 			it->render();
 		}
 		renderList.clear();
-	}
+	}*/
 }
 
 void Core::release()
