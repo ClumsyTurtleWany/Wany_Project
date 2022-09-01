@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="Define.hpp">
+      <Filter>헤더 파일\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Core.hpp">
+      <Filter>헤더 파일\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.hpp">
+      <Filter>헤더 파일\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.hpp">
+      <Filter>헤더 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Obstacle.hpp">
+      <Filter>헤더 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC.hpp">
+      <Filter>헤더 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.hpp">
+      <Filter>헤더 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.hpp">
+      <Filter>헤더 파일\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Octree.hpp">
+      <Filter>헤더 파일\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="QuadTree.hpp">
+      <Filter>헤더 파일\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="SpaceDivision.hpp">
+      <Filter>헤더 파일\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertex.hpp">
+      <Filter>헤더 파일\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="DXDevice.hpp">
+      <Filter>헤더 파일\Graphics\DirectX\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="DXTexture.hpp">
+      <Filter>헤더 파일\Graphics\DirectX\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="DXTextureManager.hpp">
+      <Filter>헤더 파일\Graphics\DirectX\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="DXShader.hpp">
+      <Filter>헤더 파일\Graphics\DirectX\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="DXShaderManager.hpp">
+      <Filter>헤더 파일\Graphics\DirectX\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowUI.hpp">
+      <Filter>헤더 파일\Graphics\WinAPI</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="PixelShader.txt">
+      <Filter>헤더 파일\Graphics\DirectX\HLSL</Filter>
+    </Text>
+    <Text Include="ShapeShader.txt">
+      <Filter>헤더 파일\Graphics\DirectX\HLSL</Filter>
+    </Text>
+    <Text Include="VertexShader.txt">
+      <Filter>헤더 파일\Graphics\DirectX\HLSL</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{bc6b4f77-1dfb-4811-90f0-80ce7ca0977d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{51ce2475-5a8c-47b3-8f20-9e630e49c256}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Common">
+      <UniqueIdentifier>{0acb5c8a-4c4e-45bb-bc0b-8f33c0b9b6e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Core">
+      <UniqueIdentifier>{5a363917-41a1-460e-900d-de70d9d3d4aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Engine">
+      <UniqueIdentifier>{9aa55afa-cd1c-40d2-afb6-252091399b25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Map">
+      <UniqueIdentifier>{357037af-16af-49be-9f4c-d85b584ff3a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Object">
+      <UniqueIdentifier>{171d05cc-41f6-4650-9fb8-9b8a96bfee51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Graphics">
+      <UniqueIdentifier>{26a2196e-005a-4397-908f-0a8518cedb26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Graphics\DirectX">
+      <UniqueIdentifier>{290eb7b0-28d2-4b90-bdbe-10a8468610a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Graphics\DirectX\HLSL">
+      <UniqueIdentifier>{9517c4a0-68a9-4557-a67c-71fe25f96b5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Graphics\DirectX\Shader">
+      <UniqueIdentifier>{bf04f7e2-9adb-4066-9282-ee62e2c95c4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Graphics\DirectX\Texture">
+      <UniqueIdentifier>{2c4d7119-6e63-447d-9967-028eb1da2984}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Graphics\DirectX\Device">
+      <UniqueIdentifier>{87b69058-844f-40ac-90f7-6e7856871326}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Graphics\WinAPI">
+      <UniqueIdentifier>{f5f68fea-ab9d-46a3-b106-51a0b1eca0db}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Sample.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

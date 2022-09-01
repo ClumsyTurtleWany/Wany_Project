@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{065AC6D0-9FC4-4249-A730-AF2B5390998B}</ProjectGuid>
+    <ProjectGuid>{DEE0CC36-5718-4940-B4C3-F1A88B4C5CDD}</ProjectGuid>
     <RootNamespace>CreateTexture</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -78,13 +78,13 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>../../output/Debug/CreateTexture_1/</OutDir>
-    <IntDir>../../output/Debug/CreateTexture_1/</IntDir>
+    <OutDir>../../output/Debug/CreateTexture_2/</OutDir>
+    <IntDir>../../output/Debug/CreateTexture_2/</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>../../output/Release/CreateTexture_1/</OutDir>
-    <IntDir>../../output/Release/CreateTexture_1/</IntDir>
+    <OutDir>../../output/Release/CreateTexture_2/</OutDir>
+    <IntDir>../../output/Release/CreateTexture_2/</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
