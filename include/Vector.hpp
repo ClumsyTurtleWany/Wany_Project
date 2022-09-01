@@ -44,14 +44,14 @@ public:
 
 	/*void operator =(const Point_<T>& _v)
 	{
-		x += _v.x;
-		y += _v.y;
+		x = _v.x;
+		y = _v.y;
 	}*/
 
 	void operator =(const Vector2D_<T>& _v)
 	{
-		x += _v.x;
-		y += _v.y;
+		x = _v.x;
+		y = _v.y;
 	}
 
 	void operator +=(const Vector2D_<T>& _v)

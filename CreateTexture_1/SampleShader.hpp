@@ -2,15 +2,8 @@
 #include "DXDevice.hpp"
 #include "Define.hpp"
 
-class DXShader
+class SampleShader : public DXDevice
 {
-private:
-	// Device
-	ID3D11Device* m_pd3dDevice = nullptr;
-	ID3D11DeviceContext* m_pImmediateContext = nullptr;
-
-private:
-	// Shader
 	ID3D11Buffer* m_pVertexBuffer;
 	ID3D11InputLayout* m_pVertexLayout;
 
@@ -20,24 +13,6 @@ private:
 	ID3DBlob* m_pVertexShaderCode = nullptr;
 	ID3DBlob* m_pPixelShaderCode = nullptr;
 
-private:
-	// Texture
-	ID3D11ShaderResourceView* m_pTextureView;
-	ID3D11Resource* m_pTexture;
-
-private:
-	std::vector<Vertex> m_VertexList;
-
-private:
-	bool isCreated = false;
-
-private:
-	HRESULT CreateVertexBuffer();
-	HRESULT CreateVertexLayout();
-	HRESULT CreateVertexSharder();
-	HRESULT CreatePixelSharder();
-	HRESULT LoadTexture(std::wstring _filename);
-
 public:
 	bool initialize();
 	bool frame();
@@ -45,34 +20,14 @@ public:
 	bool release();
 
 public:
-	void setDevice(ID3D11Device* _device, ID3D11DeviceContext* _context);
-	void setVertexList(const std::vector<Vertex>& _target)
-	{
-		if (!_target.empty())
-		{
-			m_VertexList.clear();
-			m_VertexList.assign(_target.begin(), _target.end());
-		}
-	}
+	HRESULT CreateVertexBuffer();
+	HRESULT CreateVertexLayout();
+	HRESULT CreateVertexSharder();
+	HRESULT CreatePixelSharder();
 };
 
-bool DXShader::initialize()
+bool SampleShader::initialize()
 {
-	if (isCreated)
-	{
-		return false;
-	}
-
-	if (m_pd3dDevice == nullptr)
-	{
-		return false;
-	}
-
-	if (m_pImmediateContext == nullptr)
-	{
-		return false;
-	}
-
 	if (FAILED(CreateVertexBuffer()))
 	{
 		return false;
@@ -93,36 +48,16 @@ bool DXShader::initialize()
 		return false;
 	}
 
-	if (FAILED(LoadTexture(L"../../resource/KGCABK.bmp")))
-	{
-		return false;
-	}
-
-	isCreated = true;
-
 	return true;
 }
 
-bool DXShader::frame()
+bool SampleShader::frame()
 {
-	if (!isCreated)
-	{
-		return false;
-	}
-
 	return true;
 }
 
-bool DXShader::render()
+bool SampleShader::render()
 {
-	if (!isCreated)
-	{
-		return false;
-	}
-
-	// GPU Update
-	m_pImmediateContext->UpdateSubresource(m_pVertexBuffer, 0, NULL, &m_VertexList.at(0), 0, 0);
-
 	// 삼각형 랜더링
 	// 1) Input-Assember Stage
 
@@ -157,23 +92,15 @@ bool DXShader::render()
 	// 이러한 셋팅도 있는데 디폴트 값으로 이미 들어 있었다.
 	m_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	// Texture - Pixel Shader에 Texture 넘김
-	m_pImmediateContext->PSSetShaderResources(0, 1, &m_pTextureView); // 레지스터 0번
-
 	// Draw 명령이 호출되면 위의 파이프라인 순서대로 타고 내려옴. 셋팅 할 때의 순서는 상관 없으나
 	// 셋팅이 안되있으면 문제가 생김.
-	m_pImmediateContext->Draw(m_VertexList.size(), 0);
+	m_pImmediateContext->Draw(6, 0);
 
 	return true;
 }
 
-bool DXShader::release()
+bool SampleShader::release()
 {
-	if (!isCreated)
-	{
-		return false;
-	}
-
 	if (m_pVertexBuffer != nullptr)
 	{
 		m_pVertexBuffer->Release();
@@ -210,56 +137,35 @@ bool DXShader::release()
 		m_pPixelShaderCode = nullptr;
 	}
 
-	if (m_pTextureView != nullptr)
-	{
-		m_pTextureView->Release();
-		m_pTextureView = nullptr;
-	}
-
-	if (m_pTexture != nullptr)
-	{
-		m_pTexture->Release();
-		m_pTexture = nullptr;
-	}
-
 	return true;
 }
 
-HRESULT DXShader::CreateVertexBuffer()
+HRESULT SampleShader::CreateVertexBuffer()
 {
 	HRESULT result;
 	// NDC 좌표계 공간
 	// x: -1 ~ +1
 	// y: -1 ~ +1
 	// z: 0 ~ +1
-	
-	m_VertexList.assign(6, Vertex());
-	m_VertexList[0].pos = { -0.25f, +0.25f, 0.0f }; // p1-LT
-	m_VertexList[1].pos = { +0.25f, +0.25f, 0.0f }; // p2-RT
-	m_VertexList[2].pos = { -0.25f, -0.25f, 0.0f }; // p3-LB
-	m_VertexList[3].pos = { -0.25f, -0.25f, 0.0f }; // p4-LB
-	m_VertexList[4].pos = { +0.25f, +0.25f, 0.0f }; // p5-RT
-	m_VertexList[5].pos = { +0.25f, -0.25f, 0.0f }; // p6-RB
+	Vertex vertices[] =
+	{
+		// 반드시 시계 방향(앞면) 으로 구성해야 한다.
+		// 시계 반대 방향(뒷면)은 랜더링 안함.
+		// Position				// Color
+		-0.5f, 0.5f, 0.0f,		0.0f, 0.0f, 1.0f, 0.0f, // v0
+		+0.5f, 0.0f, 0.0f,		0.0f, 1.0f, 0.0f, 0.0f, // v1
+		-0.5f, -0.5f, 0.0f,		1.0f, 0.0f, 0.0f, 0.0f, // v2
 
-	m_VertexList[0].color = { 1.0f, 0.0f, 0.0f, 0.0f }; // p1-LT
-	m_VertexList[1].color = { 1.0f, 0.0f, 0.0f, 0.0f }; // p2-RT
-	m_VertexList[2].color = { 1.0f, 0.0f, 0.0f, 0.0f }; // p3-LB
-	m_VertexList[3].color = { 1.0f, 0.0f, 0.0f, 0.0f }; // p4-LB
-	m_VertexList[4].color = { 1.0f, 0.0f, 0.0f, 0.0f }; // p5-RT
-	m_VertexList[5].color = { 1.0f, 0.0f, 0.0f, 0.0f }; // p6-RB
-
-	m_VertexList[0].texture = { 0.0f, 0.0f }; // p1-LT
-	m_VertexList[1].texture = { 1.0f, 0.0f }; // p2-RT
-	m_VertexList[2].texture = { 0.0f, 1.0f }; // p3-LB
-	m_VertexList[3].texture = { 0.0f, 1.0f }; // p4-LB
-	m_VertexList[4].texture = { 1.0f, 0.0f }; // p5-RT
-	m_VertexList[5].texture = { 1.0f, 1.0f }; // p6-RB
+		-0.5f, -0.0f, 0.0f,		1.0f, 0.0f, 0.0f, 0.0f, // v2
+		+0.5f, 0.5f, 0.0f,		0.0f, 1.0f, 0.0f, 0.0f, // v1
+		+0.5f, -0.5f, 0.0f,		1.0f, 0.0f, 0.0f, 0.0f, // v4		
+	};
 
 	// CreateBuffer() Param
 	// D3D11_BUFFER_DESC* pDesc,
 	// D3D11_SUBRESOURCE_DATA* pInitialData,
 	// ID3D11Buffer** ppBuffer
-	UINT NumVertex = m_VertexList.size();
+	UINT NumVertex = sizeof(vertices) / sizeof(vertices[0]);
 	D3D11_BUFFER_DESC desc;
 	ZeroMemory(&desc, sizeof(desc));
 	desc.ByteWidth = sizeof(Vertex) * NumVertex; // 바이트 용량
@@ -271,7 +177,7 @@ HRESULT DXShader::CreateVertexBuffer()
 
 	D3D11_SUBRESOURCE_DATA initialData;
 	ZeroMemory(&initialData, sizeof(initialData));
-	initialData.pSysMem = &m_VertexList.at(0);
+	initialData.pSysMem = vertices;
 
 	return m_pd3dDevice->CreateBuffer(
 		&desc, // 버퍼 할당 
@@ -280,7 +186,7 @@ HRESULT DXShader::CreateVertexBuffer()
 
 }
 
-HRESULT DXShader::CreateVertexLayout()
+HRESULT SampleShader::CreateVertexLayout()
 {
 	HRESULT result;
 
@@ -305,7 +211,6 @@ HRESULT DXShader::CreateVertexLayout()
 	{
 		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0}, // 12 == float * 3
-		{"TEXTURE", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 28, D3D11_INPUT_PER_VERTEX_DATA, 0} // 28 == float * 28
 	};
 
 	UINT NumElements = sizeof(InputElementDescs) / sizeof(InputElementDescs[0]);
@@ -319,7 +224,7 @@ HRESULT DXShader::CreateVertexLayout()
 	return result;
 }
 
-HRESULT DXShader::CreateVertexSharder()
+HRESULT SampleShader::CreateVertexSharder()
 {
 	// 정점 레이아웃은 정점 쉐이더와 밀접한 관련이 있다.
 	// 정점 레이아웃 생성 시 사전에 정점 쉐이더 생성이 필요함. VertexShader.txt 참고.
@@ -364,7 +269,7 @@ HRESULT DXShader::CreateVertexSharder()
 
 }
 
-HRESULT DXShader::CreatePixelSharder()
+HRESULT SampleShader::CreatePixelSharder()
 {
 	// Pixel Shader Create
 	HRESULT result;
@@ -394,20 +299,4 @@ HRESULT DXShader::CreatePixelSharder()
 	{
 		return result;
 	}
-}
-
-HRESULT DXShader::LoadTexture(std::wstring _filename)
-{
-	// Texture
-	// ID3D11Device* d3dDevice
-	// const wchar_t* fileName
-	// ID3D11Resource** texture
-	// ID3D11ShaderResourceView** textureView
-	return DirectX::CreateWICTextureFromFile(m_pd3dDevice, L"../../resource/KGCABK.bmp", &m_pTexture, &m_pTextureView);
-}
-
-void DXShader::setDevice(ID3D11Device* _device, ID3D11DeviceContext* _context)
-{
-	m_pd3dDevice = _device;
-	m_pImmediateContext = _context;
 }

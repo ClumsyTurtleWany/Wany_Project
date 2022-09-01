@@ -1,5 +1,6 @@
 #pragma once
 #include "DXDevice.hpp"
+#include "DXTexture.hpp"
 #include "Define.hpp"
 
 class DXShader
@@ -22,9 +23,8 @@ private:
 
 private:
 	// Texture
-	ID3D11ShaderResourceView* m_pTextureView;
-	ID3D11Resource* m_pTexture;
-
+	DXTexture* m_pTexture;
+	
 private:
 	std::vector<Vertex> m_VertexList;
 
@@ -36,7 +36,7 @@ private:
 	HRESULT CreateVertexLayout();
 	HRESULT CreateVertexSharder();
 	HRESULT CreatePixelSharder();
-	HRESULT LoadTexture(std::wstring _filename);
+	
 
 public:
 	bool initialize();
@@ -54,6 +54,8 @@ public:
 			m_VertexList.assign(_target.begin(), _target.end());
 		}
 	}
+	void setTexture(DXTexture* _texture);
+
 };
 
 bool DXShader::initialize()
@@ -89,11 +91,6 @@ bool DXShader::initialize()
 	}
 
 	if (FAILED(CreateVertexLayout()))
-	{
-		return false;
-	}
-
-	if (FAILED(LoadTexture(L"../../resource/KGCABK.bmp")))
 	{
 		return false;
 	}
@@ -158,7 +155,8 @@ bool DXShader::render()
 	m_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	// Texture - Pixel Shader에 Texture 넘김
-	m_pImmediateContext->PSSetShaderResources(0, 1, &m_pTextureView); // 레지스터 0번
+	ID3D11ShaderResourceView* resourceView = m_pTexture->getResourceView();
+	m_pImmediateContext->PSSetShaderResources(0, 1, &resourceView); // 레지스터 0번
 
 	// Draw 명령이 호출되면 위의 파이프라인 순서대로 타고 내려옴. 셋팅 할 때의 순서는 상관 없으나
 	// 셋팅이 안되있으면 문제가 생김.
@@ -208,18 +206,6 @@ bool DXShader::release()
 	{
 		m_pPixelShaderCode->Release();
 		m_pPixelShaderCode = nullptr;
-	}
-
-	if (m_pTextureView != nullptr)
-	{
-		m_pTextureView->Release();
-		m_pTextureView = nullptr;
-	}
-
-	if (m_pTexture != nullptr)
-	{
-		m_pTexture->Release();
-		m_pTexture = nullptr;
 	}
 
 	return true;
@@ -285,10 +271,10 @@ HRESULT DXShader::CreateVertexLayout()
 	HRESULT result;
 
 	// CreateInputLayout() Param
-	// D3D11_INPUT_ELEMENT_DESC* pInputElementDescs
+	// D3D11_INPUT_ELEMENT_DESC* pInputElementDescs : 쉐이더 처리 함수에 들어갈 in-out put 지정. Vertex의 각 요소로 나누어 넣으면 보기 편함.
 	// UINT NumElements
-	// void* pShaderBytecodeWithInputSignature : 정점 쉐이더
-	// SIZE_T BytecodeLength
+	// void* pShaderBytecodeWithInputSignature  : 정점 쉐이더 처리 방법이 담긴 함수 포인터 (HLSL이나 txt 파일을 compile 해서 사용.)
+	// SIZE_T BytecodeLength					: 정점 쉐이더 처리 방법이 담긴 함수의 크기 (HLSL이나 txt 파일을 compile 해서 사용.)
 	// ID3D11InputLayout** ppInputLayout
 
 	// D3D11_INPUT_ELEMENT_DESC InputElementDescs;
@@ -396,18 +382,13 @@ HRESULT DXShader::CreatePixelSharder()
 	}
 }
 
-HRESULT DXShader::LoadTexture(std::wstring _filename)
-{
-	// Texture
-	// ID3D11Device* d3dDevice
-	// const wchar_t* fileName
-	// ID3D11Resource** texture
-	// ID3D11ShaderResourceView** textureView
-	return DirectX::CreateWICTextureFromFile(m_pd3dDevice, L"../../resource/KGCABK.bmp", &m_pTexture, &m_pTextureView);
-}
-
 void DXShader::setDevice(ID3D11Device* _device, ID3D11DeviceContext* _context)
 {
 	m_pd3dDevice = _device;
 	m_pImmediateContext = _context;
+}
+
+void DXShader::setTexture(DXTexture* _texture)
+{
+	m_pTexture = _texture;
 }
