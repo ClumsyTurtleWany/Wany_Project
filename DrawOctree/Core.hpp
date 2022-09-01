@@ -163,6 +163,7 @@ void Core::render()
 		{
 			it->render();
 		}
+		renderList.clear();
 	}
 }
 

@@ -103,7 +103,7 @@ public:
 		this->shape.offset(offset);
 	}
 
-	void moveTo(int _x, int _y)
+	void moveTo(T _x, T _y)
 	{
 		moveTo(Point_<T>(_x, _y));
 	}
@@ -208,7 +208,7 @@ public:
 		this->shape.offset(offset);
 	}
 
-	void moveTo(int _x, int _y, int _z)
+	void moveTo(T _x, T _y, T _z)
 	{
 		moveTo(Point3D_<T>(_x, _y, _z));
 	}
