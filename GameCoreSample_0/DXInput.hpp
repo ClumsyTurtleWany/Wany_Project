@@ -19,7 +19,7 @@ private:
 	LPDIRECTINPUTDEVICE8	m_pDeviceMouse;
 	DIDEVICEOBJECTDATA		m_didod[SAMPLE_BUFFER_SIZE];
 
-	DWORD					m_dwImmediate = true;
+	DWORD					m_dwImmediate = false;
 	DWORD					m_dwElements;
 
 public:
