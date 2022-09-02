@@ -21,9 +21,9 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{DEE0CC36-5718-4940-B4C3-F1A88B4C5CDD}</ProjectGuid>
-    <RootNamespace>CreateTexture</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
+    <ProjectGuid>{13ea1ff5-9480-457a-a6d8-48726c8362ce}</ProjectGuid>
+    <RootNamespace>GameCoreSample0</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -78,13 +78,13 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>../../output/Debug/CreateTexture_2/</OutDir>
-    <IntDir>../../output/Debug/CreateTexture_2/</IntDir>
+    <OutDir>../../output/Debug/GameCoreSample_0/</OutDir>
+    <IntDir>../../output/Debug/GameCoreSample_0/</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>../../output/Release/CreateTexture_2/</OutDir>
-    <IntDir>../../output/Release/CreateTexture_2/</IntDir>
+    <OutDir>../../output/Release/GameCoreSample_0/</OutDir>
+    <IntDir>../../output/Release/GameCoreSample_0/</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -119,13 +119,13 @@
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>false</ConformanceMode>
+      <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>../include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../include;../include/lib;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../include/lib;</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -135,7 +135,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>false</ConformanceMode>
+      <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>../include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -143,36 +143,19 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../include;../include/lib;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../include/lib;</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Core.hpp" />
     <ClInclude Include="Define.hpp" />
     <ClInclude Include="DXDevice.hpp" />
-    <ClInclude Include="DXShader.hpp" />
-    <ClInclude Include="DXShaderManager.hpp" />
-    <ClInclude Include="DXTexture.hpp" />
-    <ClInclude Include="DXTextureManager.hpp" />
     <ClInclude Include="Engine.hpp" />
-    <ClInclude Include="Node.hpp" />
-    <ClInclude Include="NPC.hpp" />
-    <ClInclude Include="Object.hpp" />
-    <ClInclude Include="Obstacle.hpp" />
-    <ClInclude Include="Octree.hpp" />
-    <ClInclude Include="Player.hpp" />
-    <ClInclude Include="QuadTree.hpp" />
-    <ClInclude Include="SpaceDivision.hpp" />
-    <ClInclude Include="Vertex.hpp" />
+    <ClInclude Include="GameCore.hpp" />
+    <ClInclude Include="Timer.hpp" />
     <ClInclude Include="WindowUI.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sample.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="PixelShader.txt" />
-    <Text Include="ShapeShader.txt" />
-    <Text Include="VertexShader.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
