@@ -72,7 +72,7 @@ HRESULT DXDevice::createDevice()
 	//HRESULT rst; // Dx의 모든 반환값은 HRESULT 사용
 	D3D_FEATURE_LEVEL* pFeatureLevel = nullptr;
 	D3D_FEATURE_LEVEL pFeatureLevels[] = { D3D_FEATURE_LEVEL_11_0 };
-	ID3D11Device** ppDevice;
+	//ID3D11Device** ppDevice;
 	UINT createDeviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT; // 기본은 0인데, 이 플래그를 넣어야 랜더 타겟 생성이 지원이 된다.
 	#ifdef _DEBUG 
 		createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;

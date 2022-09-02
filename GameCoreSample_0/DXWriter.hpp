@@ -13,20 +13,23 @@
 // Font Collention -> Font Family -> Font/Font Face 순으로 나뉘어 져 있음.
 // 예를 들면 현대차 -> 소나타 종류 -> 소나타 같은 관계를 형성함.
 // gdi -> gdiplus -> directX 2D -> directX 3D 순서로 나오게 됨. (기존 기능은 불편해서 개선에 개선)
-// 3D 그래픽에는 winAPI 사용 불가.
+// 3D 그래픽에는 WinAPI 사용 불가.
 
-
-// 폰트랑 사이즈는 실시간 변경 불가함. 색상이랑 글자는 가능.
+// 왠만하면 DrawText는 사용 안하는게 좋다. 성능저하의 주범. 
+// 보통 게임에서 글자출력은 sprite를 이용하여 글자 이미지로 출력만 해주는 경우가 많음.
+// 채팅이나 어쩔 수 없는 경우(글자 이미지가 없는 경우) 사용한다.
 class DXWriter
 {
 public:
 	ID2D1Factory*			m_pd2dFactory;
 	IDWriteFactory*			m_pDWriteFactory;
 	ID2D1RenderTarget*		m_pd2dRenderTarget; // 직접 만들지 않고 3D Device에서 가져와서 사용.
-	IDWriteTextFormat*		m_pTextFormat;
+	IDWriteTextFormat*		m_pTextFormat; // 글자(Text)를 바꿀 수 있지만 폰트와 크기는 변경 불가, 색상이나 위치는 변경 가능.
 	ID2D1SolidColorBrush*	m_pTextColor;	// 색상 관련 브러쉬
 
 	std::wstring			m_strDefault;
+
+	IDWriteTextLayout* m_pTextLayout; // 글자(Text)를 못바꾸는 대신 폰트나 크기 색상 등등 전부 변경 가능.
 
 public:
 	virtual bool initialize();
@@ -37,6 +40,7 @@ public:
 public:
 	bool setBuffer(IDXGISurface* _dxgiSurface);
 	void setString(std::wstring _str);
+	bool draw(int _x, int _y, std::wstring _str, D2D1_COLOR_F _color);
 };
 
 bool DXWriter::initialize() 
@@ -63,6 +67,7 @@ bool DXWriter::initialize()
 	//	FLOAT fontSize,
 	//	WCHAR const* localeName,
 	//	IDWriteTextFormat** textFormat
+	// 폰트랑 사이즈는 실시간 변경 불가함. 색상이랑 글자는 가능.
 	rst = m_pDWriteFactory->CreateTextFormat(
 		L"고딕", //L"Gabriola ", 
 		NULL, 
@@ -73,7 +78,7 @@ bool DXWriter::initialize()
 		L"ko-kr", // 영문 폰트면 L"en-us"
 		&m_pTextFormat);
 
-	// 폰트랑 사이즈는 실시간 변경 불가함. 색상이랑 글자는 가능.
+	
 
 	if (FAILED(rst))
 	{
@@ -81,6 +86,20 @@ bool DXWriter::initialize()
 	}
 
 	m_strDefault = L"DEFAULT";
+	// 글자가 박혀있어서 글자는 변경 불가능 하다.
+	rst = m_pDWriteFactory->CreateTextLayout(
+		m_strDefault.c_str(),
+		m_strDefault.size(),
+		m_pTextFormat,
+		1024, 768,
+		&m_pTextLayout);
+
+	if (FAILED(rst))
+	{
+		return false;
+	}
+
+	
 
 	return true; 
 };
@@ -95,11 +114,11 @@ bool DXWriter::render()
 	m_pd2dRenderTarget->BeginDraw();
 	
 	// render는 반드시 begin과 end 사이에 넣어야 함.
-	D2D1_RECT_F rt = { 100, 100, 300, 300 };
+	// Draw
+	D2D1_RECT_F rt = { 0, 0, 600, 300 };
 	m_pTextColor->SetColor({ 1, 0, 0, 1 });
 	m_pTextColor->SetOpacity(1); // 0에 가까울 수록 투명해짐. 0 ~ 1
 	m_pd2dRenderTarget->DrawText(m_strDefault.c_str(), m_strDefault.size(), m_pTextFormat, rt, m_pTextColor);
-
 
 	m_pd2dRenderTarget->EndDraw();
 	return true; 
@@ -107,6 +126,12 @@ bool DXWriter::render()
 
 bool DXWriter::release() 
 { 
+	if (m_pTextLayout != nullptr)
+	{
+		m_pTextLayout->Release();
+		m_pTextLayout = nullptr;
+	}
+
 	if (m_pTextColor != nullptr)
 	{
 		m_pTextColor->Release();
@@ -173,3 +198,23 @@ void DXWriter::setString(std::wstring _str)
 {
 	m_strDefault = _str;
 }
+
+bool DXWriter::draw(int _x, int _y, std::wstring _str, D2D1_COLOR_F _color)
+{
+	m_pd2dRenderTarget->BeginDraw();
+
+	// render는 반드시 begin과 end 사이에 넣어야 함.
+	D2D1_RECT_F rt = { _x, _y, 600, 300 };
+	m_pTextColor->SetColor(_color);
+	m_pTextColor->SetOpacity(1); // 0에 가까울 수록 투명해짐. 0 ~ 1
+	m_pd2dRenderTarget->DrawText(_str.c_str(), _str.size(), m_pTextFormat, rt, m_pTextColor);
+
+
+	// Draw Layout
+	m_pTextLayout->SetFontSize(_x, { 0, (UINT)m_strDefault.size() });
+	m_pTextLayout->SetFontStyle(DWRITE_FONT_STYLE_ITALIC, { 0, (UINT)m_strDefault.size() });
+	m_pd2dRenderTarget->DrawTextLayout({ 0, 0 }, m_pTextLayout, m_pTextColor);
+
+	m_pd2dRenderTarget->EndDraw();
+	return true;
+};

@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClInclude Include="Define.hpp" />
     <ClInclude Include="DXDevice.hpp" />
+    <ClInclude Include="DXInput.hpp" />
     <ClInclude Include="Engine.hpp" />
     <ClInclude Include="GameCore.hpp" />
     <ClInclude Include="Input.hpp" />

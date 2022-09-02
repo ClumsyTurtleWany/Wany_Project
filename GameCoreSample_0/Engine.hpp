@@ -31,45 +31,49 @@ public:
 
 	bool frame() override
 	{
-		/*
-		 * VK_0 - VK_9 are the same as ASCII '0' - '9' (0x30 - 0x39)
-		 * 0x3A - 0x40 : unassigned
-		 * VK_A - VK_Z are the same as ASCII 'A' - 'Z' (0x41 - 0x5A)
-		 */
-		POINT ptPos = Input::getInstance()->m_ptPos;
-		if (Input::getInstance()->getKey(VK_LBUTTON) == KeyState::Push)
-		{
-			int a = 0;
-		}
-		if (Input::getInstance()->getKey(VK_LBUTTON) == KeyState::Up)
-		{						
-			int a = 0;			
-		}						
-		if (Input::getInstance()->getKey(VK_SPACE) == KeyState::Push)
-		{						
-			int a = 0;			
-		}						
-		if (Input::getInstance()->getKey('w') == KeyState::Push)
-		{						
-			int a = 0;			
-		}						
-		if (Input::getInstance()->getKey('a') == KeyState::Push)
-		{						
-			int a = 0;			
-		}						
-		if (Input::getInstance()->getKey('s') == KeyState::Push)
-		{						
-			int a = 0;			
-		}						
-		if (Input::getInstance()->getKey('d') == KeyState::Push)
-		{
-			int a = 0;
-		}
+		
 		return true;
 	}
 
 	bool render() override
 	{
+		/*
+		 * VK_0 - VK_9 are the same as ASCII '0' - '9' (0x30 - 0x39)
+		 * 0x3A - 0x40 : unassigned
+		 * VK_A - VK_Z are the same as ASCII 'A' - 'Z' (0x41 - 0x5A)
+		 */
+
+		/*POINT ptPos = Input::getInstance()->m_ptPos;
+		if (Input::getInstance()->getKey(VK_LBUTTON) == KeyState::Hold)
+		{
+			dxWriter.draw(ptPos.x, ptPos.y, L"Mouse LButton", D2D1_COLOR_F({ 1, 0, 0, 1 }));
+		}
+		if (Input::getInstance()->getKey(VK_SPACE) == KeyState::Hold)
+		{
+			dxWriter.draw(100, 300, L"Space", D2D1_COLOR_F({ 1, 0, 0, 1 }));
+		}
+		if (Input::getInstance()->getKey('W') == KeyState::Hold)
+		{
+			dxWriter.draw(100, 400, L"W Button", D2D1_COLOR_F({ 1, 0, 0, 1 }));
+		}
+		if (Input::getInstance()->getKey('A') == KeyState::Hold)
+		{
+			dxWriter.draw(100, 500, L"A Button", D2D1_COLOR_F({ 1, 0, 0, 1 }));
+		}
+		if (Input::getInstance()->getKey('S') == KeyState::Hold)
+		{
+			dxWriter.draw(100, 600, L"S Button", D2D1_COLOR_F({ 1, 0, 0, 1 }));
+		}
+		if (Input::getInstance()->getKey('D') == KeyState::Hold)
+		{
+			dxWriter.draw(100, 700, L"D Button", D2D1_COLOR_F({ 1, 0, 0, 1 }));
+		}*/
+
+		std::wstring lx = std::to_wstring(DXInput::getInstance()->m_MouseState.lX);
+		std::wstring ly = std::to_wstring(DXInput::getInstance()->m_MouseState.lY);
+		std::wstring lz = std::to_wstring(DXInput::getInstance()->m_MouseState.lZ);
+		std::wstring mousePos = lx + L", " + ly + L", " + lz;
+		dxWriter.draw(0, 300, mousePos, D2D1_COLOR_F({ 1, 0, 0, 1 }));
 		
 		return true;
 	}

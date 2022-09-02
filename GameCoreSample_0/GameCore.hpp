@@ -1,6 +1,7 @@
 #pragma once
 #include "DXDevice.hpp"
 #include "Input.hpp"
+#include "DXInput.hpp"
 #include "Timer.hpp"
 #include "DXWriter.hpp"
 
@@ -36,8 +37,11 @@ bool GameCore::CoreInitialize()
 		return false;
 	}
 	Timer::getInstance()->initialize();
-	Input::getInstance()->initialize();
-	Input::getInstance()->setWndHandle(this->hWnd);
+	//Input::getInstance()->initialize();
+	//Input::getInstance()->setWndHandle(this->hWnd);
+	DXInput::getInstance()->setInstance(this->hInstance);
+	DXInput::getInstance()->setWndHandle(this->hWnd);
+	DXInput::getInstance()->initialize();
 	
 	// DXWriter
 	dxWriter.initialize();
@@ -52,7 +56,8 @@ bool GameCore::CoreInitialize()
 bool GameCore::CoreFrame()
 {
 	Timer::getInstance()->frame();
-	Input::getInstance()->frame();
+	//Input::getInstance()->frame();
+	DXInput::getInstance()->frame();
 	dxWriter.frame();
 	return frame();
 }
@@ -78,7 +83,8 @@ bool GameCore::CoreRender()
 	// 여기서 삼각형 랜더링 필요.
 	render();
 	Timer::getInstance()->render();
-	Input::getInstance()->render();
+	//Input::getInstance()->render();
+	DXInput::getInstance()->render();
 
 	std::wstring fps = std::to_wstring(Timer::getInstance()->gameTime) + L" : " + std::to_wstring(Timer::getInstance()->fps);
 	dxWriter.setString(fps);
@@ -92,7 +98,8 @@ bool GameCore::CoreRelease()
 {
 	release();
 	Timer::getInstance()->release();
-	Input::getInstance()->release();
+	//Input::getInstance()->release();
+	DXInput::getInstance()->release();
 	dxWriter.release();
 	DXDevice::release();
 	
