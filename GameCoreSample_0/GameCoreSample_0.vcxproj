@@ -151,8 +151,10 @@
     <ClInclude Include="DXDevice.hpp" />
     <ClInclude Include="Engine.hpp" />
     <ClInclude Include="GameCore.hpp" />
+    <ClInclude Include="Input.hpp" />
     <ClInclude Include="Timer.hpp" />
     <ClInclude Include="WindowUI.hpp" />
+    <ClInclude Include="DXWriter.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sample.cpp" />

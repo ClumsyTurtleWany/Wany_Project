@@ -1,16 +1,17 @@
 #pragma once
 
-class Timer
+// 교재 7강 Timer 참고할 것 나중에 HRT로 바꿀 것.
+class Timer : public BaseSingleton<Timer>
 {
+public:
+	float	gameTime = 0.0f;
+	float	secondPerFrame = 0.0f;
+	float	fps = 0.0f;
+
 private:
-	float gameTime = 0.0f;
-	float elapseTime = 0.0f;
-	float fps = 0.0f;
-	float beforeTime = 0.0f;
-
-	float fpsTimer = 0.0f;
-
-	UINT fpsCounter = 0;
+	float	beforeTime = 0.0f;
+	float	fpsTimer = 0.0f;
+	UINT	fpsCounter = 0;
 
 
 public:
@@ -24,7 +25,7 @@ public:
 bool Timer::initialize()
 {
 	gameTime = 0.0f;
-	elapseTime = 0.0f;
+	secondPerFrame = 0.0f;
 	fps = 0;
 	fpsCounter = 0;
 	fpsTimer = 0.0f;
@@ -36,12 +37,12 @@ bool Timer::initialize()
 bool Timer::frame()
 {
 	float currentTime = timeGetTime();
-	elapseTime = (currentTime - beforeTime) / 1000.0f;
-	gameTime += elapseTime;
+	secondPerFrame = (currentTime - beforeTime) / 1000.0f;
+	gameTime += secondPerFrame;
 	fpsCounter++;
 	beforeTime = currentTime;
 
-	fpsTimer += elapseTime;
+	fpsTimer += secondPerFrame;
 	if (fpsTimer >= 1.0f)
 	{
 		fps = fpsCounter;

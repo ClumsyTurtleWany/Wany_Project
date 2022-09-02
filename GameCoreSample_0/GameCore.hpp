@@ -1,11 +1,13 @@
 #pragma once
 #include "DXDevice.hpp"
+#include "Input.hpp"
+#include "Timer.hpp"
+#include "DXWriter.hpp"
 
 class GameCore : public DXDevice
 {
 public:
-	Timer m_Timer;
-
+	DXWriter dxWriter;
 
 public:
 	virtual bool initialize() { return true; };
@@ -33,13 +35,25 @@ bool GameCore::CoreInitialize()
 	{
 		return false;
 	}
-	m_Timer.initialize();
+	Timer::getInstance()->initialize();
+	Input::getInstance()->initialize();
+	Input::getInstance()->setWndHandle(this->hWnd);
+	
+	// DXWriter
+	dxWriter.initialize();
+	IDXGISurface* pBackBuffer;
+	m_pSwapChain->GetBuffer(0, __uuidof(IDXGISurface), (void**)&pBackBuffer); // Buffer를 Surface로 가져 올 것이다.
+	dxWriter.setBuffer(pBackBuffer);
+	pBackBuffer->Release();
+
 	return initialize();
 }
 
 bool GameCore::CoreFrame()
 {
-	m_Timer.frame();
+	Timer::getInstance()->frame();
+	Input::getInstance()->frame();
+	dxWriter.frame();
 	return frame();
 }
 
@@ -63,7 +77,12 @@ bool GameCore::CoreRender()
 
 	// 여기서 삼각형 랜더링 필요.
 	render();
-	m_Timer.render();
+	Timer::getInstance()->render();
+	Input::getInstance()->render();
+
+	std::wstring fps = std::to_wstring(Timer::getInstance()->gameTime) + L" : " + std::to_wstring(Timer::getInstance()->fps);
+	dxWriter.setString(fps);
+	dxWriter.render();
 
 	PostRender();
 	return true;
@@ -72,7 +91,9 @@ bool GameCore::CoreRender()
 bool GameCore::CoreRelease()
 {
 	release();
-	m_Timer.release();
+	Timer::getInstance()->release();
+	Input::getInstance()->release();
+	dxWriter.release();
 	DXDevice::release();
 	
 	return true;

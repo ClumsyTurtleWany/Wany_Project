@@ -73,9 +73,13 @@ HRESULT DXDevice::createDevice()
 	D3D_FEATURE_LEVEL* pFeatureLevel = nullptr;
 	D3D_FEATURE_LEVEL pFeatureLevels[] = { D3D_FEATURE_LEVEL_11_0 };
 	ID3D11Device** ppDevice;
+	UINT createDeviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT; // 기본은 0인데, 이 플래그를 넣어야 랜더 타겟 생성이 지원이 된다.
+	#ifdef _DEBUG 
+		createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
+	#endif 
 	//rst = D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, pFeatureLevels, 1, D3D11_SDK_VERSION, &m_pd3dDevice, pFeatureLevel, &m_pImmediateContext); // 디바이스 생성
 
-	return D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, pFeatureLevels, 1, D3D11_SDK_VERSION, &m_pd3dDevice, pFeatureLevel, &m_pImmediateContext);
+	return D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, NULL, createDeviceFlags, pFeatureLevels, 1, D3D11_SDK_VERSION, &m_pd3dDevice, pFeatureLevel, &m_pImmediateContext);
 }
 
 // 2) 팩토리 생성

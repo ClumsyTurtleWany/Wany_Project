@@ -29,10 +29,6 @@
 #include "Vector.hpp"
 #include "Circle.hpp"
 
-
-// Common
-#include "Timer.hpp"
-
 enum class Texture_Key
 {
 	World,
