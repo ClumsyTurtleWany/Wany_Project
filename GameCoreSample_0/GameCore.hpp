@@ -28,8 +28,6 @@ public:
 	bool run();
 };
 
-
-
 bool GameCore::CoreInitialize()
 {
 	if (DXDevice::initialize() == false)
