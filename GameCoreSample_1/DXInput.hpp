@@ -8,7 +8,7 @@
 #define KEY_STATE_COUNT 256
 #define SAMPLE_BUFFER_SIZE 16
 
-class DXInput : public BaseSingleton<DXInput>
+class DXInput : public Singleton<DXInput>
 {
 private:
 	HINSTANCE				hInstance;

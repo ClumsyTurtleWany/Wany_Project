@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일\Common">
+      <UniqueIdentifier>{5e17041a-488a-4bd6-ae13-c86b8fda7097}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Engine">
+      <UniqueIdentifier>{38ca4b1f-661b-4e25-960a-24ac08fe2407}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Core">
+      <UniqueIdentifier>{e885fbb0-5c39-464c-9a89-54ef3108ea38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Map">
+      <UniqueIdentifier>{49513de3-d838-4d2f-a94a-156ec5196aab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Object">
+      <UniqueIdentifier>{011c009a-d5f5-4332-a63d-c9ab7bca0fa5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Graphics">
+      <UniqueIdentifier>{6b27ce15-072c-4eba-9ad1-c5f04abe8e2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Graphics\WinAPI">
+      <UniqueIdentifier>{03df633d-f455-44ee-a6d5-af820d1a8e6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Graphics\DirectX">
+      <UniqueIdentifier>{837756d4-45a9-4feb-9082-02068e0dcb9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Graphics\DirectX\HLSL">
+      <UniqueIdentifier>{bbc40247-afd5-445f-8afb-529cff699e8e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Define.hpp">
+      <Filter>헤더 파일\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.hpp">
+      <Filter>헤더 파일\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="GameCore.hpp">
+      <Filter>헤더 파일\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.hpp">
+      <Filter>헤더 파일\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC.hpp">
+      <Filter>헤더 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.hpp">
+      <Filter>헤더 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Obstacle.hpp">
+      <Filter>헤더 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.hpp">
+      <Filter>헤더 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Octree.hpp">
+      <Filter>헤더 파일\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="QuadTree.hpp">
+      <Filter>헤더 파일\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="SpaceDivision.hpp">
+      <Filter>헤더 파일\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.hpp">
+      <Filter>헤더 파일\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertex.hpp">
+      <Filter>헤더 파일\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.hpp">
+      <Filter>헤더 파일\Graphics\WinAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowUI.hpp">
+      <Filter>헤더 파일\Graphics\WinAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="DXDevice.hpp">
+      <Filter>헤더 파일\Graphics\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="DXInput.hpp">
+      <Filter>헤더 파일\Graphics\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="DXSamplerState.hpp">
+      <Filter>헤더 파일\Graphics\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="DXShader.hpp">
+      <Filter>헤더 파일\Graphics\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="DXShaderManager.hpp">
+      <Filter>헤더 파일\Graphics\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="DXTexture.hpp">
+      <Filter>헤더 파일\Graphics\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="DXTextureManager.hpp">
+      <Filter>헤더 파일\Graphics\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="DXWriter.hpp">
+      <Filter>헤더 파일\Graphics\DirectX</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Sample.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\resource\shader\ShapeShader.txt">
+      <Filter>헤더 파일\Graphics\DirectX\HLSL</Filter>
+    </Text>
+    <Text Include="MaskShader.txt">
+      <Filter>헤더 파일\Graphics\DirectX\HLSL</Filter>
+    </Text>
+  </ItemGroup>
+</Project>
