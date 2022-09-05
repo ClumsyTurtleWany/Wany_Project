@@ -55,7 +55,7 @@ bool DXShaderManager::Load(int _key, ShaderType _type)
 	}
 	else
 	{
-		newShader->setShaderFile(L"../../resource/shader/ShapeShader.txt");
+		newShader->setShaderFile(L"../HLSL/ShapeShader.txt");
 	}
 
 	bool rst = newShader->initialize();

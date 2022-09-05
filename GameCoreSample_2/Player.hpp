@@ -9,6 +9,8 @@ public:
 	{
 		this->type = OBJECT_TYPE::DYNAMIC_OBJECT;
 		this->setSpriteNum(3);
+		this->shape = Rect_<float>(500, 500, 100, 100);
+		this->mass = 100;
 	};
 	Player2D(std::string _name, Rect_<T> _rect, OBJECT_TYPE _type = OBJECT_TYPE::DYNAMIC_OBJECT)
 	{
@@ -28,7 +30,7 @@ public:
 			this->force.y -= 100 * _dt;
 			if (spriteNum == 3)
 			{
-				this->setSpriteNum(4);
+				this->setSpriteNum(++spriteNum);
 			}
 		}
 		
@@ -48,19 +50,44 @@ public:
 		if ((keyState_A == KeyState::Down) || (keyState_A == KeyState::Hold))
 		{
 			this->force.x -= 100 * _dt;
+
+			if (spriteNum != 0)
+			{
+				this->setSpriteNum(--spriteNum);
+			}
 		}
 
 		KeyState keyState_D = Input::getInstance()->getKey('D');
 		if ((keyState_D == KeyState::Down) || (keyState_D == KeyState::Hold))
 		{
 			this->force.x += 100 * _dt;
+
+			if (spriteNum != 7)
+			{
+				this->setSpriteNum(++spriteNum);
+			}
 		}
 
 		if ((keyState_A == KeyState::Free) && (keyState_D == KeyState::Free))
 		{
 			this->force.x = 0;
 			this->velocity.x = 0;
+
+			if (spriteNum != 3)
+			{
+				if (spriteNum < 3)
+				{
+					this->setSpriteNum(++spriteNum);
+				}
+				else
+				{
+					this->setSpriteNum(--spriteNum);
+				}
+			}
 		}
+
+		OutputDebugStringA((char*)&spriteNum);
+		
 
 		// Calculate Accel and Velocity.
 		this->accel = this->force / this->mass;

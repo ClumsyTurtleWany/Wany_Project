@@ -41,13 +41,13 @@ public:
 		if (worldMap == nullptr)
 		{
 			worldMap = new QuadTree<float>;
-			Rect_<float> region = Rect_<float>(0, 0, 128.0f, 128.0f);
+			Rect_<float> region = Rect_<float>(0, 0, 1024.0f, 768.0f);
 			worldMap->create(&region);
 		}
 		if (worldMapObj == nullptr)
 		{
 			worldMapObj = new object2D<float>;
-			worldMapObj->shape = Rect_<float>(0, 0, 1024, 768);
+			worldMapObj->shape = Rect_<float>(0, 0, 1024.0f, 768.0f);
 			worldMapObj->createShader(ShaderType::Normal);
 			worldMapObj->setTexture(DXTextureManager::getInstance()->getTexture(Texture_Key::World));
 		}
@@ -55,7 +55,7 @@ public:
 		if (user == nullptr)
 		{
 			user = worldMap->newPlayer();
-			user->Random();
+			//user->Random();
 			user->createShader();
 			user->setTexture(DXTextureManager::getInstance()->getTexture(Texture_Key::Charater));
 			user->setTextureMask(DXTextureManager::getInstance()->getTextureMask(Texture_Key::Charater));

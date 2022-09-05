@@ -118,10 +118,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\..\resource\shader\ShapeShader.txt">
+    <Text Include="MaskShader.txt">
       <Filter>헤더 파일\Graphics\DirectX\HLSL</Filter>
     </Text>
-    <Text Include="MaskShader.txt">
+    <Text Include="..\HLSL\ShapeShader.txt">
       <Filter>헤더 파일\Graphics\DirectX\HLSL</Filter>
     </Text>
   </ItemGroup>

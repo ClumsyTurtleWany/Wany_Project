@@ -185,16 +185,16 @@ public:
 public:
 	void updateShader()
 	{
-		float mapWidth = 128.0f;
-		float mapHeight = 128.0f;
+		float mapWidth = 1024; // clientRectWidth;
+		float mapHeight = 768; // clientRectHeight;
 		float mapWidth_Half = mapWidth * 0.5;
 		float mapHeight_Half = mapHeight * 0.5;
 
 		Rect_<float> rectNDC;
 		rectNDC.LT.x = (shape.LT.x - mapWidth_Half) / mapWidth_Half;
-		rectNDC.LT.y = -(shape.LT.y - mapHeight_Half) / mapWidth_Half;
+		rectNDC.LT.y = -(shape.LT.y - mapHeight_Half) / mapHeight_Half;
 		rectNDC.RB.x = (shape.RB.x - mapWidth_Half) / mapWidth_Half;
-		rectNDC.RB.y = -(shape.RB.y - mapHeight_Half) / mapWidth_Half;
+		rectNDC.RB.y = -(shape.RB.y - mapHeight_Half) / mapHeight_Half;
 
 		std::vector<Vertex> list;
 		list.assign(6, Vertex());

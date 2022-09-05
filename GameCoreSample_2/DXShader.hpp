@@ -356,6 +356,7 @@ HRESULT DXShader::CreateVertexSharder()
 		return result;
 	}
 
+	return result;
 }
 
 HRESULT DXShader::CreatePixelSharder()
@@ -388,6 +389,8 @@ HRESULT DXShader::CreatePixelSharder()
 	{
 		return result;
 	}
+
+	return result;
 }
 
 void DXShader::setDevice(ID3D11Device* _device, ID3D11DeviceContext* _context)
