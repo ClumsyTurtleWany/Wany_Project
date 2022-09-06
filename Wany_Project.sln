@@ -103,7 +103,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CoreInputTest_0", "CoreInpu
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CoreInputTest_1", "CoreInputTest_1\CoreInputTest_1.vcxproj", "{8271BB85-C470-4708-ABFF-3C46E34281FD}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4_Writer", "4_Writer", "{BFA41BE7-AC7B-40E1-B98A-8D92A05E9F9F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4_DXWriter", "4_DXWriter", "{BFA41BE7-AC7B-40E1-B98A-8D92A05E9F9F}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CoreWriterTest_0", "CoreWriterTest_0\CoreWriterTest_0.vcxproj", "{B4638F32-FFDE-401F-9B1D-F39C68B82185}"
 EndProject

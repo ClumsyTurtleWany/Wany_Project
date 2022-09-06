@@ -78,13 +78,13 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>../../output/Debug/CoreTimerTest_0</OutDir>
-    <IntDir>../../output/Debug/CoreTimerTest_0</IntDir>
+    <OutDir>../../output/Debug/$(TargetName)</OutDir>
+    <IntDir>../../output/Debug/$(TargetName)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>../../output/Release/CoreTimerTest_0</OutDir>
-    <IntDir>../../output/Release/CoreTimerTest_0</IntDir>
+    <OutDir>../../output/Release/$(TargetName)</OutDir>
+    <IntDir>../../output/Release/$(TargetName)</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
