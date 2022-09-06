@@ -205,10 +205,22 @@ bool DXDevice::render()
 
 bool DXDevice::release()
 {
-	if (m_pd3dDevice != nullptr)
+	if (m_pRTV != nullptr)
 	{
-		m_pd3dDevice->Release();
-		m_pd3dDevice = nullptr;
+		m_pRTV->Release();
+		m_pRTV = nullptr;
+	}
+
+	if (m_pSwapChain != nullptr)
+	{
+		m_pSwapChain->Release();
+		m_pSwapChain = nullptr;
+	}
+
+	if (m_pGIFactory != nullptr)
+	{
+		m_pGIFactory->Release();
+		m_pGIFactory = nullptr;
 	}
 
 	if (m_pImmediateContext != nullptr)
@@ -218,22 +230,10 @@ bool DXDevice::release()
 		m_pImmediateContext = nullptr;
 	}
 
-	if (m_pGIFactory != nullptr)
+	if (m_pd3dDevice != nullptr)
 	{
-		m_pGIFactory->Release();
-		m_pGIFactory = nullptr;
-	}
-
-	if (m_pSwapChain != nullptr)
-	{
-		m_pSwapChain->Release();
-		m_pSwapChain = nullptr;
-	}
-
-	if (m_pRTV != nullptr)
-	{
-		m_pRTV->Release();
-		m_pRTV = nullptr;
+		m_pd3dDevice->Release();
+		m_pd3dDevice = nullptr;
 	}
 
 	return true;

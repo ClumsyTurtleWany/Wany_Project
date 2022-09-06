@@ -95,6 +95,12 @@ bool DXWriter::release()
 		m_pTextColor = nullptr;
 	}
 
+	if (m_pTextFormat != nullptr)
+	{
+		m_pTextFormat->Release();
+		m_pTextFormat = nullptr;
+	}
+
 	if (m_pDWriteFactory != nullptr)
 	{
 		m_pDWriteFactory->Release();
