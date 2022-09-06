@@ -110,7 +110,7 @@ bool DXShader::render()
 
 	// Draw 명령이 호출되면 위의 파이프라인 순서대로 타고 내려옴. 셋팅 할 때의 순서는 상관 없으나
 	// 셋팅이 안되있으면 문제가 생김.
-	m_pImmediateContext->Draw(m_VertexList.size(), 0);
+	m_pImmediateContext->Draw(static_cast<UINT>(m_VertexList.size()), 0);
 
 	return true;
 }
@@ -163,7 +163,7 @@ bool DXShader::release()
 
 HRESULT DXShader::CreateVertexBuffer()
 {
-	HRESULT result;
+	//HRESULT result;
 	// NDC 좌표계 공간
 	// x: -1 ~ +1
 	// y: -1 ~ +1
@@ -195,7 +195,7 @@ HRESULT DXShader::CreateVertexBuffer()
 	// D3D11_BUFFER_DESC* pDesc,
 	// D3D11_SUBRESOURCE_DATA* pInitialData,
 	// ID3D11Buffer** ppBuffer
-	UINT NumVertex = m_VertexList.size();
+	UINT NumVertex = static_cast<UINT>(m_VertexList.size());
 	D3D11_BUFFER_DESC desc;
 	ZeroMemory(&desc, sizeof(desc));
 	desc.ByteWidth = sizeof(Vertex) * NumVertex; // 바이트 용량

@@ -53,6 +53,4 @@ public:
 	// 5) ºä Æ÷Æ® ¼³Á¤
 	void createViewPort();
 
-public:
-
 };

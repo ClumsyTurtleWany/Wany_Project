@@ -52,13 +52,34 @@
     <Filter Include="WinAPI\Windows\소스 파일">
       <UniqueIdentifier>{27ab7a23-54e2-4471-9fb5-879aa4c1c9f8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{3fc1b9c5-6859-42d8-bcff-ce9d216a974f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\소스 파일">
+      <UniqueIdentifier>{c1d2d9e9-5280-4349-89bf-22b71bc4464e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\헤더 파일">
+      <UniqueIdentifier>{7b43c183-2378-430a-9394-e6d2688c2687}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\소스 파일">
+      <UniqueIdentifier>{1c9f1b78-9efe-4a8d-8565-316a18cf05fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\헤더 파일">
+      <UniqueIdentifier>{0b1cf5ac-996c-488e-8983-374f3835cb3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Writer">
+      <UniqueIdentifier>{44717860-1f43-4207-ae35-5857c91755e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Writer\소스 파일">
+      <UniqueIdentifier>{78db0624-bc9a-419e-a6be-0a35ab5a1a66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Writer\헤더 파일">
+      <UniqueIdentifier>{ca2af170-d8b7-444f-b629-fe7ad6b02c91}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowUI.hpp">
       <Filter>WinAPI\Windows\헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Define.hpp">
-      <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="DXDevice.hpp">
       <Filter>DirectX\Device\헤더 파일</Filter>
@@ -68,6 +89,21 @@
     </ClInclude>
     <ClInclude Include="DXTexture.hpp">
       <Filter>DirectX\Texture\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GameCore.hpp">
+      <Filter>Core\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Define.hpp">
+      <Filter>Common\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.hpp">
+      <Filter>Common\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.hpp">
+      <Filter>Common\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DXWriter.hpp">
+      <Filter>DirectX\Writer\헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -82,6 +118,18 @@
     </ClCompile>
     <ClCompile Include="DXTexture.cpp">
       <Filter>DirectX\Texture\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GameCore.cpp">
+      <Filter>Core\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Common\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>Common\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DXWriter.cpp">
+      <Filter>DirectX\Writer\소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

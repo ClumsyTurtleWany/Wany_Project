@@ -11,8 +11,6 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
     return 1;
 }
 
-
-
 bool Sample::initialize()
 {
     DXDevice::initialize();

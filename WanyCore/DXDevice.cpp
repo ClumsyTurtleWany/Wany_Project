@@ -136,8 +136,8 @@ void DXDevice::createViewPort()
 	// 5) ºä Æ÷Æ® ¼³Á¤
 	//////////////////////////////////////////////////////////////////////
 	D3D11_VIEWPORT vp;
-	vp.Width = clientRect.right;
-	vp.Height = clientRect.bottom;
+	vp.Width = static_cast<float>(clientRect.right);
+	vp.Height = static_cast<float>(clientRect.bottom);
 	vp.TopLeftX = 0;
 	vp.TopLeftY = 0;
 	vp.MaxDepth = 1.0f;

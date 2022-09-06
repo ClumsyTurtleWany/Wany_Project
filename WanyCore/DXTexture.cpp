@@ -36,10 +36,10 @@ ID3D11ShaderResourceView* DXTexture::getResourceView()
 
 float DXTexture::getWidth()
 {
-	return m_Desc.Width;
+	return static_cast<float>(m_Desc.Width);
 }
 
 float DXTexture::getHeight()
 {
-	return m_Desc.Height;
+	return static_cast<float>(m_Desc.Height);
 }
