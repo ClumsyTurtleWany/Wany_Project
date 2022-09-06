@@ -13,7 +13,8 @@ bool GameCore::CoreInitialize()
 	// DXWriter
 	DXWriter::getInstance()->initialize();
 	IDXGISurface* pBackBuffer;
-	m_pSwapChain->GetBuffer(0, __uuidof(IDXGISurface), (void**)&pBackBuffer); // Buffer를 Surface로 가져 올 것이다.
+	// Buffer를 Surface 타입으로 가져 올 것이다. 0번 버퍼의 복사본(pBackBuffer에) 생성.
+	m_pSwapChain->GetBuffer(0, __uuidof(IDXGISurface), (void**)&pBackBuffer);
 	DXWriter::getInstance()->setBuffer(pBackBuffer);
 	pBackBuffer->Release();
 
