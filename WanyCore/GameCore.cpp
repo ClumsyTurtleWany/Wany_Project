@@ -15,6 +15,7 @@ bool GameCore::CoreInitialize()
 	IDXGISurface* pBackBuffer;
 	m_pSwapChain->GetBuffer(0, __uuidof(IDXGISurface), (void**)&pBackBuffer); // Buffer를 Surface로 가져 올 것이다.
 	DXWriter::getInstance()->setBuffer(pBackBuffer);
+	pBackBuffer->Release();
 
 	return initialize();
 }

@@ -151,7 +151,6 @@ bool DXWriter::setBuffer(IDXGISurface* _dxgiSurface)
 		return false;
 	}
 
-
 	m_pd2dRenderTarget->CreateSolidColorBrush(D2D1_COLOR_F({ 0.0f, 0.0f, 0.0f, 1.0f }), &m_pTextColor);
 
 	return true;
