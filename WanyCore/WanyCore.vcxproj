@@ -21,32 +21,32 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{C08B133C-7A03-4DEF-B85E-F150F436F2A4}</ProjectGuid>
-    <RootNamespace>GameCoreSample0</RootNamespace>
+    <ProjectGuid>{dcbbff00-fb32-44c8-93e3-5b71b5f68a18}</ProjectGuid>
+    <RootNamespace>WanyCore</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -78,23 +78,24 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>../../output/Debug/GameCoreSample_2/</OutDir>
-    <IntDir>../../output/Debug/GameCoreSample_2/</IntDir>
+    <OutDir>../../output/Debug/WanyCore/</OutDir>
+    <IntDir>../../output/Debug/WanyCore/</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>../../output/Release/GameCoreSample_2/</OutDir>
-    <IntDir>../../output/Release/GameCoreSample_2/</IntDir>
+    <OutDir>../../output/Release/WanyCore</OutDir>
+    <IntDir>../../output/Release/WanyCore</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>
+      </SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -104,11 +105,12 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>
+      </SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -118,15 +120,22 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>../include;</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>
+      </SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../include/lib;</AdditionalLibraryDirectories>
     </Link>
+    <Lib>
+      <OutputFile>WanyCore_debug.lib</OutputFile>
+    </Lib>
+    <PostBuildEvent>
+      <Command>copy "*.h" "..\\include\\"
+copy "*.hpp" "..\\include\\"
+copy "WanyCore_debug.lib" "..\\include\\lib\\"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -134,49 +143,31 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>
+      </SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../include/lib;</AdditionalLibraryDirectories>
     </Link>
+    <Lib>
+      <OutputFile>WanyCore_release.lib</OutputFile>
+    </Lib>
+    <PostBuildEvent>
+      <Command>copy "*.h" "..\\include\\"
+copy "*.hpp" "..\\include\\"
+copy "WanyCore_release.lib" "..\\include\\lib\\"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Define.hpp" />
-    <ClInclude Include="DXDevice.hpp" />
-    <ClInclude Include="DXInput.hpp" />
-    <ClInclude Include="DXShader.hpp" />
-    <ClInclude Include="DXShaderManager.hpp" />
-    <ClInclude Include="DXSamplerState.hpp" />
-    <ClInclude Include="DXTexture.hpp" />
-    <ClInclude Include="DXTextureManager.hpp" />
-    <ClInclude Include="Engine.hpp" />
-    <ClInclude Include="GameCore.hpp" />
-    <ClInclude Include="Input.hpp" />
-    <ClInclude Include="Node.hpp" />
-    <ClInclude Include="NPC.hpp" />
-    <ClInclude Include="Object.hpp" />
-    <ClInclude Include="Obstacle.hpp" />
-    <ClInclude Include="Octree.hpp" />
-    <ClInclude Include="Player.hpp" />
-    <ClInclude Include="QuadTree.hpp" />
-    <ClInclude Include="SpaceDivision.hpp" />
-    <ClInclude Include="Timer.hpp" />
-    <ClInclude Include="Vertex.hpp" />
     <ClInclude Include="WindowUI.hpp" />
-    <ClInclude Include="DXWriter.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Sample.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\HLSL\ShapeShader.txt" />
-    <Text Include="MaskShader.txt" />
+    <ClCompile Include="WindowUI.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
