@@ -1,14 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="소스 파일">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="헤더 파일">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="리소스 파일">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
@@ -16,27 +8,80 @@
     <Filter Include="WinAPI">
       <UniqueIdentifier>{ce9e022c-cd5d-4463-8521-df2c9bd9c9e3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="WinAPI\소스 파일">
-      <UniqueIdentifier>{27ab7a23-54e2-4471-9fb5-879aa4c1c9f8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="WinAPI\헤더 파일">
-      <UniqueIdentifier>{627a6387-0046-4b01-b489-9407d8b006b9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Common">
       <UniqueIdentifier>{e216b7d4-b57b-4115-9261-e897f5a56c5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX">
+      <UniqueIdentifier>{614d3de9-8e35-45e5-bc99-6b6fd077e8e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Device">
+      <UniqueIdentifier>{3c6ba72a-3b57-4537-b207-c39d49181e50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Device\소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="DirectX\Device\헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="DirectX\Shader">
+      <UniqueIdentifier>{1aa4328f-141b-46b7-83a0-5e2ba8584ef3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Texture">
+      <UniqueIdentifier>{154c0fc7-05f4-4963-86cb-adce3714206e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Shader\소스 파일">
+      <UniqueIdentifier>{42f54bef-a2af-4df9-9157-f7857e2911e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Shader\헤더 파일">
+      <UniqueIdentifier>{4101863f-a680-4a43-b2e4-b4e36b380f2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Texture\헤더 파일">
+      <UniqueIdentifier>{80e2accb-9c9a-412f-bde2-9505bdea4362}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Texture\소스 파일">
+      <UniqueIdentifier>{473647e6-2b40-4144-9313-1fa05d5a8803}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinAPI\Windows">
+      <UniqueIdentifier>{f8ba6985-b97a-4bf1-9f72-3c9a3d094533}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinAPI\Windows\헤더 파일">
+      <UniqueIdentifier>{627a6387-0046-4b01-b489-9407d8b006b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinAPI\Windows\소스 파일">
+      <UniqueIdentifier>{27ab7a23-54e2-4471-9fb5-879aa4c1c9f8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowUI.hpp">
-      <Filter>WinAPI\헤더 파일</Filter>
+      <Filter>WinAPI\Windows\헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Define.hpp">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="DXDevice.hpp">
+      <Filter>DirectX\Device\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DXShader.hpp">
+      <Filter>DirectX\Shader\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DXTexture.hpp">
+      <Filter>DirectX\Texture\헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowUI.cpp">
-      <Filter>WinAPI\소스 파일</Filter>
+      <Filter>WinAPI\Windows\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DXDevice.cpp">
+      <Filter>DirectX\Device\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DXShader.cpp">
+      <Filter>DirectX\Shader\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DXTexture.cpp">
+      <Filter>DirectX\Texture\소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

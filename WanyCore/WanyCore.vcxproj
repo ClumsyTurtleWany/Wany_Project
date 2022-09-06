@@ -122,6 +122,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>../include/;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -132,9 +133,9 @@
       <OutputFile>WanyCore_debug.lib</OutputFile>
     </Lib>
     <PostBuildEvent>
-      <Command>copy "*.h" "..\\include\\"
-copy "*.hpp" "..\\include\\"
-copy "WanyCore_debug.lib" "..\\include\\lib\\"</Command>
+      <Command>copy "*.h" "..\\include\\core\\"
+copy "*.hpp" "..\\include\\core\\"
+copy "WanyCore_debug.lib" "..\\include\\lib\\core\\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -145,6 +146,7 @@ copy "WanyCore_debug.lib" "..\\include\\lib\\"</Command>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>../include/;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -157,16 +159,22 @@ copy "WanyCore_debug.lib" "..\\include\\lib\\"</Command>
       <OutputFile>WanyCore_release.lib</OutputFile>
     </Lib>
     <PostBuildEvent>
-      <Command>copy "*.h" "..\\include\\"
-copy "*.hpp" "..\\include\\"
-copy "WanyCore_release.lib" "..\\include\\lib\\"</Command>
+      <Command>copy "*.h" "..\\include\\core\\"
+copy "*.hpp" "..\\include\\core\\"
+copy "WanyCore_release.lib" "..\\include\\lib\\core\\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Define.hpp" />
+    <ClInclude Include="DXDevice.hpp" />
+    <ClInclude Include="DXShader.hpp" />
+    <ClInclude Include="DXTexture.hpp" />
     <ClInclude Include="WindowUI.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DXDevice.cpp" />
+    <ClCompile Include="DXShader.cpp" />
+    <ClCompile Include="DXTexture.cpp" />
     <ClCompile Include="WindowUI.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

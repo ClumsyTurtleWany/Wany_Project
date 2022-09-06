@@ -125,7 +125,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../include/lib;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../include/lib;../include/lib/core;</AdditionalLibraryDirectories>
       <AdditionalDependencies>WanyCore_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -144,7 +144,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../include/lib;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../include/lib;../include/lib/core;</AdditionalLibraryDirectories>
       <AdditionalDependencies>WanyCore_release.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
