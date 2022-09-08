@@ -100,6 +100,15 @@
     <Filter Include="DirectX\Sampler\헤더 파일">
       <UniqueIdentifier>{caea2542-fa29-4f07-abbd-a82e9a7b642a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object">
+      <UniqueIdentifier>{0a6e3010-d60c-46c6-8799-c540f01ebd87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\소스 파일">
+      <UniqueIdentifier>{7a9ee7c0-40a8-44a8-9cd9-11c6e73f8fed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\헤더 파일">
+      <UniqueIdentifier>{79298fbf-6992-4f74-af21-c57b3be7d074}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowUI.hpp">
@@ -138,6 +147,9 @@
     <ClInclude Include="DXShaderManager.hpp">
       <Filter>DirectX\Shader\헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Object.hpp">
+      <Filter>Object\헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowUI.cpp">
@@ -172,6 +184,9 @@
     </ClCompile>
     <ClCompile Include="DXShaderManager.cpp">
       <Filter>DirectX\Shader\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Object\소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

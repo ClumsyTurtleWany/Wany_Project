@@ -127,6 +127,11 @@ bool WindowUI::createWindow(HINSTANCE _hInstance, const WCHAR* _title, UINT _wid
 	return true;
 }
 
+RECT WindowUI::getClientRect()
+{
+	return clientRect;
+}
+
 bool WindowUI::run()
 {
 	MSG msg;

@@ -6,6 +6,7 @@
 #include "DXSamplerState.hpp"
 #include "DXTextureManager.hpp"
 #include "DXShaderManager.hpp"
+#include "Object.hpp"
 
 class GameCore : public DXDevice
 {

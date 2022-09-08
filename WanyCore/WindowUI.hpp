@@ -13,6 +13,7 @@ public:
 	BOOL initInstance(const WCHAR* _title, UINT _width, UINT _height);
 	ATOM MyRegisterClass();
 	bool createWindow(HINSTANCE _hInstance, const WCHAR* _title, UINT _width, UINT _height);
+	RECT getClientRect();
 
 public:
 	virtual bool run();

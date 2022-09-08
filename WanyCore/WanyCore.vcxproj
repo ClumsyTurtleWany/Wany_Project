@@ -177,6 +177,7 @@ copy "*.txt" "..\\include\\core\\HLSL\\"</Command>
     <ClInclude Include="DXWriter.hpp" />
     <ClInclude Include="GameCore.hpp" />
     <ClInclude Include="Input.hpp" />
+    <ClInclude Include="Object.hpp" />
     <ClInclude Include="Timer.hpp" />
     <ClInclude Include="WindowUI.hpp" />
   </ItemGroup>
@@ -190,6 +191,7 @@ copy "*.txt" "..\\include\\core\\HLSL\\"</Command>
     <ClCompile Include="DXWriter.cpp" />
     <ClCompile Include="GameCore.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Object.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="WindowUI.cpp" />
   </ItemGroup>
