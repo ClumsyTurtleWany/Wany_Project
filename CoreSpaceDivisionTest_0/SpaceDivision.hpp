@@ -1,7 +1,5 @@
 #pragma once
 #include "Node.hpp"
-#include "NPC.hpp"
-#include "Obstacle.hpp"
 
 class SpaceDivision
 {
