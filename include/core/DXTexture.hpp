@@ -28,6 +28,8 @@ public:
 
 	float getWidth();
 	float getHeight();
+
+	bool release();
 	
 };
 

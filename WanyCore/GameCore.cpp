@@ -20,7 +20,8 @@ bool GameCore::CoreInitialize()
 		return false;
 	}
 	
-
+	DXShaderManager::getInstance()->setDevice(m_pd3dDevice, m_pImmediateContext);
+	DXTextureManager::getInstance()->setDevice(m_pd3dDevice, m_pImmediateContext);
 
 	// Sampler State
 	if (!DXSamplerState::setState(m_pd3dDevice))
@@ -140,6 +141,9 @@ bool GameCore::CoreRelease()
 	release();
 	// initialize 역순으로 release 할 것!
 
+	DXTextureManager::getInstance()->release();
+	DXShaderManager::getInstance()->release();
+	DXSamplerState::release();
 	DXWriter::getInstance()->release();
 	Input::getInstance()->release();
 	Timer::getInstance()->release();

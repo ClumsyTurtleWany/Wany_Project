@@ -132,6 +132,12 @@
     <ClInclude Include="DXSamplerState.hpp">
       <Filter>DirectX\Sampler\헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="DXTextureManager.hpp">
+      <Filter>DirectX\Texture\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DXShaderManager.hpp">
+      <Filter>DirectX\Shader\헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowUI.cpp">
@@ -160,6 +166,12 @@
     </ClCompile>
     <ClCompile Include="DXSamplerState.cpp">
       <Filter>DirectX\Sampler\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DXTextureManager.cpp">
+      <Filter>DirectX\Texture\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DXShaderManager.cpp">
+      <Filter>DirectX\Shader\소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

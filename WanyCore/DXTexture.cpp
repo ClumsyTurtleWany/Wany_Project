@@ -52,3 +52,20 @@ float DXTexture::getHeight()
 {
 	return static_cast<float>(m_Desc.Height);
 }
+
+bool DXTexture::release()
+{
+	if (m_pTextureResourceView != nullptr)
+	{
+		m_pTextureResourceView->Release();
+		m_pTextureResourceView = nullptr;
+	}
+
+	if (m_pTextureResource != nullptr)
+	{
+		m_pTextureResource->Release();
+		m_pTextureResource = nullptr;
+	}
+
+	return true;
+}

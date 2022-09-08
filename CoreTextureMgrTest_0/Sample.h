@@ -1,22 +1,17 @@
 #pragma once
 #include "GameCore.hpp"
 #include "DXShader.hpp"
-#include "DXSamplerState.hpp"
-#include "DXShaderManager.hpp"
+#include "DXTextureManager.hpp"
 
+#define RSRC_BACKGROUND L"../../resource/KGCABK.bmp"
+#define RSRC_CHARATER L"../../resource/bitmap1.bmp"
+#define SHADER_FILE L"../include/core/HLSL/ShapeShader.txt"
 
-enum class testKey
-{
-	Key1,
-	Key2,
-	Key3
-};
 //C:\Users\kgca4108\Documents\Visual Studio 2019\My Exported Templates\CoreTestTemplate_0.zip
 class Sample : public GameCore
 {
 public:
 	DXShader testShader;
-	DXTexture testTexture;
 
 public:
 	bool initialize() override;

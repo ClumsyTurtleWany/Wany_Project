@@ -4,6 +4,8 @@
 #include "Input.hpp"
 #include "DXWriter.hpp"
 #include "DXSamplerState.hpp"
+#include "DXTextureManager.hpp"
+#include "DXShaderManager.hpp"
 
 class GameCore : public DXDevice
 {

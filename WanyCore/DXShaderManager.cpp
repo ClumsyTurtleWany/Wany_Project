@@ -1,37 +1,6 @@
-#pragma once
-#include "DXShader.hpp"
+#include "DXShaderManager.hpp"
 
-enum class ShaderType
-{
-	Normal,
-	Mask,
-};
 
-class DXShaderManager : public Singleton<DXShaderManager>`
-{
-private:
-	friend class Singleton<DXShaderManager>;
-
-	ID3D11Device* m_pd3dDevice = nullptr;
-	ID3D11DeviceContext* m_pImmediateContext = nullptr;
-
-	std::map<int, DXShader*> m_ShaderList;
-
-private:
-	DXShaderManager() {};
-	~DXShaderManager() { release(); };
-
-public:
-	void setDevice(ID3D11Device* _device, ID3D11DeviceContext* _context);
-	bool Load(int _key, ShaderType _type = ShaderType::Normal);
-	DXShader* getShader(int _key);
-
-public:
-	bool initialize();
-	bool frame();
-	bool render();
-	bool release();
-};
 
 void DXShaderManager::setDevice(ID3D11Device* _device, ID3D11DeviceContext* _context)
 {
@@ -44,23 +13,24 @@ bool DXShaderManager::Load(int _key, ShaderType _type)
 	auto it = m_ShaderList.find(_key);
 	if (it != m_ShaderList.end())
 	{
-		return it->second;
+		return true;
 	}
 
 	DXShader* newShader = new DXShader;
 	newShader->setDevice(m_pd3dDevice, m_pImmediateContext);
 	if (_type == ShaderType::Mask)
 	{
-		newShader->setShaderFile(L"MaskShader.txt");
+		newShader->setShaderFile(L"../include/core/HLSL/MaskShader.txt");
 	}
 	else
 	{
-		newShader->setShaderFile(L"../HLSL/ShapeShader.txt");
+		newShader->setShaderFile(L"../include/core/HLSL/ShapeShader.txt");
 	}
 
 	bool rst = newShader->initialize();
 	if (!rst)
 	{
+		OutputDebugString(L"WanyCore::DXShaderManager::Failed Shader Initialize.\n");
 		return false;
 	}
 
@@ -101,8 +71,14 @@ bool DXShaderManager::release()
 	{
 		for (auto it : m_ShaderList)
 		{
-			delete it.second;
+			DXShader* pShader = it.second;
+			if (pShader != nullptr)
+			{
+				pShader->release();
+				delete pShader;
+			}
 		}
+		m_ShaderList.clear();
 	}
 
 	return true;
