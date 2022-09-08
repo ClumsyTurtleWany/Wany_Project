@@ -17,6 +17,15 @@ HRESULT DXTexture::Load(std::wstring _filename)
 	HRESULT rst = DirectX::CreateWICTextureFromFile(m_pd3dDevice, _filename.c_str(), (ID3D11Resource**)&m_pTextureResource, &m_pTextureResourceView);
 	if (FAILED(rst))
 	{
+		OutputDebugString(L"WanyCore::DXTexture::Failed Create WIC Texture From File.\n");
+		rst = DirectX::CreateDDSTextureFromFile(m_pd3dDevice, _filename.c_str(), (ID3D11Resource**)&m_pTextureResource, &m_pTextureResourceView);
+		if (FAILED(rst))
+		{
+			OutputDebugString(L"WanyCore::DXTexture::Failed Create DDS Texture From File.\n");
+			OutputDebugString(L"WanyCore::DXTexture::Failed Load.\n");
+			return rst;
+		}
+
 		return rst;
 	}
 

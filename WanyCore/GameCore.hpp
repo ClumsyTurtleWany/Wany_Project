@@ -3,6 +3,7 @@
 #include "Timer.hpp"
 #include "Input.hpp"
 #include "DXWriter.hpp"
+#include "DXSamplerState.hpp"
 
 class GameCore : public DXDevice
 {

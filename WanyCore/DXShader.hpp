@@ -13,34 +13,42 @@ private:
 
 private:
 	// Shader
+
+	// Vertex Buffer
 	ID3D11Buffer* m_pVertexBuffer;
 	ID3D11InputLayout* m_pVertexLayout;
+	std::vector<Vertex> m_VertexList;
+
+	// Index Buffer
+	ID3D11Buffer* m_pIndexBuffer;
+	std::vector<DWORD> m_IndexList;
 
 	ID3D11VertexShader* m_pVertexShader;
 	ID3D11PixelShader* m_pPixelShader;
 
-	std::wstring m_wstrShaderFile;
 	ID3DBlob* m_pVertexShaderCode = nullptr;
 	ID3DBlob* m_pPixelShaderCode = nullptr;
+
+	std::wstring m_wstrShaderFile;
 
 private:
 	// Texture
 	DXTexture* m_pTexture;
-	DXTexture* m_pTextureMask;
-	
-private:
-	std::vector<Vertex> m_VertexList;
+	DXTexture* m_pTextureMask;	
 
 private:
 	bool isCreated = false;
 
 private:
-	HRESULT CreateVertexBuffer();
-	HRESULT CreateVertexLayout();
-	HRESULT CreateVertexSharder();
-	HRESULT CreatePixelSharder();
-	
+	virtual HRESULT CreateVertexBuffer();
+	virtual HRESULT CreateIndexBuffer();
+	virtual HRESULT CreateVertexLayout();
+	virtual HRESULT CreateVertexSharder();
+	virtual HRESULT CreatePixelSharder();
 
+	virtual void initializeVertexList();
+	virtual void initializeIndexList();
+	
 public:
 	bool initialize();
 	bool frame();

@@ -156,8 +156,11 @@ bool DXShader::render()
 	m_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	// Texture - Pixel Shader에 Texture 넘김
-	ID3D11ShaderResourceView* resourceView = m_pTexture->getResourceView();
-	m_pImmediateContext->PSSetShaderResources(0, 1, &resourceView); // 레지스터 0번
+	if (m_pTexture != nullptr)
+	{
+		ID3D11ShaderResourceView* resourceView = m_pTexture->getResourceView();
+		m_pImmediateContext->PSSetShaderResources(0, 1, &resourceView); // 레지스터 0번
+	}
 
 	// Alpha 제거 (배경 제거 - 포토샵 누끼 따는 것처럼)
 	if (m_pTextureMask != nullptr)

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.2.32630.192
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32602.291
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "C_Lang", "C_Lang", "{4FE54FDF-0BD4-4643-B305-515971355CA1}"
 EndProject
@@ -116,6 +116,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0_LinkedList", "0_LinkedList", "{ACD92B18-64C8-4788-8E54-2703490A712C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1_Tree", "1_Tree", "{D4C7B1B9-A5B7-43E3-9C48-800D7DD5FEC1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5_ShaderManager", "5_ShaderManager", "{9D0E33D7-C59B-4D69-8889-10EDFCEF7E6E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CoreShaderManagerTest_0", "CoreShaderManagerTest_0\CoreShaderManagerTest_0.vcxproj", "{EC13CAD5-5BC5-4AF2-9D45-635DA1B26D98}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -529,6 +533,18 @@ Global
 		{6F76FDD8-AA53-4AAC-A7AF-9A49C856CAED}.Release|x64.Build.0 = Release|x64
 		{6F76FDD8-AA53-4AAC-A7AF-9A49C856CAED}.Release|x86.ActiveCfg = Release|Win32
 		{6F76FDD8-AA53-4AAC-A7AF-9A49C856CAED}.Release|x86.Build.0 = Release|Win32
+		{EC13CAD5-5BC5-4AF2-9D45-635DA1B26D98}.Debug|ARM.ActiveCfg = Debug|Win32
+		{EC13CAD5-5BC5-4AF2-9D45-635DA1B26D98}.Debug|ARM64.ActiveCfg = Debug|Win32
+		{EC13CAD5-5BC5-4AF2-9D45-635DA1B26D98}.Debug|x64.ActiveCfg = Debug|x64
+		{EC13CAD5-5BC5-4AF2-9D45-635DA1B26D98}.Debug|x64.Build.0 = Debug|x64
+		{EC13CAD5-5BC5-4AF2-9D45-635DA1B26D98}.Debug|x86.ActiveCfg = Debug|Win32
+		{EC13CAD5-5BC5-4AF2-9D45-635DA1B26D98}.Debug|x86.Build.0 = Debug|Win32
+		{EC13CAD5-5BC5-4AF2-9D45-635DA1B26D98}.Release|ARM.ActiveCfg = Release|Win32
+		{EC13CAD5-5BC5-4AF2-9D45-635DA1B26D98}.Release|ARM64.ActiveCfg = Release|Win32
+		{EC13CAD5-5BC5-4AF2-9D45-635DA1B26D98}.Release|x64.ActiveCfg = Release|x64
+		{EC13CAD5-5BC5-4AF2-9D45-635DA1B26D98}.Release|x64.Build.0 = Release|x64
+		{EC13CAD5-5BC5-4AF2-9D45-635DA1B26D98}.Release|x86.ActiveCfg = Release|Win32
+		{EC13CAD5-5BC5-4AF2-9D45-635DA1B26D98}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -588,6 +604,8 @@ Global
 		{EEE5A0BB-331A-4501-8E17-2BB6958B553D} = {198E4D80-FAF3-410C-B2ED-140682355F50}
 		{ACD92B18-64C8-4788-8E54-2703490A712C} = {2AEBBBB1-ACFB-49EA-B126-72C6C9CEDB60}
 		{D4C7B1B9-A5B7-43E3-9C48-800D7DD5FEC1} = {2AEBBBB1-ACFB-49EA-B126-72C6C9CEDB60}
+		{9D0E33D7-C59B-4D69-8889-10EDFCEF7E6E} = {9F47A49F-976D-48FC-B89F-5B06CD034EFB}
+		{EC13CAD5-5BC5-4AF2-9D45-635DA1B26D98} = {9D0E33D7-C59B-4D69-8889-10EDFCEF7E6E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A3BBF0E1-2A93-4AE9-8140-46A77DAC79E2}

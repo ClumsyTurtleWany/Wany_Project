@@ -63,20 +63,21 @@ BOOL WindowUI::initInstance(const WCHAR* _title, UINT _width, UINT _height)
 	// Wany
 	// 운영체제에 등록한(RegisterWindow) 윈도우를 생성한다.
 	DWORD csStyle = WS_OVERLAPPEDWINDOW;
-	RECT rc = { 0, 0, _width, _height };
+	RECT rc = { 0, 0, static_cast<LONG>(_width), static_cast<LONG>(_height) };
 	AdjustWindowRect(&rc, csStyle, FALSE);
 
 	UINT clientWidth = rc.right - rc.left;
 	UINT clientHeight = rc.bottom - rc.top;
 	UINT monitorWidth = GetSystemMetrics(SM_CXFULLSCREEN);
 	UINT monitorHeight = GetSystemMetrics(SM_CYFULLSCREEN);
-	UINT x = (monitorWidth - clientWidth) * 0.5f;
-	UINT y = (monitorHeight - clientHeight) * 0.5f;
+	UINT x = static_cast<UINT>((monitorWidth - clientWidth) * 0.5f);
+	UINT y = static_cast<UINT>((monitorHeight - clientHeight) * 0.5f);
 
 	hWnd = CreateWindowExW(0, L"WindowUI", _title, WS_OVERLAPPEDWINDOW, x, y, clientWidth, clientHeight, nullptr, nullptr, hInstance, nullptr);
 
 	if (!hWnd)
 	{
+		OutputDebugString(L"WanyCore::WindowUI::Failed Create Window.\n");
 		return FALSE;
 	}
 
@@ -120,6 +121,7 @@ bool WindowUI::createWindow(HINSTANCE _hInstance, const WCHAR* _title, UINT _wid
 	WORD rst = MyRegisterClass();
 	if (!initInstance(_title, _width, _height))
 	{
+		OutputDebugString(L"WanyCore::WindowUI::Failed initInstance.\n");
 		return false;
 	}
 	return true;

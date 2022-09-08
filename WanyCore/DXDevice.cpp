@@ -154,6 +154,7 @@ bool DXDevice::initialize()
 
 	if (FAILED(createDevice())) // 0도 성공으로 들어가 있어서 SUCCEED or FAILED로만 사용할 것.
 	{
+		OutputDebugString(L"WanyCore::DXDevice::Failed Create Device.\n");
 		return false;
 	}
 
@@ -163,6 +164,7 @@ bool DXDevice::initialize()
 
 	if (FAILED(createFactory()))
 	{
+		OutputDebugString(L"WanyCore::DXDevice::Failed Create Factory.\n");
 		return false;
 	}
 
@@ -172,6 +174,7 @@ bool DXDevice::initialize()
 
 	if (FAILED(createSwapChain()))
 	{
+		OutputDebugString(L"WanyCore::DXDevice::Failed Create Swap Chain.\n");
 		return false;
 	}
 
@@ -182,6 +185,7 @@ bool DXDevice::initialize()
 
 	if (FAILED(createRenderTargetView()))
 	{
+		OutputDebugString(L"WanyCore::DXDevice::Failed Create Render Target View.\n");
 		return false;
 	}
 

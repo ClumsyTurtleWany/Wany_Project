@@ -61,12 +61,6 @@
     <Filter Include="Core\헤더 파일">
       <UniqueIdentifier>{7b43c183-2378-430a-9394-e6d2688c2687}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Common\소스 파일">
-      <UniqueIdentifier>{1c9f1b78-9efe-4a8d-8565-316a18cf05fa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Common\헤더 파일">
-      <UniqueIdentifier>{0b1cf5ac-996c-488e-8983-374f3835cb3c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="DirectX\Writer">
       <UniqueIdentifier>{44717860-1f43-4207-ae35-5857c91755e5}</UniqueIdentifier>
     </Filter>
@@ -75,6 +69,36 @@
     </Filter>
     <Filter Include="DirectX\Writer\헤더 파일">
       <UniqueIdentifier>{ca2af170-d8b7-444f-b629-fe7ad6b02c91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Timer">
+      <UniqueIdentifier>{aeb2778c-313b-4211-bda1-e9543f2696c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Input">
+      <UniqueIdentifier>{ac8c139d-a924-4369-a894-285df4b0620e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Input\소스 파일">
+      <UniqueIdentifier>{1c9f1b78-9efe-4a8d-8565-316a18cf05fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Input\헤더 파일">
+      <UniqueIdentifier>{0b1cf5ac-996c-488e-8983-374f3835cb3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Timer\헤더 파일">
+      <UniqueIdentifier>{5146a59a-3122-451e-b1d6-4da5e53f0da1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Timer\소스 파일">
+      <UniqueIdentifier>{b6ad5e7f-ad58-441d-a480-dfe8d92877df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\HLSL">
+      <UniqueIdentifier>{5ec0543a-8a44-45b1-b77e-1e390b7eeb89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Sampler">
+      <UniqueIdentifier>{5a681b95-0733-4b00-b8a8-a601ee32be31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Sampler\소스 파일">
+      <UniqueIdentifier>{41d9279d-0040-44a9-899b-d4e36ef4404a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Sampler\헤더 파일">
+      <UniqueIdentifier>{caea2542-fa29-4f07-abbd-a82e9a7b642a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -93,17 +117,20 @@
     <ClInclude Include="GameCore.hpp">
       <Filter>Core\헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Define.hpp">
-      <Filter>Common\헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Timer.hpp">
-      <Filter>Common\헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Input.hpp">
-      <Filter>Common\헤더 파일</Filter>
+      <Filter>Common\Input\헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="DXWriter.hpp">
       <Filter>DirectX\Writer\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Define.hpp">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.hpp">
+      <Filter>Common\Timer\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DXSamplerState.hpp">
+      <Filter>DirectX\Sampler\헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -122,14 +149,25 @@
     <ClCompile Include="GameCore.cpp">
       <Filter>Core\소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Timer.cpp">
-      <Filter>Common\소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Input.cpp">
-      <Filter>Common\소스 파일</Filter>
+      <Filter>Common\Input\소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="DXWriter.cpp">
       <Filter>DirectX\Writer\소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Common\Timer\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DXSamplerState.cpp">
+      <Filter>DirectX\Sampler\소스 파일</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ShapeShader.txt">
+      <Filter>DirectX\HLSL</Filter>
+    </Text>
+    <Text Include="MaskShader.txt">
+      <Filter>DirectX\HLSL</Filter>
+    </Text>
   </ItemGroup>
 </Project>

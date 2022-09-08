@@ -6,12 +6,14 @@ bool DXWriter::initialize()
 	rst = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &m_pd2dFactory);
 	if (FAILED(rst))
 	{
+		OutputDebugString(L"WanyCore::DXWriter::Failed Create Factory.\n");
 		return false;
 	}
 
 	rst = DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), (IUnknown**)&m_pDWriteFactory);
 	if (FAILED(rst))
 	{
+		OutputDebugString(L"WanyCore::DXWriter::Failed Create Write Factory.\n");
 		return false;
 	}
 
@@ -35,10 +37,9 @@ bool DXWriter::initialize()
 		L"ko-kr", // 영문 폰트면 L"en-us"
 		&m_pTextFormat);
 
-
-
 	if (FAILED(rst))
 	{
+		OutputDebugString(L"WanyCore::DXWriter::Failed Create Text Format.\n");
 		return false;
 	}
 
@@ -46,17 +47,16 @@ bool DXWriter::initialize()
 	// 글자가 박혀있어서 글자는 변경 불가능 하다.
 	rst = m_pDWriteFactory->CreateTextLayout(
 		m_strDefault.c_str(),
-		m_strDefault.size(),
+		static_cast<UINT32>(m_strDefault.size()),
 		m_pTextFormat,
 		1024, 768,
 		&m_pTextLayout);
 
 	if (FAILED(rst))
 	{
+		OutputDebugString(L"WanyCore::DXWriter::Failed Create Text Layout.\n");
 		return false;
 	}
-
-
 
 	return true;
 };
@@ -75,7 +75,7 @@ bool DXWriter::render()
 	D2D1_RECT_F rt = { 0, 0, 600, 300 };
 	m_pTextColor->SetColor({ 1, 0, 0, 1 });
 	m_pTextColor->SetOpacity(1); // 0에 가까울 수록 투명해짐. 0 ~ 1
-	m_pd2dRenderTarget->DrawText(m_strDefault.c_str(), m_strDefault.size(), m_pTextFormat, rt, m_pTextColor);
+	m_pd2dRenderTarget->DrawText(m_strDefault.c_str(), static_cast<UINT32>(m_strDefault.size()), m_pTextFormat, rt, m_pTextColor);
 
 	m_pd2dRenderTarget->EndDraw();
 	return true;
@@ -148,6 +148,7 @@ bool DXWriter::setBuffer(IDXGISurface* _dxgiSurface)
 	HRESULT rst = m_pd2dFactory->CreateDxgiSurfaceRenderTarget(_dxgiSurface, renderTargetProperties, &m_pd2dRenderTarget);
 	if (FAILED(rst))
 	{
+		OutputDebugString(L"WanyCore::DXWriter::Failed Create DxgiSurface Render Target.\n");
 		return false;
 	}
 
@@ -166,14 +167,14 @@ bool DXWriter::draw(int _x, int _y, std::wstring _str, D2D1_COLOR_F _color)
 	m_pd2dRenderTarget->BeginDraw();
 
 	// render는 반드시 begin과 end 사이에 넣어야 함.
-	D2D1_RECT_F rt = { _x, _y, 600, 300 };
+	D2D1_RECT_F rt = { static_cast<FLOAT>(_x), static_cast<FLOAT>(_y), 600, 300 };
 	m_pTextColor->SetColor(_color);
 	m_pTextColor->SetOpacity(1); // 0에 가까울 수록 투명해짐. 0 ~ 1
-	m_pd2dRenderTarget->DrawText(_str.c_str(), _str.size(), m_pTextFormat, rt, m_pTextColor);
+	m_pd2dRenderTarget->DrawText(_str.c_str(), static_cast<UINT32>(_str.size()), m_pTextFormat, rt, m_pTextColor);
 
 
 	// Draw Layout
-	m_pTextLayout->SetFontSize(_x, { 0, (UINT)m_strDefault.size() });
+	m_pTextLayout->SetFontSize(static_cast<FLOAT>(_x), { 0, (UINT)m_strDefault.size() });
 	m_pTextLayout->SetFontStyle(DWRITE_FONT_STYLE_ITALIC, { 0, (UINT)m_strDefault.size() });
 	m_pd2dRenderTarget->DrawTextLayout({ 0, 0 }, m_pTextLayout, m_pTextColor);
 

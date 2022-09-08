@@ -8,13 +8,13 @@ bool Timer::initialize()
 	fpsCounter = 0;
 	fpsTimer = 0.0f;
 
-	beforeTime = timeGetTime();
+	beforeTime = static_cast<float>(timeGetTime());
 	return true;
 }
 
 bool Timer::frame()
 {
-	float currentTime = timeGetTime();
+	float currentTime = static_cast<float>(timeGetTime());
 	secondPerFrame = (currentTime - beforeTime) / 1000.0f;
 	gameTime += secondPerFrame;
 	fpsCounter++;
@@ -23,7 +23,7 @@ bool Timer::frame()
 	fpsTimer += secondPerFrame;
 	if (fpsTimer >= 1.0f)
 	{
-		fps = fpsCounter;
+		fps = static_cast<float>(fpsCounter);
 		fpsTimer -= 1.0f;
 		fpsCounter = 0;
 	}

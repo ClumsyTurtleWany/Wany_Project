@@ -73,7 +73,7 @@ bool DXWriter::render()
 	// render는 반드시 begin과 end 사이에 넣어야 함.
 	// Draw
 	D2D1_RECT_F rt = { 0, 0, 600, 300 };
-	m_pTextColor->SetColor({ 1, 0, 0, 1 });
+	m_pTextColor->SetColor({ 1, 0, 0, 1 }); // R, G, B, A,  0 ~ 1
 	m_pTextColor->SetOpacity(1); // 0에 가까울 수록 투명해짐. 0 ~ 1
 	m_pd2dRenderTarget->DrawText(m_strDefault.c_str(), m_strDefault.size(), m_pTextFormat, rt, m_pTextColor);
 

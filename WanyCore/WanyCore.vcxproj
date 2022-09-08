@@ -42,7 +42,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -135,7 +135,8 @@
     <PostBuildEvent>
       <Command>copy "*.h" "..\\include\\core\\"
 copy "*.hpp" "..\\include\\core\\"
-copy "WanyCore_debug.lib" "..\\lib\\core\\"</Command>
+copy "WanyCore_debug.lib" "..\\lib\\core\\"
+copy "*.txt" "..\\include\\core\\HLSL\\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -161,12 +162,14 @@ copy "WanyCore_debug.lib" "..\\lib\\core\\"</Command>
     <PostBuildEvent>
       <Command>copy "*.h" "..\\include\\core\\"
 copy "*.hpp" "..\\include\\core\\"
-copy "WanyCore_release.lib" "..\\lib\\core\\"</Command>
+copy "WanyCore_release.lib" "..\\lib\\core\\"
+copy "*.txt" "..\\include\\core\\HLSL\\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Define.hpp" />
     <ClInclude Include="DXDevice.hpp" />
+    <ClInclude Include="DXSamplerState.hpp" />
     <ClInclude Include="DXShader.hpp" />
     <ClInclude Include="DXTexture.hpp" />
     <ClInclude Include="DXWriter.hpp" />
@@ -177,6 +180,7 @@ copy "WanyCore_release.lib" "..\\lib\\core\\"</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXDevice.cpp" />
+    <ClCompile Include="DXSamplerState.cpp" />
     <ClCompile Include="DXShader.cpp" />
     <ClCompile Include="DXTexture.cpp" />
     <ClCompile Include="DXWriter.cpp" />
@@ -184,6 +188,10 @@ copy "WanyCore_release.lib" "..\\lib\\core\\"</Command>
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="WindowUI.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="MaskShader.txt" />
+    <Text Include="ShapeShader.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
