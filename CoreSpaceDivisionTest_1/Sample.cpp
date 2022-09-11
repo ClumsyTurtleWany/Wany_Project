@@ -65,6 +65,7 @@ bool Sample::render()
         it->render();
     }
 
+
     user->render();
     return true;
 }
