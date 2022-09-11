@@ -106,8 +106,8 @@ bool DXShader::render()
 	// 6) Pixel Shader Stage
 	m_pImmediateContext->PSSetShader(m_pPixelShader, NULL, 0);
 
-	// 이러한 셋팅도 있는데 디폴트 값으로 이미 들어 있었다. 
-	// 기본적으로 트라이앵글로 출력 하지만 포ㅇㄴ트 혹은 사각형 등으로 출력도 가능.
+	// 이러한 셋팅도 있는데 디폴트 값으로 이미 들어 있었다.
+	// 기본적으로 트라이앵글로 출력 하지만 포인트 혹은 사각형 등으로 출력도 가능.
 	m_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	// Texture - Pixel Shader에 Texture 넘김
@@ -473,13 +473,14 @@ void DXShader::initializeIndexList()
 	// 2, 1, 3 순서(시계 방향 순서)의 인덱스를 넣어주면 됨.
 	// 인덱스 버퍼를 넣어주면 Vertex Buffer가 줄어들기 때문에 속도가 더 빨라진다.
 
+	// Rect
 	m_IndexList.assign(6, 0);
 	m_IndexList[0] = 0;
 	m_IndexList[1] = 1;
 	m_IndexList[2] = 2;
 	m_IndexList[3] = 2;
 	m_IndexList[4] = 1;
-	m_IndexList[5] = 3;
+	m_IndexList[5] = 3;	
 }
 
 void DXShader::setDevice(ID3D11Device* _device, ID3D11DeviceContext* _context)
@@ -493,6 +494,14 @@ void DXShader::setTexture(DXTexture* _texture)
 	m_pTexture = _texture;
 }
 
+void DXShader::setColor(const Vector4f& _color)
+{
+	for (auto &it : m_VertexList)
+	{
+		it.color = _color;
+	}
+}
+
 void DXShader::setTextureMask(DXTexture* _texture)
 {
 	m_pTextureMask = _texture;
@@ -503,13 +512,9 @@ void DXShader::setShaderFile(std::wstring _file)
 	m_wstrShaderFile = _file;
 }
 
-void DXShader::setVertexList(const std::vector<Vertex>& _target)
+std::vector<Vertex>* DXShader::getVertexList()
 {
-	if (!_target.empty())
-	{
-		m_VertexList.clear();
-		m_VertexList.assign(_target.begin(), _target.end());
-	}
+	return &m_VertexList;
 }
 
 float DXShader::getTextureWidth()

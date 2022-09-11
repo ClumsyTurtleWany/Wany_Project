@@ -6,7 +6,10 @@
 #include "DXSamplerState.hpp"
 #include "DXTextureManager.hpp"
 #include "DXShaderManager.hpp"
-#include "Object.hpp"
+//#include "Object.hpp"
+//#include "SpaceDivision.hpp"
+//#include "QuadTree.hpp"
+//#include "Octree.hpp"
 
 class GameCore : public DXDevice
 {

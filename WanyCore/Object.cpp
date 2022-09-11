@@ -44,3 +44,17 @@ void objectBase::setTextureMask(DXTexture* _mask)
 {
 	pShader->setTextureMask(_mask);
 }
+
+void objectBase::setColor(Vector4f _color)
+{
+	pShader->setColor(_color);	
+}
+
+void objectBase::setSpriteList(const std::vector<Rect_<float>>& _list)
+{
+	if (!_list.empty())
+	{
+		SpriteList.clear();
+		SpriteList.assign(_list.begin(), _list.end());
+	}
+}

@@ -4,6 +4,9 @@
 #include <windows.h>
 #pragma comment(lib, "winmm.lib") // timeGetTime
 
+#include <cstdlib> // srand
+#include <ctime> // time
+
 extern class WindowUI* g_pWindow;
 
 #define CoreMode

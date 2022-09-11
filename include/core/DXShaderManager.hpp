@@ -1,10 +1,16 @@
 #pragma once
 #include "DXShader.hpp"
+#include "DXShaderBorder.hpp"
 
 enum class ShaderType
 {
+	// No Texture
 	Normal,
+	// Texture
+	Texture,
+	// Texture + Mask
 	Mask,
+	Border,
 };
 
 class DXShaderManager : public Singleton< DXShaderManager>
@@ -23,8 +29,9 @@ private:
 
 public:
 	void setDevice(ID3D11Device* _device, ID3D11DeviceContext* _context);
-	bool Load(int _key, ShaderType _type = ShaderType::Normal);
+	bool Load(int _key, ShaderType _type = ShaderType::Texture);
 	DXShader* getShader(int _key);
+	bool DeleteShader(int _key);
 
 public:
 	bool initialize();

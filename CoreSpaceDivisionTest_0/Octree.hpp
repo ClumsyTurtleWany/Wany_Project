@@ -17,12 +17,13 @@ public:
 public:
 	void create(void* _shape) override;
 	void addObject(objectBase* _obj) override;
-	objectBase* newPlayer() override;
-	objectBase* newNPC() override;
-	objectBase* newObstacle() override;
+	//objectBase* newPlayer() override;
+	//objectBase* newNPC() override;
+	//objectBase* newObstacle() override;
 	bool Collision(objectBase* _src, std::vector<objectBase*>* _dst, std::vector<void*>* _dstSection = nullptr) override;
 	bool checkBorder(objectBase* _target) override;
 	void updateDynamicObject() override;
+	void render() override;
 
 public:
 	void create(Box_<T> _box);
@@ -364,6 +365,12 @@ void Octree<T>::updateDynamicObject()
 }
 
 template <typename T>
+void Octree<T>::render()
+{
+
+}
+
+template <typename T>
 void Octree<T>::updateDynamicObject(node3D<T>* _target, std::vector<object3D<T>*>* _list)
 {
 	if (_target == nullptr)
@@ -541,23 +548,23 @@ void Octree<T>::addObject(objectBase* _obj)
 	addObject(static_cast<object3D<T>*>(_obj));
 }
 
-template <typename T>
-objectBase* Octree<T>::newPlayer()
-{
-	return new Player3D<T>;
-}
-
-template <typename T>
-objectBase* Octree<T>::newNPC()
-{
-	return new NPC3D<T>;
-}
-
-template <typename T>
-objectBase* Octree<T>::newObstacle()
-{
-	return new Obstacle3D<T>;
-}
+//template <typename T>
+//objectBase* Octree<T>::newPlayer()
+//{
+//	return new Player3D<T>;
+//}
+//
+//template <typename T>
+//objectBase* Octree<T>::newNPC()
+//{
+//	return new NPC3D<T>;
+//}
+//
+//template <typename T>
+//objectBase* Octree<T>::newObstacle()
+//{
+//	return new Obstacle3D<T>;
+//}
 
 template <typename T>
 bool Octree<T>::Collision(objectBase* _src, std::vector<objectBase*>* _dst, std::vector<void*>* _dstSection)

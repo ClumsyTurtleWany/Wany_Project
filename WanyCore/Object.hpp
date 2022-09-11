@@ -46,14 +46,8 @@ public:
 	void createShader(ShaderType _type = ShaderType::Mask);
 	void setTexture(DXTexture* _texture);
 	void setTextureMask(DXTexture* _mask);
-	void setSpriteList(const std::vector<Rect_<float>>& _list)
-	{
-		if (!_list.empty())
-		{
-			SpriteList.clear();
-			SpriteList.assign(_list.begin(), _list.end());
-		}
-	}
+	void setColor(Vector4f _color);
+	void setSpriteList(const std::vector<Rect_<float>>& _list);
 };
 
 
@@ -84,7 +78,8 @@ public:
 public:
 	bool Random()
 	{
-		shape = Rect_<T>(30 + rand() % 70, 30 + rand() % 70, 50 + (rand() % 20), 50 + (rand() % 20));
+		RECT clientRect = g_pWindow->getClientRect();
+		shape = Rect_<T>(rand() % clientRect.right, rand() % clientRect.bottom, 50 + (rand() % 20), 50 + (rand() % 20));
 		this->mass = 100 + rand() % 100;
 		//int testForce = 50 + rand() % 50;
 		//this->force = Vector2D_<T>(100 + rand() % 200, 100 + rand() % 200);
@@ -140,12 +135,38 @@ public:
 		rectNDC.RB.x = (shape.RB.x - mapWidth_Half) / mapWidth_Half;
 		rectNDC.RB.y = -(shape.RB.y - mapHeight_Half) / mapHeight_Half;
 
-		std::vector<Vertex> list;
-		list.assign(4, Vertex());
-		list[0].pos = { rectNDC.LT.x, rectNDC.LT.y, 0.0f };
-		list[1].pos = { rectNDC.RB.x, rectNDC.LT.y, 0.0f };
-		list[2].pos = { rectNDC.LT.x, rectNDC.RB.y, 0.0f };
-		list[3].pos = { rectNDC.RB.x, rectNDC.RB.y, 0.0f };
+		//std::vector<Vertex> list;
+		//list.assign(4, Vertex());
+		//list[0].pos = { rectNDC.LT.x, rectNDC.LT.y, 0.0f };
+		//list[1].pos = { rectNDC.RB.x, rectNDC.LT.y, 0.0f };
+		//list[2].pos = { rectNDC.LT.x, rectNDC.RB.y, 0.0f };
+		//list[3].pos = { rectNDC.RB.x, rectNDC.RB.y, 0.0f };
+
+		std::vector<Vertex>*list = pShader->getVertexList();
+		list->at(0).pos = { rectNDC.LT.x, rectNDC.LT.y, 0.0f };
+		list->at(1).pos = { rectNDC.RB.x, rectNDC.LT.y, 0.0f };
+		list->at(2).pos = { rectNDC.LT.x, rectNDC.RB.y, 0.0f };
+		list->at(3).pos = { rectNDC.RB.x, rectNDC.RB.y, 0.0f };
+
+		//if (!SpriteList.empty())
+		//{
+		//	// Set Sprite Region
+		//	float textureWidth = pShader->getTextureWidth();
+		//	float textureHeight = pShader->getTextureHeight();
+
+		//	Rect_<float> rect = SpriteList[SpriteNum];
+		//	list[0].texture = { rect.left() / textureWidth, rect.top() / textureHeight }; // p1-LT
+		//	list[1].texture = { rect.right() / textureWidth, rect.top() / textureHeight }; // p2-RT
+		//	list[2].texture = { rect.left() / textureWidth, rect.bottom() / textureHeight }; // p3-LB
+		//	list[3].texture = { rect.right() / textureWidth, rect.bottom() / textureHeight }; // p4-RB
+		//}
+		//else
+		//{
+		//	list[0].texture = { 0.0f, 0.0f }; // p1-LT
+		//	list[1].texture = { 1.0f, 0.0f }; // p2-RT
+		//	list[2].texture = { 0.0f, 1.0f }; // p3-LB
+		//	list[3].texture = { 1.0f, 1.0f }; // p4-RB
+		//}
 
 		if (!SpriteList.empty())
 		{
@@ -154,20 +175,20 @@ public:
 			float textureHeight = pShader->getTextureHeight();
 
 			Rect_<float> rect = SpriteList[SpriteNum];
-			list[0].texture = { rect.left() / textureWidth, rect.top() / textureHeight }; // p1-LT
-			list[1].texture = { rect.right() / textureWidth, rect.top() / textureHeight }; // p2-RT
-			list[2].texture = { rect.left() / textureWidth, rect.bottom() / textureHeight }; // p3-LB
-			list[3].texture = { rect.right() / textureWidth, rect.bottom() / textureHeight }; // p4-RB
+			list->at(0).texture = { rect.left() / textureWidth, rect.top() / textureHeight }; // p1-LT
+			list->at(1).texture = { rect.right() / textureWidth, rect.top() / textureHeight }; // p2-RT
+			list->at(2).texture = { rect.left() / textureWidth, rect.bottom() / textureHeight }; // p3-LB
+			list->at(3).texture = { rect.right() / textureWidth, rect.bottom() / textureHeight }; // p4-RB
 		}
 		else
 		{
-			list[0].texture = { 0.0f, 0.0f }; // p1-LT
-			list[1].texture = { 1.0f, 0.0f }; // p2-RT
-			list[2].texture = { 0.0f, 1.0f }; // p3-LB
-			list[3].texture = { 1.0f, 1.0f }; // p4-RB
+			list->at(0).texture = { 0.0f, 0.0f }; // p1-LT
+			list->at(1).texture = { 1.0f, 0.0f }; // p2-RT
+			list->at(2).texture = { 0.0f, 1.0f }; // p3-LB
+			list->at(3).texture = { 1.0f, 1.0f }; // p4-RB
 		}
 
-		pShader->setVertexList(list);
+		//pShader->setVertexList(list);
 	}
 
 protected:

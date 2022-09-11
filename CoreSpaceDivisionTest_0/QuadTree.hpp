@@ -2,7 +2,7 @@
 #include "SpaceDivision.hpp"
 
 // 공간 분할(Space Division) 알고리즘을 위한 Quad Tree
-static const int QuadTreeChildNum = 8;
+static const int QuadTreeChildNum = 4;
 
 template <typename T>
 class QuadTree : public SpaceDivision //: public SpaceDivision<Rect_<T>, object2D<T>>
@@ -17,12 +17,16 @@ public:
 public:
 	void create(void* _shape) override;
 	void addObject(objectBase* _obj) override;
-	objectBase* newPlayer() override;
-	objectBase* newNPC() override;
-	objectBase* newObstacle() override;
+	//objectBase* newPlayer() override;
+	//objectBase* newNPC() override;
+	//objectBase* newObstacle() override;
 	bool Collision(objectBase* _src, std::vector<objectBase*>* _dst, std::vector<void*>* _dstSection = nullptr) override;
 	bool checkBorder(objectBase* _target) override;
 	void updateDynamicObject() override;
+	
+public:
+	void render() override;
+	void renderNode(node2D<T>* _target);
 
 public:
 	void create(Rect_<T> _rect);
@@ -42,7 +46,7 @@ private:
 	bool getCollisionObject(node2D<T>* _node, object2D<T>* _src, std::vector<object2D<T>*>* _dst, std::vector<Rect_<T>>* _dstSection = nullptr);
 	void resetDynamicObject(node2D<T>* _target);
 	void updateDynamicObject(node2D<T>* _target, std::vector<object2D<T>*>* _list);
-
+	
 	bool isHitLeft(node2D<T>* _border, object2D<T>* _target, bool _move = false);
 	bool isHitRight(node2D<T>* _border, object2D<T>* _target, bool _move = false);
 	bool isHitTop(node2D<T>* _border, object2D<T>* _target, bool _move = false);
@@ -96,6 +100,7 @@ node2D<T>* QuadTree<T>::createNode(T _x, T _y, T _width, T _height, node2D<T>* _
 {
 	node2D<T>* newNode = new node2D<T>(Rect_<T>(_x, _y, _width, _height), _parent);
 	newNode->child.assign(QuadTreeChildNum, nullptr);
+	
 	return newNode;
 }
 
@@ -224,57 +229,76 @@ bool QuadTree<T>::getCollisionObject(node2D<T>* _node, object2D<T>* _src, std::v
 	else
 	{
 		bool isCollision = false;
-		if (!_node->stObjList.empty())
-		{
-			for (auto it : _node->stObjList)
-			{
-				//if (!_src->rect.RectInRect(it->rect))
-				if (_src == it)
-				{
-					continue;
-				}
 
-				if (_src->getCircle().intersectCircle(it->getCircle()))
+		if (_node->shape.intersectRect(_src->shape))
+		{
+			_node->setColor(Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+
+			if (!_node->stObjList.empty())
+			{
+				for (auto it : _node->stObjList)
 				{
-					Rect_<T> intersection;
-					isCollision = _src->shape.intersectRect(it->shape, &intersection);
-					if (isCollision)
+					//if (!_src->rect.RectInRect(it->rect))
+					if (_src == it)
 					{
-						_dst->push_back(it);
-						if (_dstSection != nullptr)
+						continue;
+					}
+
+					if (_src->getCircle().intersectCircle(it->getCircle()))
+					{
+						Rect_<T> intersection;
+						isCollision = _src->shape.intersectRect(it->shape, &intersection);
+						if (isCollision)
 						{
-							_dstSection->push_back(intersection);
+							_dst->push_back(it);
+							if (_dstSection != nullptr)
+							{
+								_dstSection->push_back(intersection);
+							}
+						}
+					}
+				}
+			}
+
+			if (!_node->dyObjList.empty())
+			{
+				for (auto it : _node->dyObjList)
+				{
+					//if (!_src->rect.RectInRect(it->rect))
+					if (_src == it)
+					{
+						continue;
+					}
+
+					if (_src->getCircle().intersectCircle(it->getCircle()))
+					{
+						Rect_<T> intersection;
+						isCollision = _src->shape.intersectRect(it->shape, &intersection);
+						if (isCollision)
+						{
+							_dst->push_back(it);
+							if (_dstSection != nullptr)
+							{
+								_dstSection->push_back(intersection);
+							}
 						}
 					}
 				}
 			}
 		}
-
-		if (!_node->dyObjList.empty())
+		else
 		{
-			for (auto it : _node->dyObjList)
-			{
-				//if (!_src->rect.RectInRect(it->rect))
-				if (_src == it)
-				{
-					continue;
-				}
-
-				if (_src->getCircle().intersectCircle(it->getCircle()))
-				{
-					Rect_<T> intersection;
-					isCollision = _src->shape.intersectRect(it->shape, &intersection);
-					if (isCollision)
-					{
-						_dst->push_back(it);
-						if (_dstSection != nullptr)
-						{
-							_dstSection->push_back(intersection);
-						}
-					}
-				}
-			}
+			_node->setColor(Vector4f(0.0f, 1.0f, 0.0f, 1.0f));
 		}
+
+		/*if (isCollision)
+		{
+			_node->setColor(Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+		}
+		else
+		{
+			_node->setColor(Vector4f(0.0f, 1.0f, 0.0f, 1.0f));
+		}*/
 
 		if (!_node->isLeaf())
 		{
@@ -312,6 +336,25 @@ void QuadTree<T>::updateDynamicObject()
 	for (auto it : objList)
 	{
 		addObject(it);
+	}
+}
+
+template<typename T>
+inline void QuadTree<T>::render()
+{
+	renderNode(root);
+}
+
+template<typename T>
+inline void QuadTree<T>::renderNode(node2D<T>* _target)
+{
+	if (_target != nullptr)
+	{
+		for (auto it : _target->child)
+		{
+			renderNode(static_cast<node2D<T>*>(it));
+		}
+		_target->render();
 	}
 }
 
@@ -442,23 +485,23 @@ void QuadTree<T>::addObject(objectBase* _obj)
 	addObject(static_cast<object2D<T>*>(_obj));
 }
 
-template <typename T>
-objectBase* QuadTree<T>::newPlayer()
-{
-	return new Player2D<T>;
-}
-
-template <typename T>
-objectBase* QuadTree<T>::newNPC()
-{
-	return new NPC2D<T>;
-}
-
-template <typename T>
-objectBase* QuadTree<T>::newObstacle()
-{
-	return new Obstacle2D<T>;
-}
+//template <typename T>
+//objectBase* QuadTree<T>::newPlayer()
+//{
+//	return new Player2D<T>;
+//}
+//
+//template <typename T>
+//objectBase* QuadTree<T>::newNPC()
+//{
+//	return new NPC2D<T>;
+//}
+//
+//template <typename T>
+//objectBase* QuadTree<T>::newObstacle()
+//{
+//	return new Obstacle2D<T>;
+//}
 
 template <typename T>
 bool QuadTree<T>::Collision(objectBase* _src, std::vector<objectBase*>* _dst, std::vector<void*>* _dstSection)

@@ -109,6 +109,15 @@
     <Filter Include="Object\헤더 파일">
       <UniqueIdentifier>{79298fbf-6992-4f74-af21-c57b3be7d074}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SpaceDivision">
+      <UniqueIdentifier>{c5b37b13-1a4f-4644-ac39-5677a03e63ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SpaceDivision\헤더 파일">
+      <UniqueIdentifier>{8b388964-4e2e-48e4-929a-e5bdb0eeddeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SpaceDivision\소스 파일">
+      <UniqueIdentifier>{51cdf987-d3c6-4d6d-a2a2-2b9b484b69e4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowUI.hpp">
@@ -150,6 +159,21 @@
     <ClInclude Include="Object.hpp">
       <Filter>Object\헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="DXShaderBorder.hpp">
+      <Filter>DirectX\Shader\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.hpp">
+      <Filter>SpaceDivision\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Octree.hpp">
+      <Filter>SpaceDivision\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="QuadTree.hpp">
+      <Filter>SpaceDivision\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="SpaceDivision.hpp">
+      <Filter>SpaceDivision\헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowUI.cpp">
@@ -188,12 +212,18 @@
     <ClCompile Include="Object.cpp">
       <Filter>Object\소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="DXShaderBorder.cpp">
+      <Filter>DirectX\Shader\소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ShapeShader.txt">
       <Filter>DirectX\HLSL</Filter>
     </Text>
     <Text Include="MaskShader.txt">
+      <Filter>DirectX\HLSL</Filter>
+    </Text>
+    <Text Include="TextureShader.txt">
       <Filter>DirectX\HLSL</Filter>
     </Text>
   </ItemGroup>

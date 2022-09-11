@@ -42,7 +42,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -171,13 +171,18 @@ copy "*.txt" "..\\include\\core\\HLSL\\"</Command>
     <ClInclude Include="DXDevice.hpp" />
     <ClInclude Include="DXSamplerState.hpp" />
     <ClInclude Include="DXShader.hpp" />
+    <ClInclude Include="DXShaderBorder.hpp" />
     <ClInclude Include="DXShaderManager.hpp" />
     <ClInclude Include="DXTexture.hpp" />
     <ClInclude Include="DXTextureManager.hpp" />
     <ClInclude Include="DXWriter.hpp" />
     <ClInclude Include="GameCore.hpp" />
     <ClInclude Include="Input.hpp" />
+    <ClInclude Include="Node.hpp" />
     <ClInclude Include="Object.hpp" />
+    <ClInclude Include="Octree.hpp" />
+    <ClInclude Include="QuadTree.hpp" />
+    <ClInclude Include="SpaceDivision.hpp" />
     <ClInclude Include="Timer.hpp" />
     <ClInclude Include="WindowUI.hpp" />
   </ItemGroup>
@@ -185,6 +190,7 @@ copy "*.txt" "..\\include\\core\\HLSL\\"</Command>
     <ClCompile Include="DXDevice.cpp" />
     <ClCompile Include="DXSamplerState.cpp" />
     <ClCompile Include="DXShader.cpp" />
+    <ClCompile Include="DXShaderBorder.cpp" />
     <ClCompile Include="DXShaderManager.cpp" />
     <ClCompile Include="DXTexture.cpp" />
     <ClCompile Include="DXTextureManager.cpp" />
@@ -198,6 +204,7 @@ copy "*.txt" "..\\include\\core\\HLSL\\"</Command>
   <ItemGroup>
     <Text Include="MaskShader.txt" />
     <Text Include="ShapeShader.txt" />
+    <Text Include="TextureShader.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
