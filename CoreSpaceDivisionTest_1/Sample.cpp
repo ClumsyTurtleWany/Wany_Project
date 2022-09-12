@@ -2,6 +2,8 @@
 
 // 2022-09-06
 
+LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+
 int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
     Sample sampleWindow;
@@ -21,7 +23,7 @@ bool Sample::initialize()
     Rect2f rect(0, 0, 1024, 768);
     CollisionMap->create(&rect);
 
-    for (int i = 0; i < 50; i++)
+    for (int i = 0; i < 20; i++)
     {
         objectBase* pObj = new object2D<float>;
         pObj->Random();

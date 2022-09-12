@@ -454,10 +454,10 @@ void DXShader::initializeVertexList()
 	m_VertexList[2].pos = { -1.0f, -1.0f, 0.0f }; // p3-LB
 	m_VertexList[3].pos = { +1.0f, -1.0f, 0.0f }; // p4-LB
 
-	m_VertexList[0].color = { 1.0f, 0.0f, 0.0f, 0.0f }; // p1-LT
-	m_VertexList[1].color = { 0.0f, 1.0f, 0.0f, 0.0f }; // p2-RT
-	m_VertexList[2].color = { 0.0f, 0.0f, 1.0f, 0.0f }; // p3-LB
-	m_VertexList[3].color = { 1.0f, 1.0f, 1.0f, 0.0f }; // p4-LB
+	m_VertexList[0].color = { 1.0f, 1.0f, 1.0f, 1.0f }; // p1-LT
+	m_VertexList[1].color = { 1.0f, 1.0f, 1.0f, 1.0f }; // p2-RT
+	m_VertexList[2].color = { 1.0f, 1.0f, 1.0f, 1.0f }; // p3-LB
+	m_VertexList[3].color = { 1.0f, 1.0f, 1.0f, 1.0f }; // p4-LB
 
 	m_VertexList[0].texture = { 0.0f, 0.0f }; // p1-LT
 	m_VertexList[1].texture = { 1.0f, 0.0f }; // p2-RT

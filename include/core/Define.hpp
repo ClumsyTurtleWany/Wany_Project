@@ -10,6 +10,7 @@
 extern class WindowUI* g_pWindow;
 
 #define CoreMode
+#define DEBUG_DISPLAY
 
 // STL
 #include <vector>

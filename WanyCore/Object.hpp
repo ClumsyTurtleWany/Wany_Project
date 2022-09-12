@@ -17,7 +17,7 @@ private:
 
 public:
 	// Direct X
-	DXShader* pShader;
+	DXShader* pShader = nullptr;
 
 public:
 	std::vector<Rect_<float>> SpriteList;
@@ -186,6 +186,12 @@ public:
 			list->at(1).texture = { 1.0f, 0.0f }; // p2-RT
 			list->at(2).texture = { 0.0f, 1.0f }; // p3-LB
 			list->at(3).texture = { 1.0f, 1.0f }; // p4-RB
+
+			// flip
+			//list->at(0).texture = { 1.0f, 0.0f }; // p1-RT
+			//list->at(1).texture = { 0.0f, 0.0f }; // p2-LT
+			//list->at(2).texture = { 1.0f, 1.0f }; // p3-RB
+			//list->at(3).texture = { 0.0f, 1.0f }; // p4-LB
 		}
 
 		//pShader->setVertexList(list);

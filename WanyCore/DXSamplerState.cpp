@@ -20,6 +20,8 @@ bool DXSamplerState::setState(ID3D11Device* _pd3dDevice)
 	// FLOAT MinLOD;
 	// FLOAT MaxLOD;
 	SamplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT; // 최근점 필터링. 현재 u,v 값에 가까운 값 넣음.
+	//SamplerDesc.Filter = D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT; // 테스트용
+	
 	SamplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP; // x 축 // MIRROR_ONCE 는 지포스에서 지원 안함. AMD 에서 지원. 지포스는 ONCE 대신 CLAMP 실행. 
 	SamplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP; // y 축
 	SamplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP; // z 축

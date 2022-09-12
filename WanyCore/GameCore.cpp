@@ -109,6 +109,7 @@ bool GameCore::CoreRender()
 		return false;
 	}
 
+#ifdef DEBUG_DISPLAY
 	if (!Input::getInstance()->render())
 	{
 		OutputDebugString(L"WanyCore::Input::Failed Render.\n");
@@ -121,16 +122,16 @@ bool GameCore::CoreRender()
 		return false;
 	}
 
-
 	Timer* timer = Timer::getInstance();
 	std::wstring info = L"Time: " + std::to_wstring(timer->getPlayTime()) + L", Fps: " + std::to_wstring(timer->getFPS()) + L"\n";
 	DXWriter::getInstance()->setString(info);
-	
+
 	if (!DXWriter::getInstance()->render())
 	{
 		OutputDebugString(L"WanyCore::DXWriter::Failed Render.\n");
 		return false;
 	}
+#endif
 	///////////////////////////////////
 	PostRender();
 	return true;
