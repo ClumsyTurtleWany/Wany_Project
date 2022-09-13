@@ -43,7 +43,7 @@ public:
 
 public:
 	void setDevice(ID3D11Device* _device, ID3D11DeviceContext* _context);
-	void createShader(ShaderType _type = ShaderType::Mask);
+	bool createShader(ShaderType _type = ShaderType::Mask);
 	void setTexture(DXTexture* _texture);
 	void setTextureMask(DXTexture* _mask);
 	void setColor(Vector4f _color);

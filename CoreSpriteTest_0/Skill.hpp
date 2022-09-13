@@ -40,6 +40,7 @@ public:
 	float frameTime = 0.0f;
 	float delayTime = 45.0f / 1000.0f;
 	int FPS = 0;
+	std::vector<std::wstring> textureKeyList;
 
 public:
 	virtual bool initialize() override;

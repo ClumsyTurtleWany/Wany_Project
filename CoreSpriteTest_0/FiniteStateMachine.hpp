@@ -1,5 +1,6 @@
 #pragma once
 
+// Finite State Machine
 class FiniteStateMachine
 {
 public:
@@ -7,4 +8,5 @@ public:
 	virtual bool frame();
 	virtual bool render();
 	virtual bool release();
+
 };

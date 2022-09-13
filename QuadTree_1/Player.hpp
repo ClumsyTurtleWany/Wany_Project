@@ -1,3 +1,4 @@
+#include "..\CoreSpriteTest_0\Player.hpp"
 #pragma once
 #include "Object.hpp"
 

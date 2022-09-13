@@ -1,6 +1,6 @@
 #include "Sample.h"
 
-// 2022-09-06
+// 2022-09-12
 
 int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
@@ -17,6 +17,7 @@ bool Sample::initialize()
 {
     state = new Skill;
     state->initialize();
+
     return true;
 }
 

@@ -65,7 +65,9 @@ bool DXShaderManager::DeleteShader(int _key)
 	auto it = m_ShaderList.find(_key);
 	if (it != m_ShaderList.end())
 	{
-		it->second->release();
+		DXShader* pShader = it->second;
+		pShader->release();
+		pShader = nullptr;
 		m_ShaderList.erase(_key);
 		return true;
 	}

@@ -18,7 +18,11 @@ bool objectBase::render()
 
 bool objectBase::release()
 {
-	return pShader->release();
+	if (DXShaderManager::getInstance()->DeleteShader(object_id))
+	{
+		return true;
+	}
+	return false;
 }
 
 void objectBase::setDevice(ID3D11Device* _device, ID3D11DeviceContext* _context)
@@ -26,12 +30,14 @@ void objectBase::setDevice(ID3D11Device* _device, ID3D11DeviceContext* _context)
 	pShader->setDevice(_device, _context);
 }
 
-void objectBase::createShader(ShaderType _type)
+bool objectBase::createShader(ShaderType _type)
 {
 	if (DXShaderManager::getInstance()->Load(object_id, _type))
 	{
 		pShader = DXShaderManager::getInstance()->getShader(object_id);
+		return true;
 	}
+	return false;
 }
 
 
