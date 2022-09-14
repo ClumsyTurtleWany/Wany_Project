@@ -11,4 +11,8 @@ public:
 	virtual bool frame() override;
 	virtual bool render() override;
 	virtual bool release() override;
+
+public:
+	bool moveLeft();
+	bool moveRight();
 };

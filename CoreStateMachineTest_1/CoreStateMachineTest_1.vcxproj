@@ -42,7 +42,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -155,6 +155,9 @@
     <ClInclude Include="Sample.h" />
     <ClInclude Include="UserState.hpp" />
     <ClInclude Include="UserState_Idle.hpp" />
+    <ClInclude Include="UserState_Jump.hpp" />
+    <ClInclude Include="UserState_MoveLeft.hpp" />
+    <ClInclude Include="UserState_MoveRight.hpp" />
     <ClInclude Include="UserState_Skill_0.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -162,6 +165,9 @@
     <ClCompile Include="Sample.cpp" />
     <ClCompile Include="UserState.cpp" />
     <ClCompile Include="UserState_Idle.cpp" />
+    <ClCompile Include="UserState_Jump.cpp" />
+    <ClCompile Include="UserState_MoveLeft.cpp" />
+    <ClCompile Include="UserState_MoveRight.cpp" />
     <ClCompile Include="UserState_Skill_0.cpp" />
   </ItemGroup>
   <ItemGroup>

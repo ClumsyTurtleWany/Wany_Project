@@ -8,8 +8,18 @@ UserState_Skill_0::UserState_Skill_0(Player* _user) : UserState(_user)
 
 bool UserState_Skill_0::initialize()
 {
-    float x = user->pObj->shape.cx() - 504;
-    float y = user->pObj->shape.cy() - 332;
+    float x = 0.0f;
+    float y = 0.0f;
+    if (user->currentDirection == Player::Direction::Left)
+    {
+        x = user->pObj->shape.cx() - 504;
+        y = user->pObj->shape.cy() - 332;
+    }
+    else
+    {
+        x = user->pObj->shape.cx();
+        y = user->pObj->shape.cy() - 332;
+    }
     skill = new object2D<float>(Rect2f(x, y, 504, 332));
     skill->createShader(ShaderType::Texture);
 
@@ -48,6 +58,13 @@ bool UserState_Skill_0::initialize()
     }
 
     skill->setTexture(DXTextureManager::getInstance()->getTexture(textureKeyList[skillState]));
+
+    std::vector<Vertex>* UserVertexList = user->pObj->pShader->getVertexList();
+    std::vector<Vertex>* skillVertexList = skill->pShader->getVertexList();
+    skillVertexList->at(0).texture = UserVertexList->at(0).texture;
+    skillVertexList->at(1).texture = UserVertexList->at(1).texture;
+    skillVertexList->at(2).texture = UserVertexList->at(2).texture;
+    skillVertexList->at(3).texture = UserVertexList->at(3).texture;
 
     beforeFrameTime = static_cast<float>(timeGetTime());
     return true;

@@ -10,6 +10,14 @@ protected:
 
 public:
 	object2D<float>* pObj;
+	
+	enum class Direction
+	{
+		Left,
+		Right
+	};
+
+	Direction currentDirection;
 
 public:
 	Player();

@@ -135,66 +135,41 @@ public:
 		rectNDC.RB.x = (shape.RB.x - mapWidth_Half) / mapWidth_Half;
 		rectNDC.RB.y = -(shape.RB.y - mapHeight_Half) / mapHeight_Half;
 
-		//std::vector<Vertex> list;
-		//list.assign(4, Vertex());
-		//list[0].pos = { rectNDC.LT.x, rectNDC.LT.y, 0.0f };
-		//list[1].pos = { rectNDC.RB.x, rectNDC.LT.y, 0.0f };
-		//list[2].pos = { rectNDC.LT.x, rectNDC.RB.y, 0.0f };
-		//list[3].pos = { rectNDC.RB.x, rectNDC.RB.y, 0.0f };
-
+		// Vectex List
 		std::vector<Vertex>*list = pShader->getVertexList();
 		list->at(0).pos = { rectNDC.LT.x, rectNDC.LT.y, 0.0f };
 		list->at(1).pos = { rectNDC.RB.x, rectNDC.LT.y, 0.0f };
 		list->at(2).pos = { rectNDC.LT.x, rectNDC.RB.y, 0.0f };
 		list->at(3).pos = { rectNDC.RB.x, rectNDC.RB.y, 0.0f };
 
-		//if (!SpriteList.empty())
-		//{
-		//	// Set Sprite Region
-		//	float textureWidth = pShader->getTextureWidth();
-		//	float textureHeight = pShader->getTextureHeight();
-
-		//	Rect_<float> rect = SpriteList[SpriteNum];
-		//	list[0].texture = { rect.left() / textureWidth, rect.top() / textureHeight }; // p1-LT
-		//	list[1].texture = { rect.right() / textureWidth, rect.top() / textureHeight }; // p2-RT
-		//	list[2].texture = { rect.left() / textureWidth, rect.bottom() / textureHeight }; // p3-LB
-		//	list[3].texture = { rect.right() / textureWidth, rect.bottom() / textureHeight }; // p4-RB
-		//}
-		//else
-		//{
-		//	list[0].texture = { 0.0f, 0.0f }; // p1-LT
-		//	list[1].texture = { 1.0f, 0.0f }; // p2-RT
-		//	list[2].texture = { 0.0f, 1.0f }; // p3-LB
-		//	list[3].texture = { 1.0f, 1.0f }; // p4-RB
-		//}
-
-		if (!SpriteList.empty())
+		if (0)
 		{
-			// Set Sprite Region
-			float textureWidth = pShader->getTextureWidth();
-			float textureHeight = pShader->getTextureHeight();
+			if (!SpriteList.empty())
+			{
+				// Set Sprite Region
+				float textureWidth = pShader->getTextureWidth();
+				float textureHeight = pShader->getTextureHeight();
 
-			Rect_<float> rect = SpriteList[SpriteNum];
-			list->at(0).texture = { rect.left() / textureWidth, rect.top() / textureHeight }; // p1-LT
-			list->at(1).texture = { rect.right() / textureWidth, rect.top() / textureHeight }; // p2-RT
-			list->at(2).texture = { rect.left() / textureWidth, rect.bottom() / textureHeight }; // p3-LB
-			list->at(3).texture = { rect.right() / textureWidth, rect.bottom() / textureHeight }; // p4-RB
+				Rect_<float> rect = SpriteList[SpriteNum];
+				list->at(0).texture = { rect.left() / textureWidth, rect.top() / textureHeight }; // p1-LT
+				list->at(1).texture = { rect.right() / textureWidth, rect.top() / textureHeight }; // p2-RT
+				list->at(2).texture = { rect.left() / textureWidth, rect.bottom() / textureHeight }; // p3-LB
+				list->at(3).texture = { rect.right() / textureWidth, rect.bottom() / textureHeight }; // p4-RB
+			}
+			else
+			{
+				list->at(0).texture = { 0.0f, 0.0f }; // p1-LT
+				list->at(1).texture = { 1.0f, 0.0f }; // p2-RT
+				list->at(2).texture = { 0.0f, 1.0f }; // p3-LB
+				list->at(3).texture = { 1.0f, 1.0f }; // p4-RB
+
+				// flip
+				//list->at(0).texture = { 1.0f, 0.0f }; // p1-RT
+				//list->at(1).texture = { 0.0f, 0.0f }; // p2-LT
+				//list->at(2).texture = { 1.0f, 1.0f }; // p3-RB
+				//list->at(3).texture = { 0.0f, 1.0f }; // p4-LB
+			}
 		}
-		else
-		{
-			list->at(0).texture = { 0.0f, 0.0f }; // p1-LT
-			list->at(1).texture = { 1.0f, 0.0f }; // p2-RT
-			list->at(2).texture = { 0.0f, 1.0f }; // p3-LB
-			list->at(3).texture = { 1.0f, 1.0f }; // p4-RB
-
-			// flip
-			//list->at(0).texture = { 1.0f, 0.0f }; // p1-RT
-			//list->at(1).texture = { 0.0f, 0.0f }; // p2-LT
-			//list->at(2).texture = { 1.0f, 1.0f }; // p3-RB
-			//list->at(3).texture = { 0.0f, 1.0f }; // p4-LB
-		}
-
-		//pShader->setVertexList(list);
 	}
 
 protected:
