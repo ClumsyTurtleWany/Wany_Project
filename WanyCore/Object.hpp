@@ -57,6 +57,7 @@ class object2D : public objectBase
 {
 public:
 	Rect_<T> shape;
+	Rect_<T> hitbox;
 	Vector2D_<T> force;
 	Vector2D_<T> accel;
 	Vector2D_<T> velocity;
@@ -195,6 +196,7 @@ class object3D : public objectBase
 {
 public:
 	Box_<T> shape;
+	Box_<T> hitbox;
 	Vector3D_<T> force;
 	Vector3D_<T> accel;
 	Vector3D_<T> velocity;
