@@ -35,6 +35,8 @@ bool Player::frame(float _dt)
 		return false;
 	}
 
+	pObj->hitbox = pObj->shape;
+
 	return true;
 }
 
@@ -44,6 +46,8 @@ bool Player::render()
 	{
 		return false;
 	}
+
+	DrawBorder(pObj->hitbox, BORDER_COLOR_RED);
 
 	if (!currentState->render())
 	{

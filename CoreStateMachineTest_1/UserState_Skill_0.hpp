@@ -9,7 +9,7 @@
 class UserState_Skill_0 : public UserState
 {
 public:
-	objectBase* skill;
+	object2D<float>* skill;
 	int skillState = 0;
 	float beforeFrameTime = 0.0f;
 	float secondPerFrame = 0.0f;

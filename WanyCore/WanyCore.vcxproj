@@ -139,6 +139,10 @@ copy "*.hpp" "..\\include\\core\\"
 copy "WanyCore_debug.lib" "..\\lib\\core\\"
 copy "*.txt" "..\\include\\core\\HLSL\\"</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>copy "..\\lib\\FMOD\\fmod.dll" "..\\..\\output\\Debug\\$(TargetName)\\"
+copy "..\\lib\\FMOD\\fmod.dll" "..\\$(TargetName)\\"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -167,6 +171,10 @@ copy "*.hpp" "..\\include\\core\\"
 copy "WanyCore_release.lib" "..\\lib\\core\\"
 copy "*.txt" "..\\include\\core\\HLSL\\"</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>copy "..\\lib\\FMOD\\fmod.dll" "..\\..\\output\\Release\\$(TargetName)\\"
+copy "..\\lib\\FMOD\\fmod.dll" "..\\$(TargetName)\\"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Define.hpp" />
@@ -183,11 +191,7 @@ copy "*.txt" "..\\include\\core\\HLSL\\"</Command>
     <ClInclude Include="FMODSoundManager.hpp" />
     <ClInclude Include="GameCore.hpp" />
     <ClInclude Include="Input.hpp" />
-    <ClInclude Include="Node.hpp" />
     <ClInclude Include="Object.hpp" />
-    <ClInclude Include="Octree.hpp" />
-    <ClInclude Include="QuadTree.hpp" />
-    <ClInclude Include="SpaceDivision.hpp" />
     <ClInclude Include="Timer.hpp" />
     <ClInclude Include="WindowUI.hpp" />
   </ItemGroup>

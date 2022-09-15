@@ -10,18 +10,39 @@ bool UserState_Skill_0::initialize()
 {
     float x = 0.0f;
     float y = 0.0f;
+    float width = 504;
+    float height = 332;
+
+    float hitboxOffset_x = 10.0f;
+    float hitboxOffset_y = 10.0f;
+    float hitbox_x = 0.0f;
+    float hitbox_y = 0.0f;
+    float hitbox_width = 0.0f;
+    float hitbox_height = 0.0f;
     if (user->currentDirection == Player::Direction::Left)
     {
-        x = user->pObj->shape.cx() - 504;
-        y = user->pObj->shape.cy() - 332;
+        x = user->pObj->shape.cx() - width;
+        y = user->pObj->shape.cy() - height;
+        
+        hitbox_x = x + hitboxOffset_x;
+        hitbox_y = y + hitboxOffset_y;
+        hitbox_width = width - (hitboxOffset_x * 2.0f);
+        hitbox_height = height - (hitboxOffset_y * 2.0f);
     }
     else
     {
         x = user->pObj->shape.cx();
-        y = user->pObj->shape.cy() - 332;
+        y = user->pObj->shape.cy() - height;
+
+        hitbox_x = x + hitboxOffset_x;
+        hitbox_y = y + hitboxOffset_y;
+        hitbox_width = width - (hitboxOffset_x * 2.0f);
+        hitbox_height = height - (hitboxOffset_y * 2.0f);
     }
     skill = new object2D<float>(Rect2f(x, y, 504, 332));
     skill->createShader(ShaderType::Texture);
+
+    skill->hitbox = Rect2f(hitbox_x, hitbox_y, hitbox_width, hitbox_height);
 
     // 1
     textureKeyList.push_back(USER_STATE_SKILL_0_0_0);
@@ -112,6 +133,7 @@ bool UserState_Skill_0::frame()
 bool UserState_Skill_0::render()
 {
     skill->render();
+    DrawBorder(skill->hitbox, BORDER_COLOR_GREEN);
     return true;
 }
 

@@ -113,7 +113,7 @@ public:
 	}
 
 public:
-	virtual bool frame(float _dt) { return true; };
+	virtual bool frame(float _dt) {	return true; };
 	bool render() override
 	{
 		updateShader();
