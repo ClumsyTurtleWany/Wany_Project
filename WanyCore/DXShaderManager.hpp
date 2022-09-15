@@ -13,7 +13,7 @@ enum class ShaderType
 	Border,
 };
 
-class DXShaderManager : public Singleton< DXShaderManager>
+class DXShaderManager : public Singleton<DXShaderManager>
 {
 private:
 	friend class Singleton<DXShaderManager>;

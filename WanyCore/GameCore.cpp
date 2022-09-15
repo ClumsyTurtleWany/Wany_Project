@@ -23,6 +23,19 @@ bool GameCore::CoreInitialize()
 	DXShaderManager::getInstance()->setDevice(m_pd3dDevice, m_pImmediateContext);
 	DXTextureManager::getInstance()->setDevice(m_pd3dDevice, m_pImmediateContext);
 
+	DXShaderBorderManager::getInstance()->setDevice(m_pd3dDevice, m_pImmediateContext);
+	if (!DXShaderBorderManager::getInstance()->initialize())
+	{
+		OutputDebugString(L"WanyCore::DXShaderBorderManager::Failed Initialize.\n");
+		return false;
+	}
+
+	if (!FMODSoundManager::getInstance()->initialize())
+	{
+		OutputDebugString(L"WanyCore::FMODSoundManager::Failed Initialize.\n");
+		return false;
+	}
+
 	// Sampler State
 	if (!DXSamplerState::setState(m_pd3dDevice))
 	{
@@ -73,6 +86,12 @@ bool GameCore::CoreFrame()
 	if (!DXWriter::getInstance()->frame())
 	{
 		OutputDebugString(L"WanyCore::DXWriter::Failed Frame.\n");
+		return false;
+	}
+
+	if (!FMODSoundManager::getInstance()->frame())
+	{
+		OutputDebugString(L"WanyCore::FMODSoundManager::Failed frame.\n");
 		return false;
 	}
 
@@ -141,8 +160,9 @@ bool GameCore::CoreRelease()
 {
 	release();
 	// initialize 역순으로 release 할 것!
-
+	FMODSoundManager::getInstance()->release();	
 	DXTextureManager::getInstance()->release();
+	DXShaderBorderManager::getInstance()->release();
 	DXShaderManager::getInstance()->release();
 	DXSamplerState::release();
 	DXWriter::getInstance()->release();

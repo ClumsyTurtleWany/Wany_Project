@@ -121,6 +121,7 @@
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>../include/;../include/core/;../include/FMOD/;</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -129,6 +130,10 @@
       <AdditionalLibraryDirectories>../lib/;../lib/core/;../lib/FMOD/;</AdditionalLibraryDirectories>
       <AdditionalDependencies>WanyCore_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>copy "..\\lib\\FMOD\\fmod.dll" "..\\..\\output\\Debug\\$(TargetName)\\"
+copy "..\\lib\\FMOD\\fmod.dll" "..\\$(TargetName)\\"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -139,6 +144,7 @@
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>../include/;../include/core/;../include/FMOD/;</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -148,6 +154,10 @@
       <AdditionalDependencies>WanyCore_release.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>../lib/;../lib/core/;../lib/FMOD/;</AdditionalLibraryDirectories>
     </Link>
+    <PreBuildEvent>
+      <Command>copy "..\\lib\\FMOD\\fmod.dll" "..\\..\\output\\Release\\$(TargetName)\\"
+copy "..\\lib\\FMOD\\fmod.dll" "..\\$(TargetName)\\"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Sample.h" />

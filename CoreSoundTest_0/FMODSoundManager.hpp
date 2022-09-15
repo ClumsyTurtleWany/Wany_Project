@@ -1,6 +1,12 @@
 #pragma once
 #include "FMODSound.hpp"
 
+enum class SoundType
+{
+	BGM,
+	Effect,
+};
+
 class FMODSoundManager : public Singleton<FMODSoundManager>
 {
 private:
@@ -14,7 +20,8 @@ private:
 	~FMODSoundManager() { release(); };
 
 public:
-	bool Load(std::wstring _filename);
+	bool Load(std::wstring _filename, SoundType _type = SoundType::Effect);
+	bool LoadDir(std::wstring _path);
 	FMODSound* getSound(std::wstring _filename);
 
 public:

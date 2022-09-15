@@ -239,18 +239,18 @@ bool FMODSound::render()
 
 bool FMODSound::release()
 {
-	if (m_pSound != nullptr)
-	{
-		m_pSound->release();
-		m_pSound = nullptr;
-	}
+	//if (m_pSound != nullptr)
+	//{
+	//	m_pSound->release();
+	//	m_pSound = nullptr;
+	//}
 
-	if (m_pFmodSystem != nullptr)
-	{
-		// System은 Close 먼저 필요함.
-		m_pFmodSystem->close();
-		m_pFmodSystem->release();
-		m_pFmodSystem = nullptr;
-	}
+	//if (m_pFmodSystem != nullptr)
+	//{
+	//	// System은 Close 먼저 필요함.
+	//	m_pFmodSystem->close();
+	//	m_pFmodSystem->release();
+	//	m_pFmodSystem = nullptr;
+	//}
 	return true;
 }

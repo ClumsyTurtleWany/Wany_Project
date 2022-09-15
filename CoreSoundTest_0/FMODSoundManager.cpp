@@ -1,6 +1,6 @@
 #include "FMODSoundManager.hpp"
 
-bool FMODSoundManager::Load(std::wstring _filename)
+bool FMODSoundManager::Load(std::wstring _filename, SoundType _type)
 {
 	auto it = m_SoundList.find(_filename);
 	if (it != m_SoundList.end())
@@ -15,13 +15,56 @@ bool FMODSoundManager::Load(std::wstring _filename)
 	filename.assign(_filename.begin(), _filename.end());
 	if (!newSound->load(filename))
 	{
+		delete newSound;
+
 		std::wstring debugStr = L"WanyCore::FMODSoundManager::Load::Failed Load FMODSound(";
 		debugStr += _filename + L").\n";
 		OutputDebugString(debugStr.c_str());
 		return false;
 	}
+
+	if (_type == SoundType::Effect)
+	{
+		newSound->setLoop(false);
+	}
+	else
+	{
+		newSound->setLoop(true);
+	}
 	
 	m_SoundList.insert(std::make_pair(_filename, newSound));
+
+	return true;
+}
+
+bool FMODSoundManager::LoadDir(std::wstring _path)
+{
+	// recursive_directory_iterator 사용 시 하위 폴더까지 모두 탐색.
+	/*std::filesystem::path path(_path);
+	for (auto& file : std::filesystem::recursive_directory_iterator(path))
+	{
+		std::wstring filename = file.path().filename();
+		std::wstring str = file.path();
+		Load(str);
+	}*/
+
+	// directory_iterator 사용 시 현재 폴더만 탐색. 하위 폴더 탐색 시 재귀적으로 폴더 호출 필요.
+	// 위의 코드와 아래 코드가 동일하다고 보면 됨.
+	std::filesystem::path path(_path);
+	for (auto& file : std::filesystem::directory_iterator(path))
+	{
+		std::wstring filename = file.path().filename();
+		std::wstring str = file.path();
+		if (file.path().extension() == L"")
+		{
+			std::wstring dir = str + L"/";
+			LoadDir(dir);
+		}
+		else
+		{
+			Load(str);
+		}
+	}
 
 	return true;
 }
@@ -64,7 +107,7 @@ bool FMODSoundManager::frame()
 		return false;
 	}
 
-	return false;
+	return true;
 }
 
 bool FMODSoundManager::render()
@@ -74,5 +117,21 @@ bool FMODSoundManager::render()
 
 bool FMODSoundManager::release()
 {
+	for (auto it : m_SoundList)
+	{
+		FMODSound* pSound = it.second;
+		pSound->release();
+		delete pSound;
+		pSound = nullptr;
+	}
+
+	if (m_pFmodSystem != nullptr)
+	{
+		// System은 Close 먼저 필요함.
+		m_pFmodSystem->close();
+		m_pFmodSystem->release();
+		m_pFmodSystem = nullptr;
+	}
+
 	return false;
 }

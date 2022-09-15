@@ -6,6 +6,8 @@
 #include "DXSamplerState.hpp"
 #include "DXTextureManager.hpp"
 #include "DXShaderManager.hpp"
+#include "DXShaderBorderManager.hpp"
+#include "FMODSoundManager.hpp"
 //#include "Object.hpp"
 //#include "SpaceDivision.hpp"
 //#include "QuadTree.hpp"

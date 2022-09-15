@@ -22,6 +22,9 @@ bool Sample::initialize()
         m_pSound = FMODSoundManager::getInstance()->getSound(L"../../resource/sound/abel_leaf.asf");
     }
 
+    FMODSoundManager::getInstance()->LoadDir(L"../../resource/sound/");
+
+    m_pSound->play();
     return true;
 }
 

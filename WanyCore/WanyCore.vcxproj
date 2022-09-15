@@ -123,6 +123,7 @@
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>../include/;</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -148,6 +149,7 @@ copy "*.txt" "..\\include\\core\\HLSL\\"</Command>
       <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>../include/;</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -172,10 +174,13 @@ copy "*.txt" "..\\include\\core\\HLSL\\"</Command>
     <ClInclude Include="DXSamplerState.hpp" />
     <ClInclude Include="DXShader.hpp" />
     <ClInclude Include="DXShaderBorder.hpp" />
+    <ClInclude Include="DXShaderBorderManager.hpp" />
     <ClInclude Include="DXShaderManager.hpp" />
     <ClInclude Include="DXTexture.hpp" />
     <ClInclude Include="DXTextureManager.hpp" />
     <ClInclude Include="DXWriter.hpp" />
+    <ClInclude Include="FMODSound.hpp" />
+    <ClInclude Include="FMODSoundManager.hpp" />
     <ClInclude Include="GameCore.hpp" />
     <ClInclude Include="Input.hpp" />
     <ClInclude Include="Node.hpp" />
@@ -191,10 +196,13 @@ copy "*.txt" "..\\include\\core\\HLSL\\"</Command>
     <ClCompile Include="DXSamplerState.cpp" />
     <ClCompile Include="DXShader.cpp" />
     <ClCompile Include="DXShaderBorder.cpp" />
+    <ClCompile Include="DXShaderBorderManager.cpp" />
     <ClCompile Include="DXShaderManager.cpp" />
     <ClCompile Include="DXTexture.cpp" />
     <ClCompile Include="DXTextureManager.cpp" />
     <ClCompile Include="DXWriter.cpp" />
+    <ClCompile Include="FMODSound.cpp" />
+    <ClCompile Include="FMODSoundManager.cpp" />
     <ClCompile Include="GameCore.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Object.cpp" />

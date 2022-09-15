@@ -16,6 +16,7 @@ extern class WindowUI* g_pWindow;
 #include <vector>
 #include <string>
 #include <map>
+#include <filesystem> // c++ 17 std
 
 // Shape
 #include "Vertex.hpp"

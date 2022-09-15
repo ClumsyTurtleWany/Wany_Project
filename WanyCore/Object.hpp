@@ -71,6 +71,7 @@ public:
 	object2D(Rect_<T> _rect, OBJECT_TYPE _type = OBJECT_TYPE::STATIC_OBJECT)
 	{
 		shape = _rect;
+		hitbox = _rect;
 		this->type = _type;
 		this->mass = 0.0f;
 	};
