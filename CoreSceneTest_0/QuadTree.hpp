@@ -369,6 +369,8 @@ void QuadTree<T>::updateDynamicObject(node2D<T>* _target, std::vector<object2D<T
 	}
 	_target->dyObjList.clear();
 
+	_target->isCollisionCheck = false;
+
 	for (int cnt = 0; cnt < QuadTreeChildNum; cnt++)
 	{
 		updateDynamicObject(static_cast<node2D<T>*>(_target->child[cnt]), _list);

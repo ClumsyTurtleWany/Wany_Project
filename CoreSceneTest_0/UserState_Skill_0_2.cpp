@@ -140,35 +140,13 @@ bool UserState_Skill_0_2::frame()
         }
         else
         {
-            KeyState KeyState_Left = Input::getInstance()->getKey(VK_LEFT);
-            if ((KeyState_Left == KeyState::Down))
-            {
-                user->changeCurrentState<UserState_Idle>();
-                return true;
-            }
-
-            // Move to Right
-            KeyState KeyState_Right = Input::getInstance()->getKey(VK_RIGHT);
-            if ((KeyState_Right == KeyState::Down))
-            {
-                user->changeCurrentState<UserState_Idle>();
-                return true;
-            }
-
-            // Jump
-            KeyState KeyState_X = Input::getInstance()->getKey('X');
-            if ((KeyState_X == KeyState::Down))
-            {
-                user->changeCurrentState<UserState_Idle>();
-                return true;
-            }
-
             skillState = 0;
             skill->release();
             delete skill;
             skill = nullptr;
             if (isCancle)
             {
+                user->currentMap->updateDynamicObject();
                 user->changeCurrentState<UserState_Idle>();
             }
             else

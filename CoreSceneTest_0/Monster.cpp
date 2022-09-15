@@ -4,12 +4,14 @@
 Monster::Monster()// : currentState(new UserState_Idle(this))
 {
 	pObj = new object2D<float>;
+	pObj->type = OBJECT_TYPE::DYNAMIC_OBJECT;
 	pObj->createShader(ShaderType::Normal);
 }
 
 Monster::Monster(const Rect2f& _rect)// : currentState(new UserState_Idle(this))
 {
 	pObj = new object2D<float>(_rect);
+	pObj->type = OBJECT_TYPE::DYNAMIC_OBJECT;
 	pObj->createShader(ShaderType::Normal);
 }
 

@@ -25,6 +25,7 @@ bool Scene::frame()
 		it->frame();
 	}
 
+	//worldMap->updateDynamicObject();
 	return true;
 }
 

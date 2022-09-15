@@ -130,6 +130,7 @@ bool UserState_Skill_0_3::frame()
             skill->release();
             delete skill;
             skill = nullptr;
+            user->currentMap->updateDynamicObject();
             user->changeCurrentState<UserState_Idle>();
 
             return true;

@@ -146,6 +146,7 @@ bool UserState_Skill_0_1::frame()
             skill = nullptr;
             if (isCancle)
             {
+                user->currentMap->updateDynamicObject();
                 user->changeCurrentState<UserState_Idle>();
             }
             else
