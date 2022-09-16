@@ -62,6 +62,9 @@ public:
 	Vector2D_<T> accel;
 	Vector2D_<T> velocity;
 
+	float mapWidth = 0.0f;
+	float mapHeight = 0.0f;
+
 //public:
 //	std::vector<Rect_<float>> SpriteList;
 //	int SpriteNum = 0;
@@ -112,11 +115,55 @@ public:
 		return Circle_<T>(this->shape.center(), this->shape.length() / 2.0f);
 	}
 
+	// 2022-09-16 Test
+	Rect_<T> ScreenToNDC()
+	{
+		RECT clientRect = g_pWindow->getClientRect();
+		float mapWidth = clientRect.right - clientRect.left; // clientRectWidth;
+		float mapHeight = clientRect.bottom - clientRect.top; // clientRectHeight;
+		float mapWidth_Half = mapWidth * 0.5;
+		float mapHeight_Half = mapHeight * 0.5;
+
+		Rect_<T> rectNDC;
+		rectNDC.LT.x = (shape.LT.x - mapWidth_Half) / mapWidth_Half;
+		rectNDC.LT.y = -(shape.LT.y - mapHeight_Half) / mapHeight_Half;
+		rectNDC.RB.x = (shape.RB.x - mapWidth_Half) / mapWidth_Half;
+		rectNDC.RB.y = -(shape.RB.y - mapHeight_Half) / mapHeight_Half;
+
+		return rectNDC;
+	}
+
+	// 2022-09-16 Test
+	Rect_<T> ScreenToCamera()
+	{
+		//float mapWidth = mapWidth; // clientRectWidth;
+		//float mapHeight = shape.height(); // clientRectHeight;
+		float mapWidth_Half = mapWidth * 0.5;
+		float mapHeight_Half = mapHeight * 0.5;
+
+		Rect_<T> rectCamera;
+		//rectCamera.LT.y = 
+
+		Rect_<T> rectNDC;
+		rectNDC.LT.x = (shape.LT.x - mapWidth_Half) / mapWidth_Half;
+		rectNDC.LT.y = -(shape.LT.y - mapHeight_Half) / mapHeight_Half;
+		rectNDC.RB.x = (shape.RB.x - mapWidth_Half) / mapWidth_Half;
+		rectNDC.RB.y = -(shape.RB.y - mapHeight_Half) / mapHeight_Half;
+
+		rectNDC.LT.x = -2.0f;
+		rectNDC.LT.y = 2.0f;
+		rectNDC.RB.x = 2.0;
+		rectNDC.RB.y = -2.0f;
+
+		return rectNDC;
+	}
+
 public:
 	virtual bool frame(float _dt) {	return true; };
 	bool render() override
 	{
-		updateShader();
+		//updateShader();
+		updateShaderCamera();
 		pShader->render();
 
 		return true;
@@ -125,17 +172,23 @@ public:
 public:
 	void updateShader()
 	{
-		RECT clientRect = g_pWindow->getClientRect();
-		float mapWidth = clientRect.right - clientRect.left; // clientRectWidth;
-		float mapHeight = clientRect.bottom - clientRect.top; // clientRectHeight;
-		float mapWidth_Half = mapWidth * 0.5;
-		float mapHeight_Half = mapHeight * 0.5;
+		//RECT clientRect = g_pWindow->getClientRect();
+		//float mapWidth = clientRect.right - clientRect.left; // clientRectWidth;
+		//float mapHeight = clientRect.bottom - clientRect.top; // clientRectHeight;
+		//float mapWidth_Half = mapWidth * 0.5;
+		//float mapHeight_Half = mapHeight * 0.5;
+
+		//Rect_<float> rectNDC;
+		//rectNDC.LT.x = (shape.LT.x - mapWidth_Half) / mapWidth_Half;
+		//rectNDC.LT.y = -(shape.LT.y - mapHeight_Half) / mapHeight_Half;
+		//rectNDC.RB.x = (shape.RB.x - mapWidth_Half) / mapWidth_Half;
+		//rectNDC.RB.y = -(shape.RB.y - mapHeight_Half) / mapHeight_Half;
 
 		Rect_<float> rectNDC;
-		rectNDC.LT.x = (shape.LT.x - mapWidth_Half) / mapWidth_Half;
-		rectNDC.LT.y = -(shape.LT.y - mapHeight_Half) / mapHeight_Half;
-		rectNDC.RB.x = (shape.RB.x - mapWidth_Half) / mapWidth_Half;
-		rectNDC.RB.y = -(shape.RB.y - mapHeight_Half) / mapHeight_Half;
+		rectNDC = ScreenToNDC();
+		
+
+		//rectNDC = ScreenToCamera();
 
 		// Vectex List
 		std::vector<Vertex>*list = pShader->getVertexList();
@@ -143,6 +196,68 @@ public:
 		list->at(1).pos = { rectNDC.RB.x, rectNDC.LT.y, 0.0f };
 		list->at(2).pos = { rectNDC.LT.x, rectNDC.RB.y, 0.0f };
 		list->at(3).pos = { rectNDC.RB.x, rectNDC.RB.y, 0.0f };
+
+		if (0)
+		{
+			if (!SpriteList.empty())
+			{
+				// Set Sprite Region
+				float textureWidth = pShader->getTextureWidth();
+				float textureHeight = pShader->getTextureHeight();
+
+				Rect_<float> rect = SpriteList[SpriteNum];
+				list->at(0).texture = { rect.left() / textureWidth, rect.top() / textureHeight }; // p1-LT
+				list->at(1).texture = { rect.right() / textureWidth, rect.top() / textureHeight }; // p2-RT
+				list->at(2).texture = { rect.left() / textureWidth, rect.bottom() / textureHeight }; // p3-LB
+				list->at(3).texture = { rect.right() / textureWidth, rect.bottom() / textureHeight }; // p4-RB
+			}
+			else
+			{
+				list->at(0).texture = { 0.0f, 0.0f }; // p1-LT
+				list->at(1).texture = { 1.0f, 0.0f }; // p2-RT
+				list->at(2).texture = { 0.0f, 1.0f }; // p3-LB
+				list->at(3).texture = { 1.0f, 1.0f }; // p4-RB
+
+				// flip
+				//list->at(0).texture = { 1.0f, 0.0f }; // p1-RT
+				//list->at(1).texture = { 0.0f, 0.0f }; // p2-LT
+				//list->at(2).texture = { 1.0f, 1.0f }; // p3-RB
+				//list->at(3).texture = { 0.0f, 1.0f }; // p4-LB
+			}
+		}
+	}
+
+	// 2022-09-16 Test
+	void updateShaderCamera()
+	{
+		//RECT clientRect = g_pWindow->getClientRect();
+		//float mapWidth = clientRect.right - clientRect.left; // clientRectWidth;
+		//float mapHeight = clientRect.bottom - clientRect.top; // clientRectHeight;
+		//float mapWidth_Half = mapWidth * 0.5;
+		//float mapHeight_Half = mapHeight * 0.5;
+
+		//Rect_<float> rectNDC;
+		//rectNDC.LT.x = (shape.LT.x - mapWidth_Half) / mapWidth_Half;
+		//rectNDC.LT.y = -(shape.LT.y - mapHeight_Half) / mapHeight_Half;
+		//rectNDC.RB.x = (shape.RB.x - mapWidth_Half) / mapWidth_Half;
+		//rectNDC.RB.y = -(shape.RB.y - mapHeight_Half) / mapHeight_Half;
+
+		Rect_<float> rectNDC;
+		//rectNDC = ScreenToNDC();
+		rectNDC = ScreenToCamera();
+
+		// Vectex List
+		std::vector<Vertex>* list = pShader->getVertexList();
+		list->at(0).pos = { rectNDC.LT.x, rectNDC.LT.y, 0.0f };
+		list->at(1).pos = { rectNDC.RB.x, rectNDC.LT.y, 0.0f };
+		list->at(2).pos = { rectNDC.LT.x, rectNDC.RB.y, 0.0f };
+		list->at(3).pos = { rectNDC.RB.x, rectNDC.RB.y, 0.0f };
+
+
+		list->at(0).texture = { 0.0f, 0.0f }; // p1-LT
+		list->at(1).texture = { 1.0f, 0.0f }; // p2-RT
+		list->at(2).texture = { 0.0f, 1.0f }; // p3-LB
+		list->at(3).texture = { 1.0f, 1.0f }; // p4-RB
 
 		if (0)
 		{
