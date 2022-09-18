@@ -2,16 +2,17 @@
 #include "Object.hpp"
 #include "DXShaderBorderManager.hpp"
 #include "SpaceDivision.hpp"
+#include "Camera.hpp"
 
 class UserState;
 
-class Player
+class Player : public object2D<float>
 {
 protected:
 	UserState* currentState;
 
 public:
-	object2D<float>* pObj;
+	//object2D<float>* pObj;
 	
 	enum class Direction
 	{
@@ -19,9 +20,11 @@ public:
 		Right
 	};
 
-	Direction currentDirection;
+	Direction currentDirection = Direction::Right;
 
 	SpaceDivision* currentMap;
+
+	Camera* renderCamera;
 
 public:
 	Player();
@@ -33,6 +36,12 @@ public:
 	virtual bool frame(float _dt);
 	virtual bool render();
 	virtual bool release();
+
+public:
+	virtual void updateShader() override;
+
+public:
+	void setCamera(Camera* _camera);
 
 public:
 	Rect2f getRect();

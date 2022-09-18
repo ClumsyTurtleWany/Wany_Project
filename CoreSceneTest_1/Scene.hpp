@@ -18,9 +18,8 @@ public:
 	Player* user;
 	SpaceDivision* collisionMap;
 	BackgroundMap* background;
-	Camera renderCamera;
-
-
+	Camera* renderCamera;
+	
 	std::vector<Monster*>	MonsterList;
 	std::vector<objectBase*>	NPCList;
 

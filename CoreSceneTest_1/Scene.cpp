@@ -9,9 +9,10 @@ void Scene::setDevice(ID3D11Device* _device, ID3D11DeviceContext* _context)
 bool Scene::initialize()
 {
 	RECT clientRect = g_pWindow->getClientRect();
-	renderCamera.setPos(Vector2f(0, 0));
-	renderCamera.setWidth(clientRect.right - clientRect.left);
-	renderCamera.setHeight(clientRect.bottom - clientRect.top);
+	renderCamera = new Camera;
+	renderCamera->setPos(Vector2f(0, 0));
+	renderCamera->setWidth(clientRect.right - clientRect.left);
+	renderCamera->setHeight(clientRect.bottom - clientRect.top);
 	return true;
 }
 
@@ -20,8 +21,8 @@ bool Scene::frame()
 	if (user != nullptr)
 	{
 		user->frame(Timer::getInstance()->getDeltaTime());
-		renderCamera.setPos(user->getCenter());
-		renderCamera.frame();
+		renderCamera->setPos(user->getCenter());
+		renderCamera->frame();
 	}
 
 	for (auto it : MonsterList)
@@ -70,6 +71,12 @@ bool Scene::release()
 	{
 		delete collisionMap;
 		collisionMap = nullptr;
+	}
+
+	if (renderCamera != nullptr)
+	{
+		delete renderCamera;
+		renderCamera = nullptr;
 	}
 	return true;
 }

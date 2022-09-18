@@ -23,15 +23,21 @@ bool UserState_MoveRight::frame()
         {
             user->currentDirection = Player::Direction::Right;
 
-            std::vector<Vertex>* list = user->pObj->pShader->getVertexList();
-            list->at(0).texture = { 1.0f, 0.0f }; // LT
-            list->at(1).texture = { 0.0f, 0.0f }; // RT
-            list->at(2).texture = { 1.0f, 1.0f }; // LB
-            list->at(3).texture = { 0.0f, 1.0f }; // RB
+            std::vector<Vertex>* list = user->pShader->getVertexList();
+
+            Vector2f LT = list->at(0).texture;
+            Vector2f RT = list->at(1).texture;
+            Vector2f LB = list->at(2).texture;
+            Vector2f RB = list->at(3).texture;
+            
+            list->at(0).texture = RT; //{ 1.0f, 0.0f }; // LT
+            list->at(1).texture = LT; //{ 0.0f, 0.0f }; // RT
+            list->at(2).texture = RB; //{ 1.0f, 1.0f }; // LB
+            list->at(3).texture = LB; //{ 0.0f, 1.0f }; // RB
         }
         else
         {
-            user->pObj->shape.offset(Vector2f(1.0f, 0.0f));
+            user->shape.offset(Vector2f(1.0f, 0.0f));
         }
     }
     else

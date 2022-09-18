@@ -20,7 +20,7 @@ bool UserState_Idle::frame()
 	KeyState KeyState_Up = Input::getInstance()->getKey(VK_UP);
 	if ((KeyState_Up == KeyState::Down) || (KeyState_Up == KeyState::Hold))
 	{
-		user->pObj->shape.offset(Vector2f( 0.0f, -1.0f));
+		user->shape.offset(Vector2f( 0.0f, -1.0f));
 		//return true;
 	}
 
@@ -28,7 +28,7 @@ bool UserState_Idle::frame()
 	KeyState KeyState_Down = Input::getInstance()->getKey(VK_DOWN);
 	if ((KeyState_Down == KeyState::Down) || (KeyState_Down == KeyState::Hold))
 	{
-		user->pObj->shape.offset(Vector2f(0.0f, 1.0f));
+		user->shape.offset(Vector2f(0.0f, 1.0f));
 		//return true;
 	}
 
@@ -91,7 +91,7 @@ bool UserState_Idle::moveLeft()
 	{
 		user->currentDirection = Player::Direction::Left;
 
-		std::vector<Vertex>* list = user->pObj->pShader->getVertexList();
+		std::vector<Vertex>* list = user->pShader->getVertexList();
 		list->at(0).texture = { 0.0f, 0.0f }; // LT
 		list->at(1).texture = { 1.0f, 0.0f }; // RT
 		list->at(2).texture = { 0.0f, 1.0f }; // LB
@@ -99,7 +99,7 @@ bool UserState_Idle::moveLeft()
 	}
 	else
 	{
-		user->pObj->shape.offset(Vector2f(-1.0f, 0.0f));
+		user->shape.offset(Vector2f(-1.0f, 0.0f));
 	}
 
 	return false;
@@ -111,7 +111,7 @@ bool UserState_Idle::moveRight()
 	{
 		user->currentDirection = Player::Direction::Right;
 
-		std::vector<Vertex>* list = user->pObj->pShader->getVertexList();
+		std::vector<Vertex>* list = user->pShader->getVertexList();
 		list->at(0).texture = { 1.0f, 0.0f }; // LT
 		list->at(1).texture = { 0.0f, 0.0f }; // RT
 		list->at(2).texture = { 1.0f, 1.0f }; // LB
@@ -119,7 +119,7 @@ bool UserState_Idle::moveRight()
 	}
 	else
 	{
-		user->pObj->shape.offset(Vector2f(1.0f, 0.0f));
+		user->shape.offset(Vector2f(1.0f, 0.0f));
 	}
 
 	return false;

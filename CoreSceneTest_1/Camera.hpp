@@ -1,9 +1,11 @@
 #pragma once
 #include "Define.hpp"
 
-class Camera
+class Camera //: public Singleton<Camera>
 {
 private:
+	//friend class Singleton<DXShaderBorderManager>;
+
 	Vector2f pos;
 	float width = 0.0f;
 	float height = 0.0f;
@@ -27,3 +29,5 @@ public:
 	virtual bool render();
 	virtual bool release();
 };
+
+//#define CAMERA Camera::getInstance()

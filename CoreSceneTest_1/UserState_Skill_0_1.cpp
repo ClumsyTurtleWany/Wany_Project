@@ -21,8 +21,8 @@ bool UserState_Skill_0_1::initialize()
     float hitbox_height = 0.0f;
     if (user->currentDirection == Player::Direction::Left)
     {
-        x = user->pObj->shape.cx() - width;
-        y = user->pObj->shape.cy() - height;
+        x = user->shape.cx() - width;
+        y = user->shape.cy() - height;
         
         hitbox_x = x + hitboxOffset_x;
         hitbox_y = y + hitboxOffset_y;
@@ -31,8 +31,8 @@ bool UserState_Skill_0_1::initialize()
     }
     else
     {
-        x = user->pObj->shape.cx();
-        y = user->pObj->shape.cy() - height;
+        x = user->shape.cx();
+        y = user->shape.cy() - height;
 
         hitbox_x = x + hitboxOffset_x;
         hitbox_y = y + hitboxOffset_y;
@@ -80,7 +80,7 @@ bool UserState_Skill_0_1::initialize()
 
     skill->setTexture(DXTextureManager::getInstance()->getTexture(textureKeyList[skillState]));
 
-    std::vector<Vertex>* UserVertexList = user->pObj->pShader->getVertexList();
+    std::vector<Vertex>* UserVertexList = user->pShader->getVertexList();
     std::vector<Vertex>* skillVertexList = skill->pShader->getVertexList();
     skillVertexList->at(0).texture = UserVertexList->at(0).texture;
     skillVertexList->at(1).texture = UserVertexList->at(1).texture;

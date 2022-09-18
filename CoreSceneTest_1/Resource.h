@@ -28,7 +28,7 @@
 #define USER_STATE_SKILL_0_2_6 L"../resource/MapleStory/Skill/Skill1/2_6.bmp"
 
 // Character
-#define USER_CHARACTER_0 L"../resource/MapleStory/Character/green-034.bmp"
+#define USER_CHARACTER_0 L"../resource/MapleStory/Character/0.bmp"
 
 // Background
-#define MAP_SCENE_0		L"../resource/MapleStory/Map/TestMap.bmp"
+#define MAP_SCENE_0		L"../resource/MapleStory/Map/happy.bmp"

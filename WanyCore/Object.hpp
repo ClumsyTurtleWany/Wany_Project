@@ -81,7 +81,7 @@ public:
 	~object2D() {};
 
 public:
-	bool Random()
+	virtual bool Random()
 	{
 		RECT clientRect = g_pWindow->getClientRect();
 		shape = Rect_<T>(rand() % clientRect.right, rand() % clientRect.bottom, 50 + (rand() % 20), 50 + (rand() % 20));
@@ -119,8 +119,8 @@ public:
 	Rect_<T> ScreenToNDC()
 	{
 		RECT clientRect = g_pWindow->getClientRect();
-		float mapWidth = clientRect.right - clientRect.left; // clientRectWidth;
-		float mapHeight = clientRect.bottom - clientRect.top; // clientRectHeight;
+		float clientWidth = clientRect.right - clientRect.left; // clientRectWidth;
+		float clientHeight = clientRect.bottom - clientRect.top; // clientRectHeight;
 		float mapWidth_Half = mapWidth * 0.5;
 		float mapHeight_Half = mapHeight * 0.5;
 
@@ -133,44 +133,68 @@ public:
 		return rectNDC;
 	}
 
-	// 2022-09-16 Test
-	Rect_<T> ScreenToCamera()
+	// 2022-09-18 Test
+	// Local->World (Screen to Orthogonal Coordinate)
+	Rect_<T> ScreenToOrthogonal(const Rect_<T>& _screen, const float _width, const float _height)
 	{
 		//float mapWidth = mapWidth; // clientRectWidth;
 		//float mapHeight = shape.height(); // clientRectHeight;
-		float mapWidth_Half = mapWidth * 0.5;
-		float mapHeight_Half = mapHeight * 0.5;
+		float mapWidth_Half = _width * 0.5;
+		float mapHeight_Half = _height * 0.5;
 
-		Rect_<T> rectCamera;
-		//rectCamera.LT.y = 
+		Rect_<T> rectOrthogonal;
+		rectOrthogonal.LT.x = _screen.LT.x - mapWidth_Half;
+		rectOrthogonal.LT.y = mapHeight_Half - _screen.LT.y;
+		rectOrthogonal.RB.x = _screen.RB.x - mapWidth_Half;
+		rectOrthogonal.RB.y = mapHeight_Half - _screen.RB.y;
+
+		return rectOrthogonal;
+	}
+
+	// 2022-09-18 Test
+	// View->NDC (View to NDC)
+	Rect_<T> OrthogonalToNDC(const Rect_<T>& _Orthogonal, const float _width, const float _height)
+	{
+		float cameraWidth_Half = _width * 0.5;
+		float cameraHeight_Half = _height * 0.5;
 
 		Rect_<T> rectNDC;
-		rectNDC.LT.x = (shape.LT.x - mapWidth_Half) / mapWidth_Half;
-		rectNDC.LT.y = -(shape.LT.y - mapHeight_Half) / mapHeight_Half;
-		rectNDC.RB.x = (shape.RB.x - mapWidth_Half) / mapWidth_Half;
-		rectNDC.RB.y = -(shape.RB.y - mapHeight_Half) / mapHeight_Half;
-
-		rectNDC.LT.x = -2.0f;
-		rectNDC.LT.y = 2.0f;
-		rectNDC.RB.x = 2.0;
-		rectNDC.RB.y = -2.0f;
+		rectNDC.LT.x = (_Orthogonal.LT.x / cameraWidth_Half);
+		rectNDC.LT.y = (_Orthogonal.LT.y / cameraHeight_Half);
+		rectNDC.RB.x = (_Orthogonal.RB.x / cameraWidth_Half);
+		rectNDC.RB.y = (_Orthogonal.RB.y / cameraHeight_Half);
 
 		return rectNDC;
 	}
 
+	Rect_<T> calcTextureRect(const Rect_<T>& _Orthogonal, const Rect_<T>& _cameraOrtho)
+	{
+		Rect_<T> rectTexture;
+		// -2000, 1500 && -500, 380 -> 0.375, 0.25  
+		// 2000, -1500 && 500, -380 -> 0.625, 
+		rectTexture.LT.x = ((_cameraOrtho.LT.x - _Orthogonal.LT.x) / mapWidth);
+		rectTexture.LT.y = ((_Orthogonal.LT.y - _cameraOrtho.LT.y) / mapHeight);
+		rectTexture.RB.x = 1.0f - ((_cameraOrtho.RB.x - _Orthogonal.RB.x) / mapWidth);
+		rectTexture.RB.y = 1.0f - ((_Orthogonal.RB.y - _cameraOrtho.RB.y) / mapHeight);
+
+		return rectTexture;
+
+	}
+
+
 public:
 	virtual bool frame(float _dt) {	return true; };
-	bool render() override
+	virtual bool render() override
 	{
-		//updateShader();
-		updateShaderCamera();
+		updateShader();
+		//updateShaderCamera();
 		pShader->render();
 
 		return true;
 	}
 
 public:
-	void updateShader()
+	virtual void updateShader()
 	{
 		//RECT clientRect = g_pWindow->getClientRect();
 		//float mapWidth = clientRect.right - clientRect.left; // clientRectWidth;
@@ -196,6 +220,11 @@ public:
 		list->at(1).pos = { rectNDC.RB.x, rectNDC.LT.y, 0.0f };
 		list->at(2).pos = { rectNDC.LT.x, rectNDC.RB.y, 0.0f };
 		list->at(3).pos = { rectNDC.RB.x, rectNDC.RB.y, 0.0f };
+
+		list->at(0).texture = { 0.0f, 0.0f }; // p1-LT
+		list->at(1).texture = { 1.0f, 0.0f }; // p2-RT
+		list->at(2).texture = { 0.0f, 1.0f }; // p3-LB
+		list->at(3).texture = { 1.0f, 1.0f }; // p4-RB
 
 		if (0)
 		{
@@ -228,7 +257,7 @@ public:
 	}
 
 	// 2022-09-16 Test
-	void updateShaderCamera()
+	virtual void updateShaderCamera()
 	{
 		//RECT clientRect = g_pWindow->getClientRect();
 		//float mapWidth = clientRect.right - clientRect.left; // clientRectWidth;
@@ -242,9 +271,24 @@ public:
 		//rectNDC.RB.x = (shape.RB.x - mapWidth_Half) / mapWidth_Half;
 		//rectNDC.RB.y = -(shape.RB.y - mapHeight_Half) / mapHeight_Half;
 
-		Rect_<float> rectNDC;
-		//rectNDC = ScreenToNDC();
-		rectNDC = ScreenToCamera();
+		Rect_<float> rectOrthogonal = ScreenToOrthogonal(shape, mapWidth, mapHeight);
+
+		RECT clientRect = g_pWindow->getClientRect();
+		float width = clientRect.right - clientRect.left;
+		float height = clientRect.bottom - clientRect.top;
+		float x = (mapWidth - width) * 0.5f;
+		float y = (mapHeight - height) * 0.5f;
+		Rect_<float> rectCamera(x, y, width, height);
+		Rect_<float> rectCameraOrtho = ScreenToOrthogonal(rectCamera, mapWidth, mapHeight);
+
+		Rect_<float> rectNDC = OrthogonalToNDC(rectOrthogonal, mapWidth, mapHeight);
+
+		Rect_<float> rectTexture = calcTextureRect(rectOrthogonal, rectCameraOrtho);
+
+		rectTexture.LT.x = 0.375f;
+		rectTexture.LT.y = 0.375f;
+		rectTexture.RB.x = 0.625f;
+		rectTexture.RB.y = 0.625f;
 
 		// Vectex List
 		std::vector<Vertex>* list = pShader->getVertexList();
@@ -258,6 +302,11 @@ public:
 		list->at(1).texture = { 1.0f, 0.0f }; // p2-RT
 		list->at(2).texture = { 0.0f, 1.0f }; // p3-LB
 		list->at(3).texture = { 1.0f, 1.0f }; // p4-RB
+
+		list->at(0).texture = { rectTexture.LT.x, rectTexture.LT.y }; // p1-LT
+		list->at(1).texture = { rectTexture.RB.x, rectTexture.LT.y }; // p2-RT
+		list->at(2).texture = { rectTexture.LT.x, rectTexture.RB.y }; // p3-LB
+		list->at(3).texture = { rectTexture.RB.x, rectTexture.RB.y }; // p4-RB
 
 		if (0)
 		{
