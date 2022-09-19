@@ -43,19 +43,22 @@ bool DXWriter::initialize()
 		return false;
 	}
 
-	m_strDefault = L"DEFAULT";
-	// 글자가 박혀있어서 글자는 변경 불가능 하다.
-	rst = m_pDWriteFactory->CreateTextLayout(
-		m_strDefault.c_str(),
-		static_cast<UINT32>(m_strDefault.size()),
-		m_pTextFormat,
-		1024, 768,
-		&m_pTextLayout);
-
-	if (FAILED(rst))
+	if (bDrawLayout)
 	{
-		OutputDebugString(L"WanyCore::DXWriter::Failed Create Text Layout.\n");
-		return false;
+		m_strDefault = L"DEFAULT";
+		// 글자가 박혀있어서 글자는 변경 불가능 하다.
+		rst = m_pDWriteFactory->CreateTextLayout(
+			m_strDefault.c_str(),
+			static_cast<UINT32>(m_strDefault.size()),
+			m_pTextFormat,
+			1024, 768,
+			&m_pTextLayout);
+
+		if (FAILED(rst))
+		{
+			OutputDebugString(L"WanyCore::DXWriter::Failed Create Text Layout.\n");
+			return false;
+		}
 	}
 
 	return true;
@@ -172,11 +175,13 @@ bool DXWriter::draw(int _x, int _y, std::wstring _str, D2D1_COLOR_F _color)
 	m_pTextColor->SetOpacity(1); // 0에 가까울 수록 투명해짐. 0 ~ 1
 	m_pd2dRenderTarget->DrawText(_str.c_str(), static_cast<UINT32>(_str.size()), m_pTextFormat, rt, m_pTextColor);
 
-
 	// Draw Layout
-	m_pTextLayout->SetFontSize(static_cast<FLOAT>(_x), { 0, (UINT)m_strDefault.size() });
-	m_pTextLayout->SetFontStyle(DWRITE_FONT_STYLE_ITALIC, { 0, (UINT)m_strDefault.size() });
-	m_pd2dRenderTarget->DrawTextLayout({ 0, 0 }, m_pTextLayout, m_pTextColor);
+	if (bDrawLayout)
+	{
+		m_pTextLayout->SetFontSize(static_cast<FLOAT>(_x), { 0, (UINT)m_strDefault.size() });
+		m_pTextLayout->SetFontStyle(DWRITE_FONT_STYLE_ITALIC, { 0, (UINT)m_strDefault.size() });
+		m_pd2dRenderTarget->DrawTextLayout({ 0, 0 }, m_pTextLayout, m_pTextColor);
+	}
 
 	m_pd2dRenderTarget->EndDraw();
 	return true;

@@ -31,6 +31,8 @@ public:
 
 	IDWriteTextLayout* m_pTextLayout; // 글자(Text)를 못바꾸는 대신 폰트나 크기 색상 등등 전부 변경 가능.
 
+	bool bDrawLayout = false;
+
 public:
 	virtual bool initialize();
 	virtual bool frame();
@@ -40,6 +42,6 @@ public:
 public:
 	bool setBuffer(IDXGISurface* _dxgiSurface);
 	void setString(std::wstring _str);
-	bool draw(int _x, int _y, std::wstring _str, D2D1_COLOR_F _color);
+	bool draw(int _x, int _y, std::wstring _str, D2D1_COLOR_F _color = D2D1_COLOR_F({ 0.0f, 0.0f, 0.0f, 1.0f }));
 };
 

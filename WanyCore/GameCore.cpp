@@ -107,6 +107,20 @@ bool GameCore::PreRender()
 	// Sampler State 적용.
 	m_pImmediateContext->PSSetSamplers(0, 1, &DXSamplerState::pDefaultSamplerState);
 
+	// Rasterizer State 적용.
+	//m_pImmediateContext->RSSetState(DXSamplerState::pDefaultRSWireFrame);
+
+	// View Port 설정
+	// 보통은 client 크기로 설정하지만, 미니맵의 경우 뷰포트 설정을 바꿔 출력 가능.
+	//D3D11_VIEWPORT viewPort;
+	//viewPort.TopLeftX = 0;
+	//viewPort.TopLeftY = 0;
+	//viewPort.Width = 1366; 
+	//viewPort.Height = 786;
+	//viewPort.MinDepth = 0;
+	//viewPort.MaxDepth = 1;
+	//m_pImmediateContext->RSSetViewports(0, &viewPort);
+
 	return true;
 }
 

@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="State">
+      <UniqueIdentifier>{e1d17a4c-a42d-4a58-aa7b-56db5f3b7e20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="State\소스 파일">
+      <UniqueIdentifier>{3b3f461f-094b-4d43-a023-33dbb0ba5652}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="State\헤더 파일">
+      <UniqueIdentifier>{4a23e2b6-dc00-4a40-8787-7d6fa38f0e3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map">
+      <UniqueIdentifier>{189f4bf5-1bf9-4997-a8bf-599392af29fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map\헤더 파일">
+      <UniqueIdentifier>{bdc8f5a8-b858-4c58-8d6e-71b888ba63d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map\소스 파일">
+      <UniqueIdentifier>{a766bff3-daf5-4199-952e-6557d5de65bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{85fc27d7-37d1-43bd-adb9-4cf47569bcca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object">
+      <UniqueIdentifier>{95300f7d-562f-4d2b-a817-078917590146}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Sample.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="UserState.hpp">
+      <Filter>State\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="UserState_Idle.hpp">
+      <Filter>State\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="UserState_Jump.hpp">
+      <Filter>State\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="UserState_MoveLeft.hpp">
+      <Filter>State\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="UserState_MoveRight.hpp">
+      <Filter>State\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="UserState_Skill_0_1.hpp">
+      <Filter>State\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.hpp">
+      <Filter>Map\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Octree.hpp">
+      <Filter>Map\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="QuadTree.hpp">
+      <Filter>Map\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="SpaceDivision.hpp">
+      <Filter>Map\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.hpp">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Map_0.hpp">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="UserState_Skill_0_2.hpp">
+      <Filter>State\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="UserState_Skill_0_3.hpp">
+      <Filter>State\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.hpp">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.hpp">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="BackgroundMap.hpp">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.hpp">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Skill.hpp">
+      <Filter>Object</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Sample.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="UserState.cpp">
+      <Filter>State\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="UserState_Idle.cpp">
+      <Filter>State\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="UserState_Jump.cpp">
+      <Filter>State\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="UserState_MoveLeft.cpp">
+      <Filter>State\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="UserState_MoveRight.cpp">
+      <Filter>State\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="UserState_Skill_0_1.cpp">
+      <Filter>State\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Map_0.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="UserState_Skill_0_2.cpp">
+      <Filter>State\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="UserState_Skill_0_3.cpp">
+      <Filter>State\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="BackgroundMap.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Skill.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

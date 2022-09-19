@@ -1,0 +1,89 @@
+#include "Scene.hpp"
+#include "DXWriter.hpp"
+
+void Scene::setDevice(ID3D11Device* _device, ID3D11DeviceContext* _context)
+{
+	m_pd3dDevice = _device;
+	m_pImmediateContext = _context;
+}
+
+bool Scene::initialize()
+{
+	RECT clientRect = g_pWindow->getClientRect();
+	renderCamera = new Camera;
+	renderCamera->setPos(Vector2f(0, 0));
+	renderCamera->setWidth(clientRect.right - clientRect.left);
+	renderCamera->setHeight(clientRect.bottom - clientRect.top);
+	return true;
+}
+
+bool Scene::frame()
+{
+	if (user != nullptr)
+	{
+		user->frame(Timer::getInstance()->getDeltaTime());
+		renderCamera->setPos(user->getCenter());
+		renderCamera->frame();
+	}
+
+	for (auto it : MonsterList)
+	{
+		it->frame(Timer::getInstance()->getDeltaTime());
+	}
+
+	for (auto it : NPCList)
+	{
+		it->frame();
+	}
+
+	//collisionMap->updateDynamicObject();
+	return true;
+}
+
+bool Scene::render()
+{
+	if (background != nullptr)
+	{
+		background->render();
+	}
+
+	if (user != nullptr)
+	{
+		user->render();
+	}
+
+	std::wstring wstrUserPos;
+	wstrUserPos += std::to_wstring(static_cast<int>(user->shape.LT.x));
+	wstrUserPos += L", ";
+	wstrUserPos += std::to_wstring(static_cast<int>(user->shape.LT.y));
+	DXWriter::getInstance()->draw(0, 100, wstrUserPos);
+
+	/*for (auto it : MonsterList)
+	{
+		it->render();
+	}
+
+	for (auto it : NPCList)
+	{
+		it->render();
+	}
+
+	collisionMap->render();*/
+	return true;
+}
+
+bool Scene::release()
+{
+	if (collisionMap != nullptr)
+	{
+		delete collisionMap;
+		collisionMap = nullptr;
+	}
+
+	if (renderCamera != nullptr)
+	{
+		delete renderCamera;
+		renderCamera = nullptr;
+	}
+	return true;
+}

@@ -121,8 +121,10 @@ public:
 		RECT clientRect = g_pWindow->getClientRect();
 		float clientWidth = clientRect.right - clientRect.left; // clientRectWidth;
 		float clientHeight = clientRect.bottom - clientRect.top; // clientRectHeight;
-		float mapWidth_Half = mapWidth * 0.5;
-		float mapHeight_Half = mapHeight * 0.5;
+		//float mapWidth_Half = mapWidth * 0.5;
+		//float mapHeight_Half = mapHeight * 0.5;
+		float mapWidth_Half = clientWidth * 0.5;
+		float mapHeight_Half = clientHeight * 0.5;
 
 		Rect_<T> rectNDC;
 		rectNDC.LT.x = (shape.LT.x - mapWidth_Half) / mapWidth_Half;
