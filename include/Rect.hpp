@@ -53,8 +53,10 @@ public:
 	T right()		const { return RB.x; }
 	T top()			const { return LT.y; }
 	T bottom()		const { return RB.y; }
-	T width()		const { return static_cast<T>(fabs(static_cast<double>(RB.x) - static_cast<double>(LT.x) + 1)); }
-	T height()		const { return static_cast<T>(fabs(static_cast<double>(RB.y) - static_cast<double>(LT.y) + 1)); }
+	T width()		const { return static_cast<T>(fabs(RB.x - LT.x + 1)); }
+	T height()		const { return static_cast<T>(fabs(RB.y - LT.y + 1)); }
+	T fWidth()		const { return static_cast<T>(fabs(RB.x - LT.x)); }
+	T fHeight()		const { return static_cast<T>(fabs(RB.y - LT.y)); }
 	T area()		const { return width() * height(); }
 	T length()		const { return sqrt(pow(width(), 2) + pow(height(), 2)); }
 	T cx()			const {	return static_cast<T>((static_cast<double>(RB.x) + static_cast<double>(LT.x)) / 2.0f); }

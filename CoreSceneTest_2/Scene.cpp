@@ -52,11 +52,34 @@ bool Scene::render()
 		user->render();
 	}
 
+	std::wstring wstrMapSize;
+	wstrMapSize += L"Map Size: ";
+	wstrMapSize += std::to_wstring(static_cast<int>(background->shape.width()));
+	wstrMapSize += L", ";
+	wstrMapSize += std::to_wstring(static_cast<int>(background->shape.height()));
+	DXWriter::getInstance()->draw(0, 25, wstrMapSize);
+
 	std::wstring wstrUserPos;
+	wstrUserPos += L"User Position: ";
 	wstrUserPos += std::to_wstring(static_cast<int>(user->shape.LT.x));
 	wstrUserPos += L", ";
 	wstrUserPos += std::to_wstring(static_cast<int>(user->shape.LT.y));
-	DXWriter::getInstance()->draw(0, 100, wstrUserPos);
+	DXWriter::getInstance()->draw(0, 50, wstrUserPos);
+
+	std::wstring wstrCameraPos;
+	wstrCameraPos += L"Camera LT: ";
+	wstrCameraPos += std::to_wstring(static_cast<int>(renderCamera->getRect().LT.x));
+	wstrCameraPos += L", ";
+	wstrCameraPos += std::to_wstring(static_cast<int>(renderCamera->getRect().LT.y));
+	wstrCameraPos += L", RB: ";
+	wstrCameraPos += std::to_wstring(static_cast<int>(renderCamera->getRect().RB.x));
+	wstrCameraPos += L", ";
+	wstrCameraPos += std::to_wstring(static_cast<int>(renderCamera->getRect().RB.y));
+	wstrCameraPos += L", Center: ";
+	wstrCameraPos += std::to_wstring(static_cast<int>((renderCamera->getRect().LT.x + renderCamera->getRect().RB.x) / 2));
+	wstrCameraPos += L", ";
+	wstrCameraPos += std::to_wstring(static_cast<int>((renderCamera->getRect().LT.y + renderCamera->getRect().RB.y) / 2));
+	DXWriter::getInstance()->draw(0, 75, wstrCameraPos);
 
 	/*for (auto it : MonsterList)
 	{

@@ -121,10 +121,26 @@ public:
 		RECT clientRect = g_pWindow->getClientRect();
 		float clientWidth = clientRect.right - clientRect.left; // clientRectWidth;
 		float clientHeight = clientRect.bottom - clientRect.top; // clientRectHeight;
-		//float mapWidth_Half = mapWidth * 0.5;
-		//float mapHeight_Half = mapHeight * 0.5;
-		float mapWidth_Half = clientWidth * 0.5;
-		float mapHeight_Half = clientHeight * 0.5;
+		float mapWidth_Half = mapWidth * 0.5;
+		float mapHeight_Half = mapHeight * 0.5;
+
+		Rect_<T> rectNDC;
+		rectNDC.LT.x = (shape.LT.x - mapWidth_Half) / mapWidth_Half;
+		rectNDC.LT.y = -(shape.LT.y - mapHeight_Half) / mapHeight_Half;
+		rectNDC.RB.x = (shape.RB.x - mapWidth_Half) / mapWidth_Half;
+		rectNDC.RB.y = -(shape.RB.y - mapHeight_Half) / mapHeight_Half;
+
+		return rectNDC;
+	}
+
+	// 2022-09-20 Test
+	Rect_<T> ScreenToNDC2()
+	{
+		RECT clientRect = g_pWindow->getClientRect();
+		float clientWidth = clientRect.right - clientRect.left; // clientRectWidth;
+		float clientHeight = clientRect.bottom - clientRect.top; // clientRectHeight;
+		float mapWidth_Half = mapWidth * 0.5;
+		float mapHeight_Half = mapHeight * 0.5;
 
 		Rect_<T> rectNDC;
 		rectNDC.LT.x = (shape.LT.x - mapWidth_Half) / mapWidth_Half;
@@ -223,10 +239,17 @@ public:
 		list->at(2).pos = { rectNDC.LT.x, rectNDC.RB.y, 0.0f };
 		list->at(3).pos = { rectNDC.RB.x, rectNDC.RB.y, 0.0f };
 
-		list->at(0).texture = { 0.0f, 0.0f }; // p1-LT
-		list->at(1).texture = { 1.0f, 0.0f }; // p2-RT
-		list->at(2).texture = { 0.0f, 1.0f }; // p3-LB
-		list->at(3).texture = { 1.0f, 1.0f }; // p4-RB
+		//float width = rectNDC.fWidth();
+		//float height = rectNDC.fHeight();
+		//list->at(0).pos = { rectNDC.LT.x, rectNDC.LT.y, 0.0f };
+		//list->at(1).pos = { rectNDC.LT.x + rectNDC.width(), rectNDC.LT.y, 0.0f };
+		//list->at(2).pos = { rectNDC.LT.x, rectNDC.LT.y + rectNDC.height(), 0.0f };
+		//list->at(3).pos = { rectNDC.LT.x + rectNDC.width(), rectNDC.LT.y + rectNDC.height(), 0.0f };
+
+		//list->at(0).texture = { 0.0f, 0.0f }; // p1-LT
+		//list->at(1).texture = { 1.0f, 0.0f }; // p2-RT
+		//list->at(2).texture = { 0.0f, 1.0f }; // p3-LB
+		//list->at(3).texture = { 1.0f, 1.0f }; // p4-RB
 
 		if (0)
 		{

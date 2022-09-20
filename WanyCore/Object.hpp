@@ -133,39 +133,74 @@ public:
 		return rectNDC;
 	}
 
-	// 2022-09-18 Test
-	// Local->World (Screen to Orthogonal Coordinate)
-	Rect_<T> ScreenToOrthogonal(const Rect_<T>& _screen, const float _width, const float _height)
+	// 2022-09-20 Test
+	Rect_<T> ScreenToNDC2()
 	{
-		//float mapWidth = mapWidth; // clientRectWidth;
-		//float mapHeight = shape.height(); // clientRectHeight;
-		float mapWidth_Half = _width * 0.5;
-		float mapHeight_Half = _height * 0.5;
+		RECT clientRect = g_pWindow->getClientRect();
+		float clientWidth = clientRect.right - clientRect.left; // clientRectWidth;
+		float clientHeight = clientRect.bottom - clientRect.top; // clientRectHeight;
+		float mapWidth_Half = mapWidth * 0.5;
+		float mapHeight_Half = mapHeight * 0.5;
+
+		Rect_<T> rectNDC;
+		rectNDC.LT.x = (shape.LT.x - mapWidth_Half) / mapWidth_Half;
+		rectNDC.LT.y = -(shape.LT.y - mapHeight_Half) / mapHeight_Half;
+		rectNDC.RB.x = (shape.RB.x - mapWidth_Half) / mapWidth_Half;
+		rectNDC.RB.y = -(shape.RB.y - mapHeight_Half) / mapHeight_Half;
+
+		return rectNDC;
+	}
+
+	// 2022-09-20 Test
+	// Local->World (Screen to Orthogonal Coordinate)
+	Rect_<T> ScreenToOrthogonal()
+	{
+		// m_vPos
+		// m_rtCollision
+		float mapWidth_Half = mapWidth * 0.5;
+		float mapHeight_Half = mapHeight() * 0.5;
 
 		Rect_<T> rectOrthogonal;
-		rectOrthogonal.LT.x = _screen.LT.x - mapWidth_Half;
-		rectOrthogonal.LT.y = mapHeight_Half - _screen.LT.y;
-		rectOrthogonal.RB.x = _screen.RB.x - mapWidth_Half;
-		rectOrthogonal.RB.y = mapHeight_Half - _screen.RB.y;
+		rectOrthogonal.LT.x = shape.LT.x - mapWidth_Half;
+		rectOrthogonal.LT.y = mapHeight_Half - shape.LT.y;
+		rectOrthogonal.RB.x = shape.RB.x - mapWidth_Half;
+		rectOrthogonal.RB.y = mapHeight_Half - shape.RB.y;
 
 		return rectOrthogonal;
 	}
 
-	// 2022-09-18 Test
+	// 2022-09-20 Test
 	// View->NDC (View to NDC)
-	Rect_<T> OrthogonalToNDC(const Rect_<T>& _Orthogonal, const float _width, const float _height)
+	Rect_<T> OrthogonalToNDC(const Rect_<T>& _Orthogonal)
 	{
-		float cameraWidth_Half = _width * 0.5;
-		float cameraHeight_Half = _height * 0.5;
+		// No Camera
+		float mapWidth_Half = mapWidth * 0.5;
+		float mapHeight_Half = mapHeight() * 0.5;
 
 		Rect_<T> rectNDC;
-		rectNDC.LT.x = (_Orthogonal.LT.x / cameraWidth_Half);
-		rectNDC.LT.y = (_Orthogonal.LT.y / cameraHeight_Half);
-		rectNDC.RB.x = (_Orthogonal.RB.x / cameraWidth_Half);
-		rectNDC.RB.y = (_Orthogonal.RB.y / cameraHeight_Half);
+		rectNDC.LT.x = (_Orthogonal.LT.x / mapWidth_Half);
+		rectNDC.LT.y = (_Orthogonal.LT.y / mapHeight_Half);
+		rectNDC.RB.x = (_Orthogonal.RB.x / mapWidth_Half);
+		rectNDC.RB.y = (_Orthogonal.RB.y / mapHeight_Half);
 
 		return rectNDC;
 	}
+
+	// 2022-09-20 Test
+	// NDC->View Port
+	Rect_<T> NDC2ViewPort(const Rect_<T>& _NDC)
+	{
+		RECT clientRect = g_pWindow->getClientRect();
+		float clientWidth = clientRect.right - clientRect.left; // clientRectWidth;
+		float clientHeight = clientRect.bottom - clientRect.top; // clientRectHeight;
+		
+		Rect_<T> rectNDC;
+		rectNDC.LT.x = (_Orthogonal.LT.x / mapWidth_Half);
+		rectNDC.LT.y = (_Orthogonal.LT.y / mapHeight_Half);
+		rectNDC.RB.x = (_Orthogonal.RB.x / mapWidth_Half);
+		rectNDC.RB.y = (_Orthogonal.RB.y / mapHeight_Half);
+	}
+
 
 	Rect_<T> calcTextureRect(const Rect_<T>& _Orthogonal, const Rect_<T>& _cameraOrtho)
 	{
@@ -221,10 +256,17 @@ public:
 		list->at(2).pos = { rectNDC.LT.x, rectNDC.RB.y, 0.0f };
 		list->at(3).pos = { rectNDC.RB.x, rectNDC.RB.y, 0.0f };
 
-		list->at(0).texture = { 0.0f, 0.0f }; // p1-LT
-		list->at(1).texture = { 1.0f, 0.0f }; // p2-RT
-		list->at(2).texture = { 0.0f, 1.0f }; // p3-LB
-		list->at(3).texture = { 1.0f, 1.0f }; // p4-RB
+		//float width = rectNDC.fWidth();
+		//float height = rectNDC.fHeight();
+		//list->at(0).pos = { rectNDC.LT.x, rectNDC.LT.y, 0.0f };
+		//list->at(1).pos = { rectNDC.LT.x + rectNDC.width(), rectNDC.LT.y, 0.0f };
+		//list->at(2).pos = { rectNDC.LT.x, rectNDC.LT.y + rectNDC.height(), 0.0f };
+		//list->at(3).pos = { rectNDC.LT.x + rectNDC.width(), rectNDC.LT.y + rectNDC.height(), 0.0f };
+
+		//list->at(0).texture = { 0.0f, 0.0f }; // p1-LT
+		//list->at(1).texture = { 1.0f, 0.0f }; // p2-RT
+		//list->at(2).texture = { 0.0f, 1.0f }; // p3-LB
+		//list->at(3).texture = { 1.0f, 1.0f }; // p4-RB
 
 		if (0)
 		{
