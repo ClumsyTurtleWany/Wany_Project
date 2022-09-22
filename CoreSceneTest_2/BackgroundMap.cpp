@@ -25,10 +25,6 @@ BackgroundMap::~BackgroundMap()
 
 void BackgroundMap::updateShader()
 {
-	//RECT clientRect = g_pWindow->getClientRect();
-	//float width = clientRect.right - clientRect.left;
-	//float height = clientRect.bottom - clientRect.top;
-
 	std::vector<Vertex>* list = pShader->getVertexList();
 	list->at(0).pos = { -1.0f, 1.0f, 0.0f };
 	list->at(1).pos = { 1.0f, 1.0f, 0.0f };
@@ -49,6 +45,31 @@ void BackgroundMap::updateShader()
 		list->at(2).texture = { rectTexture.LT.x, rectTexture.RB.y }; // p3-LB
 		list->at(3).texture = { rectTexture.RB.x, rectTexture.RB.y }; // p4-RB
 	}
+}
+
+void BackgroundMap::updateShaderCamera()
+{
+	std::vector<Vertex>* list = pShader->getVertexList();
+	list->at(0).pos = { -1.0f, 1.0f, 0.0f };
+	list->at(1).pos = { 1.0f, 1.0f, 0.0f };
+	list->at(2).pos = { -1.0f, -1.0f, 0.0f };
+	list->at(3).pos = { 1.0f, -1.0f, 0.0f };
+
+	if (renderCamera != nullptr)
+	{
+		Rect2f rectCamera = renderCamera->getRect();
+		Rect2f rectTexture;
+		rectTexture.LT.x = rectCamera.LT.x / mapWidth;
+		rectTexture.LT.y = rectCamera.LT.y / mapHeight;
+		rectTexture.RB.x = rectCamera.RB.x / mapWidth;
+		rectTexture.RB.y = rectCamera.RB.y / mapHeight;
+
+		list->at(0).texture = { rectTexture.LT.x, rectTexture.LT.y }; // p1-LT
+		list->at(1).texture = { rectTexture.RB.x, rectTexture.LT.y }; // p2-RT
+		list->at(2).texture = { rectTexture.LT.x, rectTexture.RB.y }; // p3-LB
+		list->at(3).texture = { rectTexture.RB.x, rectTexture.RB.y }; // p4-RB
+	}
+
 }
 
 

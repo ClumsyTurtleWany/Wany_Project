@@ -26,7 +26,7 @@ bool Scene_Map_0::initialize()
 	{
 		DXTexture* pTexture = DXTextureManager::getInstance()->getTexture(USER_CHARACTER_0);
 		float width = pTexture->getWidth();
-		float height = pTexture->getWidth();
+		float height = pTexture->getHeight();
 		float x = (background->mapWidth - width) * 0.5f;
 		float y = (background->mapHeight - height) * 0.5f;
 		

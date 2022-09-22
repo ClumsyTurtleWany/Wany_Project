@@ -171,6 +171,9 @@
     <ClInclude Include="DXShaderBorderManager.hpp">
       <Filter>DirectX\Shader\헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Camera.hpp">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowUI.cpp">
@@ -220,6 +223,9 @@
     </ClCompile>
     <ClCompile Include="DXShaderBorderManager.cpp">
       <Filter>DirectX\Shader\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

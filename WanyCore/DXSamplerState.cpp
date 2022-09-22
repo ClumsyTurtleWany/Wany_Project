@@ -92,5 +92,17 @@ bool DXSamplerState::release()
 		pDefaultSamplerState = nullptr;
 	}
 
+	if (pDefaultRSWireFrame != nullptr)
+	{
+		pDefaultRSWireFrame->Release();
+		pDefaultRSWireFrame = nullptr;
+	}
+
+	if (pDefaultRSSolid != nullptr)
+	{
+		pDefaultRSSolid->Release();
+		pDefaultRSSolid = nullptr;
+	}
+
 	return true;
 }

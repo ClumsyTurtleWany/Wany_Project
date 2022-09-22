@@ -8,7 +8,7 @@ class BackgroundMap : public object2D<float>
 {
 public:
 	//object2D<float>* pObj;
-	Camera* renderCamera;
+	//Camera* renderCamera;
 
 public:
 	BackgroundMap();
@@ -17,6 +17,7 @@ public:
 
 public:
 	virtual void updateShader() override;
+	virtual void updateShaderCamera() override;
 //public:
 //	virtual bool initialize();
 //	virtual bool frame(float _dt);

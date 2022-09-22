@@ -24,7 +24,7 @@ public:
 
 	SpaceDivision* currentMap;
 
-	Camera* renderCamera;
+	//Camera* renderCamera;
 
 public:
 	Player();

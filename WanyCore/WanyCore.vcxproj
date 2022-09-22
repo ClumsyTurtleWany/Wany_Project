@@ -177,6 +177,7 @@ copy "..\\lib\\FMOD\\fmod.dll" "..\\$(TargetName)\\"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.hpp" />
     <ClInclude Include="Define.hpp" />
     <ClInclude Include="DXDevice.hpp" />
     <ClInclude Include="DXSamplerState.hpp" />
@@ -196,6 +197,7 @@ copy "..\\lib\\FMOD\\fmod.dll" "..\\$(TargetName)\\"</Command>
     <ClInclude Include="WindowUI.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DXDevice.cpp" />
     <ClCompile Include="DXSamplerState.cpp" />
     <ClCompile Include="DXShader.cpp" />
