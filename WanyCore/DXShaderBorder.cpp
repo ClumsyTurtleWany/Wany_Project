@@ -1,4 +1,5 @@
 #include "DXShaderBorder.hpp"
+#include "DXSamplerState.hpp"
 
 void DXShaderBorder::initializeIndexList()
 {
@@ -84,6 +85,9 @@ bool DXShaderBorder::render()
 		m_pImmediateContext->PSSetShaderResources(1, 1, &resourceViewMask); // 레지스터 1번
 	}
 
+	// Blend State 미적용.
+	m_pImmediateContext->OMSetBlendState(nullptr, 0, -1);
+
 	// Draw 명령이 호출되면 위의 파이프라인 순서대로 타고 내려옴. 셋팅 할 때의 순서는 상관 없으나
 	// 셋팅이 안되있으면 문제가 생김.
 	// Vertex Buffer 출력 할 때 사용
@@ -99,6 +103,9 @@ bool DXShaderBorder::render()
 		// Index Buffer 사용 할 땐 DrawIndexed 사용 해야 함.
 		m_pImmediateContext->DrawIndexed(static_cast<UINT>(m_IndexList.size()), 0, 0);
 	}
+
+	// Blend State 적용.
+	m_pImmediateContext->OMSetBlendState(DXSamplerState::pBlendSamplerState, 0, -1);
 
 	return true;
 }

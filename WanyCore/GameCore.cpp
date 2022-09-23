@@ -121,6 +121,9 @@ bool GameCore::PreRender()
 	//viewPort.MaxDepth = 1;
 	//m_pImmediateContext->RSSetViewports(0, &viewPort);
 
+	// Blend State Àû¿ë.
+	m_pImmediateContext->OMSetBlendState(DXSamplerState::pBlendSamplerState, 0, -1);
+
 	return true;
 }
 

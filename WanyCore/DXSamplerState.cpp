@@ -3,6 +3,7 @@
 ID3D11SamplerState* DXSamplerState::pDefaultSamplerState = nullptr;
 ID3D11RasterizerState* DXSamplerState::pDefaultRSWireFrame = nullptr;
 ID3D11RasterizerState* DXSamplerState::pDefaultRSSolid = nullptr;
+ID3D11BlendState* DXSamplerState::pBlendSamplerState = nullptr;
 
 bool DXSamplerState::setState(ID3D11Device* _pd3dDevice)
 {
@@ -81,6 +82,47 @@ bool DXSamplerState::setState(ID3D11Device* _pd3dDevice)
 		return false;
 	}
 
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	// Blend State
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+
+	D3D11_BLEND_DESC BlendStateDesc;
+	ZeroMemory(&BlendStateDesc, sizeof(BlendStateDesc));
+	//BlendStateDesc.AlphaToCoverageEnable;
+	
+	// 배경(목적지: 백버퍼에 이미 랜더링이 되어 있는 결과)과 현재 소스(지금 랜더링 하려는 객체 == 픽셀 쉐이더 소스)를 섞는다.
+	// 픽셀 쉐이더 뒤에 혼합이 된다. (랜더링 파이프 라인에서 Output-Merger Stage 단계에 해당 됨.)
+	//BlendStateDesc.IndependentBlendEnable  = true; 
+
+	// RenderTarget: 최대 8개 까지 한번에 랜더링 가능. 현재는 1개만 사용 중.
+	// BlendEnable: 알파 블렌딩 사용 할 것인가의 플래그.
+	BlendStateDesc.RenderTarget[0].BlendEnable = TRUE; 
+
+	// RGB 성분을 혼합하는 명령(SrcBlend, DestBlend, BlendOp)
+	BlendStateDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA; // 소스의 알파값
+	BlendStateDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA; // 소스의 알파값의 역
+	BlendStateDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD; // 알파 블렌딩에 사용할 연산자 지정.
+	// Alpha Blending 기본 공식
+	// Final Color = (Src Color * Src Alpha) + Dest Color * Inv Src Alpha(1.0f - SrcAlpha);
+	// Alpha == 1.0f : 불투명, Alpha == 0.0f : 투명, Alpha 0.0f ~ 1.0f : 반투명
+	// Alpha == 1.0f, Final Color = (Src Color * 1.0f) + Dest Color * (1.0f - 1.0f) = Src Color;
+	// Alpha == 0.0f, Final Color = (Src Color * 0.0f) + Dest Color * (1.0f - 0.0f) = Dest Color;
+	
+	// Alpha 성분을 혼합하는 명령 (SrcBlendAlpha, DestBlendAlpha, BlendOpAlpha, RenderTargetWriteMask)
+	// Final Alpha = Src Alpha * 1.0f(D3D11_BLEND_ONE) + Dest Alpha * 0.0f(D3D11_BLEND_ZERO);
+	BlendStateDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	BlendStateDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	BlendStateDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	// RenderTargetWriteMask: 랜더 타겟을 출력하는 마스크 비트. 설정 안하면 출력 안됨. 중요함.
+	BlendStateDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+	rst = _pd3dDevice->CreateBlendState(&BlendStateDesc, &pBlendSamplerState);
+	if (FAILED(rst))
+	{
+		OutputDebugString(L"WanyCore::DXSamplerState::Failed Create Blend State Solid.\n");
+		return false;
+	}
+
 	return true;
 }
 
@@ -102,6 +144,12 @@ bool DXSamplerState::release()
 	{
 		pDefaultRSSolid->Release();
 		pDefaultRSSolid = nullptr;
+	}
+
+	if (pBlendSamplerState != nullptr)
+	{
+		pBlendSamplerState->Release();
+		pBlendSamplerState = nullptr;
 	}
 
 	return true;

@@ -210,36 +210,34 @@ public:
 		return rectNDC;
 	}
 
-	// 2022-09-20 Test
-	// NDC->View Port
-	//Rect_<T> NDC2ViewPort(const Rect_<T>& _NDC)
-	//{
-	//	RECT clientRect = g_pWindow->getClientRect();
-	//	float clientWidth = clientRect.right - clientRect.left; // clientRectWidth;
-	//	float clientHeight = clientRect.bottom - clientRect.top; // clientRectHeight;
-	//	
-	//	Rect_<T> rectNDC;
-	//	rectNDC.LT.x = (_Orthogonal.LT.x / mapWidth_Half);
-	//	rectNDC.LT.y = (_Orthogonal.LT.y / mapHeight_Half);
-	//	rectNDC.RB.x = (_Orthogonal.RB.x / mapWidth_Half);
-	//	rectNDC.RB.y = (_Orthogonal.RB.y / mapHeight_Half);
-	//}
-
-
-	Rect_<T> calcTextureRect(const Rect_<T>& _Orthogonal, const Rect_<T>& _cameraOrtho)
+	void flipTexture(bool _horizontal, bool _vertical)
 	{
-		Rect_<T> rectTexture;
-		// -2000, 1500 && -500, 380 -> 0.375, 0.25  
-		// 2000, -1500 && 500, -380 -> 0.625, 
-		rectTexture.LT.x = ((_cameraOrtho.LT.x - _Orthogonal.LT.x) / mapWidth);
-		rectTexture.LT.y = ((_Orthogonal.LT.y - _cameraOrtho.LT.y) / mapHeight);
-		rectTexture.RB.x = 1.0f - ((_cameraOrtho.RB.x - _Orthogonal.RB.x) / mapWidth);
-		rectTexture.RB.y = 1.0f - ((_Orthogonal.RB.y - _cameraOrtho.RB.y) / mapHeight);
+		if (_horizontal)
+		{
+			std::vector<Vertex>* list = pShader->getVertexList();
+			Vector2f LT = list->at(0).texture;
+			Vector2f RT = list->at(1).texture;
+			Vector2f LB = list->at(2).texture;
+			Vector2f RB = list->at(3).texture;
+			list->at(0).texture = RT; //{ 0.0f, 0.0f }; // LT
+			list->at(1).texture = LT; //{ 1.0f, 0.0f }; // RT
+			list->at(2).texture = RB; //{ 0.0f, 1.0f }; // LB
+			list->at(3).texture = LB; //{ 1.0f, 1.0f }; // RB
+		}
 
-		return rectTexture;
-
+		if (_vertical)
+		{
+			std::vector<Vertex>* list = pShader->getVertexList();
+			Vector2f LT = list->at(0).texture;
+			Vector2f RT = list->at(1).texture;
+			Vector2f LB = list->at(2).texture;
+			Vector2f RB = list->at(3).texture;
+			list->at(0).texture = LB;
+			list->at(1).texture = RB;
+			list->at(2).texture = LT;
+			list->at(3).texture = RT;
+		}
 	}
-
 
 public:
 	virtual bool frame(float _dt) {	return true; };
