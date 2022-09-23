@@ -3,16 +3,16 @@
 
 Monster::Monster()// : currentState(new UserState_Idle(this))
 {
-	pObj = new object2D<float>;
-	pObj->type = OBJECT_TYPE::DYNAMIC_OBJECT;
-	pObj->createShader(ShaderType::Normal);
+	//pObj = new object2D<float>;
+	type = OBJECT_TYPE::DYNAMIC_OBJECT;
+	createShader(ShaderType::Normal);
 }
 
 Monster::Monster(const Rect2f& _rect)// : currentState(new UserState_Idle(this))
 {
-	pObj = new object2D<float>(_rect);
-	pObj->type = OBJECT_TYPE::DYNAMIC_OBJECT;
-	pObj->createShader(ShaderType::Normal);
+	//pObj = new object2D<float>(_rect);
+	type = OBJECT_TYPE::DYNAMIC_OBJECT;
+	createShader(ShaderType::Normal);
 }
 
 Monster::~Monster()
@@ -27,7 +27,7 @@ bool Monster::initialize()
 
 bool Monster::frame(float _dt)
 {
-	if (!pObj->frame(_dt))
+	if (!frame(_dt))
 	{
 		return false;
 	}
@@ -37,14 +37,14 @@ bool Monster::frame(float _dt)
 		return false;
 	}*/
 
-	pObj->hitbox = pObj->shape;
+	hitbox = shape;
 
 	return true;
 }
 
 bool Monster::render()
 {
-	if (!pObj->render())
+	if (!render())
 	{
 		return false;
 	}
@@ -61,8 +61,5 @@ bool Monster::render()
 
 bool Monster::release()
 {
-	pObj->release();
-	delete pObj;
-	pObj = nullptr;
 	return true; // currentState->release();
 }

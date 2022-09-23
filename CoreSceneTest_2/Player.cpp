@@ -110,36 +110,6 @@ bool Player::release()
 	return currentState->release();
 }
 
-//void Player::updateShader()
-//{
-//	Rect_<float> rectNDC;
-//	rectNDC = ScreenToNDC();
-//	
-//
-//	/*if (renderCamera != nullptr)
-//	{
-//		float magnification_width = mapWidth / renderCamera->getWidth();
-//		float magnification_Height = mapHeight / renderCamera->getHeight();
-//		rectNDC.LT.x *= magnification_width;
-//		rectNDC.LT.y *= magnification_Height;
-//		rectNDC.RB.x *= magnification_width;
-//		rectNDC.RB.y *= magnification_Height;
-//	}*/
-//	//rectNDC = ScreenToCamera();
-//
-//	// Vectex List
-//	std::vector<Vertex>* list = pShader->getVertexList();
-//	list->at(0).pos = { rectNDC.LT.x, rectNDC.LT.y, 0.0f };
-//	list->at(1).pos = { rectNDC.RB.x, rectNDC.LT.y, 0.0f };
-//	list->at(2).pos = { rectNDC.LT.x, rectNDC.RB.y, 0.0f };
-//	list->at(3).pos = { rectNDC.RB.x, rectNDC.RB.y, 0.0f };
-//
-//	//list->at(0).texture = { 0.0f, 0.0f }; // p1-LT
-//	//list->at(1).texture = { 1.0f, 0.0f }; // p2-RT
-//	//list->at(2).texture = { 0.0f, 1.0f }; // p3-LB
-//	//list->at(3).texture = { 1.0f, 1.0f }; // p4-RB
-//}
-
 void Player::setCamera(Camera* _camera)
 {
 	renderCamera = _camera;

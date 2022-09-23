@@ -3,13 +3,14 @@
 #include "DXShaderBorderManager.hpp"
 #include "SpaceDivision.hpp"
 
-class UserState;
+class MonsterState;
 
-class Monster
+class Monster : public object2D<float>
 {
-public:
-	object2D<float>* pObj;
+protected:
+	MonsterState* currentState;
 
+public:
 	enum class Direction
 	{
 		Left,

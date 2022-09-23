@@ -44,13 +44,13 @@ bool Scene_Map_0::initialize()
 	for (int i = 0; i < 0; i++)
 	{
 		Monster* pMonster = new Monster;
-		pMonster->pObj->Random();
-		pMonster->pObj->setColor(Vector4f(0.0f, 0.0f, 0.0f, 1.0f));
-		pMonster->pObj->mapWidth = background->mapWidth;
-		pMonster->pObj->mapHeight = background->mapHeight;
+		pMonster->Random();
+		pMonster->setColor(Vector4f(0.0f, 0.0f, 0.0f, 1.0f));
+		pMonster->mapWidth = background->mapWidth;
+		pMonster->mapHeight = background->mapHeight;
 
 		MonsterList.push_back(pMonster);
-		collisionMap->addObject(pMonster->pObj);
+		collisionMap->addObject(pMonster);
 	}
 
 	return true;

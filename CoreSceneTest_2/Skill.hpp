@@ -6,15 +6,12 @@ class Skill : public object2D<float>
 {
 public:
 	//object2D<float>* pObj;
-	Camera* renderCamera;
+	//Camera* renderCamera;
 
 public:
 	Skill();
 	Skill(const Rect2f& _rect);
 	virtual ~Skill();
-
-public:
-	virtual void updateShader() override;
 
 public:
 	void setCamera(Camera* _camera);

@@ -24,8 +24,6 @@ public:
 
 	SpaceDivision* currentMap;
 
-	//Camera* renderCamera;
-
 public:
 	Player();
 	Player(const Rect2f& _rect);
@@ -36,9 +34,6 @@ public:
 	virtual bool frame(float _dt);
 	virtual bool render();
 	virtual bool release();
-
-public:
-	//virtual void updateShader() override;
 
 public:
 	void setCamera(Camera* _camera);
