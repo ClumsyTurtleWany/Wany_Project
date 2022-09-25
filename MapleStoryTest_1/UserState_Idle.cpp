@@ -61,7 +61,7 @@ bool UserState_Idle::frame()
 	KeyState KeyState_Up = Input::getInstance()->getKey(VK_UP);
 	if ((KeyState_Up == KeyState::Down) || (KeyState_Up == KeyState::Hold))
 	{
-		user->shape.offset(Vector2f( 0.0f, -0.5f));
+		//user->shape.offset(Vector2f( 0.0f, -0.5f));
 		//return true;
 	}
 
@@ -69,7 +69,7 @@ bool UserState_Idle::frame()
 	KeyState KeyState_Down = Input::getInstance()->getKey(VK_DOWN);
 	if ((KeyState_Down == KeyState::Down) || (KeyState_Down == KeyState::Hold))
 	{
-		user->shape.offset(Vector2f(0.0f, 0.5f));
+		//user->shape.offset(Vector2f(0.0f, 0.5f));
 		//return true;
 	}
 

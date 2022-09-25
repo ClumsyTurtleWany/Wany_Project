@@ -41,15 +41,33 @@ bool Map::Collision(objectBase* _src, std::vector<objectBase*>* _dst, std::vecto
 	return collisionMap->Collision(_src, _dst, _dstSection);
 }
 
-bool Map::CollisionMapObject(object2D<float>* _obj)
+bool Map::CollisionMapObject(object2D<float>* _obj, std::vector<object2D<float>*>* _dst, std::vector<Rect_<float>>* _dstSection)
 {
 	bool isCollision = false;
 	for (auto it : mapObjectList)
 	{
-		if (_obj->shape.intersectRect(it->shape))
+		if ((it->type == MapObjectType::Floor) || (it->type == MapObjectType::Slope))
 		{
-			DrawBorder(it->shape, BORDER_COLOR_YELLOW);
-			isCollision = true;
+			Rect2f intersection;
+			if (_obj->shape.intersectRect(it->shape, &intersection))
+			{
+				if (_dst != nullptr)
+				{
+					_dst->push_back(it);
+				}
+
+				if (_dstSection != nullptr)
+				{
+					_dstSection->push_back(intersection);
+				}
+
+				DrawBorder(it->shape, BORDER_COLOR_YELLOW);
+				isCollision = true;
+			}
+		}
+		else
+		{
+			continue;
 		}
 	}
 	return isCollision;

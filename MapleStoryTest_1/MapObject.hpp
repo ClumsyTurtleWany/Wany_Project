@@ -18,7 +18,7 @@ public:
 
 public:
 	MapObject();
-	MapObject(const Rect2f& _rect);
+	MapObject(const Rect2f& _rect, MapObjectType _type);
 	virtual ~MapObject();
 
 //public:

@@ -7,12 +7,13 @@ MapObject::MapObject()// : currentState(new UserState_Idle(this))
 	//pObj->createShader(ShaderType::Texture);
 }
 
-MapObject::MapObject(const Rect2f& _rect)// : currentState(new UserState_Idle(this))
+MapObject::MapObject(const Rect2f& _rect, MapObjectType _type)// : currentState(new UserState_Idle(this))
 {
 	//pObj = new object2D<float>(_rect);
 	//pObj->type = OBJECT_TYPE::STATIC_OBJECT;
 	//pObj->createShader(ShaderType::Texture);
 	this->shape = _rect;
+	type = _type;
 }
 
 MapObject::~MapObject()

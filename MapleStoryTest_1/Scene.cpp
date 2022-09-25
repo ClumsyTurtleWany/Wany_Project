@@ -95,7 +95,7 @@ bool Scene::render()
 		it->render();
 	}
 
-	background->CollisionMapObject(user);
+	//background->CollisionMapObject(user);
 
 	return true;
 }

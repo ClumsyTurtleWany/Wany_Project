@@ -40,16 +40,23 @@ bool UserState_Falling::frame()
 	if (timeCounter >= 0.1f)
 	{
 		timeCounter = 0.0f;
-		user->force.y += (9.81f + user->force.y) * 2.0f;
+		user->force.y += (9.81f + user->force.y) * 5.0f;
 		user->force.y = user->force.y >= 500.0f ? 500.0f : user->force.y;
 	}
 
 	beforeTime = currentTime;
 
-	if (user->currentMap->CollisionMapObject(user))
+	std::vector<object2D<float>*> collisionObjectList;
+	std::vector<Rect2f> intersectionRectList;
+	if (user->currentMap->CollisionMapObject(user, &collisionObjectList, &intersectionRectList))
 	{
 		user->force.x = 0.0f;
 		user->force.y = 0.0f;
+		if (!intersectionRectList.empty())
+		{
+			auto it = intersectionRectList.begin();
+			user->moveTo(it->left(), it->top() - user->shape.height() + 1);
+		}
 		user->changeCurrentState<UserState_Idle>();
 		return true;
 	}
@@ -58,17 +65,17 @@ bool UserState_Falling::frame()
 	KeyState KeyState_Up = Input::getInstance()->getKey(VK_UP);
 	if ((KeyState_Up == KeyState::Down) || (KeyState_Up == KeyState::Hold))
 	{
-		user->force.x = 0.0f;
-		user->force.y = 0.0f;
+		//user->force.x = 0.0f;
+		//user->force.y = 0.0f;
 		//user->shape.offset(Vector2f(0.0f, -0.1f));
-		return true;
+		//return true;
 	}
 
 	// Get Down
 	KeyState KeyState_Down = Input::getInstance()->getKey(VK_DOWN);
 	if ((KeyState_Down == KeyState::Down) || (KeyState_Down == KeyState::Hold))
 	{
-		user->shape.offset(Vector2f(0.0f, 0.1f));
+		//user->shape.offset(Vector2f(0.0f, 0.1f));
 		//return true;
 	}
 
@@ -76,6 +83,8 @@ bool UserState_Falling::frame()
 	KeyState KeyState_Left = Input::getInstance()->getKey(VK_LEFT);
 	if ((KeyState_Left == KeyState::Down) || (KeyState_Left == KeyState::Hold))
 	{
+		//user->currentDirection = Player::Direction::Left;
+		//user->flipTexture(true);
 		//user->changeCurrentState<UserState_MoveLeft>();
 		return true;
 	}
@@ -84,6 +93,8 @@ bool UserState_Falling::frame()
 	KeyState KeyState_Right = Input::getInstance()->getKey(VK_RIGHT);
 	if ((KeyState_Right == KeyState::Down) || (KeyState_Right == KeyState::Hold))
 	{
+		//user->currentDirection = Player::Direction::Right;
+		//user->flipTexture(true);
 		//user->changeCurrentState<UserState_MoveRight>();
 		return true;
 	}

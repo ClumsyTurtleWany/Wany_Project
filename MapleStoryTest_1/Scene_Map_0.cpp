@@ -24,39 +24,39 @@ bool Scene_Map_0::initialize()
 		DXShaderBorderManager::getInstance()->setMapSize(Vector2f(width, height));
 
 		// 중앙 상단 발판 545, 455, 1048, 20 - 로프1 618, 455, 10, 222,  로프2  1499, 455, 10, 222
-		MapObject* Stepbox_0 = new MapObject(Rect2f(545, 455, 1048, 20));
-		MapObject* Stepbox_0_rope_0 = new MapObject(Rect2f(618, 455, 10, 222));
-		MapObject* Stepbox_0_rope_1 = new MapObject(Rect2f(1499, 455, 10, 222));
+		MapObject* Stepbox_0 = new MapObject(Rect2f(545, 455, 1048, 20), MapObjectType::Floor);
+		MapObject* Stepbox_0_rope_0 = new MapObject(Rect2f(618, 455, 10, 222), MapObjectType::Rope);
+		MapObject* Stepbox_0_rope_1 = new MapObject(Rect2f(1499, 455, 10, 222), MapObjectType::Rope);
 		background->addMapObject(Stepbox_0);
 		background->addMapObject(Stepbox_0_rope_0);
 		background->addMapObject(Stepbox_0_rope_1);
 
 		// 왼쪽 상단 발판 0, 723, 836, 20 - 로프 64, 723, 10, 257
-		MapObject* Stepbox_1 = new MapObject(Rect2f(0, 723, 836, 20));
-		MapObject* Stepbox_1_rope_0 = new MapObject(Rect2f(64, 723, 10, 257));
+		MapObject* Stepbox_1 = new MapObject(Rect2f(0, 723, 836, 20), MapObjectType::Floor);
+		MapObject* Stepbox_1_rope_0 = new MapObject(Rect2f(64, 723, 10, 257), MapObjectType::Rope);
 		background->addMapObject(Stepbox_1);
 		background->addMapObject(Stepbox_1_rope_0);
 
 		// 왼쪽 하단 발판 0, 1024, 750, 20 - 로프 604, 1024, 10, 185
-		MapObject* Stepbox_2 = new MapObject(Rect2f(0, 1024, 750, 20));
-		MapObject* Stepbox_2_rope_0 = new MapObject(Rect2f(604, 1024, 10, 185));
+		MapObject* Stepbox_2 = new MapObject(Rect2f(0, 1024, 750, 20), MapObjectType::Floor);
+		MapObject* Stepbox_2_rope_0 = new MapObject(Rect2f(604, 1024, 10, 185), MapObjectType::Rope);
 		background->addMapObject(Stepbox_2);
 		background->addMapObject(Stepbox_2_rope_0);
 
 		// 오른쪽 상단 발판 1255, 723, 840, 20 - 로프 2016, 723, 10, 257
-		MapObject* Stepbox_3 = new MapObject(Rect2f(1255, 723, 840, 20));
-		MapObject* Stepbox_3_rope_0 = new MapObject(Rect2f(2016, 723, 10, 257));
+		MapObject* Stepbox_3 = new MapObject(Rect2f(1255, 723, 840, 20), MapObjectType::Floor);
+		MapObject* Stepbox_3_rope_0 = new MapObject(Rect2f(2016, 723, 10, 257), MapObjectType::Rope);
 		background->addMapObject(Stepbox_3);
 		background->addMapObject(Stepbox_3_rope_0);
 
 		// 오른쪽 하단 발판 1345, 1024, 750, 20 - 로프 1485, 1024, 10, 185
-		MapObject* Stepbox_4 = new MapObject(Rect2f(1345, 1024, 750, 20));
-		MapObject* Stepbox_4_rope_0 = new MapObject(Rect2f(1485, 1024, 10, 185));
+		MapObject* Stepbox_4 = new MapObject(Rect2f(1345, 1024, 750, 20), MapObjectType::Floor);
+		MapObject* Stepbox_4_rope_0 = new MapObject(Rect2f(1485, 1024, 10, 185), MapObjectType::Rope);
 		background->addMapObject(Stepbox_4);
 		background->addMapObject(Stepbox_4_rope_0);
 
 		// 바닥 0, 1255, 2095, 155
-		MapObject* floor = new MapObject(Rect2f(0, 1255, 2095, 155));
+		MapObject* floor = new MapObject(Rect2f(0, 1255, 2095, 155), MapObjectType::Floor);
 		background->addMapObject(floor);
 	}
 

@@ -20,7 +20,7 @@ public:
 	void addMapObject(MapObject* _obj);
 	void addObject(objectBase* _obj);
 	bool Collision(objectBase* _src, std::vector<objectBase*>* _dst, std::vector<Rect_<float>>* _dstSection = nullptr);
-	bool CollisionMapObject(object2D<float>* _obj);
+	bool CollisionMapObject(object2D<float>* _obj, std::vector<object2D<float>*>* _dst = nullptr, std::vector<Rect_<float>>* _dstSection = nullptr);
 	void updateDynamicObject();
 
 public:

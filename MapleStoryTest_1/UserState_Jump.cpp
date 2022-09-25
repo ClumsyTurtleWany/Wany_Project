@@ -26,7 +26,7 @@ bool UserState_Jump::initialize()
     }
 
     user->setTexture(DXTextureManager::getInstance()->getTexture(textureKeyList[jumpState]));
-	user->force.y = -250.0f;
+	user->force.y = -300.0f;
 	beforeTime = Timer::getInstance()->getPlayTime();
 
     return true;
@@ -46,7 +46,7 @@ bool UserState_Jump::frame()
 	
 	beforeTime = currentTime;
 	
-	if (user->force.y > -10.0f)
+	if (user->force.y > -100.0f)
 	{
 		user->force.y = 0.0f;
 		int a = 0;
@@ -68,7 +68,7 @@ bool UserState_Jump::frame()
 	KeyState KeyState_Down = Input::getInstance()->getKey(VK_DOWN);
 	if ((KeyState_Down == KeyState::Down) || (KeyState_Down == KeyState::Hold))
 	{
-		user->shape.offset(Vector2f(0.0f, 0.1f));
+		//user->shape.offset(Vector2f(0.0f, 0.1f));
 		//return true;
 	}
 
@@ -76,6 +76,8 @@ bool UserState_Jump::frame()
 	KeyState KeyState_Left = Input::getInstance()->getKey(VK_LEFT);
 	if ((KeyState_Left == KeyState::Down) || (KeyState_Left == KeyState::Hold))
 	{
+		//user->currentDirection = Player::Direction::Left;
+		//user->flipTexture(true);
 		//user->changeCurrentState<UserState_MoveLeft>();
 		return true;
 	}
@@ -84,6 +86,8 @@ bool UserState_Jump::frame()
 	KeyState KeyState_Right = Input::getInstance()->getKey(VK_RIGHT);
 	if ((KeyState_Right == KeyState::Down) || (KeyState_Right == KeyState::Hold))
 	{
+		//user->currentDirection = Player::Direction::Right;
+		//user->flipTexture(true);
 		//user->changeCurrentState<UserState_MoveRight>();
 		return true;
 	}
