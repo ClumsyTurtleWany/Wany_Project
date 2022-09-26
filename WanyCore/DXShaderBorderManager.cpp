@@ -16,8 +16,18 @@ void DXShaderBorderManager::setMapSize(Vector2f _size)
 	mapSize = _size;
 }
 
+void DXShaderBorderManager::setVisible(bool _flag)
+{
+	visible = _flag;
+}
+
 bool DXShaderBorderManager::drawBorder(const Rect2f& _rect, const Vector4f& _color)
 {
+	if (!visible)
+	{
+		return true;
+	}
+
 	if (renderCamera == nullptr)
 	{
 		RECT clientRect = g_pWindow->getClientRect();
@@ -93,7 +103,7 @@ bool DXShaderBorderManager::drawBorder(const Rect2f& _rect, const Vector4f& _col
 
 	m_pBorderShader->render();
 
-	return false;
+	return true;
 }
 
 bool DXShaderBorderManager::initialize()

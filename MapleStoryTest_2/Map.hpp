@@ -8,7 +8,8 @@
 class Map : public object2D<float>
 {
 private:
-	SpaceDivision* collisionMap;
+	//SpaceDivision* collisionMap;
+	QuadTree<float>* collisionMap;
 	std::vector<MapObject*> mapObjectList;
 
 public:
@@ -18,9 +19,9 @@ public:
 
 public:
 	void addMapObject(MapObject* _obj);
-	void addObject(objectBase* _obj);
-	bool Collision(objectBase* _src, std::vector<objectBase*>* _dst, std::vector<Rect_<float>>* _dstSection = nullptr);
-	bool CollisionMapObject(object2D<float>* _obj, std::vector<object2D<float>*>* _dst = nullptr, std::vector<Rect_<float>>* _dstSection = nullptr);
+	void addObject(object2D<float>* _obj);
+	bool Collision(object2D<float>* _src, std::vector<object2D<float>*>* _dst, std::vector<Rect_<float>>* _dstSection = nullptr);
+	bool CollisionMapObject(object2D<float>* _obj, MapObjectType _targetType, std::vector<object2D<float>*>* _dst = nullptr, std::vector<Rect_<float>>* _dstSection = nullptr);
 	void updateDynamicObject();
 
 public:

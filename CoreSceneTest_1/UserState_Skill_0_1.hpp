@@ -19,7 +19,7 @@ public:
 	int FPS = 0;
 	std::vector<std::wstring> textureKeyList;
 
-	bool isCancle = false;
+	bool isCancel = false;
 
 public:
 	UserState_Skill_0_1(Player* _user);

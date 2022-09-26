@@ -18,8 +18,8 @@ public:
 	virtual ~Effect();
 
 public:
-	virtual bool initialize();
-	virtual bool frame();
-	virtual bool render();
-	virtual bool release();
+	virtual bool initialize() override;
+	virtual bool frame() override;
+	virtual bool render() override;
+	virtual bool release() override;
 };

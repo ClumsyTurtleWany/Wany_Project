@@ -8,6 +8,7 @@
 #include "Map.hpp"
 #include "Camera.hpp"
 #include "Define.hpp"
+#include "SkillManager.hpp"
 
 class Scene
 {

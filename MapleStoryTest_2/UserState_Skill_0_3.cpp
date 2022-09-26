@@ -113,7 +113,7 @@ bool UserState_Skill_0_3::frame()
 
     if (skillState == 0)
     {
-        std::vector<objectBase*> collisionList;
+        std::vector<object2D<float>*> collisionList;
         std::vector<Rect2f> collisionRectList;
         user->currentMap->Collision(skill, &collisionList, &collisionRectList);
         for (auto it : collisionRectList)

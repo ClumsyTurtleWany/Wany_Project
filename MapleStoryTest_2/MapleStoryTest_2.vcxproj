@@ -42,7 +42,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -173,8 +173,11 @@ copy "..\\lib\\FMOD\\fmod.dll" "..\\$(TargetName)\\"</Command>
     <ClInclude Include="Scene_Map_0.hpp" />
     <ClInclude Include="Skill.hpp" />
     <ClInclude Include="SkillManager.hpp" />
+    <ClInclude Include="Skill_ExplosionPunch.hpp" />
+    <ClInclude Include="Skill_Installation.hpp" />
     <ClInclude Include="SpaceDivision.hpp" />
     <ClInclude Include="UserState.hpp" />
+    <ClInclude Include="UserState_Climb.hpp" />
     <ClInclude Include="UserState_Falling.hpp" />
     <ClInclude Include="UserState_Idle.hpp" />
     <ClInclude Include="UserState_Jump.hpp" />
@@ -195,7 +198,10 @@ copy "..\\lib\\FMOD\\fmod.dll" "..\\$(TargetName)\\"</Command>
     <ClCompile Include="Scene_Map_0.cpp" />
     <ClCompile Include="Skill.cpp" />
     <ClCompile Include="SkillManager.cpp" />
+    <ClCompile Include="Skill_ExplosionPunch.cpp" />
+    <ClCompile Include="Skill_Installation.cpp" />
     <ClCompile Include="UserState.cpp" />
+    <ClCompile Include="UserState_Climb.cpp" />
     <ClCompile Include="UserState_Falling.cpp" />
     <ClCompile Include="UserState_Idle.cpp" />
     <ClCompile Include="UserState_Jump.cpp" />

@@ -103,7 +103,7 @@ bool UserState_Skill_0_1::initialize()
 
 bool UserState_Skill_0_1::frame()
 {
-    if (!isCancle)
+    if (!isCancel)
     {
         // Move to Left
         KeyState KeyState_Left = Input::getInstance()->getKey(VK_LEFT);
@@ -113,7 +113,7 @@ bool UserState_Skill_0_1::frame()
         KeyState KeyState_X = Input::getInstance()->getKey('X');
         if ((KeyState_X == KeyState::Down) || (KeyState_Left == KeyState::Down) || (KeyState_Right == KeyState::Down))
         {
-            isCancle = true;
+            isCancel = true;
         }
     }
 
@@ -149,7 +149,7 @@ bool UserState_Skill_0_1::frame()
             skill->release();
             delete skill;
             skill = nullptr;
-            if (isCancle)
+            if (isCancel)
             {
                 user->currentMap->updateDynamicObject();
                 user->changeCurrentState<UserState_Idle>();

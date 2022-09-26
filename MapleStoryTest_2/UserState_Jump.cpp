@@ -4,6 +4,7 @@
 #include "UserState_MoveLeft.hpp"
 #include "UserState_MoveRight.hpp"
 #include "UserState_Falling.hpp"
+#include "SkillManager.hpp"
 
 UserState_Jump::UserState_Jump(Player* _user) : UserState(_user)
 {
@@ -58,6 +59,18 @@ bool UserState_Jump::frame()
 	KeyState KeyState_Up = Input::getInstance()->getKey(VK_UP);
 	if ((KeyState_Up == KeyState::Down) || (KeyState_Up == KeyState::Hold))
 	{
+		KeyState KeyState_X = Input::getInstance()->getKey('X');
+		if ((KeyState_X == KeyState::Down)/* || (KeyState_X == KeyState::Hold)*/)
+		{
+			KeyState_X = Input::getInstance()->getKey('X');
+			if ((KeyState_X == KeyState::Up))
+			{
+				user->force.y = -100.0f;
+				return true;
+			}
+			//user->changeCurrentState<UserState_Jump>();
+		}
+
 		//user->force.x = 0.0f;
 		//user->force.y = 0.0f;
 		//user->shape.offset(Vector2f(0.0f, -0.1f));
@@ -76,20 +89,28 @@ bool UserState_Jump::frame()
 	KeyState KeyState_Left = Input::getInstance()->getKey(VK_LEFT);
 	if ((KeyState_Left == KeyState::Down) || (KeyState_Left == KeyState::Hold))
 	{
-		//user->currentDirection = Player::Direction::Left;
-		//user->flipTexture(true);
+		if (user->currentDirection != Player::Direction::Left)
+		{
+			user->currentDirection = Player::Direction::Left;
+			user->flipTexture(true);
+		}
 		//user->changeCurrentState<UserState_MoveLeft>();
-		return true;
+		//return true;
 	}
 
 	// Move to Right
 	KeyState KeyState_Right = Input::getInstance()->getKey(VK_RIGHT);
 	if ((KeyState_Right == KeyState::Down) || (KeyState_Right == KeyState::Hold))
 	{
+		if (user->currentDirection != Player::Direction::Right)
+		{
+			user->currentDirection = Player::Direction::Right;
+			user->flipTexture(true);
+		}
 		//user->currentDirection = Player::Direction::Right;
 		//user->flipTexture(true);
 		//user->changeCurrentState<UserState_MoveRight>();
-		return true;
+		//return true;
 	}
 
 	// Jump
@@ -104,7 +125,8 @@ bool UserState_Jump::frame()
 	KeyState KeyState_C = Input::getInstance()->getKey('C');
 	if ((KeyState_C == KeyState::Down) || (KeyState_C == KeyState::Hold))
 	{
-		user->changeCurrentState<UserState_Skill_0_1>();
+		SkillManager::getInstance()->activeSkill(L"Skill_0");
+		//user->changeCurrentState<UserState_Skill_0_1>();
 		return true;
 	}
 

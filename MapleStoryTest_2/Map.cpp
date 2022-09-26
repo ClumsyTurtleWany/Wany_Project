@@ -31,22 +31,22 @@ void Map::addMapObject(MapObject* _obj)
 	mapObjectList.push_back(_obj);
 }
 
-void Map::addObject(objectBase* _obj)
+void Map::addObject(object2D<float>* _obj)
 {
 	collisionMap->addObject(_obj);
 }
 
-bool Map::Collision(objectBase* _src, std::vector<objectBase*>* _dst, std::vector<Rect_<float>>* _dstSection)
+bool Map::Collision(object2D<float>* _src, std::vector<object2D<float>*>* _dst, std::vector<Rect_<float>>* _dstSection)
 {
 	return collisionMap->Collision(_src, _dst, _dstSection);
 }
 
-bool Map::CollisionMapObject(object2D<float>* _obj, std::vector<object2D<float>*>* _dst, std::vector<Rect_<float>>* _dstSection)
+bool Map::CollisionMapObject(object2D<float>* _obj, MapObjectType _targetType, std::vector<object2D<float>*>* _dst, std::vector<Rect_<float>>* _dstSection)
 {
 	bool isCollision = false;
 	for (auto it : mapObjectList)
 	{
-		if ((it->type == MapObjectType::Floor) || (it->type == MapObjectType::Slope))
+		if ((it->type == _targetType))
 		{
 			Rect2f intersection;
 			if (_obj->shape.intersectRect(it->shape, &intersection))
@@ -61,7 +61,7 @@ bool Map::CollisionMapObject(object2D<float>* _obj, std::vector<object2D<float>*
 					_dstSection->push_back(intersection);
 				}
 
-				DrawBorder(it->shape, BORDER_COLOR_YELLOW);
+				DrawBorder(it->shape, BORDER_COLOR_RED);
 				isCollision = true;
 			}
 		}
@@ -152,6 +152,11 @@ bool Map::render()
 	}
 
 	collisionMap->render();
+
+	for (auto it : mapObjectList)
+	{
+		DrawBorder(it->shape, BORDER_COLOR_YELLOW);
+	}
 
 	return true;
 }

@@ -102,7 +102,7 @@ bool UserState_Skill_0_2::frame()
     std::wstring strTime = L"frame Time: " + std::to_wstring(secondPerFrame) + L"\n";
     OutputDebugString(strTime.c_str());
 
-    if (!isCancle)
+    if (!isCancel)
     {
         // Move to Left
         KeyState KeyState_Left = Input::getInstance()->getKey(VK_LEFT);
@@ -112,7 +112,7 @@ bool UserState_Skill_0_2::frame()
         KeyState KeyState_X = Input::getInstance()->getKey('X');
         if ((KeyState_X == KeyState::Down) || (KeyState_Left == KeyState::Down) || (KeyState_Right == KeyState::Down))
         {
-            isCancle = true;
+            isCancel = true;
         }
     }
 
@@ -144,7 +144,7 @@ bool UserState_Skill_0_2::frame()
             skill->release();
             delete skill;
             skill = nullptr;
-            if (isCancle)
+            if (isCancel)
             {
                 user->currentMap->updateDynamicObject();
                 user->changeCurrentState<UserState_Idle>();

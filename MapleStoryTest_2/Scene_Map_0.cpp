@@ -79,6 +79,24 @@ bool Scene_Map_0::initialize()
 	renderCamera->setPos(user->getCenter());
 	user->setCamera(renderCamera);
 
+	SkillManager::getInstance()->setUser(user);
+	SkillManager::getInstance()->LoadDir(SKILL_DIRECTORY);
+	for (auto it : SkillManager::getInstance()->skillNameList)
+	{
+		Skill* pSkill = SkillManager::getInstance()->getSkill(it);
+
+		if (pSkill != nullptr)
+		{
+			int a = 0;
+		}
+		else
+		{
+			int a = 0;
+		}
+
+	}
+
+
 	for (int i = 0; i < 10; i++)
 	{
 		Monster* pMonster = new Monster;

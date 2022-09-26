@@ -114,6 +114,15 @@
     <ClInclude Include="Effect.hpp">
       <Filter>Object</Filter>
     </ClInclude>
+    <ClInclude Include="Skill_ExplosionPunch.hpp">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Skill_Installation.hpp">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="UserState_Climb.hpp">
+      <Filter>State\UserState\헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sample.cpp">
@@ -172,6 +181,15 @@
     </ClCompile>
     <ClCompile Include="Effect.cpp">
       <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Skill_ExplosionPunch.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Skill_Installation.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="UserState_Climb.cpp">
+      <Filter>State\UserState\소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

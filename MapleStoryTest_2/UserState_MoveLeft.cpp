@@ -3,6 +3,7 @@
 #include "Input.hpp"
 #include "UserState_Jump.hpp"
 #include "UserState_Skill_0_1.hpp"
+#include "UserState_Falling.hpp"
 
 UserState_MoveLeft::UserState_MoveLeft(Player* _user) : UserState(_user)
 {
@@ -71,6 +72,12 @@ bool UserState_MoveLeft::frame()
         {
             //user->shape.offset(Vector2f(-0.1f, 0.0f));
             user->force.x = -200.0f;
+        }
+
+        if (!user->currentMap->CollisionMapObject(user, MapObjectType::Floor))
+        {
+            user->changeCurrentState<UserState_Falling>();
+            return true;
         }
     }
     else

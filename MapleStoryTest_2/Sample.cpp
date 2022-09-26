@@ -21,22 +21,6 @@ bool Sample::initialize()
     {
         user->pObj->setTexture(DXTextureManager::getInstance()->getTexture(USER_CHARACTER_0));
     }*/
-    SkillManager::getInstance()->LoadDir(SKILL_DIRECTORY);
-
-    for (auto it : SkillManager::getInstance()->skillNameList)
-    {
-        Skill* pSkill = SkillManager::getInstance()->getSkill(it);
-
-        if (pSkill != nullptr)
-        {
-            int a = 0;
-        }
-        else
-        {
-            int a = 0;
-        }
-
-    }
 
     Scene_Map0 = new Scene_Map_0;
     Scene_Map0->setDevice(m_pd3dDevice, m_pImmediateContext);
@@ -49,6 +33,16 @@ bool Sample::initialize()
 
 bool Sample::frame()
 {
+    KeyState KeyState_F4 = Input::getInstance()->getKey(VK_F4);
+    if ((KeyState_F4 == KeyState::Down) || (KeyState_F4 == KeyState::Hold))
+    {
+        DXShaderBorderManager::getInstance()->setVisible(true);
+    }
+    else
+    {
+        DXShaderBorderManager::getInstance()->setVisible(false);
+    }
+
     currentScene->frame();
     //user->frame(Timer::getInstance()->getDeltaTime());
     return true;

@@ -4,7 +4,6 @@
 #include "Resource.h"
 #include "Scene_Map_0.hpp"
 #include "Camera.hpp"
-#include "SkillManager.hpp"
 
 //C:\Users\kgca4108\Documents\Visual Studio 2019\My Exported Templates\CoreTestTemplate_0.zip
 class Sample : public GameCore

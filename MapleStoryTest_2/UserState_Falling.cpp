@@ -3,6 +3,7 @@
 #include "UserState_Skill_0_1.hpp"
 #include "UserState_MoveLeft.hpp"
 #include "UserState_MoveRight.hpp"
+#include "SkillManager.hpp"
 
 UserState_Falling::UserState_Falling(Player* _user) : UserState(_user)
 {
@@ -48,23 +49,48 @@ bool UserState_Falling::frame()
 
 	std::vector<object2D<float>*> collisionObjectList;
 	std::vector<Rect2f> intersectionRectList;
-	if (user->currentMap->CollisionMapObject(user, &collisionObjectList, &intersectionRectList))
+	if (user->currentMap->CollisionMapObject(user, MapObjectType::Floor, &collisionObjectList, &intersectionRectList))
 	{
-		user->force.x = 0.0f;
-		user->force.y = 0.0f;
+		//user->force.x = 0.0f;
+		//user->force.y = 0.0f;
 		if (!intersectionRectList.empty())
 		{
-			auto it = intersectionRectList.begin();
-			user->moveTo(it->left(), it->top() - user->shape.height() + 1);
+			for (auto it : intersectionRectList)
+			{
+				if (it.bottom() >= user->shape.bottom())
+				{
+					user->force.x = 0.0f;
+					user->force.y = 0.0f;
+					user->moveTo(user->shape.left(), it.top() - user->shape.height() + 1);
+					user->changeCurrentState<UserState_Idle>();
+					return true;
+				}
+			}
+			//auto it = intersectionRectList.begin();
+			//user->moveTo(it->left(), it->top() - user->shape.height() + 1);
+			//user->moveTo(user->shape.left(), it->top() - user->shape.height() + 1);
+			
 		}
-		user->changeCurrentState<UserState_Idle>();
-		return true;
+		//user->changeCurrentState<UserState_Idle>();
+		//return true;
 	}
 	
 	// Climb
 	KeyState KeyState_Up = Input::getInstance()->getKey(VK_UP);
 	if ((KeyState_Up == KeyState::Down) || (KeyState_Up == KeyState::Hold))
 	{
+		KeyState KeyState_X = Input::getInstance()->getKey('X');
+		if ((KeyState_X == KeyState::Down)/* || (KeyState_X == KeyState::Hold)*/)
+		{
+			KeyState_X = Input::getInstance()->getKey('X');
+			if ((KeyState_X == KeyState::Up))
+			{
+				user->force.y = -100.0f;
+				return true;
+			}
+			//user->changeCurrentState<UserState_Jump>();
+		}
+
 		//user->force.x = 0.0f;
 		//user->force.y = 0.0f;
 		//user->shape.offset(Vector2f(0.0f, -0.1f));
@@ -83,20 +109,30 @@ bool UserState_Falling::frame()
 	KeyState KeyState_Left = Input::getInstance()->getKey(VK_LEFT);
 	if ((KeyState_Left == KeyState::Down) || (KeyState_Left == KeyState::Hold))
 	{
+		if (user->currentDirection != Player::Direction::Left)
+		{
+			user->currentDirection = Player::Direction::Left;
+			user->flipTexture(true);
+		}
 		//user->currentDirection = Player::Direction::Left;
 		//user->flipTexture(true);
 		//user->changeCurrentState<UserState_MoveLeft>();
-		return true;
+		//return true;
 	}
 
 	// Move to Right
 	KeyState KeyState_Right = Input::getInstance()->getKey(VK_RIGHT);
 	if ((KeyState_Right == KeyState::Down) || (KeyState_Right == KeyState::Hold))
 	{
+		if (user->currentDirection != Player::Direction::Right)
+		{
+			user->currentDirection = Player::Direction::Right;
+			user->flipTexture(true);
+		}
 		//user->currentDirection = Player::Direction::Right;
 		//user->flipTexture(true);
 		//user->changeCurrentState<UserState_MoveRight>();
-		return true;
+		//return true;
 	}
 
 	// Jump
@@ -111,7 +147,8 @@ bool UserState_Falling::frame()
 	KeyState KeyState_C = Input::getInstance()->getKey('C');
 	if ((KeyState_C == KeyState::Down) || (KeyState_C == KeyState::Hold))
 	{
-		user->changeCurrentState<UserState_Skill_0_1>();
+		SkillManager::getInstance()->activeSkill(L"Skill_0");
+		//user->changeCurrentState<UserState_Skill_0_1>();
 		return true;
 	}
 

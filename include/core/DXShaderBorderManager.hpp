@@ -20,6 +20,8 @@ private:
 
 	Vector2f mapSize;
 
+	bool visible = true;
+
 private:
 	DXShaderBorderManager() {};
 	~DXShaderBorderManager() { release(); };
@@ -28,6 +30,7 @@ public:
 	void setDevice(ID3D11Device* _device, ID3D11DeviceContext* _context);
 	void setCamera(Camera* _camera);
 	void setMapSize(Vector2f _size);
+	void setVisible(bool _flag);
 	bool drawBorder(const Rect2f& _rect, const Vector4f& _color);
 
 public:

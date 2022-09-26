@@ -210,7 +210,7 @@ public:
 		return rectNDC;
 	}
 
-	void flipTexture(bool _horizontal, bool _vertical)
+	void flipTexture(bool _horizontal, bool _vertical = false)
 	{
 		if (_horizontal)
 		{

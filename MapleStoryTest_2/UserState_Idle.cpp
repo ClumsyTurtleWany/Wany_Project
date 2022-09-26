@@ -5,6 +5,8 @@
 #include "UserState_MoveRight.hpp"
 #include "UserState_Falling.hpp"
 #include "Player.hpp"
+#include "SkillManager.hpp"
+#include "UserState_Climb.hpp"
 
 UserState_Idle::UserState_Idle(Player* _user) : UserState(_user)
 {
@@ -51,7 +53,7 @@ bool UserState_Idle::frame()
 
 	user->setTexture(DXTextureManager::getInstance()->getTexture(textureKeyList[idleState]));
 
-	if (!user->currentMap->CollisionMapObject(user))
+	if (!user->currentMap->CollisionMapObject(user, MapObjectType::Floor))
 	{
 		user->changeCurrentState<UserState_Falling>();
 		return true;
@@ -61,6 +63,12 @@ bool UserState_Idle::frame()
 	KeyState KeyState_Up = Input::getInstance()->getKey(VK_UP);
 	if ((KeyState_Up == KeyState::Down) || (KeyState_Up == KeyState::Hold))
 	{
+		// 로프 충돌 체크
+		if (user->currentMap->CollisionMapObject(user, MapObjectType::Rope))
+		{
+			user->changeCurrentState<UserState_Climb>();
+			return true;
+		}
 		//user->shape.offset(Vector2f( 0.0f, -0.5f));
 		//return true;
 	}
@@ -109,7 +117,8 @@ bool UserState_Idle::frame()
 	KeyState KeyState_C = Input::getInstance()->getKey('C');
 	if ((KeyState_C == KeyState::Down) || (KeyState_C == KeyState::Hold))
 	{
-		user->changeCurrentState<UserState_Skill_0_1>();
+		SkillManager::getInstance()->activeSkill(L"Skill_0");
+		//user->changeCurrentState<UserState_Skill_0_1>();
 		return true;
 	}
 

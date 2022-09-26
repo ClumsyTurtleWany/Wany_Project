@@ -2,6 +2,8 @@
 #include "Object.hpp"
 #include "Camera.hpp"
 #include "Player.hpp"
+#include "Timer.hpp"
+#include "DXTextureManager.hpp"
 
 enum class SkillType
 {
@@ -20,13 +22,17 @@ public:
 	int state = 0;
 	float beforeTime = 0.0f;
 	float timeCounter = 0.0f;
-	float effectTime = 0.0f;
+	//float effectTime = 0.0f;
 	float frameTime = 0.0f;
 	float coolTime = 0.0f;
-	//float lifeTime = 0.0f;
+	float lifeTime = 0.0f;
+	float damage = 0.0f;
+	float totalTime = 0.0f;
+
+	bool isEnd = false;
 	std::vector<std::wstring> textureKeyList;
 
-	bool isCancle = false;
+	bool isCancel = false;
 
 	Player* user = nullptr;
 

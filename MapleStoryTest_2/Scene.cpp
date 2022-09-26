@@ -15,6 +15,7 @@ bool Scene::initialize()
 	renderCamera->setWidth(clientRect.right - clientRect.left);
 	renderCamera->setHeight(clientRect.bottom - clientRect.top);
 	DXShaderBorderManager::getInstance()->setCamera(renderCamera);
+
 	return true;
 }
 
@@ -44,6 +45,7 @@ bool Scene::frame()
 		it->frame();
 	}
 
+	SkillManager::getInstance()->frame();
 	
 	//collisionMap->updateDynamicObject();
 	return true;
@@ -60,6 +62,8 @@ bool Scene::render()
 	{
 		user->render();
 	}
+
+	SkillManager::getInstance()->render();
 
 	std::wstring wstrMapSize;
 	wstrMapSize += L"Map Size: ";

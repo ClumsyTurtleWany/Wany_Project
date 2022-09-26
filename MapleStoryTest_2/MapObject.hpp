@@ -8,7 +8,6 @@ enum class MapObjectType
 	Floor,
 	Rope,
 	RopeRadder,
-	Slope
 };
 
 class MapObject : public object2D<float>
