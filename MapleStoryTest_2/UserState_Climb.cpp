@@ -129,6 +129,10 @@ bool UserState_Climb::frame()
 
 		return true;
 	}
+	else
+	{
+		user->changeCurrentState<UserState_Falling>();
+	}
 
 
 	//user->changeCurrentState<UserState_Idle>();
