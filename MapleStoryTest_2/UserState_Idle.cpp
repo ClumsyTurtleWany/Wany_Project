@@ -31,6 +31,9 @@ bool UserState_Idle::initialize()
 		}
 	}
 
+	user->force.x = 0;
+	user->force.y = 0;
+
 	return true;
 }
 
@@ -77,8 +80,24 @@ bool UserState_Idle::frame()
 	KeyState KeyState_Down = Input::getInstance()->getKey(VK_DOWN);
 	if ((KeyState_Down == KeyState::Down) || (KeyState_Down == KeyState::Hold))
 	{
-		//user->shape.offset(Vector2f(0.0f, 0.5f));
-		//return true;
+		// 로프 충돌 체크
+		std::vector<object2D<float>*> collisionObjList;
+		std::vector<Rect2f> collisionRectList;
+		if (user->currentMap->CollisionMapObject(user, MapObjectType::Rope, &collisionObjList, &collisionRectList))
+		{
+			for (auto it : collisionObjList)
+			{
+				if (user->shape.bottom() <= it->shape.top())
+				{
+					user->changeCurrentState<UserState_Climb>();
+					return true;
+				}
+			}
+		}
+		else
+		{
+			// Get Down
+		}
 	}
 
 	// Move to Left
@@ -127,6 +146,11 @@ bool UserState_Idle::frame()
 
 bool UserState_Idle::render()
 {
+	std::wstring strUserState;
+	strUserState += L"UserState: ";
+	strUserState += L"UserState_Idle";
+	DXWriter::getInstance()->draw(0, 100, strUserState);
+
 	return true;
 }
 

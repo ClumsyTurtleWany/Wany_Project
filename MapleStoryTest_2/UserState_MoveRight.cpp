@@ -119,6 +119,11 @@ bool UserState_MoveRight::frame()
 
 bool UserState_MoveRight::render()
 {
+    std::wstring strUserState;
+    strUserState += L"UserState: ";
+    strUserState += L"UserState_MoveRight";
+    DXWriter::getInstance()->draw(0, 100, strUserState);
+
     return true;
 }
 

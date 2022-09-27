@@ -11,6 +11,8 @@ public:
 	float beforeTime = 0.0f;
 	float timeCounter = 0.0f;
 
+	float fallingHeight;
+
 public:
 	UserState_Falling(Player* _user);
 

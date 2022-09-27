@@ -4,6 +4,7 @@
 #include "UserState_MoveLeft.hpp"
 #include "UserState_MoveRight.hpp"
 #include "SkillManager.hpp"
+#include "UserState_Climb.hpp"
 
 UserState_Falling::UserState_Falling(Player* _user) : UserState(_user)
 {
@@ -27,6 +28,9 @@ bool UserState_Falling::initialize()
 
     user->setTexture(DXTextureManager::getInstance()->getTexture(textureKeyList[jumpState]));
 	user->force.y = 0.0f;
+
+	fallingHeight = user->shape.bottom();
+
 	beforeTime = Timer::getInstance()->getPlayTime();
 
     return true;
@@ -53,18 +57,25 @@ bool UserState_Falling::frame()
 	{
 		//user->force.x = 0.0f;
 		//user->force.y = 0.0f;
-		if (!intersectionRectList.empty())
+		if (!collisionObjectList.empty())
 		{
-			for (auto it : intersectionRectList)
+			for (auto it : collisionObjectList)
 			{
-				if (it.bottom() >= user->shape.bottom())
+				// floor y 100
+				// user y 200
+				// it->shape.bottom() < user->shape.bottom()
+				if (fallingHeight <= it->shape.top())
 				{
-					user->force.x = 0.0f;
-					user->force.y = 0.0f;
-					user->moveTo(user->shape.left(), it.top() - user->shape.height() + 1);
-					user->changeCurrentState<UserState_Idle>();
-					return true;
+					if (user->shape.bottom() >= it->shape.top())
+					{
+						user->force.x = 0.0f;
+						user->force.y = 0.0f;
+						user->moveTo(user->shape.left(), it->shape.top() - user->shape.height() + 1);
+						user->changeCurrentState<UserState_Idle>();
+						return true;
+					}
 				}
+				
 			}
 			//auto it = intersectionRectList.begin();
 			//user->moveTo(it->left(), it->top() - user->shape.height() + 1);
@@ -79,6 +90,13 @@ bool UserState_Falling::frame()
 	KeyState KeyState_Up = Input::getInstance()->getKey(VK_UP);
 	if ((KeyState_Up == KeyState::Down) || (KeyState_Up == KeyState::Hold))
 	{
+		// 로프 충돌 체크
+		if (user->currentMap->CollisionMapObject(user, MapObjectType::Rope))
+		{
+			user->changeCurrentState<UserState_Climb>();
+			return true;
+		}
+
 		KeyState KeyState_X = Input::getInstance()->getKey('X');
 		if ((KeyState_X == KeyState::Down)/* || (KeyState_X == KeyState::Hold)*/)
 		{
@@ -140,7 +158,7 @@ bool UserState_Falling::frame()
 	if ((KeyState_X == KeyState::Down) || (KeyState_X == KeyState::Hold))
 	{
 		//user->changeCurrentState<UserState_Falling>();
-		return true;
+		//return true;
 	}
 
 	// Skill 0 Btn
@@ -160,6 +178,11 @@ bool UserState_Falling::frame()
 
 bool UserState_Falling::render()
 {
+	std::wstring strUserState;
+	strUserState += L"UserState: ";
+	strUserState += L"UserState_Falling";
+	DXWriter::getInstance()->draw(0, 100, strUserState);
+
     return true;
 }
 

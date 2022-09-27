@@ -86,7 +86,7 @@ bool DXShaderBorder::render()
 	}
 
 	// Blend State 미적용.
-	m_pImmediateContext->OMSetBlendState(nullptr, 0, -1);
+	m_pImmediateContext->OMSetBlendState(0, 0, -1);
 
 	// Draw 명령이 호출되면 위의 파이프라인 순서대로 타고 내려옴. 셋팅 할 때의 순서는 상관 없으나
 	// 셋팅이 안되있으면 문제가 생김.

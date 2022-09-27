@@ -86,6 +86,11 @@ void Map::updateShader()
 	list->at(2).pos = { -1.0f, -1.0f, 0.0f };
 	list->at(3).pos = { 1.0f, -1.0f, 0.0f };
 
+	list->at(0).color = { 1.0f, 1.0f, 1.0f, 0.5f };
+	list->at(1).color = { 1.0f, 1.0f, 1.0f, 0.5f };
+	list->at(2).color = { 1.0f, 1.0f, 1.0f, 0.5f };
+	list->at(3).color = { 1.0f, 1.0f, 1.0f, 0.5f };
+
 	if (renderCamera != nullptr)
 	{
 		Rect2f rectCamera = renderCamera->getRect();
@@ -109,6 +114,11 @@ void Map::updateShaderCamera()
 	list->at(1).pos = { 1.0f, 1.0f, 0.0f };
 	list->at(2).pos = { -1.0f, -1.0f, 0.0f };
 	list->at(3).pos = { 1.0f, -1.0f, 0.0f };
+
+	list->at(0).color = { 1.0f, 1.0f, 1.0f, 0.5f };
+	list->at(1).color = { 1.0f, 1.0f, 1.0f, 0.5f };
+	list->at(2).color = { 1.0f, 1.0f, 1.0f, 0.5f };
+	list->at(3).color = { 1.0f, 1.0f, 1.0f, 0.5f };
 
 	if (renderCamera != nullptr)
 	{

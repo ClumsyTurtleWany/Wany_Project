@@ -73,6 +73,8 @@ bool Skill::initialize()
     this->mapWidth = user->mapWidth;
     this->mapHeight = user->mapHeight;
 
+    moveTo(user->shape.center());
+
     if (!textureKeyList.empty())
     {
         DXTexture* texture = DXTextureManager::getInstance()->getTexture(textureKeyList[state]);
@@ -80,7 +82,7 @@ bool Skill::initialize()
     }
 
     this->setCamera(user->renderCamera);
-
+    
 
     beforeTime = Timer::getInstance()->getPlayTime();
     
@@ -103,7 +105,7 @@ bool Skill::frame()
 
             std::wstring strTime = L"Skill[" + std::to_wstring(state) + L"] Time: " + std::to_wstring(frameTime) + L"\n";
             OutputDebugString(strTime.c_str());
-            //moveTo(user->shape.center());
+            moveTo(user->shape.center());
 
             if (state == 0)
             {
@@ -161,6 +163,8 @@ bool Skill::frame()
 bool Skill::render()
 {
 	object2D<float>::render();
+
+    DrawBorder(hitbox, BORDER_COLOR_GREEN);
 
 	return true;
 }

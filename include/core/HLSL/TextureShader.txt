@@ -69,6 +69,21 @@ SamplerState	g_SampleA		: register(s0); // 샘플링을 하려면 샘플러가 필요함
 // SV_Target: 출력 영역에 뿌릴 색상.
 float4 PS(	PixelShader_input _input ) : SV_Target
 {
-	return g_txTextureA.Sample(g_SampleA, _input.t); // 텍스처 출력 할 때
+	//return g_txTextureA.Sample(g_SampleA, _input.t); // 텍스처 출력 할 때
 	//return _input.c; // 텍스쳐 출력 안할 때
+
+	//float4 vColor = g_txTextureA.Sample(g_SampleA, _input.t);
+	//return vColor * _input.c;
+
+
+
+	// 2022-09-27 테스트용
+	float4 vColor = g_txTextureA.Sample(g_SampleA, _input.t);
+	if((vColor.r >= 0.99f) && (vColor.g >= 0.99f) && (vColor.b >= 0.99f))
+	{
+		discard; // 투명도 조절은 아니다.
+	}
+
+	return vColor; // * _input.c;
+	
 }

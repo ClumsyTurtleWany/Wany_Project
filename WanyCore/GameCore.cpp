@@ -101,7 +101,8 @@ bool GameCore::CoreFrame()
 bool GameCore::PreRender()
 {
 	m_pImmediateContext->OMSetRenderTargets(1, &m_pRTV, NULL); // m_pRTV 에 뿌린다.
-	float color[4] = { 1.0f, 1.0f, 1.0f, 1.0f }; // R, G, B, A 순 0 ~ 1.0사이 값 1.0 == 255
+	//float color[4] = { 1.0f, 1.0f, 1.0f, 1.0f }; // R, G, B, A 순 0 ~ 1.0사이 값 1.0 == 255
+	float color[4] = { 1.0f, 1.0f, 0.0f, 1.0f }; // R, G, B, A 순 0 ~ 1.0사이 값 1.0 == 255
 	m_pImmediateContext->ClearRenderTargetView(m_pRTV, color);
 
 	// Sampler State 적용.
@@ -109,6 +110,7 @@ bool GameCore::PreRender()
 
 	// Rasterizer State 적용.
 	//m_pImmediateContext->RSSetState(DXSamplerState::pDefaultRSWireFrame);
+	//m_pImmediateContext->RSSetState(DXSamplerState::pDefaultRSSolid);
 
 	// View Port 설정
 	// 보통은 client 크기로 설정하지만, 미니맵의 경우 뷰포트 설정을 바꿔 출력 가능.
@@ -120,6 +122,8 @@ bool GameCore::PreRender()
 	//viewPort.MinDepth = 0;
 	//viewPort.MaxDepth = 1;
 	//m_pImmediateContext->RSSetViewports(0, &viewPort);
+
+	m_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	// Blend State 적용.
 	m_pImmediateContext->OMSetBlendState(DXSamplerState::pBlendSamplerState, 0, -1);

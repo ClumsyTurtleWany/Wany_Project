@@ -1,5 +1,6 @@
 #pragma once
 #include "UserState.hpp"
+#include "DXWriter.hpp"
 
 class UserState_Idle : public UserState
 {

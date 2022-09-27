@@ -5,6 +5,7 @@
 #include "UserState_MoveRight.hpp"
 #include "UserState_Falling.hpp"
 #include "SkillManager.hpp"
+#include "UserState_Climb.hpp"
 
 UserState_Jump::UserState_Jump(Player* _user) : UserState(_user)
 {
@@ -59,6 +60,13 @@ bool UserState_Jump::frame()
 	KeyState KeyState_Up = Input::getInstance()->getKey(VK_UP);
 	if ((KeyState_Up == KeyState::Down) || (KeyState_Up == KeyState::Hold))
 	{
+		// 로프 충돌 체크
+		if (user->currentMap->CollisionMapObject(user, MapObjectType::Rope))
+		{
+			user->changeCurrentState<UserState_Climb>();
+			return true;
+		}
+
 		KeyState KeyState_X = Input::getInstance()->getKey('X');
 		if ((KeyState_X == KeyState::Down)/* || (KeyState_X == KeyState::Hold)*/)
 		{
@@ -138,6 +146,11 @@ bool UserState_Jump::frame()
 
 bool UserState_Jump::render()
 {
+	std::wstring strUserState;
+	strUserState += L"UserState: ";
+	strUserState += L"UserState_Jump";
+	DXWriter::getInstance()->draw(0, 100, strUserState);
+
     return true;
 }
 

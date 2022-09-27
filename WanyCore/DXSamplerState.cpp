@@ -28,10 +28,10 @@ bool DXSamplerState::setState(ID3D11Device* _pd3dDevice)
 	SamplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP; // x 축 // MIRROR_ONCE 는 지포스에서 지원 안함. AMD 에서 지원. 지포스는 ONCE 대신 CLAMP 실행. 
 	SamplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP; // y 축
 	SamplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP; // z 축
-	SamplerDesc.BorderColor[0] = 0.5f;
-	SamplerDesc.BorderColor[1] = 0.5f;
-	SamplerDesc.BorderColor[2] = 0.5f;
-	SamplerDesc.BorderColor[3] = 1.0f;
+	//SamplerDesc.BorderColor[0] = 0.5f;
+	//SamplerDesc.BorderColor[1] = 0.5f;
+	//SamplerDesc.BorderColor[2] = 0.5f;
+	//SamplerDesc.BorderColor[3] = 1.0f;
 	HRESULT rst = _pd3dDevice->CreateSamplerState(&SamplerDesc, &pDefaultSamplerState);
 	if (FAILED(rst))
 	{
@@ -51,7 +51,7 @@ bool DXSamplerState::setState(ID3D11Device* _pd3dDevice)
 	//RSWireDesc.DepthBias;
 	//RSWireDesc.DepthBiasClamp;
 	//RSWireDesc.SlopeScaledDepthBias;
-	RSWireDesc.DepthClipEnable = true;
+	RSWireDesc.DepthClipEnable = TRUE;
 	//RSWireDesc.ScissorEnable;
 	//RSWireDesc.MultisampleEnable;
 	//RSWireDesc.AntialiasedLineEnable;
@@ -71,7 +71,7 @@ bool DXSamplerState::setState(ID3D11Device* _pd3dDevice)
 	//RSSolidDesc.DepthBias;
 	//RSSolidDesc.DepthBiasClamp;
 	//RSSolidDesc.SlopeScaledDepthBias;
-	RSSolidDesc.DepthClipEnable = true;
+	RSSolidDesc.DepthClipEnable = TRUE;
 	//RSSolidDesc.ScissorEnable;
 	//RSSolidDesc.MultisampleEnable;
 	//RSSolidDesc.AntialiasedLineEnable;
