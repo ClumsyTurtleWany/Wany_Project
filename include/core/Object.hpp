@@ -114,6 +114,19 @@ public:
 		moveTo(Point_<T>(_x, _y));
 	}
 
+	void moveCenterTo(Vector2D_<T> _pos)
+	{
+		Vector2D_<T> offset;
+		offset.x = _pos.x - shape.cx();
+		offset.y = _pos.y - shape.cy();
+		this->shape.offset(offset);
+	}
+
+	void setCamera(Camera* _camera)
+	{
+		renderCamera = _camera;
+	}
+
 	Circle_<T> getCircle()
 	{
 		return Circle_<T>(this->shape.center(), this->shape.length() / 2.0f);

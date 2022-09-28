@@ -26,7 +26,6 @@ bool UserState_Climb::initialize()
 		}
 	}
 
-
 	user->force.x = 0;
 	user->force.y = 0;
 
