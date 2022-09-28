@@ -49,7 +49,7 @@ bool Monster::render()
 		return false;
 	}
 
-	//DrawBorder(hitbox, BORDER_COLOR_BLUE);
+	DrawBorder(hitbox, BORDER_COLOR_BLUE);
 
 	/*if (!currentState->render())
 	{
