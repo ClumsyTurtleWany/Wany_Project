@@ -61,7 +61,7 @@ struct PlayerInfo
 		}
 	}
 
-	bool load(std::wstring _path)
+	bool Load(std::wstring _path)
 	{
 		std::fstream file(_path);
 		if (!file.is_open())

@@ -4,12 +4,13 @@
 #include "Timer.hpp"
 #include "DXTextureManager.hpp"
 #include "Resource.h"
-#include "Monster.hpp"
+//#include "Monster.hpp"
 #include "Map.hpp"
 #include "Camera.hpp"
 #include "Define.hpp"
 #include "SkillManager.hpp"
 #include "EffectManager.hpp"
+#include "MonsterManager.hpp"
 
 class Scene
 {

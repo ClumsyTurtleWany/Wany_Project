@@ -2,9 +2,8 @@
 // UI 리소스 참고용 https://www.vectorstock.com/royalty-free-vectors/ui-vectors
 
 #define EFFECT_DIRECTORY L"../resource/MapleStory/Effect/"
-
-// Skill Directory
 #define SKILL_DIRECTORY L"../resource/MapleStory/Skill/"
+#define MONSTER_DIRECTORY L"../resource/MapleStory/Monster/"
 
 // UserState_Skill_0_1
 #define USER_STATE_SKILL_0_0_0 L"../resource/MapleStory/Skill/temp/0_0.bmp"

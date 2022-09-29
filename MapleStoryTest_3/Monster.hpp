@@ -17,7 +17,7 @@ struct MonsterInfo
 	int minDamage = 1;
 	int maxDamage = 1;
 
-	bool load(std::wstring _path)
+	bool Load(std::wstring _path)
 	{
 		std::fstream file(_path);
 		if (!file.is_open())
@@ -83,18 +83,23 @@ public:
 	};
 
 	MonsterInfo info;
-
 	Direction currentDirection;
-
 	SpaceDivision* currentMap;
+
+	std::vector<std::wstring> textureKeyList;
+	std::map<std::wstring, std::vector<Rect2f>> spriteList;
 
 public:
 	Monster();
+	Monster(Monster* _src);
 	Monster(const Rect2f& _rect);
 	virtual ~Monster();
 
 public:
 	void hit(float _hitPoint);
+	bool Load(std::wstring _path);
+	bool LoadInfo(std::wstring _path);
+	bool LoadSprite(std::wstring _path);
 
 public:
 	virtual bool initialize();

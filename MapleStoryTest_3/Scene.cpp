@@ -16,6 +16,7 @@ bool Scene::initialize()
 	renderCamera->setHeight(clientRect.bottom - clientRect.top);
 	DXShaderBorderManager::getInstance()->setCamera(renderCamera);
 	EffectManager::getInstance()->setCamera(renderCamera);
+	MonsterManager::getInstance()->setCamera(renderCamera);
 
 	beforeTime = 0.0f;
 

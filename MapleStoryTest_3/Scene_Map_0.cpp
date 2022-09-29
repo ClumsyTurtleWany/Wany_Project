@@ -83,10 +83,11 @@ bool Scene_Map_0::initialize()
 	SkillManager::getInstance()->setUser(user);
 	SkillManager::getInstance()->Load(SKILL_DIRECTORY);
 	EffectManager::getInstance()->Load(EFFECT_DIRECTORY);
+	MonsterManager::getInstance()->Load(MONSTER_DIRECTORY);
 
 	for (int i = 0; i < 10; i++)
 	{
-		Monster* pMonster = new Monster;
+		Monster* pMonster = new Monster(MonsterManager::getInstance()->getMonster(L"Happy_Erda"));
 		pMonster->Random();
 		pMonster->setColor(Vector4f(0.0f, 0.0f, 0.0f, 1.0f));
 		pMonster->mapWidth = background->mapWidth;

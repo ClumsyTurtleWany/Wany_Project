@@ -163,6 +163,7 @@ copy "..\\lib\\FMOD\\fmod.dll" "..\\$(TargetName)\\"</Command>
     <ClInclude Include="EffectManager.hpp" />
     <ClInclude Include="Map.hpp" />
     <ClInclude Include="Monster.hpp" />
+    <ClInclude Include="MonsterManager.hpp" />
     <ClInclude Include="Node.hpp" />
     <ClInclude Include="MapObject.hpp" />
     <ClInclude Include="Octree.hpp" />
@@ -194,6 +195,7 @@ copy "..\\lib\\FMOD\\fmod.dll" "..\\$(TargetName)\\"</Command>
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="MapObject.cpp" />
+    <ClCompile Include="MonsterManager.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Sample.cpp" />
     <ClCompile Include="Scene.cpp" />

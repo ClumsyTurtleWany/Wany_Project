@@ -126,6 +126,9 @@
     <ClInclude Include="EffectManager.hpp">
       <Filter>Object</Filter>
     </ClInclude>
+    <ClInclude Include="MonsterManager.hpp">
+      <Filter>Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sample.cpp">
@@ -195,6 +198,9 @@
       <Filter>State\UserState\소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="EffectManager.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterManager.cpp">
       <Filter>Object</Filter>
     </ClCompile>
   </ItemGroup>
