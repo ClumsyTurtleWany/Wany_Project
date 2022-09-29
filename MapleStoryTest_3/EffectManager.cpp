@@ -33,15 +33,22 @@ bool EffectManager::Load(std::wstring _path)
 	return true;
 }
 
+void EffectManager::setCamera(Camera* _camera)
+{
+	renderCamera = _camera;
+}
+
 bool EffectManager::addEffectToJobList(Vector2f _pos, std::wstring _name)
 {
 	auto it = effectList.find(_name);
 	if (it != effectList.end())
 	{
-		Effect* pEffect = new Effect;
-		pEffect = it->second.get();
+		Effect* pEffect = new Effect(it->second.get());
+		//pEffect = it->second.get();
 		pEffect->initialize();
-		pEffect->moveCenterTo(_pos);
+		pEffect->setCamera(renderCamera);
+		pEffect->setPos(_pos);
+		//pEffect->moveCenterTo(_pos);
 		jobList.push_back(pEffect);
 		return true;
 	}
@@ -85,7 +92,7 @@ bool EffectManager::render()
 {
 	for (auto it : jobList)
 	{
-		if (it->isEnd)
+		/*if (it->isEnd)
 		{
 			Effect* pEffect = it;
 			delete pEffect;
@@ -94,7 +101,8 @@ bool EffectManager::render()
 		else
 		{
 			it->render();
-		}
+		}*/
+		it->render();
 	}
 
 	return true;

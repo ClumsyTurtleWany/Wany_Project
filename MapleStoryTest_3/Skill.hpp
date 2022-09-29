@@ -17,25 +17,33 @@ enum class SkillType
 class Skill : public Effect
 {
 public:
-	std::wstring skillName;
-
-	SkillType skillType = SkillType::Immediate;
-	float coolTime = 0.0f;
-	std::vector<float> damage;
 	bool isCancel = false;
 
+	std::wstring skillName;
+	SkillType skillType = SkillType::Immediate;
+	
 	Player* user = nullptr;
-
-	int childState = 0;
+	
+	std::vector<float> damageList;
 	std::vector<Skill*> childList;
+	int childState = 0;
+	float coolTime = 0.0f;
+	
+	Vector2f offset;
+	Vector2f offset_hitbox;
 
 public:
 	Skill();
+	Skill(Skill* _src);
 	Skill(const Rect2f& _rect);
 	virtual ~Skill();
 
+private:
+	Vector2f calcSkillPos();
+
 public:
 	virtual bool Load(std::wstring _path) override;
+	virtual bool LoadInfo(std::wstring _path) override;
 	bool isCoolDown();
 
 public:

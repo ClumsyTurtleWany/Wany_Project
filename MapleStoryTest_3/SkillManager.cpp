@@ -66,26 +66,38 @@ Skill* SkillManager::getSkill(std::wstring _name)
 
 bool SkillManager::addSkillToJobList(std::wstring _name)
 {
-	/*auto it = skillList.find(_name);
-	if (it != skillList.end())
+	Skill* targetSkill = getSkill(_name);
+	if (targetSkill == nullptr)
 	{
-		if()
-		if ((*it).second->isEnd && (*it).second->isCoolDown())
+		return false;
+	}
+
+	bool isExist = false;
+	Skill* jobSkill = nullptr;
+	for (auto it : jobList)
+	{
+		if (it->skillName == targetSkill->skillName)
 		{
-			Skill* pSkill = (*it).second;
+			isExist = true;
+			jobSkill = it;
+		}
+	}
+
+	if (isExist)
+	{
+		if (jobSkill->isEnd && jobSkill->isCoolDown())
+		{
+			Skill* pSkill = new Skill(targetSkill);
 			pSkill->initialize();
 			jobList.push_back(pSkill);
-			return true;
-		}
-		else
-		{
-			return false;
 		}
 	}
 	else
 	{
-		return false;
-	}*/
+		Skill* pSkill = new Skill(targetSkill);
+		pSkill->initialize();
+		jobList.push_back(pSkill);
+	}
 
 	/*Skill* targetSkill = getSkill(_name);
 	if (targetSkill != nullptr)
@@ -96,47 +108,27 @@ bool SkillManager::addSkillToJobList(std::wstring _name)
 			if (it == targetSkill)
 			{
 				isExist = true;
-				break;
 			}
 		}
 
 		if (!isExist)
 		{
-			targetSkill->initialize();
-			targetSkill->totalTime = 0.0f;
-			jobList.push_back(targetSkill);
-		}
-	}
-	return true;*/
-
-	Skill* targetSkill = getSkill(_name);
-	if (targetSkill != nullptr)
-	{
-		bool isExist = false;
-		for (auto it : jobList)
-		{
-			if (it == targetSkill)
-			{
-				isExist = true;
-			}
-		}
-
-		if (!isExist)
-		{
-			targetSkill->initialize();
-			targetSkill->totalTime = 0.0f;
-			jobList.push_back(targetSkill);
+			Skill* pSkill = new Skill(targetSkill);
+			pSkill->initialize();
+			pSkill->totalTime = 0.0f;
+			jobList.push_back(pSkill);
 		}
 		else
 		{
 			if (targetSkill->isCoolDown() && targetSkill->isEnd)
 			{
-				targetSkill->initialize();
-				targetSkill->totalTime = 0.0f;
-				jobList.push_back(targetSkill);
+				Skill* pSkill = new Skill(targetSkill);
+				pSkill->initialize();
+				pSkill->totalTime = 0.0f;
+				jobList.push_back(pSkill);
 			}
 		}
-	}
+	}*/
 	return true;
 }
 

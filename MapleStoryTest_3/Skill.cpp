@@ -1,8 +1,31 @@
 #include "Skill.hpp"
 #include "EffectManager.hpp"
+#include "Monster.hpp"
 
 Skill::Skill()
 {
+}
+
+Skill::Skill(Skill* _src)
+{
+    // Effect
+    lifeTime = _src->lifeTime;
+    textureKeyList.assign(_src->textureKeyList.begin(), _src->textureKeyList.end());
+
+    // Skill
+    skillName = _src->skillName;
+    skillType = _src->skillType;
+    coolTime = _src->coolTime;
+    damageList.assign(_src->damageList.begin(), _src->damageList.end());
+    user = _src->user;
+    offset = _src->offset;
+    offset_hitbox = _src->offset_hitbox;
+    for (auto it : _src->childList)
+    {
+        Skill* pSkill = new Skill(it);
+        pSkill->initialize();
+        childList.push_back(pSkill);
+    }
 }
 
 Skill::Skill(const Rect2f& _rect)
@@ -13,6 +36,48 @@ Skill::Skill(const Rect2f& _rect)
 Skill::~Skill()
 {
 
+}
+
+Vector2f Skill::calcSkillPos()
+{
+    float width = 0.0f;
+    float height = 0.0f;
+    if (!textureKeyList.empty())
+    {
+        DXTexture* texture = DXTextureManager::getInstance()->getTexture(textureKeyList[state]);
+        width = texture->getWidth();
+        height = texture->getHeight();
+    }
+   
+    float x = 0.0f;
+    float y = 0.0f;
+    if (user->currentDirection == Player::Direction::Left)
+    {
+        x = user->shape.cx() - width + offset.x;
+        y = user->shape.RB.y - height + offset.y; //user->shape.cy() - height; //user->shape.RB.y - height;
+    }
+    else
+    {
+        x = user->shape.cx() - offset.x;
+        y = user->shape.RB.y - height + offset.y; //user->shape.cy() - height; //user->shape.RB.y - height;
+    }
+
+    float hitbox_x = x + offset_hitbox.x;
+    float hitbox_y = y + offset_hitbox.y;
+    float hitbox_width = width - (offset_hitbox.x * 2.0f);
+    float hitbox_height = height - (offset_hitbox.y * 2.0f);
+
+    this->shape = Rect2f(x, y, width, height);
+    this->hitbox = Rect2f(hitbox_x, hitbox_y, hitbox_width, hitbox_height);
+
+    std::vector<Vertex>* UserVertexList = user->pShader->getVertexList();
+    std::vector<Vertex>* skillVertexList = pShader->getVertexList();
+    skillVertexList->at(0).texture = UserVertexList->at(0).texture;
+    skillVertexList->at(1).texture = UserVertexList->at(1).texture;
+    skillVertexList->at(2).texture = UserVertexList->at(2).texture;
+    skillVertexList->at(3).texture = UserVertexList->at(3).texture;
+
+    return Vector2f(x, y);
 }
 
 bool Skill::isCoolDown()
@@ -32,10 +97,11 @@ bool Skill::Load(std::wstring _path)
     std::filesystem::path path(_path);
     for (auto& file : std::filesystem::directory_iterator(path))
     {
-        //std::wstring filename = file.path().filename();
         std::wstring filepath = file.path();
+        std::wstring filename = file.path().filename();
+        std::wstring fileExtension = file.path().extension();
 
-        if (file.path().extension() == L"")
+        if (fileExtension == L"")
         {
             std::wstring dir = filepath + L"/";
             Skill* childSkill = new Skill;
@@ -52,6 +118,13 @@ bool Skill::Load(std::wstring _path)
                 return false;
             }
         }
+        else if (fileExtension == L".txt")
+        {
+            if (filename == L"info.txt")
+            {
+                LoadInfo(filepath);
+            }
+        }
         else
         {
             if (DXTextureManager::getInstance()->Load(filepath))
@@ -64,64 +137,98 @@ bool Skill::Load(std::wstring _path)
     return true;
 }
 
+bool Skill::LoadInfo(std::wstring _path)
+{
+    std::fstream file(_path);
+    if (!file.is_open())
+    {
+        return false;
+    }
+    else
+    {
+        while (!file.eof())
+        {
+            std::string dataName;
+            std::getline(file, dataName, '=');
+            if (dataName == "lifeTime")
+            {
+                std::string lineData;
+                std::getline(file, lineData, '\n');
+                lifeTime = std::stof(lineData);
+            }
+            else if (dataName == "coolTime")
+            {
+                std::string lineData;
+                std::getline(file, lineData, '\n');
+                coolTime = std::stof(lineData);
+            }
+            else if (dataName == "damageCount")
+            {
+                std::string lineData;
+                std::getline(file, lineData, '\n');
+                int damageCount = std::stoi(lineData);
+                for (int cnt = 0; cnt < damageCount; cnt++)
+                {
+                    std::getline(file, lineData, '\n');
+                    damageList.push_back(std::stof(lineData));
+                }
+            }
+            else if (dataName == "offset_x")
+            {
+                std::string lineData;
+                std::getline(file, lineData, '\n');
+                offset.x = std::stof(lineData);
+            }
+            else if (dataName == "offset_y")
+            {
+                std::string lineData;
+                std::getline(file, lineData, '\n');
+                offset.y = std::stof(lineData);
+            }
+            else if (dataName == "offset_hitbox_x")
+            {
+                std::string lineData;
+                std::getline(file, lineData, '\n');
+                offset_hitbox.x = std::stof(lineData);
+            }
+            else if (dataName == "offset_hitbox_y")
+            {
+                std::string lineData;
+                std::getline(file, lineData, '\n');
+                offset_hitbox.y = std::stof(lineData);
+            }
+        }
+        file.close();
+        return true;
+    }
+
+    return false;
+}
+
 bool Skill::initialize()
 {
     Effect::initialize();
    
-    coolTime = 0.0f;
+    //coolTime = 0.0f;
     isCancel = false;
-
-    float x = 0.0f;
-    float y = 0.0f;
-    float width = 504;
-    float height = 332;
-    float offset_x = 100.0f;
-
-    float hitboxOffset_x = 10.0f;
-    float hitboxOffset_y = 10.0f;
-    float hitbox_x = 0.0f;
-    float hitbox_y = 0.0f;
-    float hitbox_width = 0.0f;
-    float hitbox_height = 0.0f;
-    if (user->currentDirection == Player::Direction::Left)
-    {
-        x = user->shape.cx() - width + offset_x;
-        y = user->shape.RB.y - height; //user->shape.cy() - height; //user->shape.RB.y - height; 
-
-        hitbox_x = x + hitboxOffset_x;
-        hitbox_y = y + hitboxOffset_y;
-        hitbox_width = width - (hitboxOffset_x * 2.0f);
-        hitbox_height = height - (hitboxOffset_y * 2.0f);
-    }
-    else
-    {
-        x = user->shape.cx() - offset_x;
-        y = user->shape.RB.y - height; //user->shape.cy() - height; //user->shape.RB.y - height;
-
-        hitbox_x = x + hitboxOffset_x;
-        hitbox_y = y + hitboxOffset_y;
-        hitbox_width = width - (hitboxOffset_x * 2.0f);
-        hitbox_height = height - (hitboxOffset_y * 2.0f);
-    }
-
-    this->hitbox = Rect2f(hitbox_x, hitbox_y, hitbox_width, hitbox_height);
+    
     this->mapWidth = user->mapWidth;
     this->mapHeight = user->mapHeight;
 
-    moveTo(user->shape.center());
-
-    if (!textureKeyList.empty())
-    {
-        DXTexture* texture = DXTextureManager::getInstance()->getTexture(textureKeyList[state]);
-        this->shape = Rect2f(x, y, texture->getWidth(), texture->getHeight());
-    }
+    Vector2f skillPos = calcSkillPos();
+    //moveTo(skillPos);
 
     this->setCamera(user->renderCamera);
     
     childState = 0;
+    for (auto it : childList)
+    {
+        it->skillName = skillName;
+    }
+   
     beforeTime = Timer::getInstance()->getPlayTime();
-    
-	return this->createShader(ShaderType::Texture);
+   
+    return true; // this->createShader(ShaderType::Texture);
 }
 
 bool Skill::frame()
@@ -174,13 +281,31 @@ bool Skill::frame()
 
             std::wstring strTime = L"Skill[" + std::to_wstring(state) + L"] Time: " + std::to_wstring(frameTime) + L"\n";
             OutputDebugString(strTime.c_str());
-            moveTo(user->shape.center());
+            calcSkillPos();
+            //moveTo(calcSkillPos());
 
             if (state == 0)
             {
                 std::vector<object2D<float>*> collisionList;
                 std::vector<Rect2f> collisionRectList;
                 user->currentMap->Collision(this, &collisionList, &collisionRectList);
+
+                std::vector<float> hitPoint;
+                for (auto it : damageList)
+                {
+                    float damage = user->info.getAttackPoint() * (it / 100.0f);
+                    hitPoint.push_back(damage);
+                }
+
+                for (auto it : collisionList)
+                {
+                    Monster* pMonster = dynamic_cast<Monster*>(it);
+                    for (auto it2 : hitPoint)
+                    {
+                        pMonster->hit(it2);
+                    }                     
+                }
+
                 for (auto it : collisionRectList)
                 {
                     EffectManager::getInstance()->addEffectToJobList(it.center(), skillName);

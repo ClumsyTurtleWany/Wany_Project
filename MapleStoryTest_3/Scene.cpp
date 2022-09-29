@@ -15,6 +15,9 @@ bool Scene::initialize()
 	renderCamera->setWidth(clientRect.right - clientRect.left);
 	renderCamera->setHeight(clientRect.bottom - clientRect.top);
 	DXShaderBorderManager::getInstance()->setCamera(renderCamera);
+	EffectManager::getInstance()->setCamera(renderCamera);
+
+	beforeTime = 0.0f;
 
 	return true;
 }
@@ -34,6 +37,22 @@ bool Scene::frame()
 		renderCamera->setPos(user->getCenter());
 		renderCamera->frame();
 	}
+
+
+	/*float currentTime = Timer::getInstance()->getPlayTime();
+	float secondPerFrame = currentTime - beforeTime;
+	timeCounter += secondPerFrame;
+	if (timeCounter >= 0.5f)
+	{
+		timeCounter = 0.0f;
+		float x = 100 + rand() % 1000;
+		float y = 100 + rand() % 1000;
+
+		EffectManager::getInstance()->addEffectToJobList(Vector2f(x, y), L"Skill_0");
+		
+	}
+	beforeTime = currentTime;*/
+
 
 	SkillManager::getInstance()->frame();
 	EffectManager::getInstance()->frame();
@@ -66,7 +85,7 @@ bool Scene::render()
 
 	SkillManager::getInstance()->render();
 	EffectManager::getInstance()->render();
-
+	
 	std::wstring wstrMapSize;
 	wstrMapSize += L"Map Size: ";
 	wstrMapSize += std::to_wstring(static_cast<int>(background->shape.width()));

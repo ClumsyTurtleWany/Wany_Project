@@ -4,6 +4,7 @@
 #include "UserState_Jump.hpp"
 #include "UserState_Skill_0_1.hpp"
 #include "UserState_Falling.hpp"
+#include "SkillManager.hpp"
 
 UserState_MoveRight::UserState_MoveRight(Player* _user) : UserState(_user)
 {
@@ -94,6 +95,7 @@ bool UserState_MoveRight::frame()
     if ((KeyState_X == KeyState::Down) || (KeyState_X == KeyState::Hold))
     {
         user->changeCurrentState<UserState_Jump>();
+        return true;
     }
 
     // Pick Up
@@ -110,7 +112,8 @@ bool UserState_MoveRight::frame()
         user->force.x = 0.0f;
         user->accel.x = 0.0f;
         user->velocity.x = 0.0f;
-        user->changeCurrentState<UserState_Skill_0_1>();
+        //user->changeCurrentState<UserState_Skill_0_1>();
+        SkillManager::getInstance()->addSkillToJobList(L"Skill_0");
         return true;
     }
 

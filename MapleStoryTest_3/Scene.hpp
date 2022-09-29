@@ -25,6 +25,12 @@ public:
 	std::vector<Monster*>	MonsterList;
 	std::vector<objectBase*>	NPCList;
 
+
+	// test
+	
+	float beforeTime;
+	float timeCounter;
+
 public:
 	void setDevice(ID3D11Device* _device, ID3D11DeviceContext* _context);
 		

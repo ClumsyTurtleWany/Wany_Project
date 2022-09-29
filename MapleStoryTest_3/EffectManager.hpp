@@ -11,8 +11,11 @@ private:
 	std::map<std::wstring, std::unique_ptr<Effect>> effectList;
 	std::vector<Effect*> jobList;
 
+	Camera* renderCamera;
+
 public:
 	bool Load(std::wstring _path);
+	void setCamera(Camera* _camera);
 	bool addEffectToJobList(Vector2f _pos, std::wstring _name);
 
 public:

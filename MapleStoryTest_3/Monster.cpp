@@ -20,6 +20,12 @@ Monster::~Monster()
 	release();
 }
 
+void Monster::hit(float _hitPoint)
+{
+	info.currentHP -= _hitPoint;
+
+}
+
 bool Monster::initialize()
 {
 	return true;

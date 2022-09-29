@@ -1,0 +1,13 @@
+job=Pirate
+strength=4
+dexterity=4
+lucky=4
+intelligence=4
+maxHP=50
+maxMP=50
+currentHP=50
+currentMP=50
+exp=0
+level=1
+minDamage=1
+maxDamage=1
