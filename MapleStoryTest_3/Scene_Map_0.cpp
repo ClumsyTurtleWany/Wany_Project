@@ -83,19 +83,28 @@ bool Scene_Map_0::initialize()
 	SkillManager::getInstance()->setUser(user);
 	SkillManager::getInstance()->Load(SKILL_DIRECTORY);
 	EffectManager::getInstance()->Load(EFFECT_DIRECTORY);
-	MonsterManager::getInstance()->Load(MONSTER_DIRECTORY);
+	NPCManager::getInstance()->Load(NPC_DIRECTORY);
 
-	for (int i = 0; i < 10; i++)
-	{
-		Monster* pMonster = new Monster(MonsterManager::getInstance()->getMonster(L"Happy_Erda"));
-		pMonster->Random();
-		pMonster->setColor(Vector4f(0.0f, 0.0f, 0.0f, 1.0f));
-		pMonster->mapWidth = background->mapWidth;
-		pMonster->mapHeight = background->mapHeight;
+	NPCInfo info = NPCManager::getInstance()->getNPCInfo(L"Happy_Erda");
 
-		MonsterList.push_back(pMonster);
-		background->addObject(pMonster);
-	}
+	std::map<std::wstring, std::vector<std::wstring>> testMap;
+	NPCManager::getInstance()->getTextureKeyMap(L"Happy_Erda", testMap);
+
+	std::map<std::wstring, std::vector<Rect2f>> testSpriteList;
+	NPCManager::getInstance()->getSpriteMap(L"Happy_Erda", testSpriteList);
+
+	//for (int i = 0; i < 10; i++)
+	//{
+	//	Monster* pMonster = new Monster; // (NPCManager::getInstance()->getMonster(L"Happy_Erda"));
+	//	pMonster->createShader(ShaderType::Texture);
+	//	pMonster->Random();
+	//	pMonster->setColor(Vector4f(0.0f, 0.0f, 0.0f, 1.0f));
+	//	pMonster->mapWidth = background->mapWidth;
+	//	pMonster->mapHeight = background->mapHeight;
+
+	//	MonsterList.push_back(pMonster);
+	//	background->addObject(pMonster);
+	//}
 
 	return true;
 }

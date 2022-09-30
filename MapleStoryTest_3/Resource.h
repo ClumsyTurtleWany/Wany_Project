@@ -3,7 +3,7 @@
 
 #define EFFECT_DIRECTORY L"../resource/MapleStory/Effect/"
 #define SKILL_DIRECTORY L"../resource/MapleStory/Skill/"
-#define MONSTER_DIRECTORY L"../resource/MapleStory/Monster/"
+#define NPC_DIRECTORY L"../resource/MapleStory/NPC/"
 
 // UserState_Skill_0_1
 #define USER_STATE_SKILL_0_0_0 L"../resource/MapleStory/Skill/temp/0_0.bmp"

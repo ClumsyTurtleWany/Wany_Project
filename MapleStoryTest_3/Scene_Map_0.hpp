@@ -1,6 +1,6 @@
 #pragma once
 #include "Scene.hpp"
-#include "Monster.hpp"
+#include "NPC.hpp"
 
 class Scene_Map_0 : public Scene
 {

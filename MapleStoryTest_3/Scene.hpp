@@ -10,7 +10,7 @@
 #include "Define.hpp"
 #include "SkillManager.hpp"
 #include "EffectManager.hpp"
-#include "MonsterManager.hpp"
+#include "NPCManager.hpp"
 
 class Scene
 {
@@ -23,8 +23,8 @@ public:
 	Map* background;
 	Camera* renderCamera;
 	
-	std::vector<Monster*>	MonsterList;
-	std::vector<objectBase*>	NPCList;
+	std::vector<NPC*>	NPCList;
+	//std::vector<objectBase*>	NPCList;
 
 
 	// test

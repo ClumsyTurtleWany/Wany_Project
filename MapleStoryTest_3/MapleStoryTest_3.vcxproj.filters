@@ -40,6 +40,15 @@
     <Filter Include="State\UserState\헤더 파일">
       <UniqueIdentifier>{4a23e2b6-dc00-4a40-8787-7d6fa38f0e3e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="State\NPCState">
+      <UniqueIdentifier>{89be7696-1b20-4be3-8e1d-f4f5737b1e3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="State\NPCState\헤더 파일">
+      <UniqueIdentifier>{ff6207f2-de1e-4636-bb90-6ff6983be67c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="State\NPCState\소스 파일">
+      <UniqueIdentifier>{5942be29-998d-4421-9167-24bff5df8725}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sample.h">
@@ -90,7 +99,7 @@
     <ClInclude Include="UserState_Skill_0_3.hpp">
       <Filter>State\UserState\헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Monster.hpp">
+    <ClInclude Include="NPC.hpp">
       <Filter>Object</Filter>
     </ClInclude>
     <ClInclude Include="Player.hpp">
@@ -126,8 +135,11 @@
     <ClInclude Include="EffectManager.hpp">
       <Filter>Object</Filter>
     </ClInclude>
-    <ClInclude Include="MonsterManager.hpp">
+    <ClInclude Include="NPCManager.hpp">
       <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="NPCState.hpp">
+      <Filter>State\NPCState\헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -164,7 +176,7 @@
     <ClCompile Include="UserState_Skill_0_3.cpp">
       <Filter>State\UserState\소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Monster.cpp">
+    <ClCompile Include="NPC.cpp">
       <Filter>Object</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
@@ -200,8 +212,11 @@
     <ClCompile Include="EffectManager.cpp">
       <Filter>Object</Filter>
     </ClCompile>
-    <ClCompile Include="MonsterManager.cpp">
+    <ClCompile Include="NPCManager.cpp">
       <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="NPCState.cpp">
+      <Filter>State\NPCState\소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

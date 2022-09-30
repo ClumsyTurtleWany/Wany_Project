@@ -1,6 +1,6 @@
 #include "Skill.hpp"
 #include "EffectManager.hpp"
-#include "Monster.hpp"
+#include "NPC.hpp"
 
 Skill::Skill()
 {
@@ -299,7 +299,7 @@ bool Skill::frame()
 
                 for (auto it : collisionList)
                 {
-                    Monster* pMonster = dynamic_cast<Monster*>(it);
+                    NPC* pMonster = dynamic_cast<NPC*>(it);
                     for (auto it2 : hitPoint)
                     {
                         pMonster->hit(it2);

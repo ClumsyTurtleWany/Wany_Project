@@ -16,7 +16,7 @@ bool Scene::initialize()
 	renderCamera->setHeight(clientRect.bottom - clientRect.top);
 	DXShaderBorderManager::getInstance()->setCamera(renderCamera);
 	EffectManager::getInstance()->setCamera(renderCamera);
-	MonsterManager::getInstance()->setCamera(renderCamera);
+	NPCManager::getInstance()->setCamera(renderCamera);
 
 	beforeTime = 0.0f;
 
@@ -58,14 +58,14 @@ bool Scene::frame()
 	SkillManager::getInstance()->frame();
 	EffectManager::getInstance()->frame();
 
-	for (auto it : MonsterList)
+	/*for (auto it : MonsterList)
 	{
 		it->frame(dt);
-	}
+	}*/
 
 	for (auto it : NPCList)
 	{
-		it->frame();
+		it->frame(dt);
 	}
 	
 	//collisionMap->updateDynamicObject();
@@ -116,7 +116,7 @@ bool Scene::render()
 	wstrCameraPos += std::to_wstring(static_cast<int>((renderCamera->getRect().LT.y + renderCamera->getRect().RB.y) / 2));
 	DXWriter::getInstance()->draw(0, 75, wstrCameraPos);
 
-	for (auto it : MonsterList)
+	for (auto it : NPCList)
 	{
 		it->render();
 	}

@@ -310,7 +310,7 @@ public:
 		//list->at(2).texture = { 0.0f, 1.0f }; // p3-LB
 		//list->at(3).texture = { 1.0f, 1.0f }; // p4-RB
 
-		if (0)
+		//if (0)
 		{
 			if (!SpriteList.empty())
 			{
@@ -324,19 +324,19 @@ public:
 				list->at(2).texture = { rect.left() / textureWidth, rect.bottom() / textureHeight }; // p3-LB
 				list->at(3).texture = { rect.right() / textureWidth, rect.bottom() / textureHeight }; // p4-RB
 			}
-			else
-			{
-				list->at(0).texture = { 0.0f, 0.0f }; // p1-LT
-				list->at(1).texture = { 1.0f, 0.0f }; // p2-RT
-				list->at(2).texture = { 0.0f, 1.0f }; // p3-LB
-				list->at(3).texture = { 1.0f, 1.0f }; // p4-RB
+			//else
+			//{
+			//	list->at(0).texture = { 0.0f, 0.0f }; // p1-LT
+			//	list->at(1).texture = { 1.0f, 0.0f }; // p2-RT
+			//	list->at(2).texture = { 0.0f, 1.0f }; // p3-LB
+			//	list->at(3).texture = { 1.0f, 1.0f }; // p4-RB
 
-				// flip
-				//list->at(0).texture = { 1.0f, 0.0f }; // p1-RT
-				//list->at(1).texture = { 0.0f, 0.0f }; // p2-LT
-				//list->at(2).texture = { 1.0f, 1.0f }; // p3-RB
-				//list->at(3).texture = { 0.0f, 1.0f }; // p4-LB
-			}
+			//	// flip
+			//	//list->at(0).texture = { 1.0f, 0.0f }; // p1-RT
+			//	//list->at(1).texture = { 0.0f, 0.0f }; // p2-LT
+			//	//list->at(2).texture = { 1.0f, 1.0f }; // p3-RB
+			//	//list->at(3).texture = { 0.0f, 1.0f }; // p4-LB
+			//}
 		}
 	}
 
@@ -365,16 +365,6 @@ public:
 		{
 			rectNDC = OrthogonalToNDC(rectOrthogonal);
 		}
-		
-
-		
-
-		//Rect_<float> rectTexture = calcTextureRect(rectOrthogonal, rectCameraOrtho);
-
-		//rectTexture.LT.x = 0.375f;
-		//rectTexture.LT.y = 0.375f;
-		//rectTexture.RB.x = 0.625f;
-		//rectTexture.RB.y = 0.625f;
 
 		// Vectex List
 		std::vector<Vertex>* list = pShader->getVertexList();
@@ -394,7 +384,7 @@ public:
 		//list->at(2).texture = { rectTexture.LT.x, rectTexture.RB.y }; // p3-LB
 		//list->at(3).texture = { rectTexture.RB.x, rectTexture.RB.y }; // p4-RB
 
-		if (0)
+		//if (0)
 		{
 			if (!SpriteList.empty())
 			{
@@ -408,19 +398,19 @@ public:
 				list->at(2).texture = { rect.left() / textureWidth, rect.bottom() / textureHeight }; // p3-LB
 				list->at(3).texture = { rect.right() / textureWidth, rect.bottom() / textureHeight }; // p4-RB
 			}
-			else
-			{
-				list->at(0).texture = { 0.0f, 0.0f }; // p1-LT
-				list->at(1).texture = { 1.0f, 0.0f }; // p2-RT
-				list->at(2).texture = { 0.0f, 1.0f }; // p3-LB
-				list->at(3).texture = { 1.0f, 1.0f }; // p4-RB
+			//else
+			//{
+			//	list->at(0).texture = { 0.0f, 0.0f }; // p1-LT
+			//	list->at(1).texture = { 1.0f, 0.0f }; // p2-RT
+			//	list->at(2).texture = { 0.0f, 1.0f }; // p3-LB
+			//	list->at(3).texture = { 1.0f, 1.0f }; // p4-RB
 
-				// flip
-				//list->at(0).texture = { 1.0f, 0.0f }; // p1-RT
-				//list->at(1).texture = { 0.0f, 0.0f }; // p2-LT
-				//list->at(2).texture = { 1.0f, 1.0f }; // p3-RB
-				//list->at(3).texture = { 0.0f, 1.0f }; // p4-LB
-			}
+			//	// flip
+			//	//list->at(0).texture = { 1.0f, 0.0f }; // p1-RT
+			//	//list->at(1).texture = { 0.0f, 0.0f }; // p2-LT
+			//	//list->at(2).texture = { 1.0f, 1.0f }; // p3-RB
+			//	//list->at(3).texture = { 0.0f, 1.0f }; // p4-LB
+			//}
 		}
 	}
 

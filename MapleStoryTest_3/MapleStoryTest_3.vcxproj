@@ -162,10 +162,11 @@ copy "..\\lib\\FMOD\\fmod.dll" "..\\$(TargetName)\\"</Command>
     <ClInclude Include="Effect.hpp" />
     <ClInclude Include="EffectManager.hpp" />
     <ClInclude Include="Map.hpp" />
-    <ClInclude Include="Monster.hpp" />
-    <ClInclude Include="MonsterManager.hpp" />
+    <ClInclude Include="NPC.hpp" />
+    <ClInclude Include="NPCManager.hpp" />
     <ClInclude Include="Node.hpp" />
     <ClInclude Include="MapObject.hpp" />
+    <ClInclude Include="NPCState.hpp" />
     <ClInclude Include="Octree.hpp" />
     <ClInclude Include="Player.hpp" />
     <ClInclude Include="QuadTree.hpp" />
@@ -193,9 +194,10 @@ copy "..\\lib\\FMOD\\fmod.dll" "..\\$(TargetName)\\"</Command>
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="EffectManager.cpp" />
     <ClCompile Include="Map.cpp" />
-    <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="NPC.cpp" />
     <ClCompile Include="MapObject.cpp" />
-    <ClCompile Include="MonsterManager.cpp" />
+    <ClCompile Include="NPCManager.cpp" />
+    <ClCompile Include="NPCState.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Sample.cpp" />
     <ClCompile Include="Scene.cpp" />

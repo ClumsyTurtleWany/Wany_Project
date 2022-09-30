@@ -1,0 +1,6 @@
+type=Sprite
+maxHP=100
+maxMP=0
+exp=100;
+minDamage=1
+maxDamage=1
