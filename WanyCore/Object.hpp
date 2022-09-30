@@ -69,6 +69,9 @@ public:
 	float mapWidth = 0.0f;
 	float mapHeight = 0.0f;
 
+	bool filpSpriteHorizontal = false;
+	bool filpSpriteVertical = false;
+
 //public:
 //	std::vector<Rect_<float>> SpriteList;
 //	int SpriteNum = 0;
@@ -252,6 +255,24 @@ public:
 		}
 	}
 
+	void flipSprite(bool _horizontal, bool _vertical = false)
+	{
+		if (_horizontal == true)
+		{
+			filpSpriteHorizontal = !filpSpriteHorizontal;
+		}
+
+		if (_vertical == true)
+		{
+			filpSpriteVertical = !filpSpriteVertical;
+		}
+	}
+
+	void flipSpriteHorizontal()
+	{
+		filpSpriteHorizontal = !filpSpriteHorizontal;		
+	}
+
 public:
 	virtual bool frame(float _dt) {	return true; };
 	virtual bool render() override
@@ -310,7 +331,7 @@ public:
 		//list->at(2).texture = { 0.0f, 1.0f }; // p3-LB
 		//list->at(3).texture = { 1.0f, 1.0f }; // p4-RB
 
-		if (0)
+		//if (0)
 		{
 			if (!SpriteList.empty())
 			{
@@ -323,20 +344,44 @@ public:
 				list->at(1).texture = { rect.right() / textureWidth, rect.top() / textureHeight }; // p2-RT
 				list->at(2).texture = { rect.left() / textureWidth, rect.bottom() / textureHeight }; // p3-LB
 				list->at(3).texture = { rect.right() / textureWidth, rect.bottom() / textureHeight }; // p4-RB
-			}
-			else
-			{
-				list->at(0).texture = { 0.0f, 0.0f }; // p1-LT
-				list->at(1).texture = { 1.0f, 0.0f }; // p2-RT
-				list->at(2).texture = { 0.0f, 1.0f }; // p3-LB
-				list->at(3).texture = { 1.0f, 1.0f }; // p4-RB
+			
+				if (filpSpriteHorizontal)
+				{
+					Vector2f LT = list->at(0).texture;
+					Vector2f RT = list->at(1).texture;
+					Vector2f LB = list->at(2).texture;
+					Vector2f RB = list->at(3).texture;
+					list->at(0).texture = RT; //{ 0.0f, 0.0f }; // LT
+					list->at(1).texture = LT; //{ 1.0f, 0.0f }; // RT
+					list->at(2).texture = RB; //{ 0.0f, 1.0f }; // LB
+					list->at(3).texture = LB; //{ 1.0f, 1.0f }; // RB
+				}
 
-				// flip
-				//list->at(0).texture = { 1.0f, 0.0f }; // p1-RT
-				//list->at(1).texture = { 0.0f, 0.0f }; // p2-LT
-				//list->at(2).texture = { 1.0f, 1.0f }; // p3-RB
-				//list->at(3).texture = { 0.0f, 1.0f }; // p4-LB
+				if (filpSpriteVertical)
+				{
+					Vector2f LT = list->at(0).texture;
+					Vector2f RT = list->at(1).texture;
+					Vector2f LB = list->at(2).texture;
+					Vector2f RB = list->at(3).texture;
+					list->at(0).texture = LB;
+					list->at(1).texture = RB;
+					list->at(2).texture = LT;
+					list->at(3).texture = RT;
+				}
 			}
+			//else
+			//{
+			//	list->at(0).texture = { 0.0f, 0.0f }; // p1-LT
+			//	list->at(1).texture = { 1.0f, 0.0f }; // p2-RT
+			//	list->at(2).texture = { 0.0f, 1.0f }; // p3-LB
+			//	list->at(3).texture = { 1.0f, 1.0f }; // p4-RB
+
+			//	// flip
+			//	//list->at(0).texture = { 1.0f, 0.0f }; // p1-RT
+			//	//list->at(1).texture = { 0.0f, 0.0f }; // p2-LT
+			//	//list->at(2).texture = { 1.0f, 1.0f }; // p3-RB
+			//	//list->at(3).texture = { 0.0f, 1.0f }; // p4-LB
+			//}
 		}
 	}
 
@@ -394,7 +439,7 @@ public:
 		//list->at(2).texture = { rectTexture.LT.x, rectTexture.RB.y }; // p3-LB
 		//list->at(3).texture = { rectTexture.RB.x, rectTexture.RB.y }; // p4-RB
 
-		if (0)
+		//if (0)
 		{
 			if (!SpriteList.empty())
 			{
@@ -407,20 +452,44 @@ public:
 				list->at(1).texture = { rect.right() / textureWidth, rect.top() / textureHeight }; // p2-RT
 				list->at(2).texture = { rect.left() / textureWidth, rect.bottom() / textureHeight }; // p3-LB
 				list->at(3).texture = { rect.right() / textureWidth, rect.bottom() / textureHeight }; // p4-RB
-			}
-			else
-			{
-				list->at(0).texture = { 0.0f, 0.0f }; // p1-LT
-				list->at(1).texture = { 1.0f, 0.0f }; // p2-RT
-				list->at(2).texture = { 0.0f, 1.0f }; // p3-LB
-				list->at(3).texture = { 1.0f, 1.0f }; // p4-RB
+			
+				if (filpSpriteHorizontal)
+				{
+					Vector2f LT = list->at(0).texture;
+					Vector2f RT = list->at(1).texture;
+					Vector2f LB = list->at(2).texture;
+					Vector2f RB = list->at(3).texture;
+					list->at(0).texture = RT; //{ 0.0f, 0.0f }; // LT
+					list->at(1).texture = LT; //{ 1.0f, 0.0f }; // RT
+					list->at(2).texture = RB; //{ 0.0f, 1.0f }; // LB
+					list->at(3).texture = LB; //{ 1.0f, 1.0f }; // RB
+				}
 
-				// flip
-				//list->at(0).texture = { 1.0f, 0.0f }; // p1-RT
-				//list->at(1).texture = { 0.0f, 0.0f }; // p2-LT
-				//list->at(2).texture = { 1.0f, 1.0f }; // p3-RB
-				//list->at(3).texture = { 0.0f, 1.0f }; // p4-LB
+				if (filpSpriteVertical)
+				{
+					Vector2f LT = list->at(0).texture;
+					Vector2f RT = list->at(1).texture;
+					Vector2f LB = list->at(2).texture;
+					Vector2f RB = list->at(3).texture;
+					list->at(0).texture = LB;
+					list->at(1).texture = RB;
+					list->at(2).texture = LT;
+					list->at(3).texture = RT;
+				}
 			}
+			//else
+			//{
+			//	list->at(0).texture = { 0.0f, 0.0f }; // p1-LT
+			//	list->at(1).texture = { 1.0f, 0.0f }; // p2-RT
+			//	list->at(2).texture = { 0.0f, 1.0f }; // p3-LB
+			//	list->at(3).texture = { 1.0f, 1.0f }; // p4-RB
+
+			//	// flip
+			//	//list->at(0).texture = { 1.0f, 0.0f }; // p1-RT
+			//	//list->at(1).texture = { 0.0f, 0.0f }; // p2-LT
+			//	//list->at(2).texture = { 1.0f, 1.0f }; // p3-RB
+			//	//list->at(3).texture = { 0.0f, 1.0f }; // p4-LB
+			//}
 		}
 	}
 
