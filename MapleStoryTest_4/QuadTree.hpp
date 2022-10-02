@@ -364,7 +364,10 @@ void QuadTree<T>::updateDynamicObject(node2D<T>* _target, std::vector<object2D<T
 	{
 		for (auto it : _target->dyObjList)
 		{
-			_list->push_back(it);
+			if (it != nullptr)
+			{
+				_list->push_back(it);
+			}
 		}
 	}
 	_target->dyObjList.clear();

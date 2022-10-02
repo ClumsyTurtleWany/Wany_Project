@@ -1,4 +1,5 @@
 #include "Effect.hpp"
+#include <set>
 
 Effect::Effect()
 {
@@ -24,6 +25,7 @@ Effect::~Effect()
 bool Effect::Load(std::wstring _path)
 {
 	std::filesystem::path path(_path);
+    std::set<std::wstring> textureList;
 	for (auto& file : std::filesystem::directory_iterator(path))
 	{
         std::wstring filepath = file.path();
@@ -45,10 +47,16 @@ bool Effect::Load(std::wstring _path)
 		{
 			if (DXTextureManager::getInstance()->Load(filepath))
 			{
-				textureKeyList.push_back(filepath);
+                textureList.insert(filepath);
+				//textureKeyList.push_back(filepath);
 			}
 		}
 	}
+
+    for (auto it : textureList)
+    {
+        textureKeyList.push_back(it);
+    }
 
 	return true;
 }

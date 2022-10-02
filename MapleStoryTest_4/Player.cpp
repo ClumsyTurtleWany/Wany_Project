@@ -1,5 +1,6 @@
 #include "Player.hpp"
 #include "UserState_Idle.hpp"
+#include "EffectManager.hpp"
 
 Player::Player() : currentState(new UserState_Idle(this))
 {
@@ -80,6 +81,13 @@ bool Player::frame(float _dt)
 	//renderCamera->setPos(shape.center());
 	//pObj->hitbox = pObj->shape;
 	hitbox = shape;
+
+	while (info.requiredExp <= info.currentExp)
+	{
+		info.currentExp -= info.requiredExp;
+		info.level++;
+		EffectManager::getInstance()->addEffectToJobList(Vector2f(shape.cx(), shape.cy() - 200), L"LevelUp");
+	}
 
 	return true;
 }

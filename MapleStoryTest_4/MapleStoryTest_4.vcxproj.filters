@@ -156,6 +156,12 @@
     <ClInclude Include="NPCState_Attack.hpp">
       <Filter>State\NPCState\헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="NPCState_Hit.hpp">
+      <Filter>State\NPCState\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="NPCState_Search.hpp">
+      <Filter>State\NPCState\헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sample.cpp">
@@ -246,6 +252,12 @@
       <Filter>State\NPCState\소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="NPCState_Attack.cpp">
+      <Filter>State\NPCState\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="NPCState_Hit.cpp">
+      <Filter>State\NPCState\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="NPCState_Search.cpp">
       <Filter>State\NPCState\소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

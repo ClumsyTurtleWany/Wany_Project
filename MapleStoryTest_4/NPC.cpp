@@ -1,6 +1,8 @@
 #include "NPC.hpp"
 #include "DXTextureManager.hpp"
 #include "NPCState_Idle.hpp"
+#include "NPCState_Die.hpp"
+#include "NPCState_Hit.hpp"
 
 NPC::NPC() //: currentState(new NPCState_Idle(this))
 {
@@ -22,10 +24,42 @@ NPC::~NPC()
 	release();
 }
 
-void NPC::hit(float _hitPoint)
+void NPC::hit(Player* _src, float _hitPoint, Direction _direction)
 {
+	aggroTarget = _src;
 	info.currentHP -= _hitPoint;
+	
+	if (currentDirection != _direction)
+	{
+		currentDirection = _direction;
+		flipSprite(true);
+	}
 
+	if (info.currentHP <= 0.0f)
+	{
+		if (!dieFlag)
+		{
+			dieFlag = true;
+			changeCurrentState<NPCState_Die>();
+		}
+	}
+	else
+	{
+		changeCurrentState<NPCState_Hit>();
+	}
+	
+}
+
+bool NPC::isDie()
+{
+	if (info.currentHP <= 0.0f)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 //bool NPC::Load(std::wstring _path)
@@ -144,41 +178,72 @@ bool NPC::frame(float _dt)
 
 	Vector2f distance = force * _dt;
 	shape.offset(distance);
+	hitbox.offset(distance);
 
-	if (shape.LT.x < boundaryRect.LT.x)
+	//if (hitbox.LT.x < boundaryRect.LT.x)
+	//{
+	//	moveTo(boundaryRect.LT.x, shape.LT.y);
+	//	//Rect2f rectTemp = shape;
+	//	//float width = rectTemp.width();
+	//	//shape.LT.x = boundaryRect.LT.x;
+	//	//shape.RB.x = shape.LT.x + width - 1;
+	//}
+
+	//if (hitbox.LT.y < boundaryRect.LT.y)
+	//{
+	//	moveTo(shape.LT.x, boundaryRect.LT.y);
+	//	//Rect2f rectTemp = shape;
+	//	//shape.LT.y = boundaryRect.LT.y;
+	//	//shape.RB.y = shape.LT.y + rectTemp.height() - 1;
+	//}
+
+	//if (hitbox.RB.x > boundaryRect.RB.x)
+	//{
+	//	moveTo(shape.RB.x - shape.width(), shape.LT.y);
+	//	//Rect2f rectTemp = shape;
+	//	//shape.RB.x = boundaryRect.RB.x;
+	//	//shape.LT.x = shape.RB.x - rectTemp.width() + 1;
+	//}
+
+	//if (hitbox.RB.y > boundaryRect.RB.y)
+	//{
+	//	moveTo(shape.LT.x, shape.RB.y - shape.height());
+	//	//Rect2f rectTemp = shape;
+	//	//shape.RB.y = boundaryRect.RB.y;
+	//	//shape.LT.y = shape.RB.y - rectTemp.height() + 1;
+	//}
+	
+	//hitbox = shape;
+	if (boundaryCheck)
 	{
-		moveTo(boundaryRect.LT.x, shape.LT.y);
-		//Rect2f rectTemp = shape;
-		//float width = rectTemp.width();
-		//shape.LT.x = boundaryRect.LT.x;
-		//shape.RB.x = shape.LT.x + width - 1;
-	}
+		if (hitbox.LT.x < boundaryRect.LT.x)
+		{
+			float offset_x = boundaryRect.LT.x - hitbox.LT.x;
+			shape.offset(offset_x, 0);
+			hitbox.offset(offset_x, 0);
+		}
 
-	if (shape.LT.y < boundaryRect.LT.y)
-	{
-		moveTo(shape.LT.x, boundaryRect.LT.y);
-		//Rect2f rectTemp = shape;
-		//shape.LT.y = boundaryRect.LT.y;
-		//shape.RB.y = shape.LT.y + rectTemp.height() - 1;
-	}
+		if (hitbox.LT.y < boundaryRect.LT.y)
+		{
+			float offset_y = boundaryRect.LT.y - hitbox.LT.y;
+			shape.offset(0, offset_y);
+			hitbox.offset(0, offset_y);
+		}
 
-	if (shape.RB.x > boundaryRect.RB.x)
-	{
-		moveTo(shape.RB.x - shape.width(), shape.LT.y);
-		//Rect2f rectTemp = shape;
-		//shape.RB.x = boundaryRect.RB.x;
-		//shape.LT.x = shape.RB.x - rectTemp.width() + 1;
-	}
+		if (hitbox.RB.x > boundaryRect.RB.x)
+		{
+			float offset_x = boundaryRect.RB.x - hitbox.RB.x;
+			shape.offset(offset_x, 0);
+			hitbox.offset(offset_x, 0);
+		}
 
-	if (shape.RB.y > boundaryRect.RB.y)
-	{
-		moveTo(shape.LT.x, shape.RB.y - shape.height());
-		//Rect2f rectTemp = shape;
-		//shape.RB.y = boundaryRect.RB.y;
-		//shape.LT.y = shape.RB.y - rectTemp.height() + 1;
+		if (hitbox.RB.y > boundaryRect.RB.y)
+		{
+			float offset_y = boundaryRect.LT.y - hitbox.LT.y;
+			shape.offset(0, offset_y);
+			hitbox.offset(0, offset_y);
+		}
 	}
-
-	hitbox = shape;
 
 	return true;
 }

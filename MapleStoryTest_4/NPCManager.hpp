@@ -15,6 +15,7 @@ private:
 	std::map<std::wstring, NPCInfo> infoList;
 	std::map<std::wstring, std::map<std::wstring, std::vector<std::wstring>>> textureKeyMapList;
 	std::map<std::wstring, std::map<std::wstring, std::vector<Rect2f>>> spriteMapList;
+	std::map<std::wstring, std::map<std::wstring, std::vector<Rect2f>>> spriteHitboxMapList;
 	std::map<std::wstring, std::map<std::wstring, Vector2f>> spriteOffsetMapList;
 
 	std::vector<NPC*> NPCList;
@@ -34,6 +35,7 @@ public:
 	NPCInfo getNPCInfo(std::wstring _name);
 	bool getTextureKeyMap(std::wstring _name, std::map<std::wstring, std::vector<std::wstring>>& _map);
 	bool getSpriteMap(std::wstring _name, std::map<std::wstring, std::vector<Rect2f>>& _map);
+	bool getSpriteHitboxMap(std::wstring _name, std::map<std::wstring, std::vector<Rect2f>>& _map);
 	bool getSpriteOffsetMap(std::wstring _name, std::map<std::wstring, Vector2f>& _map);
 	NPC* CreateNPC(std::wstring _name);
 	//bool addMonsterToJobList(Vector2f _pos, std::wstring _name);

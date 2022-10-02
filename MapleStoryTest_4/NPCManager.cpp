@@ -133,6 +133,7 @@ bool NPCManager::LoadSprite(std::wstring _path, std::wstring _key)
 	else
 	{
 		std::map<std::wstring, std::vector<Rect2f>> stateList;
+		std::map<std::wstring, std::vector<Rect2f>> stateHitboxList;
 		std::map<std::wstring, Vector2f> stateOffsetList;
 		while (!file.eof())
 		{
@@ -181,12 +182,37 @@ bool NPCManager::LoadSprite(std::wstring _path, std::wstring _key)
 				rectList.push_back(Rect2f(x, y, width, height));
 			}
 
+			// Sprite Hitbox Rect
+			std::getline(file, lineData, '\n');
+
+			std::vector<Rect2f> hitboxList;
+			for (int i = 0; i < cnt; i++)
+			{
+				// State Number
+				std::getline(file, lineData, ',');
+				int number = std::stoi(lineData);
+
+				// Rect x, y, width, height
+				std::getline(file, lineData, ',');
+				int x = std::stof(lineData);
+				std::getline(file, lineData, ',');
+				int y = std::stof(lineData);
+				std::getline(file, lineData, ',');
+				int width = std::stof(lineData);
+				std::getline(file, lineData, '\n');
+				int height = std::stof(lineData);
+
+				hitboxList.push_back(Rect2f(x, y, width, height));
+			}
+
 			stateOffsetList.insert(std::make_pair(key, Vector2f(offset_x, offset_y)));
 			stateList.insert(std::make_pair(key, rectList));
+			stateHitboxList.insert(std::make_pair(key, hitboxList));
 		}
 		file.close();
 
 		spriteMapList.insert(std::make_pair(_key, stateList));
+		spriteHitboxMapList.insert(std::make_pair(_key, stateHitboxList));
 		spriteOffsetMapList.insert(std::make_pair(_key, stateOffsetList));
 		return true;
 	}
@@ -228,6 +254,20 @@ bool NPCManager::getSpriteMap(std::wstring _name, std::map<std::wstring, std::ve
 {
 	auto it = spriteMapList.find(_name);
 	if (it != spriteMapList.end())
+	{
+		_map.insert(it->second.begin(), it->second.end());
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool NPCManager::getSpriteHitboxMap(std::wstring _name, std::map<std::wstring, std::vector<Rect2f>>& _map)
+{
+	auto it = spriteHitboxMapList.find(_name);
+	if (it != spriteHitboxMapList.end())
 	{
 		_map.insert(it->second.begin(), it->second.end());
 		return true;

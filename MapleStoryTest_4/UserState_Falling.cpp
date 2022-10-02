@@ -4,6 +4,7 @@
 #include "UserState_MoveLeft.hpp"
 #include "UserState_MoveRight.hpp"
 #include "SkillManager.hpp"
+#include "EffectManager.hpp"
 #include "UserState_Climb.hpp"
 
 UserState_Falling::UserState_Falling(Player* _user) : UserState(_user)
@@ -157,6 +158,9 @@ bool UserState_Falling::frame()
 	KeyState KeyState_X = Input::getInstance()->getKey('X');
 	if ((KeyState_X == KeyState::Down) || (KeyState_X == KeyState::Hold))
 	{
+		//EffectManager::getInstance()->addEffectToJobList(Vector2f(user->shape.cx(), user->shape.bottom()), L"DoubleJump");
+		SkillManager::getInstance()->addSkillToJobList(L"DoubleJump");
+		return true;
 		//user->changeCurrentState<UserState_Falling>();
 		//return true;
 	}

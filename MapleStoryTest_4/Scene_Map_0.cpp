@@ -110,6 +110,11 @@ bool Scene_Map_0::initialize()
 	{
 		if (it->type == MapObjectType::Floor)
 		{
+			/*if (it->isPierce)
+			{
+				continue;
+			}*/
+
 			float x = it->shape.LT.x;
 			float y = 0;
 			float width = it->shape.width();

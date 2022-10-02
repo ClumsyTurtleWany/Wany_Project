@@ -9,6 +9,24 @@ NPCState_Attack::NPCState_Attack(NPC* _npc) : NPCState(_npc)
 	initialize();
 }
 
+void NPCState_Attack::calcPos()
+{
+	float aspectRatio = 1.5f;
+	float width = spriteList[state].width() * aspectRatio;
+	float height = spriteList[state].height() * aspectRatio;
+	float offset_x = spriteOffset.x * aspectRatio;
+	float offset_y = spriteOffset.y * aspectRatio;
+	float x = npc->shape.cx() - (width * 0.5f) - offset_x;
+	float y = npc->boundaryRect.bottom() - height + offset_y;
+	npc->shape = Rect2f(x, y, width, height);
+
+	float hitbox_width = spriteHitboxList[state].width() * aspectRatio;
+	float hitbox_height = spriteHitboxList[state].height() * aspectRatio;
+	float hitboxOffset_x = (spriteHitboxList[state].LT.x - spriteList[state].LT.x) * aspectRatio;
+	float hitboxOffset_y = (spriteHitboxList[state].LT.y - spriteList[state].LT.y) * aspectRatio;
+	npc->hitbox = Rect2f(x + hitboxOffset_x, y + hitboxOffset_y, hitbox_width, hitbox_height);
+}
+
 bool NPCState_Attack::initialize()
 {
 	std::map<std::wstring, std::vector<std::wstring>> textureMap;
@@ -34,13 +52,23 @@ bool NPCState_Attack::initialize()
 			npc->SpriteList.assign(iter->second.begin(), iter->second.end());
 		}
 
+		std::map<std::wstring, std::vector<Rect2f>> spriteHitboxMap;
+		NPCManager::getInstance()->getSpriteHitboxMap(npc->NPCName, spriteHitboxMap);
+		auto iterHitbox = spriteHitboxMap.find(L"attack");
+		if (iterHitbox != spriteHitboxMap.end())
+		{
+			spriteHitboxList.assign(iterHitbox->second.begin(), iterHitbox->second.end());
+		}
+
 		std::map<std::wstring, Vector2f> spriteOffsetMap;
 		NPCManager::getInstance()->getSpriteOffsetMap(npc->NPCName, spriteOffsetMap);
-		auto iter2 = spriteOffsetMap.find(L"idle");
+		auto iter2 = spriteOffsetMap.find(L"attack");
 		if (iter2 != spriteOffsetMap.end())
 		{
 			spriteOffset = iter2->second;
 		}
+
+		calcPos();
 	}
 	else
 	{
@@ -57,13 +85,14 @@ bool NPCState_Attack::initialize()
 	}
 
 	state = 0;
+	npc->boundaryCheck = false;
 	npc->SpriteNum = state;
 	lifeTime = 2.5f + ((rand() % 250) / 100.0f);
 	totalTime = 0.0f;
 	beforeTime = Timer::getInstance()->getPlayTime();
 
-	//npc->force.x = -100.0f;
-	//npc->force.y = 0.0f;
+	npc->force.x = 0.0f;
+	npc->force.y = 0.0f;
 
 	return true;
 }
@@ -88,6 +117,7 @@ bool NPCState_Attack::frame()
 			else
 			{
 				state = 0;
+				npc->boundaryCheck = true;
 				npc->changeCurrentState<NPCState_Idle>();
 				return true;
 			}
@@ -95,14 +125,15 @@ bool NPCState_Attack::frame()
 			//npc->pos = { npc->shape.left(), npc->shape.top() };
 			//npc->shape = Rect2f(npc->pos.x, npc->pos.y, spriteList[state].width() * 1.5f, spriteList[state].height() * 1.5f);
 
-			float width = spriteList[state].width() * 1.5f;
-			float height = spriteList[state].height() * 1.5f;
-
-			float x = npc->shape.left() - (width - npc->shape.width()) - spriteOffset.x;
-			float y = npc->shape.top() - (height - npc->shape.height()) - spriteOffset.y;
-
-			npc->pos = { x, y };
-			npc->shape = Rect2f(npc->pos.x, npc->pos.y, width, height);
+			//float width = spriteList[state].width() * 1.5f;
+			//float height = spriteList[state].height() * 1.5f;
+			//
+			//float x = npc->shape.left() - (width - npc->shape.width()) - spriteOffset.x;
+			//float y = npc->shape.top() - (height - npc->shape.height()) - spriteOffset.y;
+			//
+			//npc->pos = { x, y };
+			//npc->shape = Rect2f(npc->pos.x, npc->pos.y, width, height);
+			calcPos();
 
 			npc->SpriteNum = state;
 		}
@@ -115,6 +146,7 @@ bool NPCState_Attack::frame()
 			else
 			{
 				state = 0;
+				npc->boundaryCheck = true;
 				npc->changeCurrentState<NPCState_Idle>();
 				return true;
 			}

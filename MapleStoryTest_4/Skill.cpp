@@ -297,20 +297,59 @@ bool Skill::frame()
                     hitPoint.push_back(damage);
                 }
 
-                for (auto it : collisionList)
+                //for (auto it : collisionList)
+                //{
+                //    NPC* pMonster = dynamic_cast<NPC*>(it);
+                //    for (auto it2 : hitPoint)
+                //    {
+                //        pMonster->hit(user, it2, );
+                //    }                     
+                //}
+                //
+                //for (auto it : collisionRectList)
+                //{
+                //    EffectManager::getInstance()->addEffectToJobList(it.center(), skillName);
+                //    DrawBorder(it, BORDER_COLOR_BLUE);
+                //}
+
+                for (size_t idx = 0; idx < collisionList.size(); idx++)
                 {
-                    NPC* pMonster = dynamic_cast<NPC*>(it);
+                    NPC* pMonster = dynamic_cast<NPC*>(collisionList[idx]);
+                    NPC::Direction hitDirection;
+                    if (pMonster->shape.cx() < collisionRectList[idx].cx())
+                    {
+                        hitDirection = NPC::Direction::Right;
+                    }
+                    else if(pMonster->shape.cx() > collisionRectList[idx].cx())
+                    {
+                        hitDirection = NPC::Direction::Left;
+                    }
+                    else
+                    {
+                        if (user->currentDirection == Player::Direction::Right)
+                        {
+                            hitDirection = NPC::Direction::Left;
+                        }
+                        else
+                        {
+                            hitDirection = NPC::Direction::Right;
+                        }
+                    }
+
                     for (auto it2 : hitPoint)
                     {
-                        pMonster->hit(it2);
-                    }                     
+                        pMonster->hit(user, it2, hitDirection);
+                    }
+
+                    if (pMonster->isDie())
+                    {
+                        user->info.currentExp += pMonster->info.exp;
+                    }
+
+                    EffectManager::getInstance()->addEffectToJobList(collisionRectList[idx].center(), skillName);
+                    DrawBorder(collisionRectList[idx], BORDER_COLOR_BLUE);
                 }
 
-                for (auto it : collisionRectList)
-                {
-                    EffectManager::getInstance()->addEffectToJobList(it.center(), skillName);
-                    DrawBorder(it, BORDER_COLOR_BLUE);
-                }
             }
 
             if (state < textureKeyList.size() - 1)

@@ -3,6 +3,7 @@
 #include "DXShaderBorderManager.hpp"
 #include "SpaceDivision.hpp"
 #include <fstream>
+#include "Player.hpp"
 
 class NPCState;
 
@@ -115,7 +116,11 @@ public:
 	SpaceDivision* currentMap;
 	Vector2f pos;
 	Rect2f boundaryRect;
+
+	bool boundaryCheck = true;
 	bool deleteFlag = false;
+	bool dieFlag = false;
+	Player* aggroTarget = nullptr;
 
 public:
 	NPC();
@@ -123,7 +128,8 @@ public:
 	virtual ~NPC();
 
 public:
-	void hit(float _hitPoint);
+	void hit(Player* _src, float _hitPoint, Direction _direction);
+	bool isDie();
 	//bool Load(std::wstring _path);
 	//bool LoadInfo(std::wstring _path);
 	//bool LoadSprite(std::wstring _path);

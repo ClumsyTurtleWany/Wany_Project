@@ -63,10 +63,27 @@ bool Scene::frame()
 		it->frame(dt);
 	}*/
 
-	for (auto it : NPCList)
+	/*for (auto it : NPCList)
 	{
 		it->frame(dt);
+	}*/
+
+	for (auto it = NPCList.begin(); it != NPCList.end();)
+	{
+		if ((*it)->deleteFlag)
+		{
+			delete *it;
+			*it = nullptr;
+			it = NPCList.erase(it);
+			continue;
+		}
+		else
+		{
+			(*it)->frame(dt);
+		}
+		it++;
 	}
+
 	
 	//collisionMap->updateDynamicObject();
 	return true;

@@ -6,6 +6,7 @@ class NPCState_MoveLeft : public NPCState
 public:
 	std::vector<std::wstring> textureKeyList;
 	std::vector<Rect2f> spriteList;
+	std::vector<Rect2f> spriteHitboxList;
 	Vector2f spriteOffset;
 
 	int state = 0;
@@ -17,6 +18,9 @@ public:
 
 public:
 	NPCState_MoveLeft(NPC* _npc);
+
+private:
+	void calcPos();
 
 public:
 	virtual bool initialize() override;

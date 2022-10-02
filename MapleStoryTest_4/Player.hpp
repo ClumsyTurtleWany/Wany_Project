@@ -28,10 +28,11 @@ struct PlayerInfo
 	int maxMP = 50;
 	int currentHP = 50;
 	int currentMP = 50;
-	int exp = 0;
+	int currentExp = 0;
 	int level = 1;
 	int minDamage = 1;
 	int maxDamage = 1;
+	int requiredExp = 200;
 
 	float getAttackPoint()
 	{
@@ -155,7 +156,7 @@ struct PlayerInfo
 				{
 					std::string lineData;
 					std::getline(file, lineData, '\n');
-					exp = std::stoi(lineData);
+					currentExp = std::stoi(lineData);
 				}
 				else if (dataName == "level")
 				{
