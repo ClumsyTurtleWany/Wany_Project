@@ -64,13 +64,30 @@ bool NPCState_Search::frame()
 			if (searchArea.intersectRect(pTarget->hitbox))
 			{
 				Player* pTarget = npc->aggroTarget;
-				searchDistance = 100.0f;
+				searchDistance = 200.0f;
 				x = npc->hitbox.LT.x - searchDistance;
 				y = npc->hitbox.LT.y;
 				width = npc->hitbox.width() + searchDistance * 2.0f;
 				height = npc->hitbox.height();
 				Rect2f attackArea(x, y, width, height);
 				DrawBorder(attackArea, BORDER_COLOR_RED);
+
+				if (pTarget->hitbox.cx() < npc->hitbox.cx())
+				{
+					if (npc->currentDirection != NPC::Direction::Left)
+					{
+						npc->changeCurrentState<NPCState_MoveLeft>();
+						return true;
+					}
+				}
+				else
+				{
+					if (npc->currentDirection != NPC::Direction::Right)
+					{
+						npc->changeCurrentState<NPCState_MoveRight>();
+						return true;
+					}
+				}
 
 				if (attackArea.intersectRect(pTarget->hitbox))
 				{

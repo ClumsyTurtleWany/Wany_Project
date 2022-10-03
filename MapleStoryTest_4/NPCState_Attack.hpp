@@ -8,6 +8,7 @@ public:
 	std::vector<Rect2f> spriteList;
 	std::vector<Rect2f> spriteHitboxList;
 	Vector2f spriteOffset;
+	Rect2f beforePosition;
 
 	int state = 0;
 
@@ -21,6 +22,7 @@ public:
 
 private:
 	void calcPos();
+	void calcHitbox();
 
 public:
 	virtual bool initialize() override;

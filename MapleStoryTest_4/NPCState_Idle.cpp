@@ -13,6 +13,24 @@ NPCState_Idle::NPCState_Idle(NPC* _npc) : NPCState(_npc)
 	initialize();
 }
 
+//void NPCState_Idle::calcPos()
+//{
+//	float aspectRatio = 1.5f;
+//	float width = spriteList[state].width() * aspectRatio;
+//	float height = spriteList[state].height() * aspectRatio;
+//	float offset_x = spriteOffset.x * aspectRatio;
+//	float offset_y = spriteOffset.y * aspectRatio;
+//	float x = npc->shape.cx() - (width * 0.5f) - offset_x;
+//	float y = npc->boundaryRect.bottom() - height + offset_y;
+//	npc->shape = Rect2f(x, y, width, height);
+//
+//	float hitbox_width = spriteHitboxList[state].width() * aspectRatio;
+//	float hitbox_height = spriteHitboxList[state].height() * aspectRatio;
+//	float hitboxOffset_x = (spriteHitboxList[state].LT.x - spriteList[state].LT.x) * aspectRatio;
+//	float hitboxOffset_y = (spriteHitboxList[state].LT.y - spriteList[state].LT.y) * aspectRatio;
+//	npc->hitbox = Rect2f(x + hitboxOffset_x, y + hitboxOffset_y, hitbox_width, hitbox_height);
+//}
+
 void NPCState_Idle::calcPos()
 {
 	float aspectRatio = 1.5f;
@@ -20,15 +38,32 @@ void NPCState_Idle::calcPos()
 	float height = spriteList[state].height() * aspectRatio;
 	float offset_x = spriteOffset.x * aspectRatio;
 	float offset_y = spriteOffset.y * aspectRatio;
-	float x = npc->shape.cx() - (width * 0.5f) - offset_x;
-	float y = npc->boundaryRect.bottom() - height + offset_y;
+
+	float x = npc->currentDirection == NPC::Direction::Left ?
+		npc->shape.left() - offset_x : npc->shape.right() + offset_x - width;
+
+	float y = npc->boundaryRect.bottom() + offset_y - height;
 	npc->shape = Rect2f(x, y, width, height);
 
+	//float hitbox_width = spriteHitboxList[state].width() * aspectRatio;
+	//float hitbox_height = spriteHitboxList[state].height() * aspectRatio;
+	//float hitboxOffset_x = (spriteHitboxList[state].LT.x - spriteList[state].LT.x) * aspectRatio;
+	//float hitboxOffset_y = (spriteHitboxList[state].LT.y - spriteList[state].LT.y) * aspectRatio;
+	//npc->hitbox = Rect2f(x + hitboxOffset_x, y + hitboxOffset_y, hitbox_width, hitbox_height);
+	calcHitbox();
+}
+
+void NPCState_Idle::calcHitbox()
+{
+	float aspectRatio = 1.5f;
 	float hitbox_width = spriteHitboxList[state].width() * aspectRatio;
 	float hitbox_height = spriteHitboxList[state].height() * aspectRatio;
 	float hitboxOffset_x = (spriteHitboxList[state].LT.x - spriteList[state].LT.x) * aspectRatio;
 	float hitboxOffset_y = (spriteHitboxList[state].LT.y - spriteList[state].LT.y) * aspectRatio;
-	npc->hitbox = Rect2f(x + hitboxOffset_x, y + hitboxOffset_y, hitbox_width, hitbox_height);
+
+	npc->hitbox = npc->currentDirection == NPC::Direction::Left ?
+		Rect2f(npc->shape.LT.x + hitboxOffset_x, npc->shape.LT.y + hitboxOffset_y, hitbox_width, hitbox_height) :
+		Rect2f(npc->shape.RB.x - hitboxOffset_x - hitbox_width, npc->shape.LT.y + hitboxOffset_y, hitbox_width, hitbox_height);
 }
 
 bool NPCState_Idle::initialize()

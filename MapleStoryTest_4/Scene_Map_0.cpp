@@ -110,17 +110,17 @@ bool Scene_Map_0::initialize()
 	{
 		if (it->type == MapObjectType::Floor)
 		{
-			/*if (it->isPierce)
+			if (it->isPierce)
 			{
 				continue;
-			}*/
+			}
 
 			float x = it->shape.LT.x;
 			float y = 0;
 			float width = it->shape.width();
 			float height = it->shape.LT.y;
 			Rect2f boundaryRect(x, y, width, height);
-			for (int i = 0; i < 5; i++)
+			for (int i = 0; i < 1; i++)
 			{
 				NPC* pMonster = NPCManager::getInstance()->CreateNPC(L"Happy_Erda");
 				float spawn_x = x + (rand() % static_cast<int>(width));

@@ -21,6 +21,7 @@ public:
 
 private:
 	void calcPos();
+	void calcHitbox();
 
 public:
 	virtual bool initialize() override;
