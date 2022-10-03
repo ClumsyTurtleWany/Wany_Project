@@ -300,18 +300,6 @@ public:
 public:
 	virtual void updateShader()
 	{
-		//RECT clientRect = g_pWindow->getClientRect();
-		//float mapWidth = clientRect.right - clientRect.left; // clientRectWidth;
-		//float mapHeight = clientRect.bottom - clientRect.top; // clientRectHeight;
-		//float mapWidth_Half = mapWidth * 0.5;
-		//float mapHeight_Half = mapHeight * 0.5;
-
-		//Rect_<float> rectNDC;
-		//rectNDC.LT.x = (shape.LT.x - mapWidth_Half) / mapWidth_Half;
-		//rectNDC.LT.y = -(shape.LT.y - mapHeight_Half) / mapHeight_Half;
-		//rectNDC.RB.x = (shape.RB.x - mapWidth_Half) / mapWidth_Half;
-		//rectNDC.RB.y = -(shape.RB.y - mapHeight_Half) / mapHeight_Half;
-
 		Rect_<float> rectNDC;
 		rectNDC = ScreenToNDC();
 		
@@ -325,92 +313,53 @@ public:
 		list->at(2).pos = { rectNDC.LT.x, rectNDC.RB.y, 0.0f };
 		list->at(3).pos = { rectNDC.RB.x, rectNDC.RB.y, 0.0f };
 
-		//float width = rectNDC.fWidth();
-		//float height = rectNDC.fHeight();
-		//list->at(0).pos = { rectNDC.LT.x, rectNDC.LT.y, 0.0f };
-		//list->at(1).pos = { rectNDC.LT.x + rectNDC.width(), rectNDC.LT.y, 0.0f };
-		//list->at(2).pos = { rectNDC.LT.x, rectNDC.LT.y + rectNDC.height(), 0.0f };
-		//list->at(3).pos = { rectNDC.LT.x + rectNDC.width(), rectNDC.LT.y + rectNDC.height(), 0.0f };
-
-		//list->at(0).texture = { 0.0f, 0.0f }; // p1-LT
-		//list->at(1).texture = { 1.0f, 0.0f }; // p2-RT
-		//list->at(2).texture = { 0.0f, 1.0f }; // p3-LB
-		//list->at(3).texture = { 1.0f, 1.0f }; // p4-RB
-
 		list->at(0).color = { 1.0f, 1.0f, 1.0f, alphaVal };
 		list->at(1).color = { 1.0f, 1.0f, 1.0f, alphaVal };
 		list->at(2).color = { 1.0f, 1.0f, 1.0f, alphaVal };
 		list->at(3).color = { 1.0f, 1.0f, 1.0f, alphaVal };
 
-		//if (0)
+		if (!SpriteList.empty())
 		{
-			if (!SpriteList.empty())
-			{
-				// Set Sprite Region
-				float textureWidth = pShader->getTextureWidth();
-				float textureHeight = pShader->getTextureHeight();
+			// Set Sprite Region
+			float textureWidth = pShader->getTextureWidth();
+			float textureHeight = pShader->getTextureHeight();
 
-				Rect_<float> rect = SpriteList[SpriteNum];
-				list->at(0).texture = { rect.left() / textureWidth, rect.top() / textureHeight }; // p1-LT
-				list->at(1).texture = { rect.right() / textureWidth, rect.top() / textureHeight }; // p2-RT
-				list->at(2).texture = { rect.left() / textureWidth, rect.bottom() / textureHeight }; // p3-LB
-				list->at(3).texture = { rect.right() / textureWidth, rect.bottom() / textureHeight }; // p4-RB
+			Rect_<float> rect = SpriteList[SpriteNum];
+			list->at(0).texture = { rect.left() / textureWidth, rect.top() / textureHeight }; // p1-LT
+			list->at(1).texture = { rect.right() / textureWidth, rect.top() / textureHeight }; // p2-RT
+			list->at(2).texture = { rect.left() / textureWidth, rect.bottom() / textureHeight }; // p3-LB
+			list->at(3).texture = { rect.right() / textureWidth, rect.bottom() / textureHeight }; // p4-RB
 			
-				if (filpSpriteHorizontal)
-				{
-					Vector2f LT = list->at(0).texture;
-					Vector2f RT = list->at(1).texture;
-					Vector2f LB = list->at(2).texture;
-					Vector2f RB = list->at(3).texture;
-					list->at(0).texture = RT; //{ 0.0f, 0.0f }; // LT
-					list->at(1).texture = LT; //{ 1.0f, 0.0f }; // RT
-					list->at(2).texture = RB; //{ 0.0f, 1.0f }; // LB
-					list->at(3).texture = LB; //{ 1.0f, 1.0f }; // RB
-				}
-
-				if (filpSpriteVertical)
-				{
-					Vector2f LT = list->at(0).texture;
-					Vector2f RT = list->at(1).texture;
-					Vector2f LB = list->at(2).texture;
-					Vector2f RB = list->at(3).texture;
-					list->at(0).texture = LB;
-					list->at(1).texture = RB;
-					list->at(2).texture = LT;
-					list->at(3).texture = RT;
-				}
+			if (filpSpriteHorizontal)
+			{
+				Vector2f LT = list->at(0).texture;
+				Vector2f RT = list->at(1).texture;
+				Vector2f LB = list->at(2).texture;
+				Vector2f RB = list->at(3).texture;
+				list->at(0).texture = RT; //{ 0.0f, 0.0f }; // LT
+				list->at(1).texture = LT; //{ 1.0f, 0.0f }; // RT
+				list->at(2).texture = RB; //{ 0.0f, 1.0f }; // LB
+				list->at(3).texture = LB; //{ 1.0f, 1.0f }; // RB
 			}
-			//else
-			//{
-			//	list->at(0).texture = { 0.0f, 0.0f }; // p1-LT
-			//	list->at(1).texture = { 1.0f, 0.0f }; // p2-RT
-			//	list->at(2).texture = { 0.0f, 1.0f }; // p3-LB
-			//	list->at(3).texture = { 1.0f, 1.0f }; // p4-RB
 
-			//	// flip
-			//	//list->at(0).texture = { 1.0f, 0.0f }; // p1-RT
-			//	//list->at(1).texture = { 0.0f, 0.0f }; // p2-LT
-			//	//list->at(2).texture = { 1.0f, 1.0f }; // p3-RB
-			//	//list->at(3).texture = { 0.0f, 1.0f }; // p4-LB
-			//}
+			if (filpSpriteVertical)
+			{
+				Vector2f LT = list->at(0).texture;
+				Vector2f RT = list->at(1).texture;
+				Vector2f LB = list->at(2).texture;
+				Vector2f RB = list->at(3).texture;
+				list->at(0).texture = LB;
+				list->at(1).texture = RB;
+				list->at(2).texture = LT;
+				list->at(3).texture = RT;
+			}
 		}
+			
 	}
 
 	// 2022-09-22 Test
 	virtual void updateShaderCamera()
 	{
-		//RECT clientRect = g_pWindow->getClientRect();
-		//float mapWidth = clientRect.right - clientRect.left; // clientRectWidth;
-		//float mapHeight = clientRect.bottom - clientRect.top; // clientRectHeight;
-		//float mapWidth_Half = mapWidth * 0.5;
-		//float mapHeight_Half = mapHeight * 0.5;
-
-		//Rect_<float> rectNDC;
-		//rectNDC.LT.x = (shape.LT.x - mapWidth_Half) / mapWidth_Half;
-		//rectNDC.LT.y = -(shape.LT.y - mapHeight_Half) / mapHeight_Half;
-		//rectNDC.RB.x = (shape.RB.x - mapWidth_Half) / mapWidth_Half;
-		//rectNDC.RB.y = -(shape.RB.y - mapHeight_Half) / mapHeight_Half;
-
 		Rect_<float> rectOrthogonal = ScreenToOrthogonal(shape);
 		Rect_<float> rectNDC;
 		if (renderCamera != nullptr)
@@ -421,16 +370,6 @@ public:
 		{
 			rectNDC = OrthogonalToNDC(rectOrthogonal);
 		}
-		
-
-		
-
-		//Rect_<float> rectTexture = calcTextureRect(rectOrthogonal, rectCameraOrtho);
-
-		//rectTexture.LT.x = 0.375f;
-		//rectTexture.LT.y = 0.375f;
-		//rectTexture.RB.x = 0.625f;
-		//rectTexture.RB.y = 0.625f;
 
 		// Vectex List
 		std::vector<Vertex>* list = pShader->getVertexList();
@@ -439,73 +378,46 @@ public:
 		list->at(2).pos = { rectNDC.LT.x, rectNDC.RB.y, 0.0f };
 		list->at(3).pos = { rectNDC.RB.x, rectNDC.RB.y, 0.0f };
 
-
-		//list->at(0).texture = { 0.0f, 0.0f }; // p1-LT
-		//list->at(1).texture = { 1.0f, 0.0f }; // p2-RT
-		//list->at(2).texture = { 0.0f, 1.0f }; // p3-LB
-		//list->at(3).texture = { 1.0f, 1.0f }; // p4-RB
-
-		//list->at(0).texture = { rectTexture.LT.x, rectTexture.LT.y }; // p1-LT
-		//list->at(1).texture = { rectTexture.RB.x, rectTexture.LT.y }; // p2-RT
-		//list->at(2).texture = { rectTexture.LT.x, rectTexture.RB.y }; // p3-LB
-		//list->at(3).texture = { rectTexture.RB.x, rectTexture.RB.y }; // p4-RB
-
 		list->at(0).color = { 1.0f, 1.0f, 1.0f, alphaVal };
 		list->at(1).color = { 1.0f, 1.0f, 1.0f, alphaVal };
 		list->at(2).color = { 1.0f, 1.0f, 1.0f, alphaVal };
 		list->at(3).color = { 1.0f, 1.0f, 1.0f, alphaVal };
 
-		//if (0)
+		if (!SpriteList.empty())
 		{
-			if (!SpriteList.empty())
-			{
-				// Set Sprite Region
-				float textureWidth = pShader->getTextureWidth();
-				float textureHeight = pShader->getTextureHeight();
+			// Set Sprite Region
+			float textureWidth = pShader->getTextureWidth();
+			float textureHeight = pShader->getTextureHeight();
 
-				Rect_<float> rect = SpriteList[SpriteNum];
-				list->at(0).texture = { rect.left() / textureWidth, rect.top() / textureHeight }; // p1-LT
-				list->at(1).texture = { rect.right() / textureWidth, rect.top() / textureHeight }; // p2-RT
-				list->at(2).texture = { rect.left() / textureWidth, rect.bottom() / textureHeight }; // p3-LB
-				list->at(3).texture = { rect.right() / textureWidth, rect.bottom() / textureHeight }; // p4-RB
+			Rect_<float> rect = SpriteList[SpriteNum];
+			list->at(0).texture = { rect.left() / textureWidth, rect.top() / textureHeight }; // p1-LT
+			list->at(1).texture = { rect.right() / textureWidth, rect.top() / textureHeight }; // p2-RT
+			list->at(2).texture = { rect.left() / textureWidth, rect.bottom() / textureHeight }; // p3-LB
+			list->at(3).texture = { rect.right() / textureWidth, rect.bottom() / textureHeight }; // p4-RB
 			
-				if (filpSpriteHorizontal)
-				{
-					Vector2f LT = list->at(0).texture;
-					Vector2f RT = list->at(1).texture;
-					Vector2f LB = list->at(2).texture;
-					Vector2f RB = list->at(3).texture;
-					list->at(0).texture = RT; //{ 0.0f, 0.0f }; // LT
-					list->at(1).texture = LT; //{ 1.0f, 0.0f }; // RT
-					list->at(2).texture = RB; //{ 0.0f, 1.0f }; // LB
-					list->at(3).texture = LB; //{ 1.0f, 1.0f }; // RB
-				}
-
-				if (filpSpriteVertical)
-				{
-					Vector2f LT = list->at(0).texture;
-					Vector2f RT = list->at(1).texture;
-					Vector2f LB = list->at(2).texture;
-					Vector2f RB = list->at(3).texture;
-					list->at(0).texture = LB;
-					list->at(1).texture = RB;
-					list->at(2).texture = LT;
-					list->at(3).texture = RT;
-				}
+			if (filpSpriteHorizontal)
+			{
+				Vector2f LT = list->at(0).texture;
+				Vector2f RT = list->at(1).texture;
+				Vector2f LB = list->at(2).texture;
+				Vector2f RB = list->at(3).texture;
+				list->at(0).texture = RT; //{ 0.0f, 0.0f }; // LT
+				list->at(1).texture = LT; //{ 1.0f, 0.0f }; // RT
+				list->at(2).texture = RB; //{ 0.0f, 1.0f }; // LB
+				list->at(3).texture = LB; //{ 1.0f, 1.0f }; // RB
 			}
-			//else
-			//{
-			//	list->at(0).texture = { 0.0f, 0.0f }; // p1-LT
-			//	list->at(1).texture = { 1.0f, 0.0f }; // p2-RT
-			//	list->at(2).texture = { 0.0f, 1.0f }; // p3-LB
-			//	list->at(3).texture = { 1.0f, 1.0f }; // p4-RB
 
-			//	// flip
-			//	//list->at(0).texture = { 1.0f, 0.0f }; // p1-RT
-			//	//list->at(1).texture = { 0.0f, 0.0f }; // p2-LT
-			//	//list->at(2).texture = { 1.0f, 1.0f }; // p3-RB
-			//	//list->at(3).texture = { 0.0f, 1.0f }; // p4-LB
-			//}
+			if (filpSpriteVertical)
+			{
+				Vector2f LT = list->at(0).texture;
+				Vector2f RT = list->at(1).texture;
+				Vector2f LB = list->at(2).texture;
+				Vector2f RB = list->at(3).texture;
+				list->at(0).texture = LB;
+				list->at(1).texture = RB;
+				list->at(2).texture = LT;
+				list->at(3).texture = RT;
+			}
 		}
 	}
 

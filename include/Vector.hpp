@@ -385,7 +385,7 @@ public:
 
 public:
 	Vector4D_() : x(0), y(0), z(0), w(0) {};
-	Vector4D_(const T& _x, const T& _y, const T& _z, const T& _w) : x(_x), y(_y), z(_z) {};
+	Vector4D_(const T& _x, const T& _y, const T& _z, const T& _w) : x(_x), y(_y), z(_z), w(_w) {};
 	Vector4D_(const Point_<T>& _pos) : x(_pos.x), y(_pos.y), z(0), w(0) {};
 	Vector4D_(const Point3D_<T>& _pos) : x(_pos.x), y(_pos.y), z(_pos.z), w(0) {};
 	Vector4D_(const Vector2D_<T>& _v) : x(_v.x), y(_v.y), z(0), w(0) {};

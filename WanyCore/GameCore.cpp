@@ -102,28 +102,31 @@ bool GameCore::PreRender()
 {
 	m_pImmediateContext->OMSetRenderTargets(1, &m_pRTV, NULL); // m_pRTV 에 뿌린다.
 	//float color[4] = { 1.0f, 1.0f, 1.0f, 1.0f }; // R, G, B, A 순 0 ~ 1.0사이 값 1.0 == 255
-	float color[4] = { 1.0f, 1.0f, 0.0f, 1.0f }; // R, G, B, A 순 0 ~ 1.0사이 값 1.0 == 255
+	float color[4] = { 1.0f, 1.0f, 1.0f, 1.0f }; // R, G, B, A 순 0 ~ 1.0사이 값 1.0 == 255
 	m_pImmediateContext->ClearRenderTargetView(m_pRTV, color);
+	m_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+
+	// View Port 설정
+	// 보통은 client 크기로 설정하지만, 미니맵의 경우 뷰포트 설정을 바꿔 출력 가능.
+	RECT rcClient = g_pWindow->getClientRect();
+	float width = rcClient.right - rcClient.left;
+	float height = rcClient.bottom - rcClient.top;
+	D3D11_VIEWPORT viewPort;
+	viewPort.TopLeftX = 0;
+	viewPort.TopLeftY = 0;
+	viewPort.Width = width; //1366; 
+	viewPort.Height = height; //786;
+	viewPort.MinDepth = 0;
+	viewPort.MaxDepth = 1;
+	m_pImmediateContext->RSSetViewports(1, &viewPort);
 
 	// Sampler State 적용.
 	m_pImmediateContext->PSSetSamplers(0, 1, &DXSamplerState::pDefaultSamplerState);
 
 	// Rasterizer State 적용.
 	//m_pImmediateContext->RSSetState(DXSamplerState::pDefaultRSWireFrame);
-	//m_pImmediateContext->RSSetState(DXSamplerState::pDefaultRSSolid);
-
-	// View Port 설정
-	// 보통은 client 크기로 설정하지만, 미니맵의 경우 뷰포트 설정을 바꿔 출력 가능.
-	//D3D11_VIEWPORT viewPort;
-	//viewPort.TopLeftX = 0;
-	//viewPort.TopLeftY = 0;
-	//viewPort.Width = 1366; 
-	//viewPort.Height = 786;
-	//viewPort.MinDepth = 0;
-	//viewPort.MaxDepth = 1;
-	//m_pImmediateContext->RSSetViewports(0, &viewPort);
-
-	m_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	m_pImmediateContext->RSSetState(DXSamplerState::pDefaultRSSolid);
 
 	// Blend State 적용.
 	m_pImmediateContext->OMSetBlendState(DXSamplerState::pBlendSamplerState, 0, -1);

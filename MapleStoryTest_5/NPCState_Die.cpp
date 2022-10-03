@@ -46,7 +46,7 @@ void NPCState_Die::calcPos()
 	//float hitboxOffset_x = (spriteHitboxList[state].LT.x - spriteList[state].LT.x) * aspectRatio;
 	//float hitboxOffset_y = (spriteHitboxList[state].LT.y - spriteList[state].LT.y) * aspectRatio;
 	//npc->hitbox = Rect2f(x + hitboxOffset_x, y + hitboxOffset_y, hitbox_width, hitbox_height);
-	calcHitbox();
+	//calcHitbox();
 }
 
 void NPCState_Die::calcHitbox()
@@ -122,6 +122,7 @@ bool NPCState_Die::initialize()
 	state = 0;
 	npc->boundaryCheck = false;
 	npc->SpriteNum = state;
+	npc->hitbox = Rect2f(0, 0, 0, 0);
 	lifeTime = 2.5f + ((rand() % 250) / 100.0f);
 	totalTime = 0.0f;
 	beforeTime = Timer::getInstance()->getPlayTime();

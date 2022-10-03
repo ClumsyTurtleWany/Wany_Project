@@ -84,6 +84,6 @@ float4 PS(	PixelShader_input _input ) : SV_Target
 	//	discard; // 투명도 조절은 아니다.
 	//}
 
-	return vColor; // * _input.c;
+	return vColor * _input.c;
 	
 }

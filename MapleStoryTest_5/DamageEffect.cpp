@@ -133,6 +133,7 @@ bool DamageEffect::frame()
 
     if (timeCounter >= frameTime)
     {
+        float decreaseAlpha = 1.0f / (lifeTime / timeCounter);
         timeCounter = 0.0f;
 
         std::wstring strTime = L"DamageEffect[" + std::to_wstring(state) + L"] Time: " + std::to_wstring(frameTime) + L"\n";
@@ -141,7 +142,7 @@ bool DamageEffect::frame()
         pos.y -= 10;
 
         this->setAlpha(alphaBlendVal);
-        alphaBlendVal -= (1.0f / (lifeTime / frameTime));
+        alphaBlendVal -= decreaseAlpha;
     }
 
     if (totalTime >= lifeTime)
