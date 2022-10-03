@@ -1,0 +1,270 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="State">
+      <UniqueIdentifier>{e1d17a4c-a42d-4a58-aa7b-56db5f3b7e20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map">
+      <UniqueIdentifier>{189f4bf5-1bf9-4997-a8bf-599392af29fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map\헤더 파일">
+      <UniqueIdentifier>{bdc8f5a8-b858-4c58-8d6e-71b888ba63d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map\소스 파일">
+      <UniqueIdentifier>{a766bff3-daf5-4199-952e-6557d5de65bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{85fc27d7-37d1-43bd-adb9-4cf47569bcca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object">
+      <UniqueIdentifier>{95300f7d-562f-4d2b-a817-078917590146}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="State\UserState">
+      <UniqueIdentifier>{dbc8c502-692f-4636-8736-24a526cdc02b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="State\UserState\소스 파일">
+      <UniqueIdentifier>{3b3f461f-094b-4d43-a023-33dbb0ba5652}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="State\UserState\헤더 파일">
+      <UniqueIdentifier>{4a23e2b6-dc00-4a40-8787-7d6fa38f0e3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="State\NPCState">
+      <UniqueIdentifier>{89be7696-1b20-4be3-8e1d-f4f5737b1e3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="State\NPCState\헤더 파일">
+      <UniqueIdentifier>{ff6207f2-de1e-4636-bb90-6ff6983be67c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="State\NPCState\소스 파일">
+      <UniqueIdentifier>{5942be29-998d-4421-9167-24bff5df8725}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Sample.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="UserState.hpp">
+      <Filter>State\UserState\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="UserState_Idle.hpp">
+      <Filter>State\UserState\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="UserState_Jump.hpp">
+      <Filter>State\UserState\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="UserState_MoveLeft.hpp">
+      <Filter>State\UserState\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="UserState_MoveRight.hpp">
+      <Filter>State\UserState\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="UserState_Skill_0_1.hpp">
+      <Filter>State\UserState\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.hpp">
+      <Filter>Map\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Octree.hpp">
+      <Filter>Map\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="QuadTree.hpp">
+      <Filter>Map\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="SpaceDivision.hpp">
+      <Filter>Map\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.hpp">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Map_0.hpp">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="UserState_Skill_0_2.hpp">
+      <Filter>State\UserState\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="UserState_Skill_0_3.hpp">
+      <Filter>State\UserState\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC.hpp">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.hpp">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.hpp">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Skill.hpp">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="MapObject.hpp">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="UserState_Falling.hpp">
+      <Filter>State\UserState\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="SkillManager.hpp">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.hpp">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Skill_ExplosionPunch.hpp">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Skill_Installation.hpp">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="UserState_Climb.hpp">
+      <Filter>State\UserState\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectManager.hpp">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="NPCManager.hpp">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="NPCState.hpp">
+      <Filter>State\NPCState\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="NPCState_Idle.hpp">
+      <Filter>State\NPCState\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="NPCState_MoveLeft.hpp">
+      <Filter>State\NPCState\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="NPCState_MoveRight.hpp">
+      <Filter>State\NPCState\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="NPCState_Die.hpp">
+      <Filter>State\NPCState\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="NPCState_Attack.hpp">
+      <Filter>State\NPCState\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="NPCState_Hit.hpp">
+      <Filter>State\NPCState\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="NPCState_Search.hpp">
+      <Filter>State\NPCState\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DamageEffect.hpp">
+      <Filter>Object</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Sample.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="UserState.cpp">
+      <Filter>State\UserState\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="UserState_Idle.cpp">
+      <Filter>State\UserState\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="UserState_Jump.cpp">
+      <Filter>State\UserState\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="UserState_MoveLeft.cpp">
+      <Filter>State\UserState\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="UserState_MoveRight.cpp">
+      <Filter>State\UserState\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="UserState_Skill_0_1.cpp">
+      <Filter>State\UserState\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Map_0.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="UserState_Skill_0_2.cpp">
+      <Filter>State\UserState\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="UserState_Skill_0_3.cpp">
+      <Filter>State\UserState\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="NPC.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Skill.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="MapObject.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="UserState_Falling.cpp">
+      <Filter>State\UserState\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillManager.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Skill_ExplosionPunch.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Skill_Installation.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="UserState_Climb.cpp">
+      <Filter>State\UserState\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectManager.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="NPCManager.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="NPCState.cpp">
+      <Filter>State\NPCState\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="NPCState_Idle.cpp">
+      <Filter>State\NPCState\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="NPCState_MoveLeft.cpp">
+      <Filter>State\NPCState\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="NPCState_MoveRight.cpp">
+      <Filter>State\NPCState\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="NPCState_Die.cpp">
+      <Filter>State\NPCState\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="NPCState_Attack.cpp">
+      <Filter>State\NPCState\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="NPCState_Hit.cpp">
+      <Filter>State\NPCState\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="NPCState_Search.cpp">
+      <Filter>State\NPCState\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DamageEffect.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

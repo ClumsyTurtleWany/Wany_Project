@@ -66,6 +66,7 @@ public:
 	Camera* renderCamera;
 
 	float angle = 0.0f;
+	float alphaVal = 1.0f;
 	float mapWidth = 0.0f;
 	float mapHeight = 0.0f;
 
@@ -128,6 +129,11 @@ public:
 	void setCamera(Camera* _camera)
 	{
 		renderCamera = _camera;
+	}
+
+	void setAlpha(float _alpha)
+	{
+		alphaVal = _alpha;
 	}
 
 	Circle_<T> getCircle()
@@ -331,6 +337,11 @@ public:
 		//list->at(2).texture = { 0.0f, 1.0f }; // p3-LB
 		//list->at(3).texture = { 1.0f, 1.0f }; // p4-RB
 
+		list->at(0).color = { 1.0f, 1.0f, 1.0f, alphaVal };
+		list->at(1).color = { 1.0f, 1.0f, 1.0f, alphaVal };
+		list->at(2).color = { 1.0f, 1.0f, 1.0f, alphaVal };
+		list->at(3).color = { 1.0f, 1.0f, 1.0f, alphaVal };
+
 		//if (0)
 		{
 			if (!SpriteList.empty())
@@ -438,6 +449,11 @@ public:
 		//list->at(1).texture = { rectTexture.RB.x, rectTexture.LT.y }; // p2-RT
 		//list->at(2).texture = { rectTexture.LT.x, rectTexture.RB.y }; // p3-LB
 		//list->at(3).texture = { rectTexture.RB.x, rectTexture.RB.y }; // p4-RB
+
+		list->at(0).color = { 1.0f, 1.0f, 1.0f, alphaVal };
+		list->at(1).color = { 1.0f, 1.0f, 1.0f, alphaVal };
+		list->at(2).color = { 1.0f, 1.0f, 1.0f, alphaVal };
+		list->at(3).color = { 1.0f, 1.0f, 1.0f, alphaVal };
 
 		//if (0)
 		{

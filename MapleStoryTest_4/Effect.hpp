@@ -21,7 +21,6 @@ public:
 
 	Vector2f pos;
 	std::vector<std::wstring> textureKeyList;
-	//std::set<std::wstring> textureKeyList;
 
 public:
 	Effect();
