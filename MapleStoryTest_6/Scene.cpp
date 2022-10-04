@@ -27,6 +27,22 @@ bool Scene::frame()
 {
 	float dt = Timer::getInstance()->getDeltaTime();
 
+	for (auto it = NPCList.begin(); it != NPCList.end();)
+	{
+		if ((*it)->deleteFlag)
+		{
+			delete* it;
+			*it = nullptr;
+			it = NPCList.erase(it);
+			continue;
+		}
+		else
+		{
+			(*it)->frame(dt);
+		}
+		it++;
+	}
+
 	if (currentMap != nullptr)
 	{
 		currentMap->frame(dt);
@@ -39,58 +55,14 @@ bool Scene::frame()
 		renderCamera->frame();
 	}
 
-
-	//float currentTime = Timer::getInstance()->getPlayTime();
-	//float secondPerFrame = currentTime - beforeTime;
-	//timeCounter += secondPerFrame;
-	//if (timeCounter >= 3.0f)
-	//{
-	//	timeCounter = 0.0f;
-	//	//float x = 100 + rand() % 1000;
-	//	//float y = 100 + rand() % 1000;
-
-	//	//EffectManager::getInstance()->addEffectToJobList(Vector2f(x, y), L"Skill_0");
-	//	EffectManager::getInstance()->addDamageEffectToJobList(user->shape.center(), L"Attack", 12.0f);
-	//	
-	//}
-	//beforeTime = currentTime;
-
-
 	SkillManager::getInstance()->frame();
 	EffectManager::getInstance()->frame();
-
-	/*for (auto it : MonsterList)
-	{
-		it->frame(dt);
-	}*/
-
-	/*for (auto it : NPCList)
-	{
-		it->frame(dt);
-	}*/
-
-	for (auto it = NPCList.begin(); it != NPCList.end();)
-	{
-		if ((*it)->deleteFlag)
-		{
-			delete *it;
-			*it = nullptr;
-			it = NPCList.erase(it);
-			continue;
-		}
-		else
-		{
-			(*it)->frame(dt);
-		}
-		it++;
-	}
 
 	for (auto it : uiList)
 	{
 		it->frame();
 	}
 
-	//collisionMap->updateDynamicObject();
 	return true;
 }
 

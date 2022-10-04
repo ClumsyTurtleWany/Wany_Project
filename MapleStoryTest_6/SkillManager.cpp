@@ -96,7 +96,8 @@ bool SkillManager::addSkillToJobList(std::wstring _name)
 				return false;
 			}
 
-			Skill* pSkill = new Skill(targetSkill);
+			//Skill* pSkill = new Skill(targetSkill);
+			Skill* pSkill = targetSkill;
 			pSkill->initialize();
 			jobList.push_back(pSkill);
 		}
@@ -112,7 +113,8 @@ bool SkillManager::addSkillToJobList(std::wstring _name)
 			return false;
 		}
 
-		Skill* pSkill = new Skill(targetSkill);
+		//Skill* pSkill = new Skill(targetSkill);
+		Skill* pSkill = targetSkill;
 		pSkill->initialize();
 		jobList.push_back(pSkill);
 	}

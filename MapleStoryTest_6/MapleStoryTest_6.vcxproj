@@ -187,6 +187,8 @@ copy "..\\lib\\FMOD\\fmod.dll" "..\\$(TargetName)\\"</Command>
     <ClInclude Include="SkillManager.hpp" />
     <ClInclude Include="SpaceDivision.hpp" />
     <ClInclude Include="UIManager.hpp" />
+    <ClInclude Include="UI_Btn.hpp" />
+    <ClInclude Include="UI_Exit.hpp" />
     <ClInclude Include="UI_Exp.hpp" />
     <ClInclude Include="UI_HPStatus.hpp" />
     <ClInclude Include="UserInterface.hpp" />
@@ -224,6 +226,8 @@ copy "..\\lib\\FMOD\\fmod.dll" "..\\$(TargetName)\\"</Command>
     <ClCompile Include="Skill.cpp" />
     <ClCompile Include="SkillManager.cpp" />
     <ClCompile Include="UIManager.cpp" />
+    <ClCompile Include="UI_Btn.cpp" />
+    <ClCompile Include="UI_Exit.cpp" />
     <ClCompile Include="UI_Exp.cpp" />
     <ClCompile Include="UI_HPStatus.cpp" />
     <ClCompile Include="UserInterface.cpp" />

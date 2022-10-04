@@ -1,4 +1,4 @@
-lifeTime=1.0
+lifeTime=0.66
 coolTime=0.0
 offset_x=100.0
 offset_y=50.0

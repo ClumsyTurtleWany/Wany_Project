@@ -216,6 +216,12 @@
     <ClInclude Include="UI_Exp.hpp">
       <Filter>Object\UI</Filter>
     </ClInclude>
+    <ClInclude Include="UI_Exit.hpp">
+      <Filter>Object\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Btn.hpp">
+      <Filter>Object\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sample.cpp">
@@ -321,6 +327,12 @@
       <Filter>Object\UI</Filter>
     </ClCompile>
     <ClCompile Include="UI_Exp.cpp">
+      <Filter>Object\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Exit.cpp">
+      <Filter>Object\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Btn.cpp">
       <Filter>Object\UI</Filter>
     </ClCompile>
   </ItemGroup>

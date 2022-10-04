@@ -22,6 +22,7 @@ Skill::Skill(Skill* _src)
     offset_hitbox = _src->offset_hitbox;
     hitState = _src->hitState;
     requiredMP = _src->requiredMP;
+    totalTime = 0.0f;
     for (auto it : _src->childList)
     {
         Skill* pSkill = new Skill(it);
@@ -237,6 +238,7 @@ bool Skill::initialize()
     childState = 0;
     for (auto it : childList)
     {
+        it->initialize();
         it->skillName = skillName;
     }
    
@@ -251,6 +253,7 @@ bool Skill::frame()
     float secondPerFrame = currentTime - beforeTime;
     this->timeCounter += secondPerFrame;
     this->totalTime += secondPerFrame;
+    beforeTime = currentTime;
 
     if (this->isEnd)
     {
@@ -391,9 +394,6 @@ bool Skill::frame()
             //setTexture(DXTextureManager::getInstance()->getTexture(textureKeyList[state]));
         }
     }
-    
-
-    beforeTime = currentTime;
 
 	return true;
 }
