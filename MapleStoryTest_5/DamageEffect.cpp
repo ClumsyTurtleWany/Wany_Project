@@ -100,9 +100,9 @@ bool DamageEffect::initialize()
     isEnd = false;
     if (lifeTime <= 0.0f)
     {
-        lifeTime = 3.0f;
+        lifeTime = 2.0f;
     }
-    lifeTime = 3.0f;
+    lifeTime = 2.0f;
     totalTime = 0.0f;
 
     this->createShader(ShaderType::Texture);
@@ -169,8 +169,9 @@ bool DamageEffect::render()
         {
             DXTexture* pTexture = DXTextureManager::getInstance()->getTexture(it->second);
             setTexture(pTexture);
-            float width = pTexture->getWidth();
-            float height = pTexture->getHeight();
+            float aspectRatio = 1.5f;
+            float width = pTexture->getWidth() * aspectRatio;
+            float height = pTexture->getHeight() * aspectRatio;
             Rect2f numberRect(0, 0, width, height);
             this->shape = numberRect;
             moveCenterTo(numberPos);

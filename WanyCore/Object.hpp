@@ -141,6 +141,23 @@ public:
 		return Circle_<T>(this->shape.center(), this->shape.length() / 2.0f);
 	}
 
+	Rect_<T> ScreenToNDC_noCamera()
+	{
+		RECT clientRect = g_pWindow->getClientRect();
+		float clientWidth = static_cast<float>(clientRect.right - clientRect.left); // clientRectWidth;
+		float clientHeight = static_cast<float>(clientRect.bottom - clientRect.top); // clientRectHeight;
+		float mapWidth_Half = clientWidth * 0.5f;
+		float mapHeight_Half = clientHeight * 0.5f;
+
+		Rect_<T> rectNDC;
+		rectNDC.LT.x = (shape.LT.x - mapWidth_Half) / mapWidth_Half;
+		rectNDC.LT.y = -(shape.LT.y - mapHeight_Half) / mapHeight_Half;
+		rectNDC.RB.x = (shape.RB.x - mapWidth_Half) / mapWidth_Half;
+		rectNDC.RB.y = -(shape.RB.y - mapHeight_Half) / mapHeight_Half;
+
+		return rectNDC;
+	}
+
 	// 2022-09-16 Test
 	Rect_<T> ScreenToNDC()
 	{
@@ -301,7 +318,7 @@ public:
 	virtual void updateShader()
 	{
 		Rect_<float> rectNDC;
-		rectNDC = ScreenToNDC();
+		rectNDC = ScreenToNDC_noCamera(); //ScreenToNDC();
 		
 
 		//rectNDC = ScreenToCamera();

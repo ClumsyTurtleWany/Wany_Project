@@ -8,4 +8,5 @@ damageCount=3
 200
 200
 200
-
+mp=8.0
+hitstate=0

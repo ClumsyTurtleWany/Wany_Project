@@ -1,0 +1,4 @@
+background=5, 26
+hp=25, 28
+mp=25, 44
+cover=0, 0

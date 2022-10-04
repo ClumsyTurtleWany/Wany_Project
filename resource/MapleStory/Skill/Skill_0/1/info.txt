@@ -8,3 +8,4 @@ damageCount=3
 300
 300
 300
+hitstate=0
