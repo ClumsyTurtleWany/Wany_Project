@@ -1,0 +1,31 @@
+#pragma once
+#include "GameCore.hpp"
+#include "Player.hpp"
+#include "Resource.h"
+#include "Scene_InGame.hpp"
+#include "Camera.hpp"
+
+//C:\Users\kgca4108\Documents\Visual Studio 2019\My Exported Templates\CoreTestTemplate_0.zip
+class MapleStory : public GameCore
+{
+public:
+	Scene* currentScene = nullptr;
+
+public:
+	bool initialize() override;
+	bool frame() override;
+	bool render() override;
+	bool release() override;
+
+public:
+	template <typename T>
+	void changeCurrentScene();
+};
+
+template <typename T>
+void MapleStory::changeCurrentScene()
+{
+	delete currentScene;
+	currentScene = nullptr;
+	currentScene = new T(this);
+}

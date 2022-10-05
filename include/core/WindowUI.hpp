@@ -14,6 +14,9 @@ public:
 	ATOM MyRegisterClass();
 	bool createWindow(HINSTANCE _hInstance, const WCHAR* _title, UINT _width, UINT _height);
 	RECT getClientRect();
+	float getClientWidth();
+	float getClientHeight();
+	Vector2f getClientCenterPos();
 
 public:
 	virtual bool run();

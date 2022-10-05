@@ -132,6 +132,24 @@ RECT WindowUI::getClientRect()
 	return clientRect;
 }
 
+float WindowUI::getClientWidth()
+{
+	return static_cast<float>(clientRect.right - clientRect.left);
+}
+
+float WindowUI::getClientHeight()
+{
+	return static_cast<float>(clientRect.bottom - clientRect.top);
+}
+
+Vector2f WindowUI::getClientCenterPos()
+{
+	Vector2f pos;
+	pos.x = getClientWidth() * 0.5f;
+	pos.y = getClientHeight() * 0.5f;
+	return pos;
+}
+
 bool WindowUI::run()
 {
 	MSG msg;
