@@ -10,6 +10,7 @@ public:
 
 	float beforeTime = 0.0f;
 	float timeCounter = 0.0f;
+	KeyState beforeJumpKeyState;
 
 public:
 	UserState_Jump(Player* _user);

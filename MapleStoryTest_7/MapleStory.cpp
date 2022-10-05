@@ -1,6 +1,8 @@
 #include "MapleStory.h"
 #include "Scene_Intro.hpp"
-// 2022-09-06
+#include "EffectManager.hpp"
+#include "NPCManager.hpp"
+#include "UIManager.hpp"
 
 int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {

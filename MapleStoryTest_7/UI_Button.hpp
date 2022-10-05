@@ -34,6 +34,7 @@ private:
 
 public:
 	virtual bool Load(std::wstring _path) override;
+	virtual bool isPressed();
 	virtual void setCallbackFunction(std::function<void()> _callback);
 
 public:

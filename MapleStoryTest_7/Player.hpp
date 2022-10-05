@@ -194,6 +194,8 @@ public:
 	};
 
 	bool invincible = false;
+	bool doubleJump = false;
+	bool isDie = false;
 	float beforeTime = 0.0f;
 	float collisionTimeCounter = 0.0f;
 	float invincibleTimeCounter = 0.0f;
@@ -221,6 +223,9 @@ public:
 public:
 	Rect2f getRect();
 	Vector2f getCenter();
+
+public:
+	void hit(float _damage);
 
 public:
 	template <typename T>

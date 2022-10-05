@@ -124,13 +124,22 @@ bool UserState_Jump::frame()
 
 	// Jump
 	KeyState KeyState_X = Input::getInstance()->getKey('X');
-	if ((KeyState_X == KeyState::Down) || (KeyState_X == KeyState::Hold))
+	if ((beforeJumpKeyState == KeyState::Up) || (beforeJumpKeyState == KeyState::Free))
 	{
-		//EffectManager::getInstance()->addEffectToJobList(Vector2f(user->shape.cx(), user->shape.bottom()), L"DoubleJump");
-		SkillManager::getInstance()->addSkillToJobList(L"DoubleJump");
-		//user->changeCurrentState<UserState_Jump>();
-		return true;
+		if ((KeyState_X == KeyState::Down) || (KeyState_X == KeyState::Hold))
+		{
+			if (!user->doubleJump)
+			{
+				user->doubleJump = true;
+				SkillManager::getInstance()->addSkillToJobList(L"DoubleJump");
+				float force_x = 150.0f;
+				user->force.x += user->currentDirection == Player::Direction::Left ? -force_x : force_x;
+				user->force.y += -50.0f;
+				return true;
+			}
+		}
 	}
+	beforeJumpKeyState = KeyState_X;
 
 	// Skill 0 Btn
 	KeyState KeyState_C = Input::getInstance()->getKey('C');

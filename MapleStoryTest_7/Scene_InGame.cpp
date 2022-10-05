@@ -1,8 +1,15 @@
 #include "Scene_InGame.hpp"
-#include "UI_HPStatus.hpp"
-#include "UI_Exp.hpp"
-#include "UI_Button.hpp"
 #include "DXWriter.hpp"
+#include "EffectManager.hpp"
+#include "NPCManager.hpp"
+#include "DXTextureManager.hpp"
+#include "SkillManager.hpp"
+#include "Input.hpp"
+//#include "UI_HPStatus.hpp"
+//#include "UI_Exit.hpp"
+//#include "UI_Exp.hpp"
+//#include "UI_Button.hpp"
+
 
 void GameExit()
 {
@@ -89,6 +96,7 @@ bool Scene_InGame::initialize()
 		if (FMODSoundManager::getInstance()->LoadDir(SOUND_DIRECTORY))
 		{
 			FMODSound* pSound = FMODSoundManager::getInstance()->getSound(L"BadGuys.mp3");
+			pSound->setVolume(0.5f);
 			currentMap->setBGM(pSound);
 		}
 		currentMap->initialize();
@@ -179,7 +187,7 @@ bool Scene_InGame::initialize()
 	//UserInterface* Exp_bar = UIManager::getInstance()->CreateUI(Vector2f(0.0f, 760.0f), L"Exp_bar");
 	//uiList.push_back(Exp_bar);
 
-	UI_HPStatus* HPStatus = new UI_HPStatus;
+	HPStatus = new UI_HPStatus;
 	HPStatus->initialize();
 	//HPStatus->setPos(Vector2f(584.0f, 690.0f));
 	HPStatus->setPos(Vector2f(561.0f, 680.0f)); // aspectRatio == 1.2
@@ -192,14 +200,19 @@ bool Scene_InGame::initialize()
 	uiExp->setPlayer(user);
 	uiList.push_back(uiExp);
 
-	UI_Button* uiBtn = new UI_Button;
-	if (uiBtn->Load(L"../resource/MapleStory/UI/Exit/btn/yes/"))
-	{
-		uiBtn->initialize();
-		uiBtn->setPos(Vector2f(0.0f, 0.0f));
-		uiBtn->setCallbackFunction(GameExit);
-		uiList.push_back(uiBtn);
-	}
+	//UI_Button* uiBtn = new UI_Button;
+	//if (uiBtn->Load(L"../resource/MapleStory/UI/Exit/btn/yes/"))
+	//{
+	//	uiBtn->initialize();
+	//	uiBtn->setPos(Vector2f(0.0f, 0.0f));
+	//	uiBtn->setCallbackFunction(GameExit);
+	//	uiList.push_back(uiBtn);
+	//}
+
+	uiExit = new UI_Exit;
+	uiExit->setPos(Vector2f(450.0f, 250.0f));
+	uiExit->setPlayer(user);
+	uiExit->initialize();
 
 	return true;
 }
@@ -207,6 +220,24 @@ bool Scene_InGame::initialize()
 bool Scene_InGame::frame()
 {
 	float dt = Timer::getInstance()->getDeltaTime();
+	
+	KeyState keyState_ESC = Input::getInstance()->getKey(VK_ESCAPE);
+	if ((keyState_ESC == KeyState::Down) || (keyState_ESC == KeyState::Hold))
+	{
+		bool isExist = false;
+		for(auto it : uiList)
+		{
+			if (it == uiExit)
+			{
+				isExist = true;
+			}			
+		}
+
+		if (!isExist)
+		{
+			uiList.push_back(uiExit);
+		}
+	}
 
 	for (auto it = NPCList.begin(); it != NPCList.end();)
 	{
@@ -220,6 +251,14 @@ bool Scene_InGame::frame()
 		else
 		{
 			(*it)->frame(dt);
+			
+			if (!user->invincible)
+			{
+				if ((*it)->hitbox.intersectRect(user->hitbox))
+				{
+					user->hit((*it)->info.minDamage);
+				}
+			}
 		}
 		it++;
 	}
@@ -239,9 +278,22 @@ bool Scene_InGame::frame()
 	SkillManager::getInstance()->frame();
 	EffectManager::getInstance()->frame();
 
-	for (auto it : uiList)
+	for (auto it = uiList.begin(); it != uiList.end(); )
 	{
-		it->frame();
+		if ((*it)->isClose)
+		{
+			(*it)->isClose = false;
+			it = uiList.erase(it);
+		}
+		else
+		{
+			(*it)->frame();
+		}
+
+		if (it != uiList.end())
+		{
+			it++;
+		}
 	}
 
 	return true;

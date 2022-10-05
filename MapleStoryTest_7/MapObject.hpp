@@ -2,6 +2,7 @@
 #include "Object.hpp"
 #include "DXShaderBorderManager.hpp"
 #include "SpaceDivision.hpp"
+//#include "Effect.hpp"
 
 enum class MapObjectType
 {

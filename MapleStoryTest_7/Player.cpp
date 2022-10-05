@@ -82,24 +82,6 @@ bool Player::frame(float _dt)
 
 	hitbox = shape;
 
-	// Collision
-	if (collisionTimeCounter >= 0.5f)
-	{
-		if (!invincible)
-		{
-			std::vector<object2D<float>*> collisionObjList;
-			if (currentMap->Collision(this, &collisionObjList))
-			{
-				NPC* pNpc = dynamic_cast<NPC*>(collisionObjList[0]);
-				info.currentHP -= pNpc->info.minDamage;
-				EffectManager::getInstance()->addDamageEffectToJobList(hitbox.center(), L"Hit", pNpc->info.minDamage);
-				invincible = true;
-				collisionTimeCounter = 0.0f;
-				invincibleTimeCounter = 0.0f;
-			}
-		}
-	}
-
 	if(invincible)
 	{
 		if (invincibleTimeCounter >= 2.0f)
@@ -195,4 +177,19 @@ Rect2f Player::getRect()
 Vector2f Player::getCenter()
 {
 	return shape.center();
+}
+
+void Player::hit(float _damage)
+{
+	EffectManager::getInstance()->addDamageEffectToJobList(hitbox.center(), L"Hit", _damage);
+	if ((info.currentHP - _damage) <= 0.0f)
+	{
+		info.currentHP = 0;
+		isDie = true;
+	}
+	else
+	{
+		info.currentHP -= _damage;
+	}
+	invincible = true;
 }

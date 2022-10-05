@@ -42,6 +42,6 @@ public:
 public:
 	bool setBuffer(IDXGISurface* _dxgiSurface);
 	void setString(std::wstring _str);
-	bool draw(int _x, int _y, std::wstring _str, D2D1_COLOR_F _color = D2D1_COLOR_F({ 0.0f, 0.0f, 0.0f, 1.0f }));
+	bool draw(int _x, int _y, std::wstring _str, D2D1_COLOR_F _color = D2D1_COLOR_F({ 0.0f, 0.0f, 0.0f, 1.0f }), float _alpha = 1.0f);
 };
 

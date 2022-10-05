@@ -83,6 +83,11 @@ bool UI_Button::Load(std::wstring _path)
 	return true;
 }
 
+bool UI_Button::isPressed()
+{
+	return pressed;
+}
+
 void UI_Button::setCallbackFunction(std::function<void()> _callback)
 {
 	callbackFunction = _callback;
@@ -108,7 +113,11 @@ bool UI_Button::frame()
 			if ((keyState_Up == KeyState::Up) || (keyState_Up == KeyState::Free))
 			{
 				pressed = true;
-				callbackFunction();
+				if (callbackFunction != nullptr)
+				{
+					callbackFunction();
+				}
+				return true;
 			}
 		}
 		
@@ -126,6 +135,8 @@ bool UI_Button::frame()
 	{
 		state = BtnState::Normal;
 	}
+
+	pressed = false;
 
 	setStateTexture(state);
 

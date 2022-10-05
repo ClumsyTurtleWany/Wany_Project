@@ -23,6 +23,7 @@ bool Scene_Intro::initialize()
 	FMODSound* pSound = FMODSoundManager::getInstance()->getSound(L"NxLogo.mp3");
 	if (pSound != nullptr)
 	{
+		pSound->setVolume(0.5f);
 		pSound->playEffect();
 	}
 	return true;

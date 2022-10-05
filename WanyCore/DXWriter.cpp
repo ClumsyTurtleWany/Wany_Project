@@ -1,4 +1,5 @@
 #include "DXWriter.hpp"
+#include "WindowUI.hpp"
 
 bool DXWriter::initialize()
 {
@@ -75,7 +76,10 @@ bool DXWriter::render()
 
 	// render는 반드시 begin과 end 사이에 넣어야 함.
 	// Draw
-	D2D1_RECT_F rt = { 0, 0, 600, 300 };
+	float clientWidth = g_pWindow->getClientWidth();
+	float clientHeight = g_pWindow->getClientHeight();
+
+	D2D1_RECT_F rt = { 0, 0, clientWidth, clientHeight };
 	m_pTextColor->SetColor({ 1, 0, 0, 1 });
 	m_pTextColor->SetOpacity(1); // 0에 가까울 수록 투명해짐. 0 ~ 1
 	m_pd2dRenderTarget->DrawText(m_strDefault.c_str(), static_cast<UINT32>(m_strDefault.size()), m_pTextFormat, rt, m_pTextColor);
@@ -165,14 +169,16 @@ void DXWriter::setString(std::wstring _str)
 	m_strDefault = _str;
 }
 
-bool DXWriter::draw(int _x, int _y, std::wstring _str, D2D1_COLOR_F _color)
+bool DXWriter::draw(int _x, int _y, std::wstring _str, D2D1_COLOR_F _color, float _alpha)
 {
 	m_pd2dRenderTarget->BeginDraw();
 
 	// render는 반드시 begin과 end 사이에 넣어야 함.
-	D2D1_RECT_F rt = { static_cast<FLOAT>(_x), static_cast<FLOAT>(_y), 600, 300 };
+	float clientRect = g_pWindow->getClientWidth();
+	float clientHeight = g_pWindow->getClientHeight();
+	D2D1_RECT_F rt = { static_cast<FLOAT>(_x), static_cast<FLOAT>(_y), clientRect, clientHeight };
 	m_pTextColor->SetColor(_color);
-	m_pTextColor->SetOpacity(1); // 0에 가까울 수록 투명해짐. 0 ~ 1
+	m_pTextColor->SetOpacity(_alpha); // 0에 가까울 수록 투명해짐. 0 ~ 1
 	m_pd2dRenderTarget->DrawText(_str.c_str(), static_cast<UINT32>(_str.size()), m_pTextFormat, rt, m_pTextColor);
 
 	// Draw Layout

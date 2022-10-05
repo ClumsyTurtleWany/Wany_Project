@@ -8,8 +8,7 @@ UserInterface::UserInterface()
 
 UserInterface::UserInterface(UserInterface* _src)
 {
-	textureKeyMap.insert(_src->textureKeyMap.begin(), _src->textureKeyMap.end());
-	infoList.assign(_src->infoList.begin(), _src->infoList.end());
+	copy(_src);
 }
 
 UserInterface::UserInterface(const Rect2f& _rect)
@@ -36,6 +35,10 @@ bool UserInterface::Load(std::wstring _path)
 			if (filename == L"font")
 			{
 				LoadFont(filepath);
+			}
+			else if (filename == L"btn")
+			{
+				LoadBtn(filepath);
 			}
 		}
 		else if (fileExtension == L".txt")
@@ -105,7 +108,7 @@ bool UserInterface::LoadFont(std::wstring _path, std::map<std::wstring, std::wst
 			if (LoadFont(filepath, &fontMap))
 			{
 				fontMapList.insert(std::make_pair(key, fontMap));
-			}
+			}		
 		}
 		else
 		{
@@ -126,6 +129,41 @@ bool UserInterface::LoadFont(std::wstring _path, std::map<std::wstring, std::wst
 	return true;
 }
 
+bool UserInterface::LoadBtn(std::wstring _path)
+{
+	std::filesystem::path path(_path);
+	for (auto& file : std::filesystem::directory_iterator(path))
+	{
+		std::wstring filepath = file.path();
+		std::wstring filename = file.path().filename();
+		std::wstring fileExtension = file.path().extension();
+		size_t extensionIdx = filename.find_last_of(L".");
+		std::wstring key = filename.substr(0, extensionIdx);
+
+		if (fileExtension == L"")
+		{
+			UI_Button* newBtn = new UI_Button;
+			if (newBtn->Load(filepath))
+			{
+				newBtn->initialize();
+				newBtn->setPos(pos);
+				childList.push_back(newBtn);
+			}
+			else
+			{
+				delete newBtn;
+				newBtn = nullptr;
+			}
+		}
+		else
+		{
+			continue;
+		}
+	}
+
+	return true;
+}
+
 void UserInterface::setPos(Vector2f _pos)
 {
 	pos = _pos;
@@ -139,6 +177,14 @@ void UserInterface::setPlayer(Player* _user)
 void UserInterface::addChild(UserInterface* _child)
 {
 	childList.push_back(_child);
+}
+
+void UserInterface::copy(UserInterface* _src)
+{
+	textureKeyMap.insert(_src->textureKeyMap.begin(), _src->textureKeyMap.end());
+	infoList.assign(_src->infoList.begin(), _src->infoList.end());
+	fontMapList.insert(_src->fontMapList.begin(), _src->fontMapList.end());
+	childList.assign(_src->childList.begin(), _src->childList.end());
 }
 
 bool UserInterface::initialize()

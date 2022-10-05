@@ -330,10 +330,10 @@ public:
 		list->at(2).pos = { rectNDC.LT.x, rectNDC.RB.y, 0.0f };
 		list->at(3).pos = { rectNDC.RB.x, rectNDC.RB.y, 0.0f };
 
-		list->at(0).color = { 1.0f, 1.0f, 1.0f, alphaVal };
-		list->at(1).color = { 1.0f, 1.0f, 1.0f, alphaVal };
-		list->at(2).color = { 1.0f, 1.0f, 1.0f, alphaVal };
-		list->at(3).color = { 1.0f, 1.0f, 1.0f, alphaVal };
+		list->at(0).color.w = alphaVal;
+		list->at(1).color.w = alphaVal;
+		list->at(2).color.w = alphaVal;
+		list->at(3).color.w = alphaVal;
 
 		if (!SpriteList.empty())
 		{

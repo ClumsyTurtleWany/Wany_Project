@@ -5,8 +5,10 @@
 class Scene_Title : public Scene
 {
 private:
-	Effect* titleEffect;
+	object2D<float>* titleBackground;
 	FMODSound* BGM;
+
+	float alpha = 1.0f;
 
 public:
 	Scene_Title(MapleStory* _game);

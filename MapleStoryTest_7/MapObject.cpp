@@ -14,6 +14,7 @@ MapObject::MapObject(const Rect2f& _rect, MapObjectType _type)// : currentState(
 	//pObj->createShader(ShaderType::Texture);
 	this->shape = _rect;
 	type = _type;
+	createShader(ShaderType::Texture);
 }
 
 MapObject::~MapObject()
@@ -71,7 +72,7 @@ MapObject::~MapObject()
 //}
 
 
-//
+////
 //bool MapObject::initialize()
 //{
 //	return true;

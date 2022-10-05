@@ -12,6 +12,7 @@ public:
 	float timeCounter = 0.0f;
 
 	float fallingHeight;
+	KeyState beforeJumpKeyState;
 
 public:
 	UserState_Falling(Player* _user);

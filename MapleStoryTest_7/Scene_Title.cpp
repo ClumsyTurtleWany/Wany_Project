@@ -10,18 +10,22 @@ Scene_Title::Scene_Title(MapleStory* _game) : Scene(_game)
 
 bool Scene_Title::initialize()
 {
-	RECT rectClient = g_pWindow->getClientRect();
-	Vector2f centerPos;
-	centerPos.x = (rectClient.right - rectClient.left) * 0.5f;
-	centerPos.y = (rectClient.bottom - rectClient.top) * 0.5f;
-	titleEffect = new Effect;
-	titleEffect->Load(TITLE_DIRECTORY);
-	titleEffect->setPos(centerPos);
-	titleEffect->initialize();
+	float clientWidth = g_pWindow->getClientWidth();
+	float clientHeight = g_pWindow->getClientHeight();
+
+	titleBackground = new object2D<float>;
+	titleBackground->createShader(ShaderType::Texture);
+	titleBackground->shape = Rect2f(0.0f, 0.0f, clientWidth, clientHeight);
+	if (DXTextureManager::getInstance()->Load(TITLE_BACKGROUND))
+	{
+		DXTexture* pTexture = DXTextureManager::getInstance()->getTexture(TITLE_BACKGROUND);
+		titleBackground->setTexture(pTexture);
+	}
 
 	BGM = FMODSoundManager::getInstance()->getSound(L"Title.mp3");
 	if (BGM != nullptr)
 	{
+		BGM->setVolume(0.5f);
 		BGM->play();
 	}
 	return true;
@@ -29,10 +33,11 @@ bool Scene_Title::initialize()
 
 bool Scene_Title::frame()
 {
-	if (!titleEffect->isEnd)
+	/*if (!titleEffect->isEnd)
 	{
 		titleEffect->frame();
-	}
+	}*/
+	alpha = 1.0f + (cos(Timer::getInstance()->getPlayTime()) * 0.7f);
 
 	if (Input::getInstance()->isPressedAnyKey())
 	{
@@ -45,17 +50,20 @@ bool Scene_Title::frame()
 
 bool Scene_Title::render()
 {
-	titleEffect->render();
+	titleBackground->render();
+	
+	DXWriter::getInstance()->draw(570, 550, L"Press Any Key to Continue...", D2D1_COLOR_F({ 1.0f, 1.0f, 1.0f, 1.0f }), alpha);
+
 	return true;
 }
 
 bool Scene_Title::release()
 {
-	if (titleEffect != nullptr)
+	if (titleBackground != nullptr)
 	{
-		delete titleEffect;
-		titleEffect = nullptr;
+		delete titleBackground;
+		titleBackground = nullptr;
 	}
-	return false;
+	return true;
 }
 

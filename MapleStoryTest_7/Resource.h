@@ -8,6 +8,7 @@
 #define SOUND_DIRECTORY L"../resource/MapleStory/Sound/"
 #define INTRO_DIRECTORY L"../resource/MapleStory/Intro/"
 #define TITLE_DIRECTORY L"../resource/MapleStory/Title/"
+#define TITLE_BACKGROUND L"../resource/MapleStory/Title/background.png"
 
 // UserState_Skill_0_1
 #define USER_STATE_SKILL_0_0_0 L"../resource/MapleStory/Skill/temp/0_0.bmp"
