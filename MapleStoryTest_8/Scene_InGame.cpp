@@ -24,7 +24,7 @@ Scene_InGame::Scene_InGame(MapleStory* _game) : Scene(_game)
 
 bool Scene_InGame::initialize()
 {
-	if (renderCamera == nullptr)
+	if (renderCamera == nullptr) 
 	{
 		RECT clientRect = g_pWindow->getClientRect();
 		renderCamera = new Camera;
@@ -43,7 +43,7 @@ bool Scene_InGame::initialize()
 	currentMap->PlayBGM();
 	renderCamera->setBoundary(currentMap->shape);
 
-	// Create Background Map.
+	// Create Background Map.//
 	//if (DXTextureManager::getInstance()->Load(MAP_SCENE_0))
 	//{
 	//	DXTexture* pTexture = DXTextureManager::getInstance()->getTexture(MAP_SCENE_0);
