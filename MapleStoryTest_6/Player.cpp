@@ -145,6 +145,8 @@ bool Player::frame(float _dt)
 		info.maxDamage++;
 
 		EffectManager::getInstance()->addEffectToJobList(Vector2f(shape.cx(), shape.cy() - 200), L"LevelUp");
+		FMODSound* pSound = FMODSoundManager::getInstance()->getSound(L"LevelUp.mp3");
+		pSound->playEffect();
 	}
 
 	beforeTime = currentTime;

@@ -1,0 +1,357 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Sample" Collapsed="true">
+    <Position X="21.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAAgAAAEAAAAAAgAAAAAAAAAAAQAQAAA=</HashCode>
+      <FileName>Sample.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UserState" Collapsed="true">
+    <Position X="10.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAQAAAAAAAAAABAAEAAAAAAAAAAAAAAAAAAQAQAQA=</HashCode>
+      <FileName>UserState.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UserState_Climb" Collapsed="true">
+    <Position X="5.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAIAgAAAAAAAEAAQEAAAAAAAAQAQAEAAAAAQAQAAA=</HashCode>
+      <FileName>UserState_Climb.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UserState_Falling" Collapsed="true">
+    <Position X="10.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAgAAIAAAAAAAQEAAACAAAAAAUAAAAAAAQAQAAA=</HashCode>
+      <FileName>UserState_Falling.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UserState_Idle" Collapsed="true">
+    <Position X="14.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAIAAAAAAAAAAQEAgAAAAAAAAQAAAAAACUAQAAQ=</HashCode>
+      <FileName>UserState_Idle.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UserState_Jump" Collapsed="true">
+    <Position X="17" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAgBAAAAAAAAAQEAAACAAAAAAQAAAAAAAQAQAAA=</HashCode>
+      <FileName>UserState_Jump.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UserState_MoveLeft" Collapsed="true">
+    <Position X="19.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAAAAAQEAgAAEAACAAQAAAAAAAQAQAAA=</HashCode>
+      <FileName>UserState_MoveLeft.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UserState_MoveRight" Collapsed="true">
+    <Position X="1.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAAAAAQEAgAAAAACAAQAAAAAIAQAQAAA=</HashCode>
+      <FileName>UserState_MoveRight.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UserState_Skill_0_1" Collapsed="true">
+    <Position X="3.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EBAAABgAAAAAAAAAAQECgAQAAAAAAQAAAAAABQAQAAA=</HashCode>
+      <FileName>UserState_Skill_0_1.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UserState_Skill_0_2" Collapsed="true">
+    <Position X="8" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EBAAABgAAAAAAAAAAUEAgAQAAAAAAQAAAAAABQAQAAA=</HashCode>
+      <FileName>UserState_Skill_0_2.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UserState_Skill_0_3" Collapsed="true">
+    <Position X="12.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAABgAAAAAAAAAAYEAgAQAAAAAAQAAAAAABQAQAAA=</HashCode>
+      <FileName>UserState_Skill_0_3.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NPCState" Collapsed="true">
+    <Position X="7.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAEAAAAAAAAAAAEAAAAAAAAAACAAAAAQAQAQAAA=</HashCode>
+      <FileName>NPCState.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NPCState_Attack" Collapsed="true">
+    <Position X="12.25" Y="4.75" Width="1.5" />
+    <InheritanceLine Type="NPCState" ManuallyRouted="true" FixedToPoint="true">
+      <Path>
+        <Point X="8.5" Y="4.062" />
+        <Point X="8.5" Y="4.375" />
+        <Point X="12.938" Y="4.375" />
+        <Point X="12.938" Y="4.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>EAgAAEAAAAACwAAAAQEAgAAAAQAAAQAEAAAIAQCwAAA=</HashCode>
+      <FileName>NPCState_Attack.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NPCState_Die" Collapsed="true">
+    <Position X="14.5" Y="4.75" Width="1.5" />
+    <InheritanceLine Type="NPCState" ManuallyRouted="true" FixedToPoint="true">
+      <Path>
+        <Point X="8.5" Y="4.062" />
+        <Point X="8.5" Y="4.375" />
+        <Point X="15.25" Y="4.375" />
+        <Point X="15.25" Y="4.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>EAAAAEAAAAAAwgAAAQEAgAAAAQAAAQAEAAAIAQCwAAA=</HashCode>
+      <FileName>NPCState_Die.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NPCState_Hit" Collapsed="true">
+    <Position X="1" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAEAAAAAgwAAAAQEAgAAAAQAAAQAEAAAIAQCwAAA=</HashCode>
+      <FileName>NPCState_Hit.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NPCState_Idle" Collapsed="true">
+    <Position X="3.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAEAAAAAAwAAAAQEAgAAAAQAAAQAEAAAIAQCwAAA=</HashCode>
+      <FileName>NPCState_Idle.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NPCState_MoveLeft" Collapsed="true">
+    <Position X="5.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAEAAAAAAwAAAAQEAgAAAAQAAAQAEAAAIgQCwAAA=</HashCode>
+      <FileName>NPCState_MoveLeft.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NPCState_MoveRight" Collapsed="true">
+    <Position X="7.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAUAAAAAAwAAAAQEAgAAAAQAAAQAEAAAIAQCwAAA=</HashCode>
+      <FileName>NPCState_MoveRight.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NPCState_Search" Collapsed="true">
+    <Position X="10" Y="4.75" Width="1.5" />
+    <InheritanceLine Type="NPCState" FixedToPoint="true">
+      <Path>
+        <Point X="8.5" Y="4.062" />
+        <Point X="8.5" Y="4.375" />
+        <Point X="10.812" Y="4.375" />
+        <Point X="10.812" Y="4.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>EAAAAEAAAAAAwAAAAQEAgAACAQAAAQAEAAAIAQCwAAA=</HashCode>
+      <FileName>NPCState_Search.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Scene" Collapsed="true">
+    <Position X="10.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EhAAAAgAAAAAAAAAAREAIIAAAAAAAAACAAAAAQARAQA=</HashCode>
+      <FileName>Scene.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Scene_Map_0" Collapsed="true">
+    <Position X="10.5" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Scene_Map_0.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DamageEffect" Collapsed="true">
+    <Position X="10.5" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EIAAgACAAAECgABAAAEAAAQAAAAAgAIAAAAAAYAQAAA=</HashCode>
+      <FileName>DamageEffect.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Effect" Collapsed="true">
+    <Position X="11.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>FAAAgAiAAAgAQAAAAQEAAIQAARAAAQAEAAAAAYAQAAA=</HashCode>
+      <FileName>Effect.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EffectManager" Collapsed="true">
+    <Position X="21.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAwAAAAAACAAIAAAFAIAAAACAAAAAEAAAAAQAQAAA=</HashCode>
+      <FileName>EffectManager.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="node&lt;Shape, ObjectDimension&gt;" Collapsed="true">
+    <Position X="6.75" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAACAAAAAAAABAAACBAAAAABAAAAAAIAAAIAAABCA=</HashCode>
+      <FileName>Node.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="node2D&lt;T&gt;" Collapsed="true">
+    <Position X="5.5" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAQAAA=</HashCode>
+      <FileName>Node.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="node3D&lt;T&gt;" Collapsed="true">
+    <Position X="7.75" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Node.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Octree&lt;T&gt;" Collapsed="true">
+    <Position X="2.75" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAIBEAAAIAQBAAAAAAkAAAAAABAARQAAAFAAIAQAAA=</HashCode>
+      <FileName>Octree.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="QuadTree&lt;T&gt;" Collapsed="true">
+    <Position X="0.5" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQIBAAAAIAQBAAAAAA0AAAAAgBAABQEAAFAAACQEBA=</HashCode>
+      <FileName>QuadTree.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SpaceDivision" Collapsed="true">
+    <Position X="1.75" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAEKAQAAAAAAAEAAAAAAAAAAAAAABAAAAQAAA=</HashCode>
+      <FileName>SpaceDivision.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Map" Collapsed="true">
+    <Position X="23.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EQAAAAAAAJAQAAAABAEEAAAAAAAAAEIAIAAIAQARAAA=</HashCode>
+      <FileName>Map.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MapObject" Collapsed="true">
+    <Position X="25.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAACAAAAAAAAAAAAAAAhAAAAAAAAAAAAEAA=</HashCode>
+      <FileName>MapObject.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NPC" Collapsed="true">
+    <Position X="21.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAACAACAAAgAAKAEAAoEAEAAAAAAARAAAAQARhBA=</HashCode>
+      <FileName>NPC.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NPCManager" Collapsed="true">
+    <Position X="23.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EoAEkAAAAAAAAYIAAAkAIAEEAAIAAAABAAAAQYBQAAA=</HashCode>
+      <FileName>NPCManager.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Player" Collapsed="true">
+    <Position X="25.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAABgAACAAAAIAIQEQAgQBAAAAACAAQAAAAQARABA=</HashCode>
+      <FileName>Player.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Skill" Collapsed="true">
+    <Position X="12.75" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EBCAgAAAAABAAJABAQFAAEAAACAAAAAAIEAAAYgQAQA=</HashCode>
+      <FileName>Skill.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SkillManager" Collapsed="true">
+    <Position X="23.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAgAAAAAABAAAAAAEAAAAAAAAAAgAFAAAAAQAQAQA=</HashCode>
+      <FileName>SkillManager.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UIManager" Collapsed="true">
+    <Position X="25.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAgAAAABAAAAAAEBEAAAAAAAAAAAAEAAAAAQAQAAA=</HashCode>
+      <FileName>UIManager.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UI_Button" Collapsed="true">
+    <Position X="0.75" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAQAgAAAAAAAAAAAAAEAAAAAAAAAAAAEEABACQAQAAA=</HashCode>
+      <FileName>UI_Button.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UI_Exit" Collapsed="true">
+    <Position X="3" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAAAAAEEAAAAAAAAAAAAAAAAAAQAQAAg=</HashCode>
+      <FileName>UI_Exit.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UI_Exp" Collapsed="true">
+    <Position X="5.25" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAAAAgAEAAAAAAAAAAAAAAAAAAQAQACA=</HashCode>
+      <FileName>UI_Exp.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UI_HPStatus" Collapsed="true">
+    <Position X="7.5" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAACAAAAAQEAAAAAAAAAAAAAkgQAAQAQAAA=</HashCode>
+      <FileName>UI_HPStatus.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UserInterface" Collapsed="true">
+    <Position X="4" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EIAAgACAEAAAAAAAABEAAIAAAAAAgEAAIAAAAYAQAQg=</HashCode>
+      <FileName>UserInterface.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="NPCInfo" Collapsed="true">
+    <Position X="21.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAABAAAAIAAAAAAAAKBgBABAAAAAAAIAAAAAgA=</HashCode>
+      <FileName>NPC.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="PlayerInfo" Collapsed="true">
+    <Position X="23.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAoACAAAAAgIEBAAAAAAKBgBEAAAAAQQAAAAAAAAA=</HashCode>
+      <FileName>Player.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Enum Name="MapObjectType" Collapsed="true">
+    <Position X="21.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAgAEAAAAAAAAAAAAAAAAAABAAABAAA=</HashCode>
+      <FileName>MapObject.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="SkillType" Collapsed="true">
+    <Position X="23.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAgAAACIAAEAAAEAAAAAAAAAACAAAAIAA=</HashCode>
+      <FileName>Skill.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="맑은 고딕" Size="9" />
+</ClassDiagram>

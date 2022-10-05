@@ -239,4 +239,7 @@
       <Filter>DirectX\HLSL</Filter>
     </Text>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
 </Project>

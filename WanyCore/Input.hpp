@@ -1,5 +1,6 @@
 #pragma once
 #include "Define.hpp"
+#define KEY_COUNT (int)256
 
 enum class KeyState
 {
@@ -16,7 +17,7 @@ private:
 	HWND		hWnd;
 
 public:
-	KeyState dwKeyState[256]; // mouse 버튼 + keyboard 버튼
+	KeyState dwKeyState[KEY_COUNT]; // mouse 버튼 + keyboard 버튼
 	POINT m_ptPos; // mouse position
 
 public:
@@ -28,5 +29,6 @@ public:
 public:
 	KeyState getKey(DWORD _key);
 	void setWndHandle(HWND _hWnd);
+	bool isPressedAnyKey();
 	
 };

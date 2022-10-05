@@ -1,5 +1,6 @@
 #include "UserInterface.hpp"
 #include "DXTextureManager.hpp"
+#include "UI_Button.hpp"
 
 UserInterface::UserInterface()
 {

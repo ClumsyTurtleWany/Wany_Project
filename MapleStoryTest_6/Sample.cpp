@@ -12,16 +12,8 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
     return 1;
 }
 
-
-
 bool Sample::initialize()
 {
-    /*user = new Player(Rect2f(100, 100, 39, 35));
-    if (DXTextureManager::getInstance()->Load(USER_CHARACTER_0))
-    {
-        user->pObj->setTexture(DXTextureManager::getInstance()->getTexture(USER_CHARACTER_0));
-    }*/
-
     Scene_Map0 = new Scene_Map_0;
     Scene_Map0->setDevice(m_pd3dDevice, m_pImmediateContext);
     Scene_Map0->initialize();
@@ -44,14 +36,12 @@ bool Sample::frame()
     }
 
     currentScene->frame();
-    //user->frame(Timer::getInstance()->getDeltaTime());
     return true;
 }
 
 bool Sample::render()
 {
     currentScene->render();
-    //user->render();
     return true;
 }
 

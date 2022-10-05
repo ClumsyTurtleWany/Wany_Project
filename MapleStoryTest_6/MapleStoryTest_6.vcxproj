@@ -42,7 +42,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -187,7 +187,7 @@ copy "..\\lib\\FMOD\\fmod.dll" "..\\$(TargetName)\\"</Command>
     <ClInclude Include="SkillManager.hpp" />
     <ClInclude Include="SpaceDivision.hpp" />
     <ClInclude Include="UIManager.hpp" />
-    <ClInclude Include="UI_Btn.hpp" />
+    <ClInclude Include="UI_Button.hpp" />
     <ClInclude Include="UI_Exit.hpp" />
     <ClInclude Include="UI_Exp.hpp" />
     <ClInclude Include="UI_HPStatus.hpp" />
@@ -226,7 +226,7 @@ copy "..\\lib\\FMOD\\fmod.dll" "..\\$(TargetName)\\"</Command>
     <ClCompile Include="Skill.cpp" />
     <ClCompile Include="SkillManager.cpp" />
     <ClCompile Include="UIManager.cpp" />
-    <ClCompile Include="UI_Btn.cpp" />
+    <ClCompile Include="UI_Button.cpp" />
     <ClCompile Include="UI_Exit.cpp" />
     <ClCompile Include="UI_Exp.cpp" />
     <ClCompile Include="UI_HPStatus.cpp" />
@@ -246,6 +246,9 @@ copy "..\\lib\\FMOD\\fmod.dll" "..\\$(TargetName)\\"</Command>
     <ProjectReference Include="..\WanyCore\WanyCore.vcxproj">
       <Project>{dcbbff00-fb32-44c8-93e3-5b71b5f68a18}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

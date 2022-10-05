@@ -78,6 +78,11 @@ void Map::updateDynamicObject()
 	collisionMap->updateDynamicObject();
 }
 
+void Map::setBGM(FMODSound* _bgm)
+{
+	BGM = _bgm;
+}
+
 void Map::updateShader()
 {
 	std::vector<Vertex>* list = pShader->getVertexList();
@@ -140,6 +145,7 @@ void Map::updateShaderCamera()
 bool Map::initialize()
 {
 	object2D<float>::initialize();
+	BGM->play();
 
 	return true;
 }

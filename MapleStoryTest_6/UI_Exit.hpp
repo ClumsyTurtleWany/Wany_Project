@@ -12,6 +12,9 @@ public:
 	virtual ~UI_Exit();
 
 public:
+	virtual bool Load(std::wstring _path);
+
+public:
 	virtual bool initialize() override;
 	virtual bool frame() override;
 	virtual bool render() override;

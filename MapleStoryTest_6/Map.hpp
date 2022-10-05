@@ -4,12 +4,14 @@
 #include "QuadTree.hpp"
 #include "Camera.hpp"
 #include "MapObject.hpp"
+#include "FMODSoundManager.hpp"
 
 class Map : public object2D<float>
 {
 private:
 	//SpaceDivision* collisionMap;
 	QuadTree<float>* collisionMap;
+	FMODSound* BGM;
 
 public:
 	std::vector<MapObject*> mapObjectList;
@@ -25,6 +27,7 @@ public:
 	bool Collision(object2D<float>* _src, std::vector<object2D<float>*>* _dst, std::vector<Rect_<float>>* _dstSection = nullptr);
 	bool CollisionMapObject(object2D<float>* _obj, MapObjectType _targetType, std::vector<object2D<float>*>* _dst = nullptr, std::vector<Rect_<float>>* _dstSection = nullptr);
 	void updateDynamicObject();
+	void setBGM(FMODSound* _bgm);
 
 public:
 	virtual void updateShader() override;

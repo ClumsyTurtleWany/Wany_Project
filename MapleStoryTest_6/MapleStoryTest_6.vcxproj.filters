@@ -219,7 +219,7 @@
     <ClInclude Include="UI_Exit.hpp">
       <Filter>Object\UI</Filter>
     </ClInclude>
-    <ClInclude Include="UI_Btn.hpp">
+    <ClInclude Include="UI_Button.hpp">
       <Filter>Object\UI</Filter>
     </ClInclude>
   </ItemGroup>
@@ -332,8 +332,11 @@
     <ClCompile Include="UI_Exit.cpp">
       <Filter>Object\UI</Filter>
     </ClCompile>
-    <ClCompile Include="UI_Btn.cpp">
+    <ClCompile Include="UI_Button.cpp">
       <Filter>Object\UI</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

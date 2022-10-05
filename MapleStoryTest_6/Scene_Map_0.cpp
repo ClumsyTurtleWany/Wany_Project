@@ -1,6 +1,12 @@
 #include "Scene_Map_0.hpp"
 #include "UI_HPStatus.hpp"
 #include "UI_Exp.hpp"
+#include "UI_Button.hpp"
+
+void GameExit()
+{
+	PostQuitMessage(0);
+}
 
 bool Scene_Map_0::initialize()
 {
@@ -61,6 +67,13 @@ bool Scene_Map_0::initialize()
 		MapObject* floor = new MapObject(Rect2f(0, 1255, 2095, 155), MapObjectType::Floor);
 		floor->isPierce = false;
 		currentMap->addMapObject(floor);
+
+		if (FMODSoundManager::getInstance()->LoadDir(SOUND_DIRECTORY))
+		{
+			FMODSound* pSound = FMODSoundManager::getInstance()->getSound(L"BadGuys.mp3");
+			currentMap->setBGM(pSound);
+		}
+		currentMap->initialize();
 	}
 
 	if (DXTextureManager::getInstance()->Load(USER_CHARACTER_0))
@@ -160,6 +173,15 @@ bool Scene_Map_0::initialize()
 	uiExp->setPos(Vector2f(0.0f, 760.0f));
 	uiExp->setPlayer(user);
 	uiList.push_back(uiExp);
+
+	UI_Button* uiBtn = new UI_Button;
+	if (uiBtn->Load(L"../resource/MapleStory/UI/Exit/btn/yes/"))
+	{
+		uiBtn->initialize();
+		uiBtn->setPos(Vector2f(0.0f, 0.0f));
+		uiBtn->setCallbackFunction(GameExit);
+		uiList.push_back(uiBtn);
+	}
 
 	return true;
 }

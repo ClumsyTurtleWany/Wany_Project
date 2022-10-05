@@ -8,6 +8,7 @@ bool GameCore::CoreInitialize()
 		return false;
 	}
 
+	Input::getInstance()->setWndHandle(hWnd);
 	if (!Input::getInstance()->initialize())
 	{
 		OutputDebugString(L"WanyCore::Input::Failed Initialize.\n");

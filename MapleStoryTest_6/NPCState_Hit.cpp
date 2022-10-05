@@ -135,6 +135,9 @@ bool NPCState_Hit::initialize()
 		npc->force.x = -100.0f;
 	}
 
+	FMODSound* pSound = FMODSoundManager::getInstance()->getSound(L"Damage.mp3");
+	pSound->playEffect();
+
 	return true;
 }
 

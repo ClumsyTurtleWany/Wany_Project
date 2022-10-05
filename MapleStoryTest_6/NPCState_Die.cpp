@@ -130,6 +130,9 @@ bool NPCState_Die::initialize()
 	npc->force.x = 0.0f;
 	npc->force.y = 0.0f;
 
+	FMODSound* pSound = FMODSoundManager::getInstance()->getSound(L"Die.mp3");
+	pSound->playEffect();
+
 	return true;
 }
 

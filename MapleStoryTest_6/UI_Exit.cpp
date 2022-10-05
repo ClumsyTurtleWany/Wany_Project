@@ -20,6 +20,11 @@ UI_Exit::~UI_Exit()
 {
 }
 
+bool UI_Exit::Load(std::wstring _path)
+{
+	return false;
+}
+
 bool UI_Exit::initialize()
 {
 	UserInterface::initialize();

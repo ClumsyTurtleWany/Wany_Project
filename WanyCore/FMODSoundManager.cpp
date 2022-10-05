@@ -2,7 +2,9 @@
 
 bool FMODSoundManager::Load(std::wstring _filename, SoundType _type)
 {
-	auto it = m_SoundList.find(_filename);
+	std::filesystem::path path(_filename);
+	std::wstring key = path.filename();
+	auto it = m_SoundList.find(key);
 	if (it != m_SoundList.end())
 	{
 		return true;
@@ -32,7 +34,7 @@ bool FMODSoundManager::Load(std::wstring _filename, SoundType _type)
 		newSound->setLoop(true);
 	}
 	
-	m_SoundList.insert(std::make_pair(_filename, newSound));
+	m_SoundList.insert(std::make_pair(key, newSound));
 
 	return true;
 }
