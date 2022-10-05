@@ -72,7 +72,7 @@ MapObject::~MapObject()
 //}
 
 
-////
+//// 
 //bool MapObject::initialize()
 //{
 //	return true;
