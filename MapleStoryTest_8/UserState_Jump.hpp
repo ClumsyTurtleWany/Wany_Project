@@ -10,6 +10,8 @@ public:
 
 	float beforeTime = 0.0f;
 	float timeCounter = 0.0f;
+	float doubleJumpTimeCounter = 0.0f;
+	float doubleJumpAbleTime = 0.0f;
 	KeyState beforeJumpKeyState;
 
 public:

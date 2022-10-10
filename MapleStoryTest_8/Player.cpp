@@ -2,6 +2,7 @@
 #include "UserState_Idle.hpp"
 #include "EffectManager.hpp"
 #include "NPC.hpp"
+#include "Resource.h"
 
 Player::Player() : currentState(new UserState_Idle(this))
 {
@@ -26,6 +27,8 @@ Player::~Player()
 bool Player::initialize()
 {
 	beforeTime = Timer::getInstance()->getPlayTime();
+	info.Load(USER_DATA_DIRECTORY);
+	moveTo(info.currentMapPos);
 	return true;
 }
 
@@ -119,17 +122,21 @@ bool Player::frame(float _dt)
 	{
 		info.currentExp -= info.requiredExp;
 		info.level++;
-		info.maxHP *= 1.5;
+		info.maxHP += static_cast<int>(50.0f * (1.0f + (static_cast<float>(info.level) / 100.0f)));
 		info.currentHP = info.maxHP;
-		info.maxMP *= 1.5;
+		info.maxMP += static_cast<int>(50.0f * (1.0f + (static_cast<float>(info.level) / 100.0f)));
 		info.currentMP = info.maxMP;
-		info.requiredExp *= 1.5;
+		info.requiredExp *= 1.2;
 		info.maxDamage++;
 
 		EffectManager::getInstance()->addEffectToJobList(Vector2f(shape.cx(), shape.cy() - 200), L"LevelUp");
 		FMODSound* pSound = FMODSoundManager::getInstance()->getSound(L"LevelUp.mp3");
 		pSound->playEffect();
 	}
+
+	info.currentMapName = currentMap->getMapName();
+	info.currentMapPos.x = shape.LT.x;
+	info.currentMapPos.y = shape.LT.y;
 
 	beforeTime = currentTime;
 
@@ -161,6 +168,7 @@ bool Player::release()
 	//pObj->release();
 	//delete pObj;
 	//pObj = nullptr;
+	info.Save(USER_DATA_DIRECTORY);
 	return currentState->release();
 }
 

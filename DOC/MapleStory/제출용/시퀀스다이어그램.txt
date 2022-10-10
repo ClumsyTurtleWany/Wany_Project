@@ -1,0 +1,26 @@
+title Scene In Game(frame == render)
+
+MapleStory->+Scene:frame()
+Scene->+Scene_InGame:frame()
+Scene_InGame->+Map:frame()
+Map->+MapObject:frame()
+MapObject-->-Map:void
+Map->+NPC:frame()
+NPC->+NPCState:frame()
+NPCState->-NPC:return
+NPC-->-Map:void
+Map-->-Scene_InGame:void
+Scene_InGame->+Player:frame()
+Player->+PlayerState:frame()
+PlayerState->-Player:return
+Player->+Camera:frame()
+Camera-->-Player:void
+Player-->-Scene_InGame:void
+Scene_InGame->+SkillManager:frame()
+SkillManager-->-Scene_InGame:void
+Scene_InGame->+EffectManager:frame()
+EffectManager-->-Scene_InGame:void
+Scene_InGame->+UserInterface:frame()
+UserInterface-->-Scene_InGame:void
+Scene_InGame-->-Scene:void
+Scene->-MapleStory:void

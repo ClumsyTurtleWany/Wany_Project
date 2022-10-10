@@ -4,7 +4,12 @@
 // Direct X -> Texture Tool Kit
 #include "DXTK/WICTextureLoader.h"
 #include "DXTK/DDSTextureLoader.h"
-#pragma comment(lib, "DirectXTK.lib")
+
+#ifdef _DEBUG
+#pragma comment(lib, "DirectXTK_d.lib")
+#else
+#pragma comment(lib, "DirectXTK_r.lib")
+#endif
 
 class DXTexture
 {

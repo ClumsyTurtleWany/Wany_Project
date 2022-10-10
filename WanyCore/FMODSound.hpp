@@ -6,7 +6,11 @@
 #include "fmod/fmod.h"
 #include "fmod/fmod.hpp"
 #include "fmod/fmod_errors.h"
+#ifdef _DEBUG
 #pragma comment(lib, "fmod_vc.lib")
+#else
+#pragma comment(lib, "fmodL_vc.lib")
+#endif
 
 #include "Define.hpp"
 

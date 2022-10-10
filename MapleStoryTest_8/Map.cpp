@@ -3,6 +3,7 @@
 #include "Player.hpp"
 #include "Timer.hpp"
 #include "NPCManager.hpp"
+#include "Portal.hpp"
 
 Map::Map()
 {
@@ -93,6 +94,7 @@ bool Map::LoadInfo(std::wstring _path)
 				std::wstring bgmName(lineData.begin(), lineData.end());
 
 				BGM = FMODSoundManager::getInstance()->getSound(bgmName);
+				BGM->setLoop(true);
 			}
 			else if (dataName == "monster")
 			{
@@ -139,12 +141,25 @@ bool Map::LoadInfo(std::wstring _path)
 
 					MapObject* newMapObject = new MapObject(Rect2f(x, y, width, height), MapObjectType::Floor);
 					
+					std::getline(file, lineData, ',');
+					int spawnCnt = std::stoi(lineData);
+					float offset_x = width / static_cast<float>(spawnCnt + 1);
+					for (int cnt = 0; cnt < spawnCnt; cnt++)
+					{
+						SpawnPoint spawnPoint;
+						spawnPoint.pos.x = x + offset_x * (cnt + 1);
+						spawnPoint.pos.y = y;
+						spawnPoint.boundary = Rect2f(x, 0, width, y);
+						spawnPointList.push_back(spawnPoint);
+					}
+
 					std::getline(file, lineData, '\n');
-					if (lineData == "true")
+					int pierce = std::stoi(lineData);
+					if (pierce == 1)
 					{
 						newMapObject->isPierce = true;
 					}
-					else if (lineData == "false")
+					else if (pierce == 0)
 					{
 						newMapObject->isPierce = false;
 					}
@@ -194,39 +209,20 @@ bool Map::LoadInfo(std::wstring _path)
 					std::getline(file, lineData, '\n');
 					float height = std::stof(lineData);
 
-					MapObject* newMapObject = new MapObject(Rect2f(x, y, width, height), MapObjectType::Portal);
-					mapObjectList.push_back(newMapObject);
-				}
-			}
-			else if (dataName == "spawn")
-			{
-				std::string lineData;
-				std::getline(file, lineData, '\n');
-				maxNPC = std::stoi(lineData);
-				for (int i = 0; i < maxNPC; i++)
-				{
-					SpawnPoint spawn;
-					std::getline(file, lineData, ',');
-					spawn.pos.x = std::stof(lineData);
-
-					std::getline(file, lineData, ',');
-					spawn.pos.y = std::stof(lineData);
-
-					std::getline(file, lineData, ',');
-					float x = std::stof(lineData);
-
-					std::getline(file, lineData, ',');
-					float y = std::stof(lineData);
-
-					std::getline(file, lineData, ',');
-					float width = std::stof(lineData);
+					Portal* newPortal = new Portal(Rect2f(x, y, width, height));
 
 					std::getline(file, lineData, '\n');
-					float height = std::stof(lineData);
+					std::wstring dstMap(lineData.begin(), lineData.end());
+					newPortal->setDstMap(dstMap);
 
-					spawn.boundary = Rect2f(x, 0, width, y);
+					Vector2f dstPos;
+					std::getline(file, lineData, ',');
+					dstPos.x = std::stof(lineData);
+					std::getline(file, lineData, '\n');
+					dstPos.y = std::stof(lineData);
+					newPortal->setDstPos(dstPos);
 
-					spawnPointList.push_back(spawn);
+					portalList.push_back(newPortal);
 				}
 			}
 		}
@@ -240,14 +236,32 @@ void Map::setUser(Player* _user)
 	user = _user;
 }
 
+void Map::setSceneToPortal(Scene_InGame* _InGame)
+{
+	for (auto it : portalList)
+	{
+		it->setScene(_InGame);
+	}
+}
+
 void Map::PlayBGM()
 {
 	BGM->play();
 }
 
+void Map::StopBGM()
+{
+	BGM->stop();
+}
+
 void Map::setMapName(std::wstring _name)
 {
 	mapName = _name;
+}
+
+std::wstring Map::getMapName()
+{
+	return mapName;
 }
 
 bool Map::Collision(object2D<float>* _src, std::vector<object2D<float>*>* _dst, std::vector<Rect_<float>>* _dstSection)
@@ -260,7 +274,7 @@ bool Map::CollisionMapObject(object2D<float>* _obj, MapObjectType _targetType, s
 	bool isCollision = false;
 	for (auto it : mapObjectList)
 	{
-		if ((it->type == _targetType))
+		if ((it->mapObjectType == _targetType))
 		{
 			Rect2f intersection;
 			if (_obj->shape.intersectRect(it->shape, &intersection))
@@ -282,6 +296,20 @@ bool Map::CollisionMapObject(object2D<float>* _obj, MapObjectType _targetType, s
 		else
 		{
 			continue;
+		}
+	}
+	return isCollision;
+}
+
+bool Map::CollisionPortal(object2D<float>* _obj, std::vector<Portal*>* _dst)
+{
+	bool isCollision = false;
+	for (auto it : portalList)
+	{
+		if (it->hitbox.RectInRect(_obj->hitbox))
+		{
+			isCollision = true;
+			_dst->push_back(it);
 		}
 	}
 	return isCollision;
@@ -366,10 +394,25 @@ bool Map::initialize()
 		collisionMap->create(&this->shape);
 	}
 
-	//BGM->play();
+	for (auto it : mapObjectList)
+	{
+		it->setCamera(renderCamera);
+		it->mapWidth = mapWidth;
+		it->mapHeight = mapHeight;
+		it->initialize();
+	}
+
+	for (auto it : portalList)
+	{
+		it->setCamera(renderCamera);
+		it->mapWidth = mapWidth;
+		it->mapHeight = mapHeight;
+		it->initialize();
+	}
 
 	size_t monsterTypeCnt = monsterNameList.size();
-	for (size_t idx = 0; idx < spawnPointList.size(); idx++)
+	maxMonster = spawnPointList.size();
+	for (size_t idx = 0; idx < maxMonster; idx++)
 	{
 		int monsterType = rand() % monsterTypeCnt;
 
@@ -400,6 +443,11 @@ bool Map::frame(float _dt)
 		it->frame(_dt);
 	}
 
+	for (auto it : portalList)
+	{
+		it->frame(_dt);
+	}
+
 	for (auto it = npcList.begin(); it != npcList.end();)
 	{
 		if ((*it)->deleteFlag)
@@ -413,13 +461,13 @@ bool Map::frame(float _dt)
 		{
 			(*it)->frame(_dt);
 
-			/*if (!user->invincible)
+			if (!user->invincible)
 			{
 				if ((*it)->hitbox.intersectRect(user->hitbox))
 				{
 					user->hit((*it)->info.minDamage);
 				}
-			}*/
+			}
 		}
 		it++;
 	}
@@ -427,7 +475,7 @@ bool Map::frame(float _dt)
 	if (timeCounter >= spawnTime)
 	{
 		timeCounter = 0.0f;
-		int cnt = maxNPC - npcList.size();
+		int cnt = maxMonster - npcList.size();
 		for (int i = 0; i < cnt; i++)
 		{
 			int randMonster = rand() % monsterNameList.size();
@@ -457,6 +505,13 @@ bool Map::render()
 
 	for (auto it : mapObjectList)
 	{
+		it->render();
+		DrawBorder(it->shape, BORDER_COLOR_YELLOW);
+	}
+
+	for (auto it : portalList)
+	{
+		it->render();
 		DrawBorder(it->shape, BORDER_COLOR_YELLOW);
 	}
 

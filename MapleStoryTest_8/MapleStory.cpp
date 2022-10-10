@@ -8,7 +8,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
 {
     MapleStory sampleWindow;
     //sampleWindow.createWindow(hInstance, L"TestName", 1024, 768);
-    sampleWindow.createWindow(hInstance, L"TestName", 1366, 768);
+    sampleWindow.createWindow(hInstance, L"MapleStory", 1366, 768);
     sampleWindow.run();
 
     return 1;

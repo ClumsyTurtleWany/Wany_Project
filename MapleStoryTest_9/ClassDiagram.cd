@@ -1,0 +1,459 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="MapleStory" Collapsed="true">
+    <Position X="13.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAAgAAAEAAAAIAAAAAAAAAAAAAQAQAAA=</HashCode>
+      <FileName>MapleStory.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="currentScene" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="UserState" Collapsed="true">
+    <Position X="20" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAQAAAAAAAAAABAAEAAAAAAAAAAAAAAAAAAQAQAQA=</HashCode>
+      <FileName>UserState.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UserState_Climb" Collapsed="true">
+    <Position X="22" Y="3.75" Width="1.5" />
+    <InheritanceLine Type="UserState" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="21.5" Y="3.062" />
+        <Point X="21.74" Y="3.062" />
+        <Point X="21.74" Y="4.125" />
+        <Point X="22" Y="4.125" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>EAAAIAgAAAAAAAEAAQEAAAAAAAAQAQAEAAAAAQAQAAA=</HashCode>
+      <FileName>UserState_Climb.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UserState_Falling" Collapsed="true">
+    <Position X="22" Y="5.75" Width="1.5" />
+    <InheritanceLine Type="UserState" FixedFromPoint="true">
+      <Path>
+        <Point X="21.5" Y="3.062" />
+        <Point X="21.74" Y="3.062" />
+        <Point X="21.74" Y="6.096" />
+        <Point X="22" Y="6.096" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>EgAAAAgAAIAAAAAAAQEAAACAAAAAAUAAAAAAAQAQAAA=</HashCode>
+      <FileName>UserState_Falling.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UserState_Idle" Collapsed="true">
+    <Position X="22" Y="2.75" Width="1.5" />
+    <InheritanceLine Type="UserState" FixedFromPoint="true">
+      <Path>
+        <Point X="21.5" Y="3.062" />
+        <Point X="22" Y="3.062" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>EAAAAAIAAAAAAAAAAQEAgAAAAAAAAQAAAAAACUAQAAQ=</HashCode>
+      <FileName>UserState_Idle.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UserState_Jump" Collapsed="true">
+    <Position X="22" Y="4.75" Width="1.5" />
+    <InheritanceLine Type="UserState" FixedFromPoint="true">
+      <Path>
+        <Point X="21.5" Y="3.062" />
+        <Point X="21.74" Y="3.062" />
+        <Point X="21.74" Y="5.096" />
+        <Point X="22" Y="5.096" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>EgAAAAgBAAAAAAAAAQEAAACAAAAAAQBAAAAAAQASAAA=</HashCode>
+      <FileName>UserState_Jump.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UserState_MoveLeft" Collapsed="true">
+    <Position X="22" Y="6.75" Width="1.5" />
+    <InheritanceLine Type="UserState" FixedFromPoint="true">
+      <Path>
+        <Point X="21.5" Y="3.062" />
+        <Point X="21.74" Y="3.062" />
+        <Point X="21.74" Y="7.096" />
+        <Point X="22" Y="7.096" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAAAAAQEAgAAEAACAAQAAAAAAAQAQAAA=</HashCode>
+      <FileName>UserState_MoveLeft.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UserState_MoveRight" Collapsed="true">
+    <Position X="22" Y="7.75" Width="1.5" />
+    <InheritanceLine Type="UserState" FixedFromPoint="true">
+      <Path>
+        <Point X="21.5" Y="3.062" />
+        <Point X="21.74" Y="3.062" />
+        <Point X="21.74" Y="8.096" />
+        <Point X="22" Y="8.096" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAAAAAQEAgAAAAACAAQAAAAAIAQAQAAA=</HashCode>
+      <FileName>UserState_MoveRight.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NPCState" Collapsed="true">
+    <Position X="5.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAEAAAAAAAAAAAEAAAAAAAAAACAAAAAQAQAQAAA=</HashCode>
+      <FileName>NPCState.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NPCState_Attack" Collapsed="true">
+    <Position X="2.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAgAAEAAAAACwAAAAQEAgAAAAQAAAQAEAAAIAQCwAAA=</HashCode>
+      <FileName>NPCState_Attack.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NPCState_Die" Collapsed="true">
+    <Position X="4" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAEAAAAAAwgAAAQEAgAAAAQAAAQAEAAAIAQCwAAA=</HashCode>
+      <FileName>NPCState_Die.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NPCState_Hit" Collapsed="true">
+    <Position X="11" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAEAAAAAgwAAAAQEAgAAAAQAAAQAEAAAIAQCwAAA=</HashCode>
+      <FileName>NPCState_Hit.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NPCState_Idle" Collapsed="true">
+    <Position X="0.5" Y="6.75" Width="1.5" />
+    <InheritanceLine Type="NPCState" FixedFromPoint="true">
+      <Path>
+        <Point X="6.5" Y="6.062" />
+        <Point X="6.5" Y="6.375" />
+        <Point X="1.25" Y="6.375" />
+        <Point X="1.25" Y="6.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>EAAAAEAAAAAAwAAAAQEAgAAAAQAAAQAEAAAIAQCwAAA=</HashCode>
+      <FileName>NPCState_Idle.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NPCState_MoveLeft" Collapsed="true">
+    <Position X="7.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAEAAAAAAwAAAAQEAgAAAAQAAAQAEAAAIgQCwAAA=</HashCode>
+      <FileName>NPCState_MoveLeft.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NPCState_MoveRight" Collapsed="true">
+    <Position X="9.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAUAAAAAAwAAAAQEAgAAAAQAAAQAEAAAIAQCwAAA=</HashCode>
+      <FileName>NPCState_MoveRight.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NPCState_Search" Collapsed="true">
+    <Position X="5.75" Y="6.75" Width="1.5" />
+    <InheritanceLine Type="NPCState" FixedFromPoint="true">
+      <Path>
+        <Point X="6.5" Y="6.062" />
+        <Point X="6.5" Y="6.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>EAAAAEAAAAAAwAAAAQEAgAACAQAAAQAEAAAIAQCwAAA=</HashCode>
+      <FileName>NPCState_Search.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Scene" Collapsed="true">
+    <Position X="13.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAAAAgAEAAAAAQAAAAAAIAAAAAQAQAAA=</HashCode>
+      <FileName>Scene.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Scene_Intro" Collapsed="true">
+    <Position X="15.5" Y="3.75" Width="1.5" />
+    <InheritanceLine Type="Scene" FixedFromPoint="true">
+      <Path>
+        <Point X="15" Y="2.062" />
+        <Point X="15.24" Y="2.062" />
+        <Point X="15.24" Y="4.096" />
+        <Point X="15.5" Y="4.096" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>EAAAAAACAAAAAAAAAAEAAAAAAAAAIAAAAAAAAQAQAAA=</HashCode>
+      <FileName>Scene_Intro.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Scene_InGame" Collapsed="true">
+    <Position X="15.5" Y="1.75" Width="1.5" />
+    <Members>
+      <Field Name="currentMap" Hidden="true" />
+    </Members>
+    <InheritanceLine Type="Scene" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="15" Y="2.062" />
+        <Point X="15.5" Y="2.062" />
+      </Path>
+    </InheritanceLine>
+    <AssociationLine Name="user" Type="Player" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="17" Y="2.125" />
+        <Point X="17.375" Y="2.125" />
+        <Point X="17.375" Y="3.096" />
+        <Point X="18" Y="3.096" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="HPStatus" Type="UI_HPStatus" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="17" Y="2.125" />
+        <Point X="17.375" Y="2.125" />
+        <Point X="17.375" Y="5.014" />
+        <Point X="18" Y="5.014" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="uiExp" Type="UI_Exp" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="17" Y="2.125" />
+        <Point X="17.375" Y="2.125" />
+        <Point X="17.375" Y="3.892" />
+        <Point X="18" Y="3.892" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="uiExit" Type="UI_Exit" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="17" Y="2.125" />
+        <Point X="17.375" Y="2.125" />
+        <Point X="17.375" Y="6.096" />
+        <Point X="18" Y="6.096" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>EAABAAAAAAACAAAAABEAIAAAAQAAEAAAAAACAQARAQA=</HashCode>
+      <FileName>Scene_InGame.hpp</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="user" />
+      <Field Name="currentMap" />
+      <Field Name="HPStatus" />
+      <Field Name="uiExp" />
+      <Field Name="uiExit" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Scene_Title" Collapsed="true">
+    <Position X="15.5" Y="2.75" Width="1.5" />
+    <InheritanceLine Type="Scene" FixedFromPoint="true">
+      <Path>
+        <Point X="15" Y="2.062" />
+        <Point X="15.24" Y="2.062" />
+        <Point X="15.24" Y="3.096" />
+        <Point X="15.5" Y="3.096" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>EAACAAAAAAAAAAAAAAEAAAAAAAAAACAAAAAQAQAQAAA=</HashCode>
+      <FileName>Scene_Title.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DamageEffect" Collapsed="true">
+    <Position X="4.5" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EIAAgACAAAECgABAAAEAAAQAAAAAgAIAAAAAAYAQAAA=</HashCode>
+      <FileName>DamageEffect.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Effect" Collapsed="true">
+    <Position X="2.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>FAAAgAiAAAgAQAAAAQEAAIQAARAAAQAEAAAAAYAQAAA=</HashCode>
+      <FileName>Effect.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EffectManager" Collapsed="true">
+    <Position X="12.75" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAwAAAAAACAAIAAAFAIAAAACAAAAAEAAAAAQAQAAA=</HashCode>
+      <FileName>EffectManager.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="QuadTree&lt;T&gt;" Collapsed="true">
+    <Position X="26.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQIBAAAAIAQBAAAAAA0AAAAAgBAABQEAAFAAACQEBA=</HashCode>
+      <FileName>QuadTree.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Map" Collapsed="true">
+    <Position X="24.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EwACkAgAAJAAAAAgDQUCAAAAAQAAAEIQIAAoAcCUAQg=</HashCode>
+      <FileName>Map.hpp</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="collisionMap" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="MapManager" Collapsed="true">
+    <Position X="11" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAgAAQAAAAAAIAAAEAIAAAAAAACIAAAIAAAQAQAAA=</HashCode>
+      <FileName>MapManager.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MapObject" Collapsed="true">
+    <Position X="16.25" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAACAAAAAAEAAAAAAAAgAAAAAAAAAQAQEIA=</HashCode>
+      <FileName>MapObject.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Portal" Collapsed="true">
+    <Position X="16.25" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EABEgAgAAAAAAAAAAQEAAAQAIACACYAEAAAEAQARAAA=</HashCode>
+      <FileName>Portal.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NPC" Collapsed="true">
+    <Position X="5.75" Y="4.25" Width="1.5" />
+    <AssociationLine Name="currentState" Type="NPCState" FixedToPoint="true">
+      <Path>
+        <Point X="6.5" Y="4.941" />
+        <Point X="6.5" Y="5.5" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>EAAAAACAACAAAgAAKAEAAoEAEAAAAAAARAAAAQARhBA=</HashCode>
+      <FileName>NPC.hpp</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="currentState" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="NPCManager" Collapsed="true">
+    <Position X="11" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EoAEkAAAAAAAAYIAAAkAIAEEAAIAAAABAAAAQYBQAAA=</HashCode>
+      <FileName>NPCManager.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Player" Collapsed="true">
+    <Position X="18" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAABgAACAAAgIAIQEQAwQBAAAAACAAQAAAAQARABA=</HashCode>
+      <FileName>Player.hpp</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="currentState" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Skill" Collapsed="true">
+    <Position X="2.5" Y="10" Width="1.5" />
+    <InheritanceLine Type="Effect" FixedFromPoint="true">
+      <Path>
+        <Point X="3.25" Y="9.441" />
+        <Point X="3.25" Y="10" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>EBCAgAAAAABAAJABAQFAAEAAACAAAAAAIEAAAYgQAQA=</HashCode>
+      <FileName>Skill.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SkillManager" Collapsed="true">
+    <Position X="12.75" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAgAAAAAABAAAAAAEAAAAAAAAAAgAFAAAAAQAQAQA=</HashCode>
+      <FileName>SkillManager.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UIManager" Collapsed="true">
+    <Position X="11" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAgAAAABAAAAAAEBEAAAAAAAAAAAAEAAAAAQAQAAA=</HashCode>
+      <FileName>UIManager.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UI_Button" Collapsed="true">
+    <Position X="18" Y="6.75" Width="1.5" />
+    <InheritanceLine Type="UserInterface" FixedFromPoint="true">
+      <Path>
+        <Point X="17" Y="7.063" />
+        <Point X="18" Y="7.063" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>EAQAgBAAAAEAAAAAAAEQAQEAAAAAQAAEAAAACQAQAAA=</HashCode>
+      <FileName>UI_Button.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UI_Exit" Collapsed="true">
+    <Position X="18" Y="5.75" Width="1.5" />
+    <InheritanceLine Type="UserInterface" FixedFromPoint="true">
+      <Path>
+        <Point X="17" Y="7.063" />
+        <Point X="17.375" Y="7.063" />
+        <Point X="17.375" Y="5.999" />
+        <Point X="18" Y="5.999" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>EAAAgAAACAAAAAAAAEEAQAAAAAAAAAABAAQAAQAQCAg=</HashCode>
+      <FileName>UI_Exit.hpp</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="Btn_Yes" />
+      <Field Name="Btn_No" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="UI_Exp" Collapsed="true">
+    <Position X="18" Y="3.75" Width="1.5" />
+    <InheritanceLine Type="UserInterface" FixedFromPoint="true">
+      <Path>
+        <Point X="17" Y="7.063" />
+        <Point X="17.375" Y="7.063" />
+        <Point X="17.375" Y="4.096" />
+        <Point X="18" Y="4.096" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAAAAgAEAAAAAAAAAAAAAAAAAAQAQACA=</HashCode>
+      <FileName>UI_Exp.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UI_HPStatus" Collapsed="true">
+    <Position X="18" Y="4.75" Width="1.5" />
+    <InheritanceLine Type="UserInterface" FixedFromPoint="true">
+      <Path>
+        <Point X="17" Y="7.063" />
+        <Point X="17.375" Y="7.063" />
+        <Point X="17.375" Y="5.096" />
+        <Point X="18" Y="5.096" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAACAAAAAQEAAAAAAAAAAAAAkgQAAQAQAAA=</HashCode>
+      <FileName>UI_HPStatus.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UserInterface" Collapsed="true">
+    <Position X="15.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EIAAgACAEAAAAAAAABEAAIQAAAAAgEIAIAgAAYAQAQg=</HashCode>
+      <FileName>UserInterface.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="맑은 고딕" Size="9" />
+</ClassDiagram>

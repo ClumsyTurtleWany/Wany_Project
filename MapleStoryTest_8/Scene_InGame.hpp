@@ -8,7 +8,7 @@
 
 class Scene_InGame : public Scene
 {
-public:
+private:
 	Player* user;
 	Map* currentMap;
 	Camera* renderCamera;
@@ -21,6 +21,9 @@ public:
 
 public:
 	Scene_InGame(MapleStory* _game);
+
+public:
+	bool changeCurrentMap(std::wstring _name, Vector2f _pos);
 
 public:
 	virtual bool initialize() override;

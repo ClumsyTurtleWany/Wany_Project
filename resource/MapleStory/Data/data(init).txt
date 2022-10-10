@@ -1,0 +1,16 @@
+job=Beginner
+strength=4
+dexterity=4
+lucky=4
+intelligence=4
+maxHP=50
+maxMP=50
+currentHP=50
+currentMP=50
+currentExp=0
+requiredExp=500
+level=1
+minDamage=1
+maxDamage=1
+currentMap=Happy
+currentMapPos=588.801, 1152.91

@@ -143,10 +143,10 @@ bool UserState_MoveLeft::frame()
 
 bool UserState_MoveLeft::render()
 {
-    std::wstring strUserState;
+    /*std::wstring strUserState;
     strUserState += L"UserState: ";
     strUserState += L"UserState_MoveLeft";
-    DXWriter::getInstance()->draw(0, 100, strUserState);
+    DXWriter::getInstance()->draw(0, 100, strUserState);*/
 
     return true;
 }

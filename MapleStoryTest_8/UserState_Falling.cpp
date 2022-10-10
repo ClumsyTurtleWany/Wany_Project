@@ -155,23 +155,33 @@ bool UserState_Falling::frame()
 	}
 
 	// Jump
-	KeyState KeyState_X = Input::getInstance()->getKey('X');
+	/*KeyState KeyState_X = Input::getInstance()->getKey('X');
 	if ((beforeJumpKeyState == KeyState::Up) || (beforeJumpKeyState == KeyState::Free))
 	{
 		if ((KeyState_X == KeyState::Down) || (KeyState_X == KeyState::Hold))
 		{
-			if (!user->doubleJump)
+			if (user->doubleJump)
 			{
-				user->doubleJump = true;
-				SkillManager::getInstance()->addSkillToJobList(L"DoubleJump");
-				float force_x = 300.0f;
-				user->force.x = user->currentDirection == Player::Direction::Left ? -force_x : force_x;
-				user->force.y = -50.0f;
-				return true;
+				if ((KeyState_Up == KeyState::Down) || (KeyState_Up == KeyState::Hold))
+				{
+					user->doubleJump = false;
+					SkillManager::getInstance()->addSkillToJobList(L"DoubleJump");
+					user->force.y = -500.0f;
+					return true;
+				}
+				else
+				{
+					user->doubleJump = false;
+					SkillManager::getInstance()->addSkillToJobList(L"DoubleJump");
+					float force_x = 300.0f;
+					user->force.x = user->currentDirection == Player::Direction::Left ? -force_x : force_x;
+					user->force.y = -50.0f;
+					return true;
+				}
 			}
 		}
 	}
-	beforeJumpKeyState = KeyState_X;
+	beforeJumpKeyState = KeyState_X;*/
 
 	// Skill 0 Btn
 	KeyState KeyState_C = Input::getInstance()->getKey('C');
@@ -205,10 +215,10 @@ bool UserState_Falling::frame()
 
 bool UserState_Falling::render()
 {
-	std::wstring strUserState;
+	/*std::wstring strUserState;
 	strUserState += L"UserState: ";
 	strUserState += L"UserState_Falling";
-	DXWriter::getInstance()->draw(0, 100, strUserState);
+	DXWriter::getInstance()->draw(0, 100, strUserState);*/
 
     return true;
 }

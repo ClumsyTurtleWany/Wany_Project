@@ -1,0 +1,16 @@
+job=Beginner
+strength=4
+dexterity=4
+lucky=4
+intelligence=4
+maxHP=1220
+maxMP=1220
+currentHP=1184
+currentMP=863
+currentExp=22831
+requiredExp=22947
+level=22
+minDamage=1
+maxDamage=22
+currentMap=Anger2
+currentMapPos=1796.19, 1153

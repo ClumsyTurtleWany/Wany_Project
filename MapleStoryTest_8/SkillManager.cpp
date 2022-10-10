@@ -64,7 +64,7 @@ Skill* SkillManager::getSkill(std::wstring _name)
 	}
 }
 
-bool SkillManager::addSkillToJobList(std::wstring _name)
+bool SkillManager::addSkillToJobList(std::wstring _name, float _angle)
 {
 	Skill* targetSkill = getSkill(_name);
 	if (targetSkill == nullptr)
@@ -99,6 +99,7 @@ bool SkillManager::addSkillToJobList(std::wstring _name)
 			//Skill* pSkill = new Skill(targetSkill);
 			Skill* pSkill = targetSkill;
 			pSkill->initialize();
+			pSkill->angle = _angle;
 			jobList.push_back(pSkill);
 		}
 	}
@@ -116,6 +117,7 @@ bool SkillManager::addSkillToJobList(std::wstring _name)
 		//Skill* pSkill = new Skill(targetSkill);
 		Skill* pSkill = targetSkill;
 		pSkill->initialize();
+		pSkill->angle = _angle;
 		jobList.push_back(pSkill);
 	}
 

@@ -11,6 +11,8 @@
 
 class Player;
 class NPC;
+class Scene_InGame;
+class Portal;
 
 class Map : public object2D<float>
 {
@@ -35,7 +37,7 @@ private:
 
 	Player* user = nullptr;
 
-	int maxNPC = 0;
+	int maxMonster = 0;
 
 	float beforeTime = 0.0f;
 	float timeCounter = 0.0f;
@@ -43,6 +45,7 @@ private:
 
 public:
 	std::vector<MapObject*> mapObjectList;
+	std::vector<Portal*> portalList;
 
 public:
 	Map();
@@ -58,12 +61,16 @@ public:
 
 public:
 	void setMapName(std::wstring _name);
+	std::wstring getMapName();
 	void setUser(Player* _user);
+	void setSceneToPortal(Scene_InGame* _InGame);
 	void PlayBGM();
+	void StopBGM();
 
 public:
 	bool Collision(object2D<float>* _src, std::vector<object2D<float>*>* _dst, std::vector<Rect_<float>>* _dstSection = nullptr);
 	bool CollisionMapObject(object2D<float>* _obj, MapObjectType _targetType, std::vector<object2D<float>*>* _dst = nullptr, std::vector<Rect_<float>>* _dstSection = nullptr);
+	bool CollisionPortal(object2D<float>* _obj, std::vector<Portal*>* _dst = nullptr);
 
 public:
 	virtual void updateShader() override;

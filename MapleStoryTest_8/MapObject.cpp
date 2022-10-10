@@ -5,6 +5,7 @@ MapObject::MapObject()// : currentState(new UserState_Idle(this))
 	//pObj = new object2D<float>;
 	//pObj->type = OBJECT_TYPE::STATIC_OBJECT;
 	//pObj->createShader(ShaderType::Texture);
+	createShader(ShaderType::Texture);
 }
 
 MapObject::MapObject(const Rect2f& _rect, MapObjectType _type)// : currentState(new UserState_Idle(this))
@@ -13,7 +14,7 @@ MapObject::MapObject(const Rect2f& _rect, MapObjectType _type)// : currentState(
 	//pObj->type = OBJECT_TYPE::STATIC_OBJECT;
 	//pObj->createShader(ShaderType::Texture);
 	this->shape = _rect;
-	type = _type;
+	mapObjectType = _type;
 	createShader(ShaderType::Texture);
 }
 
@@ -72,36 +73,23 @@ MapObject::~MapObject()
 //}
 
 
-//// 
-//bool MapObject::initialize()
-//{
-//	return true;
-//}
-//
-//bool MapObject::frame(float _dt)
-//{
-//	if (!pObj->frame(_dt))
-//	{
-//		return false;
-//	}
-//
-//	return true;
-//}
-//
-//bool MapObject::render()
-//{
-//	if (!pObj->render())
-//	{
-//		return false;
-//	}
-//
-//	return true;
-//}
-//
-//bool MapObject::release()
-//{
-//	pObj->release();
-//	delete pObj;
-//	pObj = nullptr;
-//	return true; // currentState->release();
-//}
+// 
+bool MapObject::initialize()
+{
+	return true;
+}
+
+bool MapObject::frame(float _dt)
+{
+	return true;
+}
+
+bool MapObject::render()
+{
+	return true;
+}
+
+bool MapObject::release()
+{
+	return true;
+}

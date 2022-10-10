@@ -31,6 +31,8 @@ bool UserState_Jump::initialize()
     user->setTexture(DXTextureManager::getInstance()->getTexture(textureKeyList[jumpState]));
 	user->force.y = -300.0f;
 	beforeTime = Timer::getInstance()->getPlayTime();
+	doubleJumpTimeCounter = 0.0f;
+	doubleJumpAbleTime = 0.1f;
 
     return true;
 }
@@ -40,14 +42,20 @@ bool UserState_Jump::frame()
 	float currentTime = Timer::getInstance()->getPlayTime();
 	float frameTime = currentTime - beforeTime;
 	timeCounter += frameTime;
-
-	if (timeCounter >= 0.33f)
+	beforeTime = currentTime;
+	doubleJumpTimeCounter += frameTime;
+	
+	/*if (timeCounter >= 0.33f)
 	{
 		timeCounter = 0.0f;
 		user->force.y -= user->force.y * 0.8f;
+	}*/
+
+	if (timeCounter >= 0.2f)
+	{
+		timeCounter = 0.0f;
+		user->force.y -= user->force.y * 0.5f;
 	}
-	
-	beforeTime = currentTime;
 	
 	if (user->force.y > -100.0f)
 	{
@@ -123,23 +131,38 @@ bool UserState_Jump::frame()
 	}
 
 	// Jump
-	/*KeyState KeyState_X = Input::getInstance()->getKey('X');
+	KeyState KeyState_X = Input::getInstance()->getKey('X');
 	if ((beforeJumpKeyState == KeyState::Up) || (beforeJumpKeyState == KeyState::Free))
 	{
 		if ((KeyState_X == KeyState::Down) || (KeyState_X == KeyState::Hold))
 		{
-			if (!user->doubleJump)
+			if (user->doubleJump)
 			{
-				user->doubleJump = true;
-				SkillManager::getInstance()->addSkillToJobList(L"DoubleJump");
-				float force_x = 150.0f;
-				user->force.x += user->currentDirection == Player::Direction::Left ? -force_x : force_x;
-				user->force.y += -50.0f;
-				return true;
+				if (doubleJumpTimeCounter >= doubleJumpAbleTime)
+				{
+					doubleJumpTimeCounter = 0.0f;
+
+					if ((KeyState_Up == KeyState::Down) || (KeyState_Up == KeyState::Hold))
+					{
+						user->doubleJump = false;
+						SkillManager::getInstance()->addSkillToJobList(L"DoubleJump", 90.0f);
+						user->force.y -= 800.0f;
+						return true;
+					}
+					else
+					{
+						user->doubleJump = false;
+						SkillManager::getInstance()->addSkillToJobList(L"DoubleJump");
+						float force_x = 350.0f;
+						user->force.x += user->currentDirection == Player::Direction::Left ? -force_x : force_x;
+						user->force.y += -200.0f;
+						return true;
+					}
+				}
 			}
 		}
 	}
-	beforeJumpKeyState = KeyState_X;*/
+	beforeJumpKeyState = KeyState_X;
 
 	// Skill 0 Btn
 	KeyState KeyState_C = Input::getInstance()->getKey('C');
@@ -166,18 +189,15 @@ bool UserState_Jump::frame()
 		return true;
 	}
 
-
-
-    //user->changeCurrentState<UserState_Idle>();
     return true;
 }
 
 bool UserState_Jump::render()
 {
-	std::wstring strUserState;
+	/*std::wstring strUserState;
 	strUserState += L"UserState: ";
 	strUserState += L"UserState_Jump";
-	DXWriter::getInstance()->draw(0, 100, strUserState);
+	DXWriter::getInstance()->draw(0, 100, strUserState);*/
 
     return true;
 }

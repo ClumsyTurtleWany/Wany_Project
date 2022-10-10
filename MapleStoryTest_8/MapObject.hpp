@@ -15,7 +15,7 @@ enum class MapObjectType
 class MapObject : public object2D<float>
 {
 public:
-	MapObjectType type = MapObjectType::Floor;
+	MapObjectType mapObjectType = MapObjectType::Floor;
 	bool isPierce = true;
 
 public:
@@ -23,9 +23,9 @@ public:
 	MapObject(const Rect2f& _rect, MapObjectType _type);
 	virtual ~MapObject();
 
-//public:
-//	virtual bool initialize();
-//	virtual bool frame(float _dt);
-//	virtual bool render();
-//	virtual bool release();
+public:
+	virtual bool initialize();
+	virtual bool frame(float _dt);
+	virtual bool render();
+	virtual bool release();
 };

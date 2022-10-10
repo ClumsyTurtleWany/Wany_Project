@@ -7,6 +7,7 @@
 #include "Player.hpp"
 #include "SkillManager.hpp"
 #include "UserState_Climb.hpp"
+#include "Portal.hpp"
 
 UserState_Idle::UserState_Idle(Player* _user) : UserState(_user)
 {
@@ -33,7 +34,7 @@ bool UserState_Idle::initialize()
 
 	user->force.x = 0;
 	user->force.y = 0;
-	user->doubleJump = false;
+	user->doubleJump = true;
 
 	return true;
 }
@@ -73,6 +74,17 @@ bool UserState_Idle::frame()
 			user->changeCurrentState<UserState_Climb>();
 			return true;
 		}
+
+		std::vector<Portal*> collisionPortal;
+		if (user->currentMap->CollisionPortal(user, &collisionPortal))
+		{
+			if (!collisionPortal.empty())
+			{
+				Portal* pPortal = collisionPortal[0];
+				pPortal->WarpPortal();
+				return true;
+			}
+		}
 		//user->shape.offset(Vector2f( 0.0f, -0.5f));
 		//return true;
 	}
@@ -95,34 +107,33 @@ bool UserState_Idle::frame()
 				}
 			}
 		}
-		else
+	
+		// Down Jump
+		KeyState KeyState_Jump = Input::getInstance()->getKey('X');
+		if ((KeyState_Jump == KeyState::Down) || (KeyState_Jump == KeyState::Hold))
 		{
-			// Down Jump
-			KeyState KeyState_Jump = Input::getInstance()->getKey('X');
-			if ((KeyState_Jump == KeyState::Down) || (KeyState_Jump == KeyState::Hold))
+			if (user->currentMap->CollisionMapObject(user, MapObjectType::Floor, &collisionObjList, &collisionRectList))
 			{
-				if (user->currentMap->CollisionMapObject(user, MapObjectType::Floor, &collisionObjList, &collisionRectList))
+				for (auto it : collisionObjList)
 				{
-					for (auto it : collisionObjList)
+					if (user->shape.bottom() <= it->shape.top())
 					{
-						if (user->shape.bottom() <= it->shape.top())
+						MapObject* pMapObject = dynamic_cast<MapObject*>(it);
+						if (pMapObject->isPierce)
 						{
-							MapObject* pMapObject = dynamic_cast<MapObject*>(it);
-							if (pMapObject->isPierce)
-							{
-								user->moveTo(user->shape.left(), it->shape.bottom() - user->shape.height() + 1);
-								user->changeCurrentState<UserState_Falling>();
-							}
-							return true;
+							user->moveTo(user->shape.left(), it->shape.bottom() - user->shape.height() + 1);
+							user->changeCurrentState<UserState_Falling>();
 						}
+						return true;
 					}
 				}
 			}
-			else
-			{
-				// Get Down
-			}
 		}
+		else
+		{
+			// Get Down
+		}
+		
 	}
 
 	// Move to Left
@@ -187,10 +198,10 @@ bool UserState_Idle::frame()
 
 bool UserState_Idle::render()
 {
-	std::wstring strUserState;
+	/*std::wstring strUserState;
 	strUserState += L"UserState: ";
 	strUserState += L"UserState_Idle";
-	DXWriter::getInstance()->draw(0, 100, strUserState);
+	DXWriter::getInstance()->draw(0, 100, strUserState);*/
 
 	return true;
 }

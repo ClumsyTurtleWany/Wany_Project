@@ -19,7 +19,7 @@ public:
 	bool Load(std::wstring _path);
 	Skill* getSkill(std::wstring _name);
 
-	bool addSkillToJobList(std::wstring _name);
+	bool addSkillToJobList(std::wstring _name, float _angle = 0.0f);
 
 public:
 	virtual bool initialize();

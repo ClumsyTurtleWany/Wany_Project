@@ -1,5 +1,5 @@
 lifeTime=0.33
-coolTime=0.0
+coolTime=0.5
 offset_x=100
 offset_y=50
 offset_hitbox_x=0

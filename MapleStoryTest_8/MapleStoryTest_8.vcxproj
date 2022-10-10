@@ -42,13 +42,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -155,8 +155,8 @@ copy "..\\lib\\FMOD\\fmod.dll" "..\\$(TargetName)\\"</Command>
       <AdditionalLibraryDirectories>../lib/;../lib/core/;../lib/FMOD/;</AdditionalLibraryDirectories>
     </Link>
     <PreBuildEvent>
-      <Command>copy "..\\lib\\FMOD\\fmod.dll" "..\\..\\output\\Release\\$(TargetName)\\"
-copy "..\\lib\\FMOD\\fmod.dll" "..\\$(TargetName)\\"</Command>
+      <Command>copy "..\\lib\\FMOD\\fmodL.dll" "..\\..\\output\\Release\\$(TargetName)\\"
+copy "..\\lib\\FMOD\\fmodL.dll" "..\\$(TargetName)\\"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -179,6 +179,8 @@ copy "..\\lib\\FMOD\\fmod.dll" "..\\$(TargetName)\\"</Command>
     <ClInclude Include="NPCState_Search.hpp" />
     <ClInclude Include="Octree.hpp" />
     <ClInclude Include="Player.hpp" />
+    <ClInclude Include="PlayerInfo.hpp" />
+    <ClInclude Include="Portal.hpp" />
     <ClInclude Include="QuadTree.hpp" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="MapleStory.h" />
@@ -225,6 +227,7 @@ copy "..\\lib\\FMOD\\fmod.dll" "..\\$(TargetName)\\"</Command>
     <ClCompile Include="NPCState_Search.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="MapleStory.cpp" />
+    <ClCompile Include="Portal.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Scene_Intro.cpp" />
     <ClCompile Include="Scene_InGame.cpp" />
@@ -252,6 +255,9 @@ copy "..\\lib\\FMOD\\fmod.dll" "..\\$(TargetName)\\"</Command>
     <ProjectReference Include="..\WanyCore\WanyCore.vcxproj">
       <Project>{dcbbff00-fb32-44c8-93e3-5b71b5f68a18}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

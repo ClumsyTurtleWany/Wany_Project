@@ -1,1 +1,1 @@
-lifeTime=4.7
+lifeTime=3.7

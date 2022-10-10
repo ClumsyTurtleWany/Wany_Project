@@ -20,8 +20,9 @@ bool MapManager::Load(std::wstring _path)
 			std::unique_ptr<Map> newMap = std::make_unique<Map>();
 			if (newMap->Load(dir))
 			{
-				newMap->setMapName(filename);
 				newMap->setCamera(renderCamera);
+				newMap->setMapName(filename);
+				newMap->setSceneToPortal(InGame);
 				newMap->initialize();
 				mapList.insert(std::make_pair(filename, std::move(newMap)));
 			}
@@ -38,6 +39,11 @@ bool MapManager::Load(std::wstring _path)
 void MapManager::setCamera(Camera* _camera)
 {
 	renderCamera = _camera;
+}
+
+void MapManager::setScene(Scene_InGame* _InGame)
+{
+	InGame = _InGame;
 }
 
 Map* MapManager::getMap(std::wstring _name)

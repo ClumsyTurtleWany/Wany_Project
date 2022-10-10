@@ -395,6 +395,37 @@ public:
 		list->at(2).pos = { rectNDC.LT.x, rectNDC.RB.y, 0.0f };
 		list->at(3).pos = { rectNDC.RB.x, rectNDC.RB.y, 0.0f };
 
+		float cosAngleVal = cos(DegreeToRadian(angle));
+		float sinAngleVal = sin(DegreeToRadian(angle));
+
+		Vector3f center;
+		center.x = (list->at(0).pos.x + list->at(1).pos.x) / 2.0f;
+		center.y = (list->at(0).pos.y + list->at(2).pos.y) / 2.0f;
+		
+		Vector3f centerMoved;
+		centerMoved = list->at(0).pos - center;
+		Vector3f rstRotation;
+		rstRotation.x = centerMoved.x * cosAngleVal - centerMoved.y * sinAngleVal;
+		rstRotation.y = centerMoved.x * sinAngleVal + centerMoved.y * cosAngleVal;
+		list->at(0).pos = rstRotation + center;
+		
+		centerMoved = list->at(1).pos - center;
+		rstRotation.x = centerMoved.x * cosAngleVal - centerMoved.y * sinAngleVal;
+		rstRotation.y = centerMoved.x * sinAngleVal + centerMoved.y * cosAngleVal;
+		list->at(1).pos = rstRotation + center;
+
+		centerMoved = list->at(2).pos - center;
+		rstRotation.x = centerMoved.x * cosAngleVal - centerMoved.y * sinAngleVal;
+		rstRotation.y = centerMoved.x * sinAngleVal + centerMoved.y * cosAngleVal;
+		list->at(2).pos = rstRotation + center;
+
+		centerMoved = list->at(3).pos - center;
+		rstRotation.x = centerMoved.x * cosAngleVal - centerMoved.y * sinAngleVal;
+		rstRotation.y = centerMoved.x * sinAngleVal + centerMoved.y * cosAngleVal;
+		list->at(3).pos = rstRotation + center;
+
+
+		
 		list->at(0).color = { 1.0f, 1.0f, 1.0f, alphaVal };
 		list->at(1).color = { 1.0f, 1.0f, 1.0f, alphaVal };
 		list->at(2).color = { 1.0f, 1.0f, 1.0f, alphaVal };

@@ -1,6 +1,12 @@
 #pragma once
 // UI 리소스 참고용 https://www.vectorstock.com/royalty-free-vectors/ui-vectors
 
+#ifdef _DEBUG
+#pragma comment(lib, "WanyCore_debug.lib")
+#else
+#pragma comment(lib, "WanyCore_release.lib")
+#endif
+
 #define EFFECT_DIRECTORY L"../resource/MapleStory/Effect/"
 #define SKILL_DIRECTORY L"../resource/MapleStory/Skill/"
 #define NPC_DIRECTORY L"../resource/MapleStory/NPC/"
@@ -10,6 +16,8 @@
 #define TITLE_DIRECTORY L"../resource/MapleStory/Title/"
 #define TITLE_BACKGROUND L"../resource/MapleStory/Title/background.png"
 #define MAP_DIRECTORY L"../resource/MapleStory/Map/"
+#define PORTAL_DIRECTORY L"../resource/MapleStory/Portal/"
+#define USER_DATA_DIRECTORY L"../resource/MapleStory/Data/data.txt"
 
 // UserState_Skill_0_1
 #define USER_STATE_SKILL_0_0_0 L"../resource/MapleStory/Skill/temp/0_0.bmp"

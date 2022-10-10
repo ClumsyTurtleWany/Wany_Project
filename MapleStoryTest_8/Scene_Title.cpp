@@ -43,6 +43,7 @@ bool Scene_Title::frame()
 	{
 		BGM->stop();
 		game->changeCurrentScene<Scene_InGame>();
+		return true;
 	}
 
 	return true;

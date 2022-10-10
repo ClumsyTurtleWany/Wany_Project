@@ -231,6 +231,12 @@
     <ClInclude Include="MapManager.hpp">
       <Filter>Object\Map\헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Portal.hpp">
+      <Filter>Object\Map\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerInfo.hpp">
+      <Filter>Object\Character\헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MapleStory.cpp">
@@ -353,5 +359,11 @@
     <ClCompile Include="MapManager.cpp">
       <Filter>Object\Map\소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Portal.cpp">
+      <Filter>Object\Map\소스 파일</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

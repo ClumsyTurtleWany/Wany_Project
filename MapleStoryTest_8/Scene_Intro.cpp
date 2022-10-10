@@ -26,6 +26,7 @@ bool Scene_Intro::initialize()
 		pSound->setVolume(0.5f);
 		pSound->playEffect();
 	}
+
 	return true;
 }
 

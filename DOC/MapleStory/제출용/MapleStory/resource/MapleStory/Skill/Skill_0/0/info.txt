@@ -1,0 +1,12 @@
+lifeTime=0.33
+coolTime=0.0
+offset_x=100.0
+offset_y=50.0
+offset_hitbox_x=50
+offset_hitbox_y=50
+damageCount=3
+200
+200
+200
+mp=8.0
+hitstate=0
