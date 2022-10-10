@@ -232,8 +232,6 @@ bool Scene_InGame::render()
 	wstrCameraPos += L", ";
 	wstrCameraPos += std::to_wstring(static_cast<int>((renderCamera->getRect().LT.y + renderCamera->getRect().RB.y) / 2));
 	DXWriter::getInstance()->draw(0, 75, wstrCameraPos);*/
-	// 됨?
-	// 다시 안되냐
 
 	for (auto it : uiList)
 	{
