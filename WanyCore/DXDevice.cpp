@@ -1,5 +1,74 @@
 #include "DXDevice.hpp"
+#include "DXWriter.hpp"
 
+bool DXDevice::resize()
+{
+	// 윈도우 크기 변경 메시지 검출(WM_SIZE)
+	// 현재 설정된 랜더타켓과 깊이 스텐실 버퍼의 해제 및 소멸
+	if (m_pd3dDevice == nullptr)
+	{
+		return false;
+	}
+
+	DXWriter::getInstance()->releaseDXResource();
+
+	m_pImmediateContext->OMSetRenderTargets(0, nullptr, NULL);
+	m_pRTV->Release();
+	m_pRTV = nullptr;
+	 
+	// 변경된 윈도우의 크기를 얻고 백 버퍼의 크기를 재 조정.
+	DXGI_SWAP_CHAIN_DESC desc;
+	m_pSwapChain->GetDesc(&desc);
+	HRESULT rst = m_pSwapChain->ResizeBuffers(desc.BufferCount, clientRect.right, clientRect.bottom, desc.BufferDesc.Format, 0);
+	if (FAILED(rst))
+	{
+		return false;
+	}
+
+	// 변경된 백 버퍼의 크기를 얻고 렌더타켓 뷰를 다시 생성 및 적용.
+	createRenderTargetView();
+	
+	// 소멸했던 깊이 스텐실 버퍼와 깊이 스텐실 뷰 다시 생성 및 적용
+	// 뷰포트 재 지정.
+	createViewPort();
+
+	IDXGISurface* pBackBuffer;
+	rst = m_pSwapChain->GetBuffer(0, __uuidof(IDXGISurface), (void**)&pBackBuffer);
+	if (SUCCEEDED(rst))
+	{
+		if (!DXWriter::getInstance()->setBuffer(pBackBuffer))
+		{
+			OutputDebugString(L"WanyCore::DXDevice::resize::Failed Set Buffer To DXWriter.\n");
+			return false;
+		}
+		pBackBuffer->Release();
+	}
+	DXWriter::getInstance()->createDXResource();
+
+	return true;
+}
+
+bool DXDevice::enableFullScreen()
+{
+	HRESULT rst = m_pGIFactory->MakeWindowAssociation(NULL, 0);
+	if (FAILED(rst))
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool DXDevice::disableFullScreen()
+{
+	HRESULT rst = m_pGIFactory->MakeWindowAssociation(hWnd, DXGI_MWA_NO_ALT_ENTER);
+	if (FAILED(rst))
+	{
+		return false;
+	}
+
+	return true;
+}
 
 // 1) 디바이스 생성
 HRESULT DXDevice::createDevice()
@@ -31,7 +100,38 @@ HRESULT DXDevice::createDevice()
 #endif 
 	//rst = D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, pFeatureLevels, 1, D3D11_SDK_VERSION, &m_pd3dDevice, pFeatureLevel, &m_pImmediateContext); // 디바이스 생성
 
-	return D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, NULL, createDeviceFlags, pFeatureLevels, 1, D3D11_SDK_VERSION, &m_pd3dDevice, pFeatureLevel, &m_pImmediateContext);
+	// 2022-10-11 이전 버젼
+	//return D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, NULL, createDeviceFlags, pFeatureLevels, 1, D3D11_SDK_VERSION, &m_pd3dDevice, pFeatureLevel, &m_pImmediateContext);
+
+	// 2022-10-11 이후 Full Screen Disable 테스트 버전
+	IDXGIAdapter* pAdapter = nullptr;
+	HRESULT rst = m_pGIFactory->EnumAdapters(0, &pAdapter);
+	if (FAILED(rst))
+	{
+		return D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, NULL, createDeviceFlags, pFeatureLevels, 1, D3D11_SDK_VERSION, &m_pd3dDevice, pFeatureLevel, &m_pImmediateContext);
+	}
+	else
+	{
+		D3D_DRIVER_TYPE driverTypes[] = { D3D_DRIVER_TYPE_HARDWARE,	D3D_DRIVER_TYPE_REFERENCE, D3D_DRIVER_TYPE_WARP };
+		UINT DriverTypeNum = sizeof(driverTypes) / sizeof(driverTypes[0]);
+		/*for (UINT driverTypeIdx = 0; driverTypeIdx < DriverTypeNum; driverTypeIdx++)
+		{
+			D3D_DRIVER_TYPE driverType = driverTypes[driverTypeIdx];
+			rst = D3D11CreateDevice(pAdapter, driverType, NULL, createDeviceFlags, pFeatureLevels, 1, D3D11_SDK_VERSION, &m_pd3dDevice, pFeatureLevel, &m_pImmediateContext);
+			if (FAILED(rst))
+			{
+				continue;
+			}
+			else
+			{
+				break;
+			}
+		}*/
+		rst = D3D11CreateDevice(pAdapter, D3D_DRIVER_TYPE_HARDWARE, NULL, createDeviceFlags, pFeatureLevels, 1, D3D11_SDK_VERSION, &m_pd3dDevice, pFeatureLevel, &m_pImmediateContext);
+
+
+		return rst;
+	}
 }
 
 // 2) 팩토리 생성
@@ -149,6 +249,15 @@ void DXDevice::createViewPort()
 bool DXDevice::initialize()
 {
 	//////////////////////////////////////////////////////////////////////
+	// 0) 팩토리 생성, 원래는 2번에서 생성 했으나 먼저 생성해도 무관하고, Full Screen 막기 위한 Adapter 생성에 먼저 필요.
+	//////////////////////////////////////////////////////////////////////
+	if (FAILED(createFactory()))
+	{
+		OutputDebugString(L"WanyCore::DXDevice::Failed Create Factory.\n");
+		return false;
+	}
+
+	//////////////////////////////////////////////////////////////////////
 	// 1) 디바이스 생성
 	//////////////////////////////////////////////////////////////////////
 
@@ -158,15 +267,14 @@ bool DXDevice::initialize()
 		return false;
 	}
 
-	//////////////////////////////////////////////////////////////////////
-	// 2) 팩토리 생성
-	//////////////////////////////////////////////////////////////////////
-
-	if (FAILED(createFactory()))
-	{
-		OutputDebugString(L"WanyCore::DXDevice::Failed Create Factory.\n");
-		return false;
-	}
+	////////////////////////////////////////////////////////////////////////
+	//// 2) 팩토리 생성
+	////////////////////////////////////////////////////////////////////////
+	//if (FAILED(createFactory()))
+	//{
+	//	OutputDebugString(L"WanyCore::DXDevice::Failed Create Factory.\n");
+	//	return false;
+	//}
 
 	//////////////////////////////////////////////////////////////////////
 	// 3) 스왑체인 생성

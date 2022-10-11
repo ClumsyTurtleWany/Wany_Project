@@ -41,7 +41,10 @@ LRESULT WindowUI::MsgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;*/
 	case WM_SIZE:
 	{
-
+		//UINT width = LOWORD(lParam);
+		//UINT height = HIWORD(wParam);
+		GetClientRect(hWnd, &clientRect);
+		resize();
 	}
 	break;
 	case WM_DESTROY:
@@ -150,6 +153,25 @@ Vector2f WindowUI::getClientCenterPos()
 	return pos;
 }
 
+void WindowUI::enableResize()
+{
+	SetWindowLongW(hWnd, GWL_STYLE, WS_OVERLAPPEDWINDOW);
+	UpdateWindow(hWnd);
+	ShowWindow(hWnd, SW_SHOW);
+}
+
+void WindowUI::disableResize()
+{
+	LONG newStyle = GetWindowLong(hWnd, GWL_STYLE);
+	newStyle &= ~(WS_THICKFRAME);
+	newStyle &= ~(WS_MINIMIZEBOX);
+	newStyle &= ~(WS_MAXIMIZEBOX);
+	SetWindowLongW(hWnd, GWL_STYLE, newStyle);
+	
+	UpdateWindow(hWnd);
+	ShowWindow(hWnd, SW_SHOW);
+}
+
 bool WindowUI::run()
 {
 	MSG msg;
@@ -170,5 +192,20 @@ bool WindowUI::run()
 	}
 
 	return false;
+}
+
+bool WindowUI::resize()
+{
+	return true;
+}
+
+bool WindowUI::enableFullScreen()
+{
+	return true;
+}
+
+bool WindowUI::disableFullScreen()
+{
+	return true;
 }
 

@@ -9,6 +9,10 @@ bool Timer::initialize()
 	fpsTimer = 0.0f;
 
 	beforeTime = static_cast<float>(timeGetTime());
+
+	// High Resolution Timer
+	QueryPerformanceFrequency(&Frequency);
+	QueryPerformanceCounter(&Before); // == timeGetTime
 	return true;
 }
 
@@ -19,6 +23,11 @@ bool Timer::frame()
 	gameTime += secondPerFrame;
 	fpsCounter++;
 	beforeTime = currentTime;
+	
+	// High Resolution Timer
+	QueryPerformanceCounter(&Current);
+	secondPerFrame = (Current.QuadPart - Before.QuadPart) / static_cast<float>(Frequency.QuadPart);
+	Before = Current;
 
 	fpsTimer += secondPerFrame;
 	if (fpsTimer >= 1.0f)

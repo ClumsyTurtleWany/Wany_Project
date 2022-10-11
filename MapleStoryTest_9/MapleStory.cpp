@@ -16,6 +16,9 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
 
 bool MapleStory::initialize()
 {
+    this->disableResize();
+    this->disableFullScreen();
+
     if (!FMODSoundManager::getInstance()->LoadDir(SOUND_DIRECTORY))
     {
         std::wstring debugStr = L"MapleStory::FMODSoundManager::Failed Load(";

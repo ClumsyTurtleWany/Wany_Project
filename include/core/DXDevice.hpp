@@ -31,6 +31,9 @@ public:
 	// Render Target View: 생성된 후면 버퍼들 중에서 랜더링(출력) 될 대상 버퍼를 지정. 
 	ID3D11RenderTargetView* m_pRTV = nullptr;
 
+	// Disable for Full Screen (Alt + Enter)
+	//IDXGIAdapter* m_pAdapter = nullptr;
+
 public:
 	virtual bool initialize();
 	virtual bool frame();
@@ -40,6 +43,11 @@ public:
 public:
 	bool PreRender();
 	bool PostRender();
+
+public:
+	bool resize() override;
+	bool enableFullScreen() override;
+	bool disableFullScreen() override;
 
 public:
 	// 1) 디바이스 생성
@@ -52,5 +60,4 @@ public:
 	HRESULT createRenderTargetView();
 	// 5) 뷰 포트 설정
 	void createViewPort();
-
 };

@@ -38,6 +38,8 @@ public:
 	virtual bool frame();
 	virtual bool render();
 	virtual bool release();
+	virtual bool releaseDXResource();
+	virtual bool createDXResource();
 
 public:
 	bool setBuffer(IDXGISurface* _dxgiSurface);

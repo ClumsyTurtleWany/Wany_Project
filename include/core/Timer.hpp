@@ -14,6 +14,12 @@ private:
 	float	fpsTimer = 0.0f;
 	UINT	fpsCounter = 0;
 
+	// High Resolution Timer
+public:
+	LARGE_INTEGER Frequency;
+	LARGE_INTEGER Current;
+	LARGE_INTEGER Before;
+	LARGE_INTEGER Elapse;
 
 public:
 	virtual bool initialize();

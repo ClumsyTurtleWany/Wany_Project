@@ -129,6 +129,33 @@ bool DXWriter::release()
 	return true;
 };
 
+bool DXWriter::releaseDXResource()
+{
+	if (m_pTextColor != nullptr)
+	{
+		m_pTextColor->Release();
+		m_pTextColor = nullptr;
+	}
+
+	if (m_pd2dRenderTarget != nullptr)
+	{
+		m_pd2dRenderTarget->Release();
+		m_pd2dRenderTarget = nullptr;
+	}
+
+	return true;
+}
+bool DXWriter::createDXResource()
+{
+	HRESULT rst = m_pd2dRenderTarget->CreateSolidColorBrush(D2D1_COLOR_F({ 0.0f, 0.0f, 0.0f, 1.0f }), &m_pTextColor);
+	if (FAILED(rst))
+	{
+		return false;
+	}
+
+	return true;
+}
+
 bool DXWriter::setBuffer(IDXGISurface* _dxgiSurface)
 {
 	// 3D -> 2D 연동하는 기능.
@@ -146,7 +173,7 @@ bool DXWriter::setBuffer(IDXGISurface* _dxgiSurface)
 	renderTargetProperties.minLevel = D2D1_FEATURE_LEVEL_DEFAULT;
 
 	// 중요!
-	// CreateDxgiSurfaceRenderTarget 메소드는 DXGI 화면에 랜더링하는 랜더 타켓을 생성하며 반드시 Direct3D 디바이스를
+	// CreateDxgiSurfaceRenderTarget 메소드는 DXGI 화면에 랜더링하는 랜더 타겟을 생성하며 반드시 Direct3D 디바이스를
 	// 생성시에 반드시 다음과 같이 플래그를 지정해야 한다. Device -> D3D11CreateDevice 의 플래그, DXDevice
 	// UINT createDeviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 	// #ifdef _DEBUG 

@@ -365,6 +365,16 @@ public:
 		float degree = RadianToDegree(acos(cosTheta));
 		return degree;
 	}
+
+	float dot(const Vector3D_<T>& _v)
+	{
+		return static_cast<float>(x * _v.x + y * _v.y + z * _v.z);
+	}
+
+	Vector3D_<T> cross(const Vector3D_<T>& _v)
+	{
+		return Vector3D_<T>((y * _v.z - z * _v.y), (z * _v.x - x * _v.z), (x * _v.y - y * _v.x));
+	}
 };
 
 template <typename T>
