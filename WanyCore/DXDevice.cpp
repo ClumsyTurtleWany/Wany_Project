@@ -61,11 +61,20 @@ bool DXDevice::enableFullScreen()
 
 bool DXDevice::disableFullScreen()
 {
-	HRESULT rst = m_pGIFactory->MakeWindowAssociation(hWnd, DXGI_MWA_NO_ALT_ENTER);
+	//HRESULT rst = m_pGIFactory->MakeWindowAssociation(hWnd, DXGI_MWA_NO_ALT_ENTER);
+	HRESULT rst = m_pGIFactory->MakeWindowAssociation(NULL, DXGI_MWA_NO_ALT_ENTER);
 	if (FAILED(rst))
 	{
 		return false;
 	}
+
+	//rst = m_pSwapChain->SetFullscreenState(TRUE, NULL); // 전체화면 모드
+	rst = m_pSwapChain->SetFullscreenState(FALSE, NULL); // 창 모드
+	if (FAILED(rst))
+	{
+		return false;
+	}
+	
 
 	return true;
 }
@@ -127,7 +136,7 @@ HRESULT DXDevice::createDevice()
 				break;
 			}
 		}*/
-		rst = D3D11CreateDevice(pAdapter, D3D_DRIVER_TYPE_HARDWARE, NULL, createDeviceFlags, pFeatureLevels, 1, D3D11_SDK_VERSION, &m_pd3dDevice, pFeatureLevel, &m_pImmediateContext);
+		rst = D3D11CreateDevice(pAdapter, D3D_DRIVER_TYPE_UNKNOWN, NULL, createDeviceFlags, pFeatureLevels, 1, D3D11_SDK_VERSION, &m_pd3dDevice, pFeatureLevel, &m_pImmediateContext);
 
 
 		return rst;

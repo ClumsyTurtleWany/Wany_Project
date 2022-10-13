@@ -46,7 +46,7 @@ bool DXSamplerState::setState(ID3D11Device* _pd3dDevice)
 	D3D11_RASTERIZER_DESC RSWireDesc;
 	ZeroMemory(&RSWireDesc, sizeof(RSWireDesc));
 	RSWireDesc.FillMode = D3D11_FILL_WIREFRAME; // Wire Frame, Solid
-	RSWireDesc.CullMode = D3D11_CULL_NONE; // Á¤¸éÀ» »Ñ¸®Áö ¸» °ÍÀÎ°¡ µÞ¸éÀ» »Ñ¸®Áö ¸» °ÍÀÎ°¡. 
+	RSWireDesc.CullMode = D3D11_CULL_NONE; // Á¤¸éÀ» ·»´õÇÏÁö ¸» °ÍÀÎ°¡ µÞ¸éÀ» ·»´õÇÏÁö ¸» °ÍÀÎ°¡. None == ¾Õ µÚ ´Ù ·»´õ, Back == ¾Õ¸¸ ·»´õ, Front µÚ¸¸ ·»´õ.
 	//RSWireDesc.FrontCounterClockwise;
 	//RSWireDesc.DepthBias;
 	//RSWireDesc.DepthBiasClamp;
@@ -66,7 +66,7 @@ bool DXSamplerState::setState(ID3D11Device* _pd3dDevice)
 	D3D11_RASTERIZER_DESC RSSolidDesc;
 	ZeroMemory(&RSSolidDesc, sizeof(RSSolidDesc));
 	RSSolidDesc.FillMode = D3D11_FILL_SOLID; // Wire Frame, Solid
-	RSSolidDesc.CullMode = D3D11_CULL_NONE; // Á¤¸éÀ» »Ñ¸®Áö ¸» °ÍÀÎ°¡ µÞ¸éÀ» »Ñ¸®Áö ¸» °ÍÀÎ°¡. 
+	RSSolidDesc.CullMode = D3D11_CULL_NONE; // Á¤¸éÀ» ·»´õÇÏÁö ¸» °ÍÀÎ°¡ µÞ¸éÀ» ·»´õÇÏÁö ¸» °ÍÀÎ°¡. None == ¾Õ µÚ ´Ù ·»´õ, Back == ¾Õ¸¸ ·»´õ, Front µÚ¸¸ ·»´õ.
 	//RSSolidDesc.FrontCounterClockwise;
 	//RSSolidDesc.DepthBias;
 	//RSSolidDesc.DepthBiasClamp;

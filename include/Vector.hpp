@@ -1,5 +1,6 @@
 #pragma once
 #include "Point.hpp"
+#include "Matrix.hpp"
 
 template <typename T>
 class Vector2D_
@@ -35,6 +36,25 @@ public:
 	Vector2D_<T> operator *(const T& _val)
 	{
 		return Vector2D_<T>(x * _val, y * _val);
+	}
+
+	Vector2D_<T> operator *(Matrix<float>& _mat)
+	{
+		int row = _mat.Row();
+		if (row == 2)
+		{
+			Matrix<float> rst(1, 2);
+			rst.arry[0][0] = x;
+			rst.arry[0][1] = y;
+
+			rst = rst * _mat;
+
+			return Vector2D_<T>(rst.arry[0][0], rst.arry[0][1]);
+		}
+		else
+		{
+			return Vector2D_<T>(x, y);
+		}
 	}
 
 	Vector2D_<T> operator /(const T& _val)
@@ -213,6 +233,26 @@ public:
 	Vector3D_<T> operator *(const T& _val)
 	{
 		return Vector3D_<T>(x * _val, y * _val, z * _val);
+	}
+
+	Vector3D_<T> operator *(Matrix<float>& _mat)
+	{
+		int row = _mat.Row();
+		if (row == 3)
+		{
+			Matrix<float> rst(1, 3);
+			rst.arry[0][0] = x;
+			rst.arry[0][1] = y;
+			rst.arry[0][2] = z;
+
+			rst = rst * _mat;
+
+			return Vector3D_<T>(rst.arry[0][0], rst.arry[0][1], rst.arry[0][2]);
+		}
+		else
+		{
+			return Vector3D_<T>(x, y, z);
+		}
 	}
 
 	Vector3D_<T> operator /(const T& _val)
@@ -418,6 +458,25 @@ public:
 		return Vector4D_<T>(x * _val, y * _val, z * _val, w * _val);
 	}
 
+	Vector4D_<T> operator *(const Matrix<float>& _mat)
+	{
+		int row = _mat.Row();
+		if (row == 4)
+		{
+			Matrix<float> rst(1, 4);
+			rst.arry[0][0] = x;
+			rst.arry[0][1] = y;
+			rst.arry[0][2] = z;
+			rst.arry[0][3] = w;
+
+			rst = rst * _mat;
+
+			return Vector4D_<T>(rst.arry[0][0], rst.arry[0][1], rst.arry[0][2], rst.arry[0][3]);
+		}
+
+		return Vector4D_<T>(x, y, z, w);
+	}
+
 	Vector4D_<T> operator /(const T& _val)
 	{
 		return Vector4D_<T>(x / _val, y / _val, z / _val, w / _val);
@@ -600,3 +659,4 @@ using Vector3D = Vector3D_<int>;
 using Vector3f = Vector3D_<float>;
 using Vector4D = Vector4D_<int>;
 using Vector4f = Vector4D_<float>;
+

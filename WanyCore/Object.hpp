@@ -372,6 +372,17 @@ public:
 			}
 		}
 			
+		Matrix<float> s = Make3DMatrix_Scale(0.5f, 0.5f, 0.0f);
+		Matrix<float> r = Make3DMatrix_RotationZ(DegreeToRadian(0));
+		Matrix<float> t = Make3DMatrix_Translation(0.1f, 0.1f, 0.0f);
+		Matrix<float> srt = s * r * t;
+		for (int i = 0; i < list->size(); i++)
+		{
+			Vector4f temp = Vector4f(list->at(i).pos.x, list->at(i).pos.y, list->at(i).pos.z, 1.0f);
+			temp = temp * srt;
+			list->at(i).pos = Vector3f(temp.x, temp.y, temp.z);
+		}
+
 	}
 
 	// 2022-09-22 Test
@@ -467,6 +478,7 @@ public:
 				list->at(3).texture = RT;
 			}
 		}
+
 	}
 
 protected:
