@@ -41,8 +41,8 @@ bool Scene_Title::frame()
 
 	if (Input::getInstance()->isPressedAnyKey())
 	{
-		BGM->stop();
-		game->changeCurrentScene<Scene_InGame>();
+		//BGM->stop();
+		//game->changeCurrentScene<Scene_InGame>();
 		return true;
 	}
 

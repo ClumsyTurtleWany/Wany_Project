@@ -38,12 +38,12 @@ public:
 		return Vector2D_<T>(x * _val, y * _val);
 	}
 
-	Vector2D_<T> operator *(Matrix<float>& _mat)
+	Vector2D_<T> operator *(Matrix& _mat)
 	{
 		int row = _mat.Row();
 		if (row == 2)
 		{
-			Matrix<float> rst(1, 2);
+			Matrix rst(1, 2);
 			rst.arry[0][0] = x;
 			rst.arry[0][1] = y;
 
@@ -235,12 +235,12 @@ public:
 		return Vector3D_<T>(x * _val, y * _val, z * _val);
 	}
 
-	Vector3D_<T> operator *(Matrix<float>& _mat)
+	Vector3D_<T> operator *(Matrix& _mat)
 	{
 		int row = _mat.Row();
 		if (row == 3)
 		{
-			Matrix<float> rst(1, 3);
+			Matrix rst(1, 3);
 			rst.arry[0][0] = x;
 			rst.arry[0][1] = y;
 			rst.arry[0][2] = z;
@@ -458,12 +458,12 @@ public:
 		return Vector4D_<T>(x * _val, y * _val, z * _val, w * _val);
 	}
 
-	Vector4D_<T> operator *(const Matrix<float>& _mat)
+	Vector4D_<T> operator *(const Matrix& _mat)
 	{
 		int row = _mat.Row();
 		if (row == 4)
 		{
-			Matrix<float> rst(1, 4);
+			Matrix rst(1, 4);
 			rst.arry[0][0] = x;
 			rst.arry[0][1] = y;
 			rst.arry[0][2] = z;

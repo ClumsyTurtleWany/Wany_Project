@@ -1,7 +1,7 @@
 #pragma once
 #include <math.h>
+#include <vector>
 
-template <typename T>
 class Matrix
 {
 private:
@@ -10,15 +10,15 @@ public:
 	int column = 0; // x
 
 public:
-	T** arry = nullptr;
+	std::vector<std::vector<float>> arry;
 
 public:
 	Matrix() {};
-	Matrix(int _row, int _column, T _val = NULL) : row(_row), column(_column)
+	Matrix(int _row, int _column, float _val = 0.0f) : row(_row), column(_column)
 	{
 		if (create())
 		{
-			clear(_val);
+			set(_val);
 		}
 	}
 	Matrix(const Matrix* _src)
@@ -43,21 +43,21 @@ public:
 public:
 	bool create()
 	{
-		if (arry != nullptr || row == 0 || column == 0)
+		if (!arry.empty() || row == 0 || column == 0)
 		{
 			return false;
 		}
 
-		arry = new T * [row];
-		for (int i = 0; i < row; i++)
+		arry.assign(row, std::vector<float>());
+		for (int idx = 0; idx < row; idx++)
 		{
-			arry[i] = new T[column];
+			arry[idx].assign(column, 0.0f);
 		}
 
 		return true;
 	}
 
-	void clear(T _val = NULL)
+	void set(float _val = 0.0f)
 	{
 		for (int i = 0; i < row; i++)
 		{
@@ -70,39 +70,12 @@ public:
 
 	void release()
 	{
-		if (arry == nullptr)
-		{
-			return;
-		}
-
-		for (int i = 0; i < row; i++)
-		{
-			delete arry[i];
-		}
-		delete[] arry;
-		arry = nullptr;
+		arry.clear();
 	}
 
-	T& at(int _row, int _column)
+	Matrix Transpose()
 	{
-		return &arry[_row][_column];
-	}
-
-	bool isCreated()
-	{
-		if (arry == nullptr)
-		{
-			return false;
-		}
-		else
-		{
-			return true;
-		}
-	}
-
-	Matrix<T> Transpose()
-	{
-		Matrix<T> mat(column, row);
+		Matrix mat(column, row);
 
 		for (int i = 0; i < row; i++)
 		{
@@ -115,9 +88,9 @@ public:
 		return mat;
 	}
 
-	Matrix<T> Identity()
+	Matrix Identity()
 	{
-		Matrix<T> mat(row, column);
+		Matrix mat(row, column);
 
 		for (int i = 0; i < row; i++)
 		{
@@ -125,11 +98,11 @@ public:
 			{
 				if (i == j)
 				{
-					mat.arry[i][j] = static_cast<T>(1);
+					mat.arry[i][j] = 1.0f;
 				}
 				else
 				{
-					mat.arry[i][j] = static_cast<T>(0);
+					mat.arry[i][j] = 0.0f;
 				}
 			}
 		}
@@ -142,24 +115,26 @@ public:
 
 public:
 
-	Matrix<T> operator =(const Matrix<T>& _src)
+	void operator =(const Matrix& _src)
 	{
-		Matrix<T> rst(_src.Row(), _src.Col());
-		
-		for (int i = 0; i < row; i++)
+		arry.clear();
+		row = _src.Row();
+		column = _src.Col();
+		if (create())
 		{
-			for (int j = 0; j < column; j++)
+			for (int i = 0; i < row; i++)
 			{
-				rst.arry[i][j] = _src.arry[i][j];
+				for (int j = 0; j < column; j++)
+				{
+					arry[i][j] = _src.arry[i][j];
+				}
 			}
 		}
-		
-		return rst;
 	}
 
-	Matrix<T> operator *(const float& _val)
+	Matrix operator *(const float& _val)
 	{
-		Matrix<T> rst(this);
+		Matrix rst(this);
 		for (int i = 0; i < row; i++)
 		{
 			for (int j = 0; j < column; j++)
@@ -171,22 +146,23 @@ public:
 		return rst;
 	}
 
-	Matrix<T> operator *(const Matrix<T>& _src)
+	Matrix operator *(const Matrix& _src)
 	{
 		if (column != _src.Row())
 		{
-			return Matrix<T>();
+			return Matrix();
 		}
 		 
-		Matrix<T> rst(row, _src.Col());
+		Matrix rst(row, _src.Col());
 		for (int i = 0; i < rst.Row(); i++)
 		{
 			for (int j = 0; j < rst.Col(); j++)
 			{
 				rst.arry[i][j] = 0;
-				for (int k = 0; k < column; k++)
+				
+				for (int k = 0; k < rst.Col(); k++)
 				{
-					rst.arry[i][j] += arry[i][k] * _src.arry[k][i];
+					rst.arry[i][j] += arry[i][k] * _src.arry[k][j];
 				}
 			}
 		}
@@ -194,14 +170,14 @@ public:
 		return rst;
 	}
 
-	Matrix<T> operator +(const Matrix<T>& _src)
+	Matrix operator +(const Matrix& _src)
 	{
 		if ((row != _src.Row()) || (column != _src.Col()))
 		{
-			return Matrix<T>();
+			return Matrix();
 		}
 
-		Matrix<T> rst(this);
+		Matrix rst(this);
 		for (int i = 0; i < rst.Row(); i++)
 		{
 			for (int j = 0; j < rst.Col(); j++)
@@ -213,14 +189,14 @@ public:
 		return rst;
 	}
 
-	Matrix<T> operator +(const T& _val)
+	Matrix operator +(const float& _val)
 	{
 		if ((row == 0) || (column == 0))
 		{
 			return this;
 		}
 
-		Matrix<T> rst(this);
+		Matrix rst(this);
 		for (int i = 0; i < row; i++)
 		{
 			for (int j = 0; j < column; j++)
@@ -232,14 +208,14 @@ public:
 		return rst;
 	}
 
-	Matrix<T> operator -(const Matrix<T>& _src)
+	Matrix operator -(const Matrix& _src)
 	{
 		if ((row != _src.Row()) || (column != _src.Col()))
 		{
-			return Matrix<T>();
+			return Matrix();
 		}
 
-		Matrix<T> rst(this);
+		Matrix rst(this);
 		for (int i = 0; i < rst.Row(); i++)
 		{
 			for (int j = 0; j < rst.Col(); j++)
@@ -251,7 +227,7 @@ public:
 		return rst;
 	}
 
-	Matrix<T> operator -(const T& _val)
+	Matrix operator -(const float& _val)
 	{
 		if ((row == 0) || (column == 0))
 		{
@@ -271,9 +247,9 @@ public:
 	}	
 };
 
-inline Matrix<float> Make2DMatrix_Scale(float _x, float _y)
+inline Matrix Make2DMatrix_Scale(float _x, float _y)
 {
-	Matrix<float> rst(3, 3);
+	Matrix rst(3, 3);
 	rst.arry[0][0] = _x;
 	rst.arry[1][1] = _y;
 	rst.arry[2][2] = 1.0f;
@@ -281,9 +257,9 @@ inline Matrix<float> Make2DMatrix_Scale(float _x, float _y)
 	return rst;
 }
 
-inline Matrix<float> Make2DMatrix_Rotation(float _radian)
+inline Matrix Make2DMatrix_Rotation(float _radian)
 {
-	Matrix<float> rst(3, 3);
+	Matrix rst(3, 3);
 	rst.arry[0][0] = cos(_radian);
 	rst.arry[0][1] = -sin(_radian);
 	rst.arry[1][0] = sin(_radian);
@@ -293,9 +269,9 @@ inline Matrix<float> Make2DMatrix_Rotation(float _radian)
 	return rst;
 }
 
-inline Matrix<float> Make2DMatrix_Translation(float _x, float _y)
+inline Matrix Make2DMatrix_Translation(float _x, float _y)
 {
-	Matrix<float> rst(3, 3);
+	Matrix rst(3, 3);
 	rst.arry[2][0] = _x;
 	rst.arry[2][1] = _y;
 	rst.arry[2][2] = 1.0f;
@@ -303,9 +279,9 @@ inline Matrix<float> Make2DMatrix_Translation(float _x, float _y)
 	return rst;
 }
 
-inline Matrix<float> Make3DMatrix_Scale(float _x, float _y, float _z)
+inline Matrix Make3DMatrix_Scale(float _x, float _y, float _z)
 {
-	Matrix<float> rst(4, 4);
+	Matrix rst(4, 4);
 	rst.arry[0][0] = _x;
 	rst.arry[1][1] = _y;
 	rst.arry[2][2] = _z;
@@ -314,9 +290,9 @@ inline Matrix<float> Make3DMatrix_Scale(float _x, float _y, float _z)
 	return rst;
 }
 
-inline Matrix<float> Make3DMatrix_RotationX(float _radian)
+inline Matrix Make3DMatrix_RotationX(float _radian)
 {
-	Matrix<float> rst(4, 4);
+	Matrix rst(4, 4);
 	rst.arry[0][0] = 1.0f;
 	rst.arry[1][1] = cos(_radian);
 	rst.arry[1][2] = -sin(_radian);
@@ -327,9 +303,9 @@ inline Matrix<float> Make3DMatrix_RotationX(float _radian)
 	return rst;
 }
 
-inline Matrix<float> Make3DMatrix_RotationY(float _radian)
+inline Matrix Make3DMatrix_RotationY(float _radian)
 {
-	Matrix<float> rst(4, 4);
+	Matrix rst(4, 4);
 	rst.arry[0][0] = cos(_radian);
 	rst.arry[0][2] = sin(_radian);
 	rst.arry[1][1] = 1.0f;
@@ -340,9 +316,9 @@ inline Matrix<float> Make3DMatrix_RotationY(float _radian)
 	return rst;
 }
 
-inline Matrix<float> Make3DMatrix_RotationZ(float _radian)
+inline Matrix Make3DMatrix_RotationZ(float _radian)
 {
-	Matrix<float> rst(4, 4);
+	Matrix rst(4, 4);
 	rst.arry[0][0] = cos(_radian);
 	rst.arry[0][1] = -sin(_radian);
 	rst.arry[1][0] = sin(_radian);
@@ -353,9 +329,13 @@ inline Matrix<float> Make3DMatrix_RotationZ(float _radian)
 	return rst;
 }
 
-inline Matrix<float> Make3DMatrix_Translation(float _x, float _y, float _z)
+inline Matrix Make3DMatrix_Translation(float _x, float _y, float _z)
 {
-	Matrix<float> rst(4, 4);
+	Matrix rst(4, 4);
+	rst.arry[0][0] = 1.0f;
+	rst.arry[1][1] = 1.0f;
+	rst.arry[2][2] = 1.0f;
+	
 	rst.arry[3][0] = _x;
 	rst.arry[3][1] = _y;
 	rst.arry[3][2] = _z;

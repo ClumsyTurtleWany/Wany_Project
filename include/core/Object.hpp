@@ -73,6 +73,8 @@ public:
 	bool filpSpriteHorizontal = false;
 	bool filpSpriteVertical = false;
 
+	float testVal = 0.0f;
+
 //public:
 //	std::vector<Rect_<float>> SpriteList;
 //	int SpriteNum = 0;
@@ -372,15 +374,18 @@ public:
 			}
 		}
 			
-		Matrix<float> s = Make3DMatrix_Scale(0.5f, 0.5f, 0.0f);
-		Matrix<float> r = Make3DMatrix_RotationZ(DegreeToRadian(0));
-		Matrix<float> t = Make3DMatrix_Translation(0.1f, 0.1f, 0.0f);
-		Matrix<float> srt = s * r * t;
+		Matrix s = Make3DMatrix_Scale(0.5f, 0.5f, 0.0f);
+		Matrix r = Make3DMatrix_RotationY(DegreeToRadian(testVal));
+		Matrix r2 = Make3DMatrix_RotationX(DegreeToRadian(testVal));
+		Matrix t = Make3DMatrix_Translation(0.0f, 0.0f, 0.0f);
+		Matrix srt = s * r * r2 * t;
+		testVal += 0.1f;
+
 		for (int i = 0; i < list->size(); i++)
 		{
 			Vector4f temp = Vector4f(list->at(i).pos.x, list->at(i).pos.y, list->at(i).pos.z, 1.0f);
 			temp = temp * srt;
-			list->at(i).pos = Vector3f(temp.x, temp.y, temp.z);
+			list->at(i).pos = Vector3f(temp.x, temp.y, 0.0f);
 		}
 
 	}
