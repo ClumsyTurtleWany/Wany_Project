@@ -375,11 +375,15 @@ public:
 		}
 			
 		Matrix s = Make3DMatrix_Scale(0.5f, 0.5f, 0.0f);
-		Matrix r = Make3DMatrix_RotationY(DegreeToRadian(testVal));
-		Matrix r2 = Make3DMatrix_RotationX(DegreeToRadian(testVal));
+		//Matrix r = Make3DMatrix_RotationY(DegreeToRadian(testVal));
+		//Matrix r2 = Make3DMatrix_RotationX(DegreeToRadian(testVal));
+		float rotVal = PI * cos(DegreeToRadian(testVal));
+		Matrix rx = Make3DMatrix_RotationX(rotVal);
+		Matrix ry = Make3DMatrix_RotationY(rotVal);
+		Matrix rz = Make3DMatrix_RotationZ(rotVal);
 		Matrix t = Make3DMatrix_Translation(0.0f, 0.0f, 0.0f);
-		Matrix srt = s * r * r2 * t;
-		testVal += 0.1f;
+		Matrix srt = s * rx * ry * rz * t;
+		testVal += 0.02f;
 
 		for (int i = 0; i < list->size(); i++)
 		{
