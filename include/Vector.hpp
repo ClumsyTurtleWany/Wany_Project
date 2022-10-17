@@ -38,23 +38,13 @@ public:
 		return Vector2D_<T>(x * _val, y * _val);
 	}
 
-	Vector2D_<T> operator *(Matrix& _mat)
+	Vector2D_<T> operator *(Matrix3x3& _mat)
 	{
-		int row = _mat.Row();
-		if (row == 2)
-		{
-			Matrix rst(1, 2);
-			rst.arry[0][0] = x;
-			rst.arry[0][1] = y;
+		float rst_x = (x * _mat.arry[0][0]) + (y * _mat.arry[1][0]) + (1 * _mat.arry[2][0]);
+		float rst_y = (x * _mat.arry[0][1]) + (y * _mat.arry[1][1]) + (1 * _mat.arry[2][1]);
+		float rst_z = (x * _mat.arry[0][2]) + (y * _mat.arry[1][2]) + (1 * _mat.arry[2][2]);
 
-			rst = rst * _mat;
-
-			return Vector2D_<T>(rst.arry[0][0], rst.arry[0][1]);
-		}
-		else
-		{
-			return Vector2D_<T>(x, y);
-		}
+		return Vector2D_<T>(rst_x, rst_y);
 	}
 
 	Vector2D_<T> operator /(const T& _val)
@@ -235,24 +225,24 @@ public:
 		return Vector3D_<T>(x * _val, y * _val, z * _val);
 	}
 
-	Vector3D_<T> operator *(Matrix& _mat)
+	Vector3D_<T> operator *(Matrix3x3& _mat)
 	{
-		int row = _mat.Row();
-		if (row == 3)
-		{
-			Matrix rst(1, 3);
-			rst.arry[0][0] = x;
-			rst.arry[0][1] = y;
-			rst.arry[0][2] = z;
+		Vector3D_<T> rst;
+		rst.x = (x * _mat.arry[0][0]) + (y * _mat.arry[1][0]) + (z * _mat.arry[2][0]);
+		rst.y = (x * _mat.arry[0][1]) + (y * _mat.arry[1][1]) + (z * _mat.arry[2][1]);
+		rst.z = (x * _mat.arry[0][2]) + (y * _mat.arry[1][2]) + (z * _mat.arry[2][2]);
 
-			rst = rst * _mat;
+		return rst;
+	}
 
-			return Vector3D_<T>(rst.arry[0][0], rst.arry[0][1], rst.arry[0][2]);
-		}
-		else
-		{
-			return Vector3D_<T>(x, y, z);
-		}
+	Vector3D_<T> operator *(Matrix4x4& _mat)
+	{
+		float rst_x = (x * _mat.arry[0][0]) + (y * _mat.arry[1][0]) + (z * _mat.arry[2][0]) + (1.0f * _mat.arry[3][0]);
+		float rst_y = (x * _mat.arry[0][1]) + (y * _mat.arry[1][1]) + (z * _mat.arry[2][1]) + (1.0f * _mat.arry[3][1]);
+		float rst_z = (x * _mat.arry[0][2]) + (y * _mat.arry[1][2]) + (z * _mat.arry[2][2]) + (1.0f * _mat.arry[3][2]);
+		float rst_w = (x * _mat.arry[0][3]) + (y * _mat.arry[1][3]) + (z * _mat.arry[2][3]) + (1.0f * _mat.arry[3][3]);
+
+		return Vector3D_<T>(rst_x, rst_y, rst_z);
 	}
 
 	Vector3D_<T> operator /(const T& _val)
@@ -458,23 +448,15 @@ public:
 		return Vector4D_<T>(x * _val, y * _val, z * _val, w * _val);
 	}
 
-	Vector4D_<T> operator *(const Matrix& _mat)
+	Vector4D_<T> operator *(const Matrix4x4& _mat)
 	{
-		int row = _mat.Row();
-		if (row == 4)
-		{
-			Matrix rst(1, 4);
-			rst.arry[0][0] = x;
-			rst.arry[0][1] = y;
-			rst.arry[0][2] = z;
-			rst.arry[0][3] = w;
+		Vector4D_<T> rst;
+		rst.x = (x * _mat.arry[0][0]) + (y * _mat.arry[1][0]) + (z * _mat.arry[2][0]) + (w * _mat.arry[3][0]);
+		rst.y = (x * _mat.arry[0][1]) + (y * _mat.arry[1][1]) + (z * _mat.arry[2][1]) + (w * _mat.arry[3][1]);
+		rst.z = (x * _mat.arry[0][2]) + (y * _mat.arry[1][2]) + (z * _mat.arry[2][2]) + (w * _mat.arry[3][2]);
+		rst.w = (x * _mat.arry[0][3]) + (y * _mat.arry[1][3]) + (z * _mat.arry[2][3]) + (w * _mat.arry[3][3]);
 
-			rst = rst * _mat;
-
-			return Vector4D_<T>(rst.arry[0][0], rst.arry[0][1], rst.arry[0][2], rst.arry[0][3]);
-		}
-
-		return Vector4D_<T>(x, y, z, w);
+		return rst;
 	}
 
 	Vector4D_<T> operator /(const T& _val)

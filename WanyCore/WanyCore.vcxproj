@@ -217,6 +217,7 @@ copy "..\\lib\\FMOD\\fmodL.dll" "..\\$(TargetName)\\"</Command>
     <ClCompile Include="WindowUI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="DefaultObject.txt" />
     <Text Include="MaskShader.txt" />
     <Text Include="ShapeShader.txt" />
     <Text Include="TextureShader.txt" />

@@ -27,14 +27,23 @@ bool DXShaderManager::Load(int _key, ShaderType _type)
 	newShader->setDevice(m_pd3dDevice, m_pImmediateContext);
 	if (_type == ShaderType::Mask)
 	{
+		// 텍스처 출력 가능. 마스크 Discard
 		newShader->setShaderFile(L"../include/core/HLSL/MaskShader.txt");
 	}
 	else if (_type == ShaderType::Texture)
 	{
+		// 텍스처 출력 가능.
 		newShader->setShaderFile(L"../include/core/HLSL/TextureShader.txt");
+	}
+	else if (_type == ShaderType::Object3D)
+	{
+		// Constant Data 이용하여 쉐이더에서 매트릭스 계산. 텍스처 출력 가능.
+		newShader->setShaderFile(L"../include/core/HLSL/DefaultObject.txt");
+		newShader->setCreateConstantFlag(true);
 	}
 	else
 	{
+		// 다이렉트로 픽셀 뿌림. 텍스처 출력 불가.
 		newShader->setShaderFile(L"../include/core/HLSL/ShapeShader.txt");
 	}
 

@@ -238,6 +238,9 @@
     <Text Include="TextureShader.txt">
       <Filter>DirectX\HLSL</Filter>
     </Text>
+    <Text Include="DefaultObject.txt">
+      <Filter>DirectX\HLSL</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

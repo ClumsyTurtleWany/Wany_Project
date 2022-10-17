@@ -26,6 +26,15 @@ bool DXShader::initialize()
 		return false;
 	}
 
+	if (isConstant)
+	{
+		if (FAILED(CreateConstantBuffer()))
+		{
+			OutputDebugString(L"WanyCore::DXShader::Failed Create Constant Buffer.\n");
+			return false;
+		}
+	}
+
 	if (FAILED(CreateIndexBuffer()))
 	{
 		OutputDebugString(L"WanyCore::DXShader::Failed Create Index Buffer.\n");
@@ -115,7 +124,7 @@ bool DXShader::render()
 	{
 		ID3D11ShaderResourceView* resourceView = m_pTexture->getResourceView();
 		m_pImmediateContext->PSSetShaderResources(0, 1, &resourceView); // 레지스터 0번
-	
+
 		// Alpha 제거 (배경 제거 - 포토샵 누끼 따는 것처럼)
 		if (m_pTextureMask != nullptr)
 		{
@@ -126,6 +135,11 @@ bool DXShader::render()
 
 	// Blend State 적용.
 	m_pImmediateContext->OMSetBlendState(DXSamplerState::pBlendSamplerState, 0, -1);
+
+	if (m_pConstantBuffer != nullptr)
+	{
+		m_pImmediateContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
+	}
 
 	// Draw 명령이 호출되면 위의 파이프라인 순서대로 타고 내려옴. 셋팅 할 때의 순서는 상관 없으나
 	// 셋팅이 안되있으면 문제가 생김.
@@ -159,11 +173,17 @@ bool DXShader::release()
 		m_pVertexBuffer = nullptr;
 	}
 
+	if (m_pConstantBuffer != nullptr)
+	{
+		m_pConstantBuffer->Release();
+		m_pConstantBuffer = nullptr;
+	}
+
 	if (m_pIndexBuffer != nullptr)
 	{
 		m_pIndexBuffer->Release();
 		m_pIndexBuffer = nullptr;
-	}	
+	}
 
 	if (m_pVertexLayout != nullptr)
 	{
@@ -304,6 +324,33 @@ HRESULT DXShader::CreateIndexBuffer()
 		&initialData, // 초기 할당된 버퍼를 체우는 CPU 메모리, NULL로 넣으면 생성만 해 놓는 것.
 		&m_pIndexBuffer); // desc cpu flag를 0으로 해서 이 버퍼에 CPU는 접근 할 수 없음.
 
+}
+
+HRESULT DXShader::CreateConstantBuffer()
+{
+	initializeConstantData();
+
+	// CreateBuffer() Param
+	// D3D11_BUFFER_DESC* pDesc,
+	// D3D11_SUBRESOURCE_DATA* pInitialData,
+	// ID3D11Buffer** ppBuffer
+	D3D11_BUFFER_DESC desc;
+	ZeroMemory(&desc, sizeof(desc));
+	desc.ByteWidth = sizeof(ConstantBufferData) * 1; // 바이트 용량
+	desc.Usage = D3D11_USAGE_DEFAULT; // 버퍼의 할당 장소 내지는 버퍼 용도, D3D11_USAGE_DEFAULT == GPU 메모리에 할당.
+	desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER; // 인덱스 버퍼를 사용하겠다는 플래그
+	// desc.CPUAccessFlags = 0; // CPU에서 접근 하게 할 것이냐, 0으로 하면 처음 할당 이외에는 CPU가 읽고 쓰기 불가.
+	// desc.MiscFlags = 0; //
+	// desc.StructureByteStride = 0;
+
+	D3D11_SUBRESOURCE_DATA initialData;
+	ZeroMemory(&initialData, sizeof(initialData));
+	initialData.pSysMem = &m_ConstantData; // 배열이 아니면 시스템 메모리에 들어 갈 수 없음. 그래서 그냥 배열보다 편한 vector 사용.
+
+	return m_pd3dDevice->CreateBuffer(
+		&desc, // 버퍼 할당 
+		&initialData, // 초기 할당된 버퍼를 체우는 CPU 메모리, NULL로 넣으면 생성만 해 놓는 것.
+		&m_pConstantBuffer); // desc cpu flag를 0으로 해서 이 버퍼에 CPU는 접근 할 수 없음.
 }
 
 HRESULT DXShader::CreateVertexLayout()
@@ -489,7 +536,18 @@ void DXShader::initializeIndexList()
 	m_IndexList[2] = 2;
 	m_IndexList[3] = 2;
 	m_IndexList[4] = 1;
-	m_IndexList[5] = 3;	
+	m_IndexList[5] = 3;
+}
+
+void DXShader::initializeConstantData()
+{
+	m_ConstantData.matWorld.Identity();
+	m_ConstantData.matView.Identity();
+	m_ConstantData.matProj.Identity();
+
+	m_ConstantData.matWorld.Transpose();
+	m_ConstantData.matView.Transpose();
+	m_ConstantData.matProj.Transpose();
 }
 
 void DXShader::setDevice(ID3D11Device* _device, ID3D11DeviceContext* _context)
@@ -505,7 +563,7 @@ void DXShader::setTexture(DXTexture* _texture)
 
 void DXShader::setColor(const Vector4f& _color)
 {
-	for (auto &it : m_VertexList)
+	for (auto& it : m_VertexList)
 	{
 		it.color = _color;
 	}
@@ -521,9 +579,120 @@ void DXShader::setShaderFile(std::wstring _file)
 	m_wstrShaderFile = _file;
 }
 
+void DXShader::setCreateConstantFlag(bool _flag)
+{
+	isConstant = _flag;
+}
+
 std::vector<Vertex>* DXShader::getVertexList()
 {
 	return &m_VertexList;
+}
+
+bool DXShader::updateVertexList(std::vector<Vertex>* _list)
+{
+	if (m_VertexList.size() == _list->size())
+	{
+		m_VertexList.assign(_list->begin(), _list->end());
+	}
+	else
+	{
+		m_VertexList.assign(_list->begin(), _list->end());
+
+		if (m_pVertexBuffer != nullptr)
+		{
+			m_pVertexBuffer->Release();
+		}
+
+		// CreateBuffer() Param
+		// D3D11_BUFFER_DESC* pDesc,
+		// D3D11_SUBRESOURCE_DATA* pInitialData,
+		// ID3D11Buffer** ppBuffer
+		D3D11_BUFFER_DESC desc;
+		ZeroMemory(&desc, sizeof(desc));
+		desc.ByteWidth = sizeof(Vertex) * static_cast<UINT>(m_VertexList.size()); // 바이트 용량
+		desc.Usage = D3D11_USAGE_DEFAULT; // 버퍼의 할당 장소 내지는 버퍼 용도, D3D11_USAGE_DEFAULT == GPU 메모리에 할당.
+		desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+		// desc.CPUAccessFlags = 0; // CPU에서 접근 하게 할 것이냐, 0으로 하면 처음 할당 이외에는 CPU가 읽고 쓰기 불가.
+		// desc.MiscFlags = 0; //
+		// desc.StructureByteStride = 0;
+
+		D3D11_SUBRESOURCE_DATA initialData;
+		ZeroMemory(&initialData, sizeof(initialData));
+		initialData.pSysMem = &m_VertexList.at(0); // 배열이 아니면 시스템 메모리에 들어 갈 수 없음. 그래서 그냥 배열보다 편한 vector 사용.
+
+		HRESULT rst = m_pd3dDevice->CreateBuffer(
+			&desc, // 버퍼 할당 
+			&initialData, // 초기 할당된 버퍼를 체우는 CPU 메모리, NULL로 넣으면 생성만 해 놓는 것.
+			&m_pVertexBuffer); // desc cpu flag를 0으로 해서 이 버퍼에 CPU는 접근 할 수 없음.
+
+		if (FAILED(rst))
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+}
+
+bool DXShader::updateIndexList(std::vector<DWORD>* _list)
+{
+	if (m_IndexList.size() == _list->size())
+	{
+		m_IndexList.assign(_list->begin(), _list->end());
+	}
+	else
+	{
+		m_IndexList.assign(_list->begin(), _list->end());
+
+		if (m_pVertexBuffer != nullptr)
+		{
+			m_pVertexBuffer->Release();
+		}
+
+		// CreateBuffer() Param
+		// D3D11_BUFFER_DESC* pDesc,
+		// D3D11_SUBRESOURCE_DATA* pInitialData,
+		// ID3D11Buffer** ppBuffer
+		D3D11_BUFFER_DESC desc;
+		ZeroMemory(&desc, sizeof(desc));
+		desc.ByteWidth = sizeof(DWORD) * static_cast<UINT>(m_IndexList.size()); // 바이트 용량
+		desc.Usage = D3D11_USAGE_DEFAULT; // 버퍼의 할당 장소 내지는 버퍼 용도, D3D11_USAGE_DEFAULT == GPU 메모리에 할당.
+		desc.BindFlags = D3D11_BIND_INDEX_BUFFER; // 인덱스 버퍼를 사용하겠다는 플래그
+		// desc.CPUAccessFlags = 0; // CPU에서 접근 하게 할 것이냐, 0으로 하면 처음 할당 이외에는 CPU가 읽고 쓰기 불가.
+		// desc.MiscFlags = 0; //
+		// desc.StructureByteStride = 0;
+
+		D3D11_SUBRESOURCE_DATA initialData;
+		ZeroMemory(&initialData, sizeof(initialData));
+		initialData.pSysMem = &m_IndexList.at(0); // 배열이 아니면 시스템 메모리에 들어 갈 수 없음. 그래서 그냥 배열보다 편한 vector 사용.
+
+		return m_pd3dDevice->CreateBuffer(
+			&desc, // 버퍼 할당 
+			&initialData, // 초기 할당된 버퍼를 체우는 CPU 메모리, NULL로 넣으면 생성만 해 놓는 것.
+			&m_pIndexBuffer); // desc cpu flag를 0으로 해서 이 버퍼에 CPU는 접근 할 수 없음.
+
+	}
+}
+
+bool DXShader::updateConstantData(ConstantBufferData* _data)
+{
+	if (_data == nullptr)
+	{
+		return false;
+	}
+
+	m_ConstantData.matWorld = _data->matWorld;
+	m_ConstantData.matView = _data->matView;
+	m_ConstantData.matProj = _data->matProj;
+	m_ConstantData.time1 = _data->time1;
+	m_ConstantData.time2 = _data->time2;
+	m_ConstantData.time3 = _data->time3;
+	m_ConstantData.time4 = _data->time4;
+
+	return true;
 }
 
 float DXShader::getTextureWidth()
