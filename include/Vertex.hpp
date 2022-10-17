@@ -13,4 +13,12 @@ struct Vertex
 
 	// Texture
 	Vector2f texture;
+
+	Vertex() {};
+	Vertex(const Vector3f& _pos, const Vector4f& _color, const Vector2f& _texture)
+	{
+		pos = _pos;
+		color = _color;
+		texture = _texture;
+	}
 };
