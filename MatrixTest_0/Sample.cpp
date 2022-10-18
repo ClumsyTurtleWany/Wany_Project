@@ -40,7 +40,7 @@ bool Sample::initialize()
     }    
 
     renderCamera = new Camera(ProjectionType::Perspective);
-    renderCamera->CreateMatrix_View(Vector3f(0.0f, 1.0f, -27.79f), Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, 1.0f, 0.0f));
+    renderCamera->CreateMatrix_View(Vector3f(0.0f, 0.0f, -10.0f), Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, 1.0f, 0.0f));
     renderCamera->CreateMatrix_Proj(1.0f, 10000.0f, PI * 0.25f, static_cast<float>(g_pWindow->getClientWidth()) / static_cast<float>(g_pWindow->getClientHeight()));
 
 

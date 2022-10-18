@@ -201,6 +201,8 @@ bool NewObject::render()
 	std::vector<Vertex>* list;
 	list = pShader->getVertexList();
 
+	pShader->updateVertexList(&VertexList);
+
 	for (size_t idx = 0; idx < list->size(); idx++)
 	{
 		Vector3f temp = VertexList[idx].pos;
