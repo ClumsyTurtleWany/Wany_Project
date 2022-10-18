@@ -30,8 +30,19 @@ bool Sample::initialize()
             pObject->shape = Rect2f(x, y, width, height);
             pObject->createShader(ShaderType::Object3D);
             pObject->setTexture(pTexture);
+
+            //pBoxObject = new BoxObject;
+            //pBoxObject->createShader(ShaderType::Object3D);
+            //pBoxObject->initVertex();
+            //pBoxObject->setTexture(pTexture);
+            
         }
     }    
+
+    renderCamera = new Camera(ProjectionType::Perspective);
+    renderCamera->CreateMatrix_View(Vector3f(0.0f, 1.0f, -27.79f), Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, 1.0f, 0.0f));
+    renderCamera->CreateMatrix_Proj(1.0f, 10000.0f, PI * 0.25f, static_cast<float>(g_pWindow->getClientWidth()) / static_cast<float>(g_pWindow->getClientHeight()));
+
 
     return true;
 }
@@ -39,20 +50,47 @@ bool Sample::initialize()
 bool Sample::frame()
 {
     float dt = Timer::getInstance()->getDeltaTime();
+    renderCamera->frame();
     pObject->frame(dt);
+    //pBoxObject->frame(dt);
+   
     return true;
 }
 
 bool Sample::render()
 {
+    KeyState KeyState_F4 = Input::getInstance()->getKey(VK_F4);
+    if (KeyState_F4 == KeyState::Hold)
+    {
+        m_pImmediateContext->RSSetState(DXSamplerState::pDefaultRSWireFrame);
+    }
+
+    Matrix4x4 identity;
+    identity.Identity();
+   /* pBoxObject->setMatrix(identity, renderCamera->getMatrix_View(), renderCamera->getMatrix_Projection());
+    pBoxObject->render();*/
+
+   // pObject->setMatrix(identity, renderCamera->getMatrix_View(), renderCamera->getMatrix_Projection());
+    pObject->setMatrix(identity, renderCamera->getMatrix_View(), renderCamera->getMatrix_Projection());
+    //pObject->setMatrix(identity, identity, identity);
     pObject->render();
     return true;
 }
 
 bool Sample::release()
 {
-    pObject->release();
-    delete pObject;
-    pObject = nullptr;
+    if (pObject != nullptr)
+    {
+        pObject->release();
+        delete pObject;
+        pObject = nullptr;
+    }
+
+    /*if (pBoxObject != nullptr)
+    {
+        pBoxObject->release();
+        delete pBoxObject;
+        pBoxObject = nullptr;
+    }*/
     return true;
 }

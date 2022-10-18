@@ -4,6 +4,8 @@ ID3D11SamplerState* DXSamplerState::pDefaultSamplerState = nullptr;
 ID3D11RasterizerState* DXSamplerState::pDefaultRSWireFrame = nullptr;
 ID3D11RasterizerState* DXSamplerState::pDefaultRSSolid = nullptr;
 ID3D11BlendState* DXSamplerState::pBlendSamplerState = nullptr;
+ID3D11DepthStencilState* DXSamplerState::pDefaultDepthStencil = nullptr;
+ID3D11DepthStencilState* DXSamplerState::pGreaterDepthStencil = nullptr;
 
 bool DXSamplerState::setState(ID3D11Device* _pd3dDevice)
 {
@@ -123,6 +125,35 @@ bool DXSamplerState::setState(ID3D11Device* _pd3dDevice)
 		return false;
 	}
 
+	// Depth Stencil State
+	D3D11_DEPTH_STENCIL_DESC DSStateDesc;
+	ZeroMemory(&DSStateDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
+	// Depth Buffer Control
+	DSStateDesc.DepthEnable = TRUE; // True: Depth Buffer 사용.
+	DSStateDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL; // 원래의 값이 0.5라면 마스크과 곱연산 되어 출력 됨. Zero: 무조건 0 출력, All: 원래 값 * 마스크(1) 출력.
+	DSStateDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL; // 원래 값보다 작거나 같으면 출력. 이 값에 의해 출력 결과 달라짐. 
+	// Stencil Buffer Control
+	DSStateDesc.StencilEnable;				// Stencil Buffer Control
+	DSStateDesc.StencilReadMask;			// Stencil Buffer Control
+	DSStateDesc.StencilWriteMask;			// Stencil Buffer Control
+	DSStateDesc.FrontFace; // Stencil Buffer Control
+	DSStateDesc.BackFace; // Stencil Buffer Control
+	rst = _pd3dDevice->CreateDepthStencilState(&DSStateDesc, &pDefaultDepthStencil);
+	if (FAILED(rst))
+	{
+		OutputDebugString(L"WanyCore::DXSamplerState::Failed Create Default Depth Stencil State.\n");
+		return false;
+	}
+
+	DSStateDesc.DepthFunc = D3D11_COMPARISON_GREATER;
+	rst = _pd3dDevice->CreateDepthStencilState(&DSStateDesc, &pGreaterDepthStencil);
+	if (FAILED(rst))
+	{
+		OutputDebugString(L"WanyCore::DXSamplerState::Failed Create Greater Depth Stencil State.\n");
+		return false;
+	}
+	
+
 	return true;
 }
 
@@ -150,6 +181,18 @@ bool DXSamplerState::release()
 	{
 		pBlendSamplerState->Release();
 		pBlendSamplerState = nullptr;
+	}
+
+	if (pDefaultDepthStencil != nullptr)
+	{
+		pDefaultDepthStencil->Release();
+		pDefaultDepthStencil = nullptr;
+	}
+
+	if (pGreaterDepthStencil != nullptr)
+	{
+		pGreaterDepthStencil->Release();
+		pGreaterDepthStencil = nullptr;
 	}
 
 	return true;

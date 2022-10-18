@@ -25,6 +25,14 @@ bool objectBase::release()
 	return false;
 }
 
+void objectBase::updateShader()
+{
+}
+
+void objectBase::updateShaderCamera()
+{
+}
+
 void objectBase::setDevice(ID3D11Device* _device, ID3D11DeviceContext* _context)
 {
 	pShader->setDevice(_device, _context);

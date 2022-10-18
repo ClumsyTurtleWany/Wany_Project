@@ -377,9 +377,14 @@ public:
 		return sqrt(static_cast<float>(x * x + y * y + z * z));
 	}
 	// 정규화: 단위벡터(자신을) 계산
-	void normalized()
+	Vector3D_<T> normalized()
 	{
-		this = unit();
+		float size = length();
+		Vector3D_<T> rst;
+		rst.x = x / size;
+		rst.y = y / size;
+		rst.z = z / size;
+		return rst;
 	}
 	// 단위벡터 반환 normal == unit
 	const Vector3D_<T> unit()

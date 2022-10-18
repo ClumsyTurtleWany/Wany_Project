@@ -8,6 +8,8 @@ class Sample : public GameCore
 {
 public:
 	NewObject* pObject = nullptr;
+	BoxObject* pBoxObject = nullptr;
+	Camera* renderCamera = nullptr;
 
 public:
 	bool initialize() override;

@@ -101,10 +101,12 @@ bool GameCore::CoreFrame()
 
 bool GameCore::PreRender()
 {
-	m_pImmediateContext->OMSetRenderTargets(1, &m_pRTV, NULL); // m_pRTV 에 뿌린다.
+	//m_pImmediateContext->OMSetRenderTargets(1, &m_pRTV, NULL); // m_pRTV 에 뿌린다.
+	m_pImmediateContext->OMSetRenderTargets(1, &m_pRTV, m_pDepthStencilView); // Depth Stencil View 추가.
 	//float color[4] = { 1.0f, 1.0f, 1.0f, 1.0f }; // R, G, B, A 순 0 ~ 1.0사이 값 1.0 == 255
 	float color[4] = { 1.0f, 1.0f, 1.0f, 1.0f }; // R, G, B, A 순 0 ~ 1.0사이 값 1.0 == 255
 	m_pImmediateContext->ClearRenderTargetView(m_pRTV, color);
+	m_pImmediateContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0); // Depth는 1.0f, Stencil은 0으로 클리어.
 	m_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 
@@ -131,6 +133,10 @@ bool GameCore::PreRender()
 
 	// Blend State 적용.
 	m_pImmediateContext->OMSetBlendState(DXSamplerState::pBlendSamplerState, 0, -1);
+
+	// Depth Stencil State 적용.
+	m_pImmediateContext->OMSetDepthStencilState(DXSamplerState::pDefaultDepthStencil, 0xff);
+	//m_pImmediateContext->OMSetDepthStencilState(DXSamplerState::pGreaterDepthStencil, 0xff); // Depth 큰것 출력하고 싶을 때.
 
 	return true;
 }

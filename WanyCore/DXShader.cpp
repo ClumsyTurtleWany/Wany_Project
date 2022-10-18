@@ -84,6 +84,12 @@ bool DXShader::render()
 	// GPU Update
 	m_pImmediateContext->UpdateSubresource(m_pVertexBuffer, 0, NULL, &m_VertexList.at(0), 0, 0);
 
+	// Constant Data Update
+	if ((m_pConstantBuffer != nullptr))
+	{
+		m_pImmediateContext->UpdateSubresource(m_pConstantBuffer, 0, nullptr, &m_ConstantData, 0, 0);
+	}
+
 	// 삼각형 랜더링
 	// 1) Input-Assember Stage
 
@@ -602,6 +608,7 @@ bool DXShader::updateVertexList(std::vector<Vertex>* _list)
 		if (m_pVertexBuffer != nullptr)
 		{
 			m_pVertexBuffer->Release();
+			m_pVertexBuffer = nullptr;
 		}
 
 		// CreateBuffer() Param
@@ -647,9 +654,10 @@ bool DXShader::updateIndexList(std::vector<DWORD>* _list)
 	{
 		m_IndexList.assign(_list->begin(), _list->end());
 
-		if (m_pVertexBuffer != nullptr)
+		if (m_pIndexBuffer != nullptr)
 		{
-			m_pVertexBuffer->Release();
+			m_pIndexBuffer->Release();
+			m_pIndexBuffer = nullptr;
 		}
 
 		// CreateBuffer() Param
@@ -669,10 +677,17 @@ bool DXShader::updateIndexList(std::vector<DWORD>* _list)
 		ZeroMemory(&initialData, sizeof(initialData));
 		initialData.pSysMem = &m_IndexList.at(0); // 배열이 아니면 시스템 메모리에 들어 갈 수 없음. 그래서 그냥 배열보다 편한 vector 사용.
 
-		return m_pd3dDevice->CreateBuffer(
+		HRESULT rst = m_pd3dDevice->CreateBuffer(
 			&desc, // 버퍼 할당 
 			&initialData, // 초기 할당된 버퍼를 체우는 CPU 메모리, NULL로 넣으면 생성만 해 놓는 것.
 			&m_pIndexBuffer); // desc cpu flag를 0으로 해서 이 버퍼에 CPU는 접근 할 수 없음.
+
+		if (FAILED(rst))
+		{
+			return false;
+		}
+		
+		return true;
 
 	}
 }

@@ -41,6 +41,8 @@ public:
 	virtual bool render();
 	virtual bool release();
 	virtual bool Random() = 0;
+	virtual void updateShader();
+	virtual void updateShaderCamera();
 
 public:
 	void setDevice(ID3D11Device* _device, ID3D11DeviceContext* _context);
@@ -317,7 +319,7 @@ public:
 	}
 
 public:
-	virtual void updateShader()
+	virtual void updateShader() override
 	{
 		Rect_<float> rectNDC;
 		rectNDC = ScreenToNDC_noCamera(); //ScreenToNDC();
@@ -395,7 +397,7 @@ public:
 	}
 
 	// 2022-09-22 Test
-	virtual void updateShaderCamera()
+	virtual void updateShaderCamera() override
 	{
 		Rect_<float> rectOrthogonal = ScreenToOrthogonal(shape);
 		Rect_<float> rectNDC;

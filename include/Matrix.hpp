@@ -456,7 +456,7 @@ public:
 	}
 
 public:
-	void operator= (Matrix4x4& _mat)
+	void operator= (const Matrix4x4& _mat)
 	{
 		for (int row = 0; row < 4; row++)
 		{

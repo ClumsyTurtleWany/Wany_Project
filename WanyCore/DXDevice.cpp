@@ -15,6 +15,13 @@ bool DXDevice::resize()
 	m_pImmediateContext->OMSetRenderTargets(0, nullptr, NULL);
 	m_pRTV->Release();
 	m_pRTV = nullptr;
+
+	// Release Depth Stencil View
+	m_pDepthStencilView->Release();
+	m_pDepthStencilView = nullptr;
+
+	pDSTexture->Release();
+	pDSTexture = nullptr;
 	 
 	// 변경된 윈도우의 크기를 얻고 백 버퍼의 크기를 재 조정.
 	DXGI_SWAP_CHAIN_DESC desc;
@@ -26,7 +33,11 @@ bool DXDevice::resize()
 	}
 
 	// 변경된 백 버퍼의 크기를 얻고 렌더타켓 뷰를 다시 생성 및 적용.
-	createRenderTargetView();
+	rst = createRenderTargetView();
+	if (FAILED(rst))
+	{
+		return false;
+	}
 	
 	// 소멸했던 깊이 스텐실 버퍼와 깊이 스텐실 뷰 다시 생성 및 적용
 	// 뷰포트 재 지정.
@@ -44,6 +55,12 @@ bool DXDevice::resize()
 		pBackBuffer->Release();
 	}
 	DXWriter::getInstance()->createDXResource();
+
+	rst = createDepthStencilView();
+	if (FAILED(rst))
+	{
+		return false;
+	}
 
 	return true;
 }
@@ -255,6 +272,53 @@ void DXDevice::createViewPort()
 	m_pImmediateContext->RSSetViewports(1, &vp);
 }
 
+HRESULT DXDevice::createDepthStencilView()
+{
+	// 깊이 스텐실 뷰는 직접 생성해야만 한다. 얘도 클라이언트 리사이징 할 때 초기화 필요.
+	// 1. 텍스처 생성.
+	// 2. 깊이 스텐실 뷰 생성.
+	// 3. 뷰 적용. (OMSetRenderTargets)
+	// 4. 깊이 스텐실 뷰 상태 객체 생성해서 적용.
+
+	// 1. 텍스처 생성.
+	D3D11_TEXTURE2D_DESC desc;
+	ZeroMemory(&desc, sizeof(D3D11_TEXTURE2D_DESC));
+
+	DXGI_SWAP_CHAIN_DESC refDesc;
+	m_pSwapChain->GetDesc(&refDesc);
+
+	desc.Width = refDesc.BufferDesc.Width;
+	desc.Height = refDesc.BufferDesc.Height;
+	desc.MipLevels = 1; // 0으로 하면 9단계 까지 생성
+	desc.ArraySize = 1; // 1개만 생성
+	desc.Format = DXGI_FORMAT_R24G8_TYPELESS; // 32bit, 24bit는 Z버퍼(Depth)로 사용하고, 8bit는 스텐실 버퍼로 사용 하겠다.
+	desc.SampleDesc.Count = 1;
+	desc.Usage = D3D11_USAGE_DEFAULT;
+	desc.BindFlags = D3D11_BIND_DEPTH_STENCIL; // 중요! 어디에 적용 할 것인지 정하는 것.
+	desc.CPUAccessFlags = 0;
+	desc.MiscFlags = 0;
+	HRESULT rst = m_pd3dDevice->CreateTexture2D(&desc, NULL, &pDSTexture);
+	if (FAILED(rst))
+	{
+		return rst;
+	}
+
+	// 2. 깊이 스텐실 뷰 생성.
+	D3D11_DEPTH_STENCIL_VIEW_DESC DSdesc;
+	ZeroMemory(&DSdesc, sizeof(D3D11_DEPTH_STENCIL_VIEW_DESC));
+	DSdesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT; // Depth는 노멀라이즈 하지말고, 스텐실은 정수형으로 생성. Texture 생성과 비트를 맞춰 줘야함.
+	DSdesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	DSdesc.Flags = 0;
+
+	rst = m_pd3dDevice->CreateDepthStencilView(pDSTexture, &DSdesc, &m_pDepthStencilView);
+	if (FAILED(rst))
+	{
+		return rst;
+	}
+
+	return rst;
+}
+
 bool DXDevice::initialize()
 {
 	//////////////////////////////////////////////////////////////////////
@@ -311,6 +375,12 @@ bool DXDevice::initialize()
 	//////////////////////////////////////////////////////////////////////
 	createViewPort();
 
+	if (FAILED(createDepthStencilView()))
+	{
+		OutputDebugString(L"WanyCore::DXDevice::Failed Create Depth Stencil View.\n");
+		return false;
+	}
+
 	return true;
 }
 
@@ -326,6 +396,18 @@ bool DXDevice::render()
 
 bool DXDevice::release()
 {
+	if (m_pDepthStencilView != nullptr)
+	{
+		m_pDepthStencilView->Release();
+		m_pDepthStencilView = nullptr;
+	}
+
+	if (pDSTexture != nullptr)
+	{
+		pDSTexture->Release();
+		pDSTexture = nullptr;
+	}
+
 	if (m_pRTV != nullptr)
 	{
 		m_pRTV->Release();

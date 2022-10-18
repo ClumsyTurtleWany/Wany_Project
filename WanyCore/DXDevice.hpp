@@ -34,6 +34,10 @@ public:
 	// Disable for Full Screen (Alt + Enter)
 	//IDXGIAdapter* m_pAdapter = nullptr;
 
+	// Depth Stencil View
+	ID3D11Texture2D* pDSTexture = nullptr;
+	ID3D11DepthStencilView* m_pDepthStencilView = nullptr;
+
 public:
 	virtual bool initialize();
 	virtual bool frame();
@@ -60,4 +64,7 @@ public:
 	HRESULT createRenderTargetView();
 	// 5) ºä Æ÷Æ® ¼³Á¤
 	void createViewPort();
+
+	// Depth Stencil View
+	HRESULT createDepthStencilView();
 };
