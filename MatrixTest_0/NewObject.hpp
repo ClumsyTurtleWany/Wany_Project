@@ -5,6 +5,7 @@ class NewObject : public object2D<float>
 {
 public:
 	ConstantBufferData data;
+	float testTime = 0.0f;
 
 public:
 	void updateShader() override;
@@ -20,6 +21,9 @@ class BoxObject : public object2D<float>
 {
 public:
 	Box_<float> box;
+	ConstantBufferData data;
+	std::vector<Vertex> VertexList;
+	float testTime = 0.0f;
 
 public:
 	BoxObject() {};
@@ -36,6 +40,8 @@ public:
 	void updateShader() override;
 	void updateShaderCamera() override;
 
+public:
+	bool render() override;
 
 };
 

@@ -479,6 +479,19 @@ public:
 		}
 		return rst;
 	}
+
+	Matrix4x4 operator* (const float& _val)
+	{
+		Matrix4x4 rst;
+		for (int row = 0; row < 4; row++)
+		{
+			for (int col = 0; col < 4; col++)
+			{
+				rst.arry[row][col] = arry[row][col] * _val;
+			}
+		}
+		return rst;
+	}
 };
 
 

@@ -202,6 +202,7 @@ bool NewObject::render()
 	list = pShader->getVertexList();
 
 	pShader->updateVertexList(&VertexList);
+	//data.matWorld._41 = 1.0f;
 
 	for (size_t idx = 0; idx < list->size(); idx++)
 	{
@@ -222,6 +223,14 @@ bool NewObject::render()
 	data.matWorld = identity;
 	data.matView = identity;
 	data.matProj = identity;
+	//data.matWorld = identity * (0.75f + cosf(testTime) / 4.0f);
+	//data.matWorld._44 = 1.0f;
+	//data.matWorld._41 = 1.0f;
+	//data.matWorld._42 = 0.0f;
+	//data.time1 = data.matProj._14;
+	//data.time2 = data.matProj._24;
+	//data.time3 = data.matProj._34;
+	//data.time4 = data.matProj._44;
 	pShader->updateConstantData(&data);
 	pShader->render();
 	return true;
@@ -229,7 +238,6 @@ bool NewObject::render()
 
 bool BoxObject::initVertex()
 {
-	std::vector<Vertex> VertexList;
 	VertexList.resize(24);
 
 	VertexList[0] = Vertex(Vector3f(-1.0f, 1.0f, -1.0f), Vector4f(1.0f, 0.0f, 0.0f, 1.0f), Vector2f(0.0f, 0.0f));
@@ -292,7 +300,7 @@ bool BoxObject::initVertex()
 
 bool BoxObject::setMatrix(Matrix4x4 _world, Matrix4x4 _view, Matrix4x4 _proj)
 {
-	ConstantBufferData data;
+	//ConstantBufferData data;
 	data.matWorld = _world;
 	data.matView = _view;
 	data.matProj = _proj;
@@ -468,6 +476,52 @@ void BoxObject::updateShaderCamera()
 	//		list->at(3).texture = RT;
 	//	}
 	//}
+}
+
+bool BoxObject::render()
+{
+	pShader->updateVertexList(&VertexList);
+	std::vector<Vertex>* list;
+	list = pShader->getVertexList();
+
+	if (1)
+	{
+		for (size_t idx = 0; idx < list->size(); idx++)
+		{
+			Vector3f temp = VertexList[idx].pos;
+			Vector4f local = (Vector4f(temp.x, temp.y, temp.z, 1.0f));
+			Vector4f world = local * data.matWorld;
+			Vector4f view = world * data.matView;
+			Vector4f proj = view * data.matProj;
+			float w = proj.x * data.matProj._14 + proj.y * data.matProj._24 + proj.z * data.matProj._34 + 1.0f * data.matProj._44;
+			proj.x /= w;
+			proj.y /= w;
+			proj.z /= w;
+			list->at(idx).pos = Vector3f(proj.x, proj.y, proj.z);
+		}
+
+		Matrix4x4 identity;
+		identity.Identity();
+		data.matWorld = identity;
+		data.matView = identity;
+		data.matProj = identity;
+		pShader->updateConstantData(&data);
+	}
+	else
+	{
+		Matrix4x4 identity;
+		identity.Identity();
+		data.matWorld = identity;
+		data.matView = identity;
+		data.matProj = identity;
+		data.matProj = identity * (0.75f + cosf(testTime) / 4.0f);
+		data.matProj._44 = 1.0f;
+
+		pShader->updateConstantData(&data);
+	}
+	pShader->render();
+
+	return true;
 }
 
 bool Map::build(int _width, int _height)

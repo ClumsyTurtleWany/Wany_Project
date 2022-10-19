@@ -31,10 +31,10 @@ bool Sample::initialize()
             pObject->createShader(ShaderType::Object3D);
             pObject->setTexture(pTexture);
 
-            //pBoxObject = new BoxObject;
-            //pBoxObject->createShader(ShaderType::Object3D);
-            //pBoxObject->initVertex();
-            //pBoxObject->setTexture(pTexture);
+            pBoxObject = new BoxObject;
+            pBoxObject->createShader(ShaderType::Object3D);
+            pBoxObject->initVertex();
+            pBoxObject->setTexture(pTexture);
             
         }
     }    
@@ -50,9 +50,12 @@ bool Sample::initialize()
 bool Sample::frame()
 {
     float dt = Timer::getInstance()->getDeltaTime();
+    float gameTime = Timer::getInstance()->gameTime;
     renderCamera->frame();
     pObject->frame(dt);
-    //pBoxObject->frame(dt);
+    pObject->testTime = gameTime;
+    pBoxObject->frame(dt);
+    pBoxObject->testTime = gameTime;
    
     return true;
 }
@@ -67,12 +70,10 @@ bool Sample::render()
 
     Matrix4x4 identity;
     identity.Identity();
-   /* pBoxObject->setMatrix(identity, renderCamera->getMatrix_View(), renderCamera->getMatrix_Projection());
-    pBoxObject->render();*/
+    pBoxObject->setMatrix(identity, renderCamera->getMatrix_View(), renderCamera->getMatrix_Projection());
+    pBoxObject->render();
 
-   // pObject->setMatrix(identity, renderCamera->getMatrix_View(), renderCamera->getMatrix_Projection());
     pObject->setMatrix(identity, renderCamera->getMatrix_View(), renderCamera->getMatrix_Projection());
-    //pObject->setMatrix(identity, identity, identity);
     pObject->render();
     return true;
 }
@@ -86,11 +87,11 @@ bool Sample::release()
         pObject = nullptr;
     }
 
-    /*if (pBoxObject != nullptr)
+    if (pBoxObject != nullptr)
     {
         pBoxObject->release();
         delete pBoxObject;
         pBoxObject = nullptr;
-    }*/
+    }
     return true;
 }
