@@ -6,6 +6,7 @@ class DXSamplerState
 {
 public:
 	static ID3D11SamplerState* pDefaultSamplerState;
+	static ID3D11SamplerState* pDefaultMirrorSamplerState;
 	static ID3D11RasterizerState* pDefaultRSWireFrame;
 	static ID3D11RasterizerState* pDefaultRSSolid;
 	static ID3D11BlendState* pBlendSamplerState; // 투명도 조절

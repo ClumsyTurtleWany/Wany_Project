@@ -1,6 +1,7 @@
 #include "DXSamplerState.hpp"
 
 ID3D11SamplerState* DXSamplerState::pDefaultSamplerState = nullptr;
+ID3D11SamplerState* DXSamplerState::pDefaultMirrorSamplerState = nullptr;
 ID3D11RasterizerState* DXSamplerState::pDefaultRSWireFrame = nullptr;
 ID3D11RasterizerState* DXSamplerState::pDefaultRSSolid = nullptr;
 ID3D11BlendState* DXSamplerState::pBlendSamplerState = nullptr;
@@ -38,6 +39,17 @@ bool DXSamplerState::setState(ID3D11Device* _pd3dDevice)
 	if (FAILED(rst))
 	{
 		OutputDebugString(L"WanyCore::DXSamplerState::Failed Create Sampler State.\n");
+		return false;
+	}
+
+	SamplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR; // 최근점 필터링. 현재 u,v 값에 가까운 값 넣음.
+	SamplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_MIRROR; // x 축 // MIRROR_ONCE 는 지포스에서 지원 안함. AMD 에서 지원. 지포스는 ONCE 대신 CLAMP 실행. 
+	SamplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_MIRROR; // y 축
+	SamplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_MIRROR; // z 축
+	rst = _pd3dDevice->CreateSamplerState(&SamplerDesc, &pDefaultMirrorSamplerState);
+	if (FAILED(rst))
+	{
+		OutputDebugString(L"WanyCore::DXSamplerState::Failed Create Mirror Sampler State.\n");
 		return false;
 	}
 
@@ -163,6 +175,12 @@ bool DXSamplerState::release()
 	{
 		pDefaultSamplerState->Release();
 		pDefaultSamplerState = nullptr;
+	}
+
+	if (pDefaultMirrorSamplerState != nullptr)
+	{
+		pDefaultMirrorSamplerState->Release();
+		pDefaultMirrorSamplerState = nullptr;
 	}
 
 	if (pDefaultRSWireFrame != nullptr)

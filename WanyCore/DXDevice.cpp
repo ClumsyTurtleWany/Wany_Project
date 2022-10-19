@@ -281,6 +281,7 @@ HRESULT DXDevice::createDepthStencilView()
 	// 4. 깊이 스텐실 뷰 상태 객체 생성해서 적용.
 
 	// 1. 텍스처 생성.
+	//ID3D11Texture2D* pDSTexture = nullptr;
 	D3D11_TEXTURE2D_DESC desc;
 	ZeroMemory(&desc, sizeof(D3D11_TEXTURE2D_DESC));
 
@@ -291,8 +292,9 @@ HRESULT DXDevice::createDepthStencilView()
 	desc.Height = refDesc.BufferDesc.Height;
 	desc.MipLevels = 1; // 0으로 하면 9단계 까지 생성
 	desc.ArraySize = 1; // 1개만 생성
-	desc.Format = DXGI_FORMAT_R24G8_TYPELESS; // 32bit, 24bit는 Z버퍼(Depth)로 사용하고, 8bit는 스텐실 버퍼로 사용 하겠다.
+	desc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT; //DXGI_FORMAT_R24G8_TYPELESS; // 32bit, 24bit는 Z버퍼(Depth)로 사용하고, 8bit는 스텐실 버퍼로 사용 하겠다.
 	desc.SampleDesc.Count = 1;
+	desc.SampleDesc.Quality = 0;
 	desc.Usage = D3D11_USAGE_DEFAULT;
 	desc.BindFlags = D3D11_BIND_DEPTH_STENCIL; // 중요! 어디에 적용 할 것인지 정하는 것.
 	desc.CPUAccessFlags = 0;

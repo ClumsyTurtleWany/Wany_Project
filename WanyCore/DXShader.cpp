@@ -140,7 +140,7 @@ bool DXShader::render()
 	}
 
 	// Blend State Àû¿ë.
-	m_pImmediateContext->OMSetBlendState(DXSamplerState::pBlendSamplerState, 0, -1);
+	//m_pImmediateContext->OMSetBlendState(DXSamplerState::pBlendSamplerState, 0, -1);
 
 	if (m_pConstantBuffer != nullptr)
 	{

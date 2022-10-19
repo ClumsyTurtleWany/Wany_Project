@@ -125,7 +125,8 @@ bool GameCore::PreRender()
 	m_pImmediateContext->RSSetViewports(1, &viewPort);
 
 	// Sampler State 적용.
-	m_pImmediateContext->PSSetSamplers(0, 1, &DXSamplerState::pDefaultSamplerState);
+	//m_pImmediateContext->PSSetSamplers(0, 1, &DXSamplerState::pDefaultSamplerState);
+	m_pImmediateContext->PSSetSamplers(0, 1, &DXSamplerState::pDefaultMirrorSamplerState);
 
 	// Rasterizer State 적용.
 	//m_pImmediateContext->RSSetState(DXSamplerState::pDefaultRSWireFrame);
@@ -135,7 +136,7 @@ bool GameCore::PreRender()
 	m_pImmediateContext->OMSetBlendState(DXSamplerState::pBlendSamplerState, 0, -1);
 
 	// Depth Stencil State 적용.
-	m_pImmediateContext->OMSetDepthStencilState(DXSamplerState::pDefaultDepthStencil, 0xff);
+	m_pImmediateContext->OMSetDepthStencilState(DXSamplerState::pDefaultDepthStencil, 0x00);
 	//m_pImmediateContext->OMSetDepthStencilState(DXSamplerState::pGreaterDepthStencil, 0xff); // Depth 큰것 출력하고 싶을 때.
 
 	return true;

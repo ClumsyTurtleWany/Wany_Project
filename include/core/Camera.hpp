@@ -61,5 +61,3 @@ public:
 	virtual bool render();
 	virtual bool release();
 };
-
-//#define CAMERA Camera::getInstance()

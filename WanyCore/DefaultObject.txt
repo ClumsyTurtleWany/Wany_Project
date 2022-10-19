@@ -43,7 +43,8 @@ cbuffer ConstantData : register(b0)
 
 VertexShader_output VS(VertexShader_input _input)
 {
-	VertexShader_output output; // = (VertexShader_output)0;
+	//VertexShader_output output;
+	VertexShader_output output = (VertexShader_output)0;
 
 	float4 vLocal = float4(_input.p, 1.0f);
 	
