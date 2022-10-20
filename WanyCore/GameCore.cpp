@@ -125,8 +125,8 @@ bool GameCore::PreRender()
 	m_pImmediateContext->RSSetViewports(1, &viewPort);
 
 	// Sampler State 적용.
-	//m_pImmediateContext->PSSetSamplers(0, 1, &DXSamplerState::pDefaultSamplerState);
-	m_pImmediateContext->PSSetSamplers(0, 1, &DXSamplerState::pDefaultMirrorSamplerState);
+	m_pImmediateContext->PSSetSamplers(0, 1, &DXSamplerState::pDefaultSamplerState);
+	//m_pImmediateContext->PSSetSamplers(0, 1, &DXSamplerState::pDefaultMirrorSamplerState);
 
 	// Rasterizer State 적용.
 	//m_pImmediateContext->RSSetState(DXSamplerState::pDefaultRSWireFrame);

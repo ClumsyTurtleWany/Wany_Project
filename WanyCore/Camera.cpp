@@ -84,6 +84,8 @@ void Camera::CreateMatrix_View(Vector3f _eye, Vector3f _target, Vector3f _up)
 	matView._41 = -(cameraPos.x * matView._11 + cameraPos.y * matView._21 + cameraPos.z * matView._31);
 	matView._42 = -(cameraPos.x * matView._12 + cameraPos.y * matView._22 + cameraPos.z * matView._32);
 	matView._43 = -(cameraPos.x * matView._13 + cameraPos.y * matView._23 + cameraPos.z * matView._33);
+	matView._14 = matView._24 = matView._34 = 0.0f;
+	matView._44 = 1.0f;
 }
 
 void Camera::CreateMatrix_Proj(float _near, float _far, float _fov_y, float _aspect)

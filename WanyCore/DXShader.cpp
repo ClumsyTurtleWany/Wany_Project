@@ -20,12 +20,6 @@ bool DXShader::initialize()
 		return false;
 	}
 
-	if (FAILED(CreateVertexBuffer()))
-	{
-		OutputDebugString(L"WanyCore::DXShader::Failed Create Vertex Buffer.\n");
-		return false;
-	}
-
 	if (isConstant)
 	{
 		if (FAILED(CreateConstantBuffer()))
@@ -33,6 +27,12 @@ bool DXShader::initialize()
 			OutputDebugString(L"WanyCore::DXShader::Failed Create Constant Buffer.\n");
 			return false;
 		}
+	}
+
+	if (FAILED(CreateVertexBuffer()))
+	{
+		OutputDebugString(L"WanyCore::DXShader::Failed Create Vertex Buffer.\n");
+		return false;
 	}
 
 	if (FAILED(CreateIndexBuffer()))
@@ -145,7 +145,7 @@ bool DXShader::render()
 	if (m_pConstantBuffer != nullptr)
 	{
 		m_pImmediateContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
-		m_pImmediateContext->PSSetConstantBuffers(0, 1, &m_pConstantBuffer);
+		//m_pImmediateContext->PSSetConstantBuffers(0, 1, &m_pConstantBuffer);
 	}
 
 	// Draw 명령이 호출되면 위의 파이프라인 순서대로 타고 내려옴. 셋팅 할 때의 순서는 상관 없으나
@@ -557,9 +557,9 @@ void DXShader::initializeConstantData()
 	m_ConstantData.matView.Identity();
 	m_ConstantData.matProj.Identity();
 
-	m_ConstantData.matWorld.Transpose();
-	m_ConstantData.matView.Transpose();
-	m_ConstantData.matProj.Transpose();
+	m_ConstantData.matWorld = m_ConstantData.matWorld.Transpose();
+	m_ConstantData.matView = m_ConstantData.matView.Transpose();
+	m_ConstantData.matProj = m_ConstantData.matProj.Transpose();
 }
 
 void DXShader::setDevice(ID3D11Device* _device, ID3D11DeviceContext* _context)

@@ -60,50 +60,6 @@ VertexShader_output VS(VertexShader_input _input)
 	float4 vView = mul(vWorld, g_matView);
 	float4 vProj = mul(vView, g_matProj);
 
-	if(0)
-	{
-	//float w = vProj.x * g_nx + vProj.y * g_ny + vProj.z * g_nz + 1.0f * g_nw;
-	//vProj = float4(vProj.x / w, vProj.y / w, vProj.z / w, vProj.w / w);
-	
-	if(vProj.w > 1)
-	{
-	}
-
-	if(vProj.x > 1.0f)
-	{
-		vProj.x = 1.0f;
-	}
-	if(vProj.y > 1.0f)
-	{
-		vProj.y = 1.0f;
-	}
-	if(vProj.z > 1.0f)
-	{
-		vProj.z = 1.0f;
-	}
-	if(vProj.w > 1.0f)
-	{
-		vProj.w = 1.0f;
-	}
-
-	if(vProj.x < -1.0f)
-	{
-		vProj.x = -1.0f;
-	}
-	if(vProj.y < -1.0f)
-	{
-		vProj.y = -1.0f;
-	}
-	if(vProj.z < -1.0f)
-	{
-		vProj.z = -1.0f;
-	}
-	if(vProj.w < -1.0f)
-	{
-		vProj.w = 1.0f;
-	}
-	}
-
 	output.p = vProj;
 	output.c = _input.c;
 	output.t = _input.t;

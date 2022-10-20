@@ -68,7 +68,7 @@ bool Sample::render()
         m_pImmediateContext->RSSetState(DXSamplerState::pDefaultRSWireFrame);
     }
 
-    m_pImmediateContext->OMSetDepthStencilState(DXSamplerState::pDefaultDepthStencil, 0xff);
+    //m_pImmediateContext->OMSetDepthStencilState(DXSamplerState::pDefaultDepthStencil, 0xff);
 
     Matrix4x4 identity;
     identity.Identity();

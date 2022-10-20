@@ -283,7 +283,6 @@ HRESULT DXDevice::createDepthStencilView()
 	// 4. 깊이 스텐실 뷰 상태 객체 생성해서 적용.
 
 	// 1. 텍스처 생성.
-	//ID3D11Texture2D* pDSTexture = nullptr;
 	D3D11_TEXTURE2D_DESC desc;
 	ZeroMemory(&desc, sizeof(desc));
 
@@ -374,16 +373,16 @@ bool DXDevice::initialize()
 		return false;
 	}
 
-	//////////////////////////////////////////////////////////////////////
-	// 5) 뷰 포트 설정
-	//////////////////////////////////////////////////////////////////////
-	createViewPort();
-
 	if (FAILED(createDepthStencilView()))
 	{
 		OutputDebugString(L"WanyCore::DXDevice::Failed Create Depth Stencil View.\n");
 		return false;
 	}
+
+	//////////////////////////////////////////////////////////////////////
+	// 5) 뷰 포트 설정
+	//////////////////////////////////////////////////////////////////////
+	createViewPort();
 
 	return true;
 }
