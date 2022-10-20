@@ -62,6 +62,8 @@ bool DXDevice::resize()
 		return false;
 	}
 
+	m_pImmediateContext->OMSetRenderTargets(1, &m_pRTV, m_pDepthStencilView);
+
 	return true;
 }
 
@@ -127,37 +129,37 @@ HRESULT DXDevice::createDevice()
 	//rst = D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, pFeatureLevels, 1, D3D11_SDK_VERSION, &m_pd3dDevice, pFeatureLevel, &m_pImmediateContext); // 디바이스 생성
 
 	// 2022-10-11 이전 버젼
-	//return D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, NULL, createDeviceFlags, pFeatureLevels, 1, D3D11_SDK_VERSION, &m_pd3dDevice, pFeatureLevel, &m_pImmediateContext);
+	return D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, NULL, createDeviceFlags, pFeatureLevels, 1, D3D11_SDK_VERSION, &m_pd3dDevice, pFeatureLevel, &m_pImmediateContext);
 
-	// 2022-10-11 이후 Full Screen Disable 테스트 버전
-	IDXGIAdapter* pAdapter = nullptr;
-	HRESULT rst = m_pGIFactory->EnumAdapters(0, &pAdapter);
-	if (FAILED(rst))
-	{
-		return D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, NULL, createDeviceFlags, pFeatureLevels, 1, D3D11_SDK_VERSION, &m_pd3dDevice, pFeatureLevel, &m_pImmediateContext);
-	}
-	else
-	{
-		D3D_DRIVER_TYPE driverTypes[] = { D3D_DRIVER_TYPE_HARDWARE,	D3D_DRIVER_TYPE_REFERENCE, D3D_DRIVER_TYPE_WARP };
-		UINT DriverTypeNum = sizeof(driverTypes) / sizeof(driverTypes[0]);
-		/*for (UINT driverTypeIdx = 0; driverTypeIdx < DriverTypeNum; driverTypeIdx++)
-		{
-			D3D_DRIVER_TYPE driverType = driverTypes[driverTypeIdx];
-			rst = D3D11CreateDevice(pAdapter, driverType, NULL, createDeviceFlags, pFeatureLevels, 1, D3D11_SDK_VERSION, &m_pd3dDevice, pFeatureLevel, &m_pImmediateContext);
-			if (FAILED(rst))
-			{
-				continue;
-			}
-			else
-			{
-				break;
-			}
-		}*/
-		rst = D3D11CreateDevice(pAdapter, D3D_DRIVER_TYPE_UNKNOWN, NULL, createDeviceFlags, pFeatureLevels, 1, D3D11_SDK_VERSION, &m_pd3dDevice, pFeatureLevel, &m_pImmediateContext);
+	//// 2022-10-11 이후 Full Screen Disable 테스트 버전
+	//IDXGIAdapter* pAdapter = nullptr;
+	//HRESULT rst = m_pGIFactory->EnumAdapters(0, &pAdapter);
+	//if (FAILED(rst))
+	//{
+	//	return D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, NULL, createDeviceFlags, pFeatureLevels, 1, D3D11_SDK_VERSION, &m_pd3dDevice, pFeatureLevel, &m_pImmediateContext);
+	//}
+	//else
+	//{
+	//	D3D_DRIVER_TYPE driverTypes[] = { D3D_DRIVER_TYPE_HARDWARE,	D3D_DRIVER_TYPE_REFERENCE, D3D_DRIVER_TYPE_WARP };
+	//	UINT DriverTypeNum = sizeof(driverTypes) / sizeof(driverTypes[0]);
+	//	/*for (UINT driverTypeIdx = 0; driverTypeIdx < DriverTypeNum; driverTypeIdx++)
+	//	{
+	//		D3D_DRIVER_TYPE driverType = driverTypes[driverTypeIdx];
+	//		rst = D3D11CreateDevice(pAdapter, driverType, NULL, createDeviceFlags, pFeatureLevels, 1, D3D11_SDK_VERSION, &m_pd3dDevice, pFeatureLevel, &m_pImmediateContext);
+	//		if (FAILED(rst))
+	//		{
+	//			continue;
+	//		}
+	//		else
+	//		{
+	//			break;
+	//		}
+	//	}*/
+	//	rst = D3D11CreateDevice(pAdapter, D3D_DRIVER_TYPE_UNKNOWN, NULL, createDeviceFlags, pFeatureLevels, 1, D3D11_SDK_VERSION, &m_pd3dDevice, pFeatureLevel, &m_pImmediateContext);
 
 
-		return rst;
-	}
+	//	return rst;
+	//}
 }
 
 // 2) 팩토리 생성
@@ -283,7 +285,7 @@ HRESULT DXDevice::createDepthStencilView()
 	// 1. 텍스처 생성.
 	//ID3D11Texture2D* pDSTexture = nullptr;
 	D3D11_TEXTURE2D_DESC desc;
-	ZeroMemory(&desc, sizeof(D3D11_TEXTURE2D_DESC));
+	ZeroMemory(&desc, sizeof(desc));
 
 	DXGI_SWAP_CHAIN_DESC refDesc;
 	m_pSwapChain->GetDesc(&refDesc);
@@ -307,7 +309,7 @@ HRESULT DXDevice::createDepthStencilView()
 
 	// 2. 깊이 스텐실 뷰 생성.
 	D3D11_DEPTH_STENCIL_VIEW_DESC DSdesc;
-	ZeroMemory(&DSdesc, sizeof(D3D11_DEPTH_STENCIL_VIEW_DESC));
+	ZeroMemory(&DSdesc, sizeof(DSdesc));
 	DSdesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT; // Depth는 노멀라이즈 하지말고, 스텐실은 정수형으로 생성. Texture 생성과 비트를 맞춰 줘야함.
 	DSdesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 	DSdesc.Flags = 0;
@@ -326,11 +328,11 @@ bool DXDevice::initialize()
 	//////////////////////////////////////////////////////////////////////
 	// 0) 팩토리 생성, 원래는 2번에서 생성 했으나 먼저 생성해도 무관하고, Full Screen 막기 위한 Adapter 생성에 먼저 필요.
 	//////////////////////////////////////////////////////////////////////
-	if (FAILED(createFactory()))
-	{
-		OutputDebugString(L"WanyCore::DXDevice::Failed Create Factory.\n");
-		return false;
-	}
+	//if (FAILED(createFactory()))
+	//{
+	//	OutputDebugString(L"WanyCore::DXDevice::Failed Create Factory.\n");
+	//	return false;
+	//}
 
 	//////////////////////////////////////////////////////////////////////
 	// 1) 디바이스 생성
@@ -345,11 +347,11 @@ bool DXDevice::initialize()
 	////////////////////////////////////////////////////////////////////////
 	//// 2) 팩토리 생성
 	////////////////////////////////////////////////////////////////////////
-	//if (FAILED(createFactory()))
-	//{
-	//	OutputDebugString(L"WanyCore::DXDevice::Failed Create Factory.\n");
-	//	return false;
-	//}
+	if (FAILED(createFactory()))
+	{
+		OutputDebugString(L"WanyCore::DXDevice::Failed Create Factory.\n");
+		return false;
+	}
 
 	//////////////////////////////////////////////////////////////////////
 	// 3) 스왑체인 생성

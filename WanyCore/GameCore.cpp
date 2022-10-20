@@ -136,7 +136,7 @@ bool GameCore::PreRender()
 	m_pImmediateContext->OMSetBlendState(DXSamplerState::pBlendSamplerState, 0, -1);
 
 	// Depth Stencil State 적용.
-	m_pImmediateContext->OMSetDepthStencilState(DXSamplerState::pDefaultDepthStencil, 0x00);
+	m_pImmediateContext->OMSetDepthStencilState(DXSamplerState::pDefaultDepthStencil, 0xff);
 	//m_pImmediateContext->OMSetDepthStencilState(DXSamplerState::pGreaterDepthStencil, 0xff); // Depth 큰것 출력하고 싶을 때.
 
 	return true;
