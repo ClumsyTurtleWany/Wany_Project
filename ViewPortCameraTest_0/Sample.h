@@ -20,4 +20,7 @@ public:
 	bool frame() override;
 	bool render() override;
 	bool release() override;
+	
+public:
+	bool resize() override;
 };

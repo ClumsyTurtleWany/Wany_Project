@@ -206,3 +206,23 @@ bool Sample::release()
     }
     return true;
 }
+
+bool Sample::resize()
+{
+    DXDevice::resize();
+
+    float height = g_pWindow->getClientHeight() / 4.0f;
+    float width = height;
+
+    for (int idx = 0; idx < 4; idx++)
+    {
+        ViewPort[idx].TopLeftX = 0;
+        ViewPort[idx].TopLeftY = idx * height;
+        ViewPort[idx].Width = width;
+        ViewPort[idx].Height = height;
+        ViewPort[idx].MinDepth = 0;
+        ViewPort[idx].MaxDepth = 1;
+    }
+
+    return true;
+}
