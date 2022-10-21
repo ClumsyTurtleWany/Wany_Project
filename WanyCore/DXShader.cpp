@@ -123,7 +123,7 @@ bool DXShader::render()
 
 	// 이러한 셋팅도 있는데 디폴트 값으로 이미 들어 있었다.
 	// 기본적으로 트라이앵글로 출력 하지만 포인트 혹은 사각형 등으로 출력도 가능.
-	m_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	m_pImmediateContext->IASetPrimitiveTopology(m_Topology);
 
 	// Texture - Pixel Shader에 Texture 넘김
 	if (m_pTexture != nullptr)
@@ -596,6 +596,11 @@ void DXShader::setCreateConstantFlag(bool _flag)
 	isConstant = _flag;
 }
 
+void DXShader::setTopology(D3D11_PRIMITIVE_TOPOLOGY _topology)
+{
+	m_Topology = _topology;
+}
+
 std::vector<Vertex>* DXShader::getVertexList()
 {
 	return &m_VertexList;
@@ -661,11 +666,11 @@ bool DXShader::updateVertexList(std::vector<Vertex>* _list)
 
 bool DXShader::updateIndexList(std::vector<DWORD>* _list)
 {
-	if (m_IndexList.size() == _list->size())
+	/*if (m_IndexList.size() == _list->size())
 	{
 		m_IndexList.assign(_list->begin(), _list->end());
 	}
-	else
+	else*/
 	{
 		m_IndexList.assign(_list->begin(), _list->end());
 

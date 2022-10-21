@@ -42,7 +42,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -220,6 +220,7 @@ copy "..\\lib\\FMOD\\fmodL.dll" "..\\$(TargetName)\\"</Command>
     <Text Include="DefaultObject.txt" />
     <Text Include="MaskShader.txt" />
     <Text Include="ShapeShader.txt" />
+    <Text Include="Textured3D.txt" />
     <Text Include="TextureShader.txt" />
   </ItemGroup>
   <ItemGroup>

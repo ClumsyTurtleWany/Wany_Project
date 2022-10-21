@@ -1,52 +1,64 @@
 #pragma once
 #include "Object.hpp"
 
-class NewObject : public object2D<float>
+class Axis3D : public object3D<float>
 {
+private:
+	Vector3f AxisSize;
+
+private:
+	virtual bool initializeVertexList() override;
+	virtual bool initializeIndexList() override;
+
 public:
-	ConstantBufferData data;
+	virtual bool initialize() override;
+
+public:
+	void setAxisSize(float _x, float _y, float _z);
+};
+
+class Plane3D : public object3D<float>
+{
+private:
+	Axis3D axis;
+
+public:
 	float testTime = 0.0f;
 
 public:
-	void updateShader() override;
-	void updateShaderCamera() override;
-
-	bool setMatrix(Matrix4x4 _world, Matrix4x4 _view, Matrix4x4 _proj);
-
-public:
-	bool render() override;
+	virtual bool initialize() override;
+	virtual bool initializeVertexList() override;
+	virtual bool initializeIndexList() override;
+	virtual bool render() override;
 };
 
-class BoxObject : public object2D<float>
+class Cube3D : public object3D<float>
 {
+private:
+	Axis3D axis;
+
 public:
-	Box_<float> box;
-	ConstantBufferData data;
-	std::vector<Vertex> VertexList;
 	float testTime = 0.0f;
 
 public:
-	BoxObject() {};
-	BoxObject(Box_<float>& _box)
-	{
-		box = _box;
-	}
-
-public:
-	bool initVertex();
-	bool setMatrix(Matrix4x4 _world, Matrix4x4 _view, Matrix4x4 _proj);
-
-public:
-	void updateShader() override;
-	void updateShaderCamera() override;
-
-public:
-	bool render() override;
-
+	virtual bool initialize() override;
+	virtual bool initializeVertexList() override;
+	virtual bool initializeIndexList() override;
+	virtual bool render() override;
 };
 
-class Map : public object2D<float>
+class Map3D : public object3D<float>
 {
+private:
+	Axis3D axis;
+
 public:
-	bool build(int _width, int _height);
+	int width = 0.0f;
+	int height = 0.0f;
+
+public:
+	virtual bool render() override;
+
+public:
+	bool build(int _width, int _height);	
 };

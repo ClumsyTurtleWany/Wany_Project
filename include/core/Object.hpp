@@ -520,6 +520,10 @@ public:
 	Vector3D_<T> accel;
 	Vector3D_<T> velocity;
 
+	ConstantBufferData data;
+	std::vector<Vertex> VertexList;
+	std::vector<DWORD> IndexList;
+
 public:
 	object3D() {};
 	object3D(Box_<T> _box, OBJECT_TYPE _type = OBJECT_TYPE::STATIC_OBJECT)
@@ -563,11 +567,78 @@ public:
 	}
 
 public:
+	virtual bool initialize() override
+	{
+		//objectBase::initialize();
+		if (!initializeVertexList())
+		{
+			return false;
+		}
+		
+		if (!initializeIndexList())
+		{
+			return false;
+		}
+		
+		return true;
+	}
+
 	virtual bool frame(float _dt) { return true; };
-	bool render() override
+
+	virtual bool render() override
 	{
 		pShader->render();
 		return true;
+	}
+
+public:
+	virtual bool initializeVertexList()
+	{
+		return true;
+	}
+
+	virtual bool initializeIndexList()
+	{
+		return true;
+	}
+
+	virtual bool setMatrix(Matrix4x4* _world, Matrix4x4* _view, Matrix4x4* _proj)
+	{
+		bool isChange = false;
+		if (_world != nullptr)
+		{
+			data.matWorld = (*_world);
+			isChange = true;
+		}
+
+		if (_view != nullptr)
+		{
+			data.matView = (*_view);
+			isChange = true;
+		}
+
+		if (_proj != nullptr)
+		{
+			data.matProj = (*_proj);
+			isChange = true;
+		}
+
+		if (isChange)
+		{
+			return pShader->updateConstantData(&data);
+		}
+		else
+		{
+			return true;
+		}
+	}
+
+	virtual bool translation(float _x, float _y, float _z)
+	{
+		data.matWorld._41 += _x;
+		data.matWorld._42 += _y;
+		data.matWorld._43 += _z;
+		return pShader->updateConstantData(&data);
 	}
 
 protected:

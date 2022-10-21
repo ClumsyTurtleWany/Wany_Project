@@ -12,6 +12,7 @@ enum class ShaderType
 	Mask,
 	Border,
 	Object3D, // 2022-10-17 추가, Constant Data 사용.
+	Axis3D,
 };
 
 class DXShaderManager : public Singleton<DXShaderManager>

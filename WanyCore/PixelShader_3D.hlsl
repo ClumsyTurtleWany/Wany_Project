@@ -1,3 +1,8 @@
+//float4 main() : SV_TARGET
+//{
+//	return float4(1.0f, 1.0f, 1.0f, 1.0f);
+//}
+
 
 // VertexShader.txt, PixelShader.txt 따로 구분하지 않고 하나의 파일에 합쳐놓아도 된다.
 
@@ -11,7 +16,7 @@
 // 고정적으로 쓰는게 아니라 그냥 변수 이름처럼 쓰지만 밖의 소스코드와 이름만 동일하면 됨.
 // 정점 쉐이더랑 인풋 레이아웃이랑 다르면 만들 수가 없다.
 // SV_POSITION: 출력 영역을 만들기 위한 위치 레지스터
- 
+
 struct VertexShader_input
 {
 	float3 p : POSITION;
@@ -41,32 +46,6 @@ cbuffer ConstantData : register(b0)
 	//float  fTimer : packoffset(c12.z); // 이런식으로 레지스터에서 일정한 값만 등록 할 수도 있음.
 }
 
-VertexShader_output VS(VertexShader_input _input)
-{
-	//VertexShader_output output;
-	VertexShader_output output = (VertexShader_output)0;
-
-	float4 vLocal = float4(_input.p, 1.0f);
-	
-	// 주의! mul 함수는 내적(dot)으로 처리됨.
-	// vWorld.x = vLocal dot c0; // 행과 행이 곱해짐.
-	// vWorld.y = vLocal dot c1;
-	// vWorld.z = vLocal dot c2;
-	// vWorld.w = vLocal dot c3;
-	// 따라서 응용프로그램 단에서 전치행렬로 만들어 보내거나, 아래와 같이 쉐이더에서 매번 전치행렬 변환작업 필요.
-	// matrix matTranspose = transpose(g_matWorld); // 매번 전치행렬 변환작업하는건 비효율적이므로 가급적 응용프로그램에서 전치해서 보내줄 것.
-	
-	float4 vWorld = mul(vLocal, g_matWorld);
-	float4 vView = mul(vWorld, g_matView);
-	float4 vProj = mul(vView, g_matProj);
-
-	output.p = vProj;
-	output.c = _input.c;
-	output.t = _input.t;
-	return output;
-}
-
-
 
 
 // 픽셀 마다 호출된다.
@@ -84,7 +63,8 @@ Texture2D		g_txTextureA	: register(t0); // register를 안 붙여주면 기본적으로 0번
 SamplerState	g_SampleA		: register(s0); // 샘플링을 하려면 샘플러가 필요함
 
 // SV_Target: 출력 영역에 뿌릴 색상.
-float4 PS(	VertexShader_output _input ) : SV_Target
+float4 main(VertexShader_output _input) : SV_Target
 {
-	return _input.c;
+	float4 vColor = g_txTextureA.Sample(g_SampleA, _input.t);
+	return vColor * _input.c;
 }

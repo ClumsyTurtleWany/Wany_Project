@@ -86,5 +86,6 @@ SamplerState	g_SampleA		: register(s0); // 샘플링을 하려면 샘플러가 필요함
 // SV_Target: 출력 영역에 뿌릴 색상.
 float4 PS(	VertexShader_output _input ) : SV_Target
 {
-	return _input.c;
+	float4 vColor = g_txTextureA.Sample(g_SampleA, _input.t);
+	return vColor * _input.c;
 }

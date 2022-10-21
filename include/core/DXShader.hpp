@@ -14,6 +14,17 @@ struct ConstantBufferData
 	float time2 = 0.0f;
 	float time3 = 0.0f;
 	float time4 = 0.0f;
+
+	ConstantBufferData()
+	{
+		matWorld.Identity();
+		matView.Identity();
+		matProj.Identity();
+		time1 = 0.0f;
+		time2 = 0.0f;
+		time3 = 0.0f;
+		time4 = 0.0f;
+	}
 };
 
 class DXShader
@@ -46,7 +57,7 @@ protected:
 
 	std::wstring m_wstrShaderFile;
 
-	D3D11_PRIMITIVE_TOPOLOGY m_Topology;
+	D3D11_PRIMITIVE_TOPOLOGY m_Topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
 protected:
 	// Texture
@@ -65,6 +76,7 @@ protected:
 	virtual HRESULT CreateVertexSharder();
 	virtual HRESULT CreatePixelSharder();
 
+public:
 	virtual void initializeVertexList();
 	virtual void initializeIndexList();
 	virtual void initializeConstantData();
@@ -82,14 +94,16 @@ public:
 	void setTextureMask(DXTexture* _texture);
 	void setShaderFile(std::wstring _file);
 	void setCreateConstantFlag(bool _flag);
-	std::vector<Vertex>* getVertexList();
-	bool updateVertexList(std::vector<Vertex>* _list);
-	bool updateIndexList(std::vector<DWORD>* _list);
-	bool updateConstantData(ConstantBufferData* _data);
+	void setTopology(D3D11_PRIMITIVE_TOPOLOGY _topology);
 
 public:
 	float getTextureWidth();
 	float getTextureHeight();
+	std::vector<Vertex>* getVertexList();
 
+public:
+	bool updateVertexList(std::vector<Vertex>* _list);
+	bool updateIndexList(std::vector<DWORD>* _list);
+	bool updateConstantData(ConstantBufferData* _data);
 };
 

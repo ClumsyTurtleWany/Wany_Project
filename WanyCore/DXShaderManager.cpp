@@ -38,6 +38,12 @@ bool DXShaderManager::Load(int _key, ShaderType _type)
 	else if (_type == ShaderType::Object3D)
 	{
 		// Constant Data 이용하여 쉐이더에서 매트릭스 계산. 텍스처 출력 가능.
+		newShader->setShaderFile(L"../include/core/HLSL/Textured3D.txt");
+		newShader->setCreateConstantFlag(true);
+	}
+	else if (_type == ShaderType::Axis3D)
+	{
+		// Constant Data 이용하여 쉐이더에서 매트릭스 계산. 텍스처 출력 가능.
 		newShader->setShaderFile(L"../include/core/HLSL/DefaultObject.txt");
 		newShader->setCreateConstantFlag(true);
 	}

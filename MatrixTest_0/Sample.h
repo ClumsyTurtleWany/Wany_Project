@@ -2,13 +2,15 @@
 #include "GameCore.hpp"
 #include "NewObject.hpp"
 #define CHARACTER_DIR L"../resource/MapleStory/0.bmp"
+#define MAP_DIR L"../../resource/map/002.jpg"
 
 //C:\Users\kgca4108\Documents\Visual Studio 2019\My Exported Templates\CoreTestTemplate_0.zip
 class Sample : public GameCore
 {
 public:
-	NewObject* pObject = nullptr;
-	BoxObject* pBoxObject = nullptr;
+	Plane3D* pObject = nullptr;
+	Cube3D* pBoxObject = nullptr;
+	Map3D* pWorldMap = nullptr;
 	Camera* renderCamera = nullptr;
 
 public:

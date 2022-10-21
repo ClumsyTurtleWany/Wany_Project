@@ -26,23 +26,40 @@ bool Sample::initialize()
             float x = (g_pWindow->getClientWidth() - width) / 2.0f;
             float y = (g_pWindow->getClientHeight() - height) / 2.0f;
 
-            pObject = new NewObject;
-            pObject->shape = Rect2f(x, y, width, height);
+            pObject = new Plane3D;
             pObject->createShader(ShaderType::Object3D);
             pObject->setTexture(pTexture);
+            pObject->initialize();
 
-            pBoxObject = new BoxObject;
+            pBoxObject = new Cube3D;
             pBoxObject->createShader(ShaderType::Object3D);
-            pBoxObject->initVertex();
             pBoxObject->setTexture(pTexture);
-            
+            pBoxObject->initialize();
+            pBoxObject->translation(-2.0f, 0.0f, -2.0f);
         }
     }    
 
-    renderCamera = new Camera(ProjectionType::Perspective);
-    renderCamera->CreateMatrix_View(Vector3f(0.0f, 0.0f, -10.0f), Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, 1.0f, 0.0f));
-    renderCamera->CreateMatrix_Proj(1.0f, 100.0f, PI * 0.25f, static_cast<float>(g_pWindow->getClientWidth()) / static_cast<float>(g_pWindow->getClientHeight()));
+    if (DXTextureManager::getInstance()->Load(MAP_DIR))
+    {
+        DXTexture* pTexture = DXTextureManager::getInstance()->getTexture(MAP_DIR);
+        if (pTexture != nullptr)
+        {
+            float width = pTexture->getWidth();
+            float height = pTexture->getHeight();
+            float x = (g_pWindow->getClientWidth() - width) / 2.0f;
+            float y = (g_pWindow->getClientHeight() - height) / 2.0f;
 
+            pWorldMap = new Map3D;
+            pWorldMap->createShader(ShaderType::Object3D);
+            pWorldMap->setTexture(pTexture);
+            pWorldMap->build(513, 513);
+            pWorldMap->initialize();
+        }
+    }   
+
+    renderCamera = new Camera(ProjectionType::Perspective);
+    renderCamera->CreateMatrix_View(Vector3f(0.0f, 10.0f, -10.0f), Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, 1.0f, 0.0f));
+    renderCamera->CreateMatrix_Proj(1.0f, 10000.0f, PI * 0.25f, static_cast<float>(g_pWindow->getClientWidth()) / static_cast<float>(g_pWindow->getClientHeight()));
 
     return true;
 }
@@ -54,8 +71,14 @@ bool Sample::frame()
     renderCamera->frame();
     pObject->frame(dt);
     pObject->testTime = gameTime;
+    pObject->translation(cos(gameTime) * 10.0f * dt, cos(gameTime) * 10.0f * dt, cos(gameTime) * 10.0f * dt);
+
     pBoxObject->frame(dt);
     pBoxObject->testTime = gameTime;
+    
+    Matrix4x4 matRotationY = Make3DMatrix_RotationY(dt);
+    pBoxObject->data.matWorld = pBoxObject->data.matWorld * matRotationY;
+    pWorldMap->frame(dt);
    
     return true;
 }
@@ -69,14 +92,17 @@ bool Sample::render()
     }
 
     //m_pImmediateContext->OMSetDepthStencilState(DXSamplerState::pDefaultDepthStencil, 0xff);
+    Matrix4x4 matView = renderCamera->getMatrix_View();
+    Matrix4x4 matProj = renderCamera->getMatrix_Projection();
 
-    Matrix4x4 identity;
-    identity.Identity();
-    pBoxObject->setMatrix(identity, renderCamera->getMatrix_View(), renderCamera->getMatrix_Projection());
+    pBoxObject->setMatrix(nullptr, &matView, &matProj);
     pBoxObject->render();
 
-    pObject->setMatrix(identity, renderCamera->getMatrix_View(), renderCamera->getMatrix_Projection());
+    pObject->setMatrix(nullptr, &matView, &matProj);
     pObject->render();
+
+    pWorldMap->setMatrix(nullptr, &matView, &matProj);
+    pWorldMap->render();
     return true;
 }
 
@@ -94,6 +120,13 @@ bool Sample::release()
         pBoxObject->release();
         delete pBoxObject;
         pBoxObject = nullptr;
+    }
+
+    if (pWorldMap != nullptr)
+    {
+        pWorldMap->release();
+        delete pWorldMap;
+        pWorldMap = nullptr;
     }
     return true;
 }
