@@ -27,7 +27,10 @@ KeyState Input::getKey(DWORD _key)
 bool Input::initialize()
 {
 	ZeroMemory(&dwKeyState, sizeof(DWORD) * KEY_COUNT);
-
+	GetCursorPos(&m_ptPos); // 화면 좌표계 상 마우스 커서 위치
+	ScreenToClient(hWnd, &m_ptPos); // 클라이언트 좌표로 변경.
+	m_ptPrevPos = m_ptPos;
+	
 	return true;
 }
 
@@ -35,6 +38,8 @@ bool Input::frame()
 {
 	GetCursorPos(&m_ptPos); // 화면 좌표계 상 마우스 커서 위치
 	ScreenToClient(hWnd, &m_ptPos); // 클라이언트 좌표로 변경.
+	m_ptOffset.x = m_ptPos.x - m_ptPrevPos.x;
+	m_ptOffset.y = m_ptPos.y - m_ptPrevPos.y;
 
 	for (int key = 0; key < KEY_COUNT; key++)
 	{
@@ -62,6 +67,8 @@ bool Input::frame()
 			}
 		}
 	}
+
+	m_ptPrevPos = m_ptPos;
 	return true;
 }
 

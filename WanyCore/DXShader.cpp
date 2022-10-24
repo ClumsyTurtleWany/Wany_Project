@@ -142,6 +142,20 @@ bool DXShader::render()
 	// Blend State 적용.
 	//m_pImmediateContext->OMSetBlendState(DXSamplerState::pBlendSamplerState, 0, -1);
 
+	// Rasterizer State 적용
+	if (m_CullMode == CullMode::None)
+	{
+		m_pImmediateContext->RSSetState(DXSamplerState::pRSSolid_CullNone);
+	}
+	else if (m_CullMode == CullMode::Front)
+	{
+		m_pImmediateContext->RSSetState(DXSamplerState::pRSSolid_CullFront);
+	}
+	else
+	{
+		m_pImmediateContext->RSSetState(DXSamplerState::pDefaultRSSolid);
+	}
+
 	if (m_pConstantBuffer != nullptr)
 	{
 		m_pImmediateContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
@@ -601,6 +615,11 @@ void DXShader::setTopology(D3D11_PRIMITIVE_TOPOLOGY _topology)
 	m_Topology = _topology;
 }
 
+void DXShader::setCullMode(CullMode _mode)
+{
+	m_CullMode = _mode;
+}
+
 std::vector<Vertex>* DXShader::getVertexList()
 {
 	return &m_VertexList;
@@ -669,6 +688,10 @@ bool DXShader::updateIndexList(std::vector<DWORD>* _list)
 	/*if (m_IndexList.size() == _list->size())
 	{
 		m_IndexList.assign(_list->begin(), _list->end());
+		if (m_pIndexBuffer != nullptr)
+		{
+			m_pImmediateContext->UpdateSubresource(m_pIndexBuffer, 0, NULL, &m_VertexList.at(0), 0, 0);
+		}
 	}
 	else*/
 	{

@@ -27,42 +27,50 @@ struct ConstantBufferData
 	}
 };
 
+enum class CullMode
+{
+	None,
+	Front,
+	Back,
+};
+
 class DXShader
 {
 protected:
 	// Device
-	ID3D11Device* m_pd3dDevice = nullptr;
-	ID3D11DeviceContext* m_pImmediateContext = nullptr;
+	ID3D11Device*				m_pd3dDevice = nullptr;
+	ID3D11DeviceContext*		m_pImmediateContext = nullptr;
 
 protected:
 	// Vertex Buffer
-	ID3D11Buffer* m_pVertexBuffer = nullptr;
-	ID3D11InputLayout* m_pVertexLayout = nullptr;
-	std::vector<Vertex> m_VertexList;
+	ID3D11Buffer*				m_pVertexBuffer = nullptr;
+	ID3D11InputLayout*			m_pVertexLayout = nullptr;
+	std::vector<Vertex>			m_VertexList;
 
 	// Index Buffer
-	ID3D11Buffer* m_pIndexBuffer = nullptr;
-	std::vector<DWORD> m_IndexList;
+	ID3D11Buffer*				m_pIndexBuffer = nullptr;
+	std::vector<DWORD>			m_IndexList;
 
 	// Constant Buffer
-	ID3D11Buffer* m_pConstantBuffer = nullptr;
-	ConstantBufferData m_ConstantData;
+	ID3D11Buffer*				m_pConstantBuffer = nullptr;
+	ConstantBufferData			m_ConstantData;
 
 	// Shader
-	ID3D11VertexShader* m_pVertexShader = nullptr;
-	ID3D11PixelShader* m_pPixelShader = nullptr;
+	ID3D11VertexShader*			m_pVertexShader = nullptr;
+	ID3D11PixelShader*			m_pPixelShader = nullptr;
 
-	ID3DBlob* m_pVertexShaderCode = nullptr;
-	ID3DBlob* m_pPixelShaderCode = nullptr;
+	ID3DBlob*					m_pVertexShaderCode = nullptr;
+	ID3DBlob*					m_pPixelShaderCode = nullptr;
 
-	std::wstring m_wstrShaderFile;
+	std::wstring				m_wstrShaderFile;
 
-	D3D11_PRIMITIVE_TOPOLOGY m_Topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+	D3D11_PRIMITIVE_TOPOLOGY	m_Topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+	CullMode					m_CullMode = CullMode::Back;
 
 protected:
 	// Texture
-	DXTexture* m_pTexture;
-	DXTexture* m_pTextureMask;
+	DXTexture*					m_pTexture;
+	DXTexture*					m_pTextureMask;
 
 protected:
 	bool isCreated = false;
@@ -95,6 +103,7 @@ public:
 	void setShaderFile(std::wstring _file);
 	void setCreateConstantFlag(bool _flag);
 	void setTopology(D3D11_PRIMITIVE_TOPOLOGY _topology);
+	void setCullMode(CullMode _mode);
 
 public:
 	float getTextureWidth();

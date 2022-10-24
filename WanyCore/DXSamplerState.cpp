@@ -4,6 +4,8 @@ ID3D11SamplerState* DXSamplerState::pDefaultSamplerState = nullptr;
 ID3D11SamplerState* DXSamplerState::pDefaultMirrorSamplerState = nullptr;
 ID3D11RasterizerState* DXSamplerState::pDefaultRSWireFrame = nullptr;
 ID3D11RasterizerState* DXSamplerState::pDefaultRSSolid = nullptr;
+ID3D11RasterizerState* DXSamplerState::pRSSolid_CullNone = nullptr;
+ID3D11RasterizerState* DXSamplerState::pRSSolid_CullFront = nullptr;
 ID3D11BlendState* DXSamplerState::pBlendSamplerState = nullptr;
 ID3D11DepthStencilState* DXSamplerState::pDefaultDepthStencil = nullptr;
 ID3D11DepthStencilState* DXSamplerState::pGreaterDepthStencil = nullptr;
@@ -92,10 +94,26 @@ bool DXSamplerState::setState(ID3D11Device* _pd3dDevice)
 	rst = _pd3dDevice->CreateRasterizerState(&RSSolidDesc, &pDefaultRSSolid);
 	if (FAILED(rst))
 	{
-		OutputDebugString(L"WanyCore::DXSamplerState::Failed Create Rasterizer State Solid.\n");
+		OutputDebugString(L"WanyCore::DXSamplerState::Failed Create Rasterizer State Solid (Render Front Only).\n");
 		return false;
 	}
 
+	RSSolidDesc.CullMode = D3D11_CULL_NONE;
+	rst = _pd3dDevice->CreateRasterizerState(&RSSolidDesc, &pRSSolid_CullNone);
+	if (FAILED(rst))
+	{
+		OutputDebugString(L"WanyCore::DXSamplerState::Failed Create Rasterizer State Solid (Render Double Side).\n");
+		return false;
+	}
+
+	RSSolidDesc.CullMode = D3D11_CULL_FRONT;
+	rst = _pd3dDevice->CreateRasterizerState(&RSSolidDesc, &pRSSolid_CullFront);
+	if (FAILED(rst))
+	{
+		OutputDebugString(L"WanyCore::DXSamplerState::Failed Create Rasterizer State Solid (Render Back Only).\n");
+		return false;
+	}
+	
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	// Blend State
 	/////////////////////////////////////////////////////////////////////////////////////////////////
@@ -193,6 +211,18 @@ bool DXSamplerState::release()
 	{
 		pDefaultRSSolid->Release();
 		pDefaultRSSolid = nullptr;
+	}
+
+	if (pRSSolid_CullNone != nullptr)
+	{
+		pRSSolid_CullNone->Release();
+		pRSSolid_CullNone = nullptr;
+	}
+
+	if (pRSSolid_CullFront != nullptr)
+	{
+		pRSSolid_CullFront->Release();
+		pRSSolid_CullFront = nullptr;
 	}
 
 	if (pBlendSamplerState != nullptr)

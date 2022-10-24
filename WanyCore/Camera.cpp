@@ -71,16 +71,16 @@ Matrix4x4 Camera::getMatrix_Projection()
 void Camera::CreateMatrix_View(Vector3f _eye, Vector3f _target, Vector3f _up)
 {
 	cameraPos = _eye;
-	target = _target;
+	look = _target;
 	up = _up;
 
-	Vector3f direction = (target - cameraPos).normalized();
-	Vector3f right = up.cross(direction).normalized();
-	Vector3f newUp = direction.cross(right).normalized();
+	Vector3f direction = (_target - _eye).normalized();
+	Vector3f rightSide = up.cross(direction).normalized();
+	Vector3f upSide = direction.cross(rightSide).normalized();
 
-	matView._11 = right.x; matView._12 = newUp.x; matView._13 = direction.x;
-	matView._21 = right.y; matView._22 = newUp.y; matView._23 = direction.y;
-	matView._31 = right.z; matView._32 = newUp.z; matView._33 = direction.z;
+	matView._11 = rightSide.x; matView._12 = upSide.x; matView._13 = direction.x;
+	matView._21 = rightSide.y; matView._22 = upSide.y; matView._23 = direction.y;
+	matView._31 = rightSide.z; matView._32 = upSide.z; matView._33 = direction.z;
 	matView._41 = -(cameraPos.x * matView._11 + cameraPos.y * matView._21 + cameraPos.z * matView._31);
 	matView._42 = -(cameraPos.x * matView._12 + cameraPos.y * matView._22 + cameraPos.z * matView._32);
 	matView._43 = -(cameraPos.x * matView._13 + cameraPos.y * matView._23 + cameraPos.z * matView._33);
@@ -145,6 +145,25 @@ void Camera::CreateMatrix_Proj(float _near, float _far, float _fov_y, float _asp
 	matProj_Perspective._44 = 0.0f;
 }
 
+void Camera::update()
+{
+	right.x = matView._11;
+	right.y = matView._21;
+	right.z = matView._31;
+
+	up.x = matView._12;
+	up.y = matView._22;
+	up.z = matView._32;
+
+	look.x = matView._13;
+	look.y = matView._23;
+	look.z = matView._33;
+
+	right = right.normalized();
+	up = up.normalized();
+	look = look.normalized();
+}
+
 bool Camera::initialize()
 {
 	return true;
@@ -167,7 +186,7 @@ bool Camera::frame()
 
 	rect = Rect2f(x, y, width, height);	 
 
-	float dt = Timer::getInstance()->getDeltaTime();
+	/*float dt = Timer::getInstance()->getDeltaTime();
 
 	KeyState KeyState_W = Input::getInstance()->getKey('W');
 	if (KeyState_W == KeyState::Hold)
@@ -203,9 +222,10 @@ bool Camera::frame()
 	if (KeyState_E == KeyState::Hold)
 	{
 		cameraPos.y -= 10.0f * dt;
-	}
+	}*/
 
-	CreateMatrix_View(cameraPos, target, up);
+	CreateMatrix_View(cameraPos, look, up);
+	update();
 
 	return true;
 }

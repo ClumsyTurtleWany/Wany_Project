@@ -19,6 +19,8 @@ private:
 public:
 	KeyState dwKeyState[KEY_COUNT]; // mouse 버튼 + keyboard 버튼
 	POINT m_ptPos; // mouse position
+	POINT m_ptPrevPos;
+	POINT m_ptOffset;
 
 public:
 	virtual bool initialize();

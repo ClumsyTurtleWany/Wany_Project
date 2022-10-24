@@ -26,7 +26,8 @@ public:
 	float fov_y = 0.0f;
 
 	Vector3f cameraPos;
-	Vector3f target = { 0, 0, 0 };
+	Vector3f look = { 0, 0, 0 };
+	Vector3f right = { 1, 0, 0 };
 	Vector3f up = { 0, 1, 0 };
 
 	Matrix4x4 matView;
@@ -54,6 +55,7 @@ public:
 
 	virtual void CreateMatrix_View(Vector3f _eye, Vector3f _target, Vector3f _up);
 	virtual void CreateMatrix_Proj(float _near, float _far, float _fov_y, float _aspect);
+	virtual void update();
 
 public:
 	virtual bool initialize();

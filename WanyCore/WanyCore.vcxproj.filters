@@ -118,6 +118,9 @@
     <Filter Include="Common\Sound\소스 파일">
       <UniqueIdentifier>{1125e0c5-29fe-40fa-992e-5396b6332fa2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Common\Camera">
+      <UniqueIdentifier>{93d8837b-9260-448c-a7c4-9c1803765b7b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowUI.hpp">
@@ -172,7 +175,7 @@
       <Filter>DirectX\Shader\헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Camera.hpp">
-      <Filter>Common</Filter>
+      <Filter>Common\Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -225,7 +228,7 @@
       <Filter>DirectX\Shader\소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
-      <Filter>Common</Filter>
+      <Filter>Common\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
