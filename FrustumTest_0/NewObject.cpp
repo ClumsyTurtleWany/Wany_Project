@@ -127,6 +127,17 @@ bool Cube3D::render()
 	return true;
 }
 
+bool Cube3D::rotationYawPitchRoll(float _yaw, float _pitch, float _roll)
+{
+	Vector3f translate = Vector3f(data.matWorld._41, data.matWorld._42, data.matWorld._43);
+	DirectX::XMMATRIX matWorld = DirectX::XMMatrixRotationRollPitchYaw(_pitch, _yaw, _roll);
+	data.matWorld = *((Matrix4x4*)&matWorld);
+	data.matWorld._41 += translate.x;
+	data.matWorld._42 += translate.y;
+	data.matWorld._43 += translate.z;
+	return true;
+}
+
 bool Map3D::build(int _width, int _height)
 {
 	// width와 height는 2^n + 1 으로 생성하는게 좋다. 그래야 셀이 잘리지 않는다.

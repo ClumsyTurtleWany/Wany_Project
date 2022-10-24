@@ -27,7 +27,7 @@ bool Sample::initialize()
         ViewPort[idx].MinDepth = 0;
         ViewPort[idx].MaxDepth = 1;
     }
-  
+
     if (DXTextureManager::getInstance()->Load(CHARACTER_DIR))
     {
         DXTexture* pTexture = DXTextureManager::getInstance()->getTexture(CHARACTER_DIR);
@@ -49,7 +49,7 @@ bool Sample::initialize()
             pBoxObject->initialize();
             pBoxObject->translation(-2.0f, 0.0f, -2.0f);
         }
-    }    
+    }
 
     if (DXTextureManager::getInstance()->Load(MAP_DIR))
     {
@@ -67,7 +67,7 @@ bool Sample::initialize()
             pWorldMap->build(513, 513);
             pWorldMap->initialize();
         }
-    }   
+    }
 
     renderCamera = new DebugCamera(ProjectionType::Perspective);
     renderCamera->CreateMatrix_View(Vector3f(0.0f, 10.0f, -10.0f), Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, 1.0f, 0.0f));
@@ -108,15 +108,16 @@ bool Sample::frame()
 
     pObject->frame(dt);
     pObject->testTime = gameTime;
-    pObject->translation(cos(gameTime) * 10.0f * dt, cos(gameTime) * 10.0f * dt, cos(gameTime) * 10.0f * dt);
+    //pObject->translation(cos(gameTime) * 10.0f * dt, cos(gameTime) * 10.0f * dt, cos(gameTime) * 10.0f * dt);
 
     pBoxObject->frame(dt);
     pBoxObject->testTime = gameTime;
-    
+    pBoxObject->rotationYawPitchRoll(gameTime, 0.0f, 0.0f);
     Matrix4x4 matRotationY = Make3DMatrix_RotationY(dt);
     pBoxObject->data.matWorld = pBoxObject->data.matWorld * matRotationY;
+
     pWorldMap->frame(dt);
-   
+
     return true;
 }
 
@@ -178,7 +179,7 @@ bool Sample::render()
 
     // 원래 뷰포트로 다시 세팅.
     m_pImmediateContext->RSSetViewports(1, &vpOld[0]);
-        
+
     return true;
 }
 

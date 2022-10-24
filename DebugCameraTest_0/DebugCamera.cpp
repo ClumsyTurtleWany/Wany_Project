@@ -76,7 +76,6 @@ bool DebugCamera::frame()
 
 	//////////////////////////// DebugCamera ////////////////////////////
 	
-	DirectX::XMMATRIX rotation;
 	DirectX::XMVECTOR quaternion = DirectX::XMQuaternionRotationRollPitchYaw(pitch, yaw, roll);
 	DirectX::XMMATRIX world = DirectX::XMMatrixAffineTransformation({ 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f, 1.0f }, quaternion, DirectX::XMLoadFloat3(&curPos));
 	DirectX::XMVECTOR determinant;
