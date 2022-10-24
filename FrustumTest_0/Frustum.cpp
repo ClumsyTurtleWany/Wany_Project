@@ -17,9 +17,10 @@ bool Frustum::createFrustum(Matrix4x4* _view, Matrix4x4* _proj)
 	FrustumVertexList[3] = Vector3f( 1.0f, -1.0f, 1.0f);
 	
 	Matrix4x4 matInvViewProj = (*_view) * (*_proj);
-	DirectX::XMMATRIX matTest = DirectX::XMMatrixIdentity();
-	DirectX::XMVECTOR vecRst;
-	DirectX::XMMatrixInverse(&vecRst, matTest);
-	//XMMatrixInverse();
+	DirectX::XMMATRIX matSrc = *((DirectX::XMMATRIX*)&matInvViewProj);
+	DirectX::XMMATRIX matDst = DirectX::XMMatrixInverse(nullptr, matSrc);
+
+	Matrix4x4 matTemp = *((Matrix4x4*)&matDst);
+
 	return false;
 }
