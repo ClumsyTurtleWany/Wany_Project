@@ -13,7 +13,7 @@ public:
 	Plane3D* pObject = nullptr;
 	Cube3D* pBoxObject = nullptr;
 	Map3D* pWorldMap = nullptr;
-	Camera* renderCamera = nullptr;
+	DebugCamera* renderCamera = nullptr;
 	D3D11_VIEWPORT ViewPort[4];
 	Camera* ViewPortCamera[4];
 

@@ -149,7 +149,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CoreStateMachineTest_0", "C
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CoreStateMachineTest_1", "CoreStateMachineTest_1\CoreStateMachineTest_1.vcxproj", "{608288CA-A600-4E83-AC1B-22BCAAE606E5}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2_TestGame", "2_TestGame", "{0EDC5770-BB13-451B-9DA9-E1344327E6C3}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MapleStory", "MapleStory", "{0EDC5770-BB13-451B-9DA9-E1344327E6C3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0_StateMachine", "0_StateMachine", "{8966021D-01B3-4ED8-8280-2FAA7700F3D8}"
 EndProject

@@ -54,6 +54,12 @@ bool Plane3D::render()
 	return true;
 }
 
+bool Plane3D::frame(float _dt)
+{
+	curPos = Vector3f(0.0f, 0.0f, 0.0f) * data.matWorld;
+	return true;
+}
+
 bool Cube3D::initialize()
 {
 	axis.createShader(ShaderType::Axis3D);
@@ -124,6 +130,12 @@ bool Cube3D::render()
 	axis.setMatrix(&data.matWorld, &data.matView, &data.matProj);
 	axis.render();
 	pShader->render();
+	return true;
+}
+
+bool Cube3D::frame(float _dt)
+{
+	curPos = Vector3f(0.0f, 0.0f, 0.0f) * data.matWorld;
 	return true;
 }
 
@@ -205,6 +217,12 @@ bool Map3D::render()
 	axis.setMatrix(&data.matWorld, &data.matView, &data.matProj);
 	axis.render();
 	pShader->render();
+	return true;
+}
+
+bool Map3D::frame(float _dt)
+{
+	curPos = Vector3f(0.0f, 0.0f, 0.0f) * data.matWorld;
 	return true;
 }
 

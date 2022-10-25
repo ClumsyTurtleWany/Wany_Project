@@ -69,8 +69,8 @@ protected:
 
 protected:
 	// Texture
-	DXTexture*					m_pTexture;
-	DXTexture*					m_pTextureMask;
+	DXTexture*					m_pTexture = nullptr;
+	DXTexture*					m_pTextureMask = nullptr;
 
 protected:
 	bool isCreated = false;

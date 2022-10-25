@@ -70,8 +70,9 @@ bool Sample::initialize()
     }
 
     renderCamera = new DebugCamera(ProjectionType::Perspective);
-    renderCamera->CreateMatrix_View(Vector3f(0.0f, 10.0f, -10.0f), Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, 1.0f, 0.0f));
+    renderCamera->CreateMatrix_View(Vector3f(0.0f, 0.0f, -10.0f), Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, 1.0f, 0.0f));
     renderCamera->CreateMatrix_Proj(1.0f, 10000.0f, PI * 0.25f, static_cast<float>(g_pWindow->getClientWidth()) / static_cast<float>(g_pWindow->getClientHeight()));
+    renderCamera->initialize();
 
     // Front View
     ViewPortCamera[0] = new Camera(ProjectionType::Perspective);
@@ -110,11 +111,11 @@ bool Sample::frame()
     pObject->testTime = gameTime;
     //pObject->translation(cos(gameTime) * 10.0f * dt, cos(gameTime) * 10.0f * dt, cos(gameTime) * 10.0f * dt);
 
-    pBoxObject->frame(dt);
     pBoxObject->testTime = gameTime;
     pBoxObject->rotationYawPitchRoll(gameTime, 0.0f, 0.0f);
     Matrix4x4 matRotationY = Make3DMatrix_RotationY(dt);
     pBoxObject->data.matWorld = pBoxObject->data.matWorld * matRotationY;
+    pBoxObject->frame(dt);
 
     pWorldMap->frame(dt);
 
@@ -133,14 +134,23 @@ bool Sample::render()
     Matrix4x4 matView = renderCamera->getMatrix_View();
     Matrix4x4 matProj = renderCamera->getMatrix_Projection();
 
-    pBoxObject->setMatrix(nullptr, &matView, &matProj);
-    pBoxObject->render();
+    if (renderCamera->frustum.classifyPoint(pBoxObject->curPos))
+    {
+        pBoxObject->setMatrix(nullptr, &matView, &matProj);
+        pBoxObject->render();
+    }
 
-    pObject->setMatrix(nullptr, &matView, &matProj);
-    pObject->render();
+    if (renderCamera->frustum.classifyPoint(pObject->curPos))
+    {
+        pObject->setMatrix(nullptr, &matView, &matProj);
+        pObject->render();
+    }
 
-    pWorldMap->setMatrix(nullptr, &matView, &matProj);
-    pWorldMap->render();
+    if (renderCamera->frustum.classifyPoint(pWorldMap->curPos))
+    {
+        pWorldMap->setMatrix(nullptr, &matView, &matProj);
+        pWorldMap->render();
+    }
 
     // 서브 뷰 포트 렌더링
     // 1. 메인 뷰 포트 저장.
@@ -179,6 +189,10 @@ bool Sample::render()
 
     // 원래 뷰포트로 다시 세팅.
     m_pImmediateContext->RSSetViewports(1, &vpOld[0]);
+
+
+    m_pImmediateContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0); // Depth는 1.0f, Stencil은 0으로 클리어.
+    renderCamera->render();
 
     return true;
 }

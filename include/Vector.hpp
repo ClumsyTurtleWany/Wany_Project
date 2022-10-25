@@ -241,6 +241,9 @@ public:
 		float rst_y = (x * _mat.arry[0][1]) + (y * _mat.arry[1][1]) + (z * _mat.arry[2][1]) + (1.0f * _mat.arry[3][1]);
 		float rst_z = (x * _mat.arry[0][2]) + (y * _mat.arry[1][2]) + (z * _mat.arry[2][2]) + (1.0f * _mat.arry[3][2]);
 		float rst_w = (x * _mat.arry[0][3]) + (y * _mat.arry[1][3]) + (z * _mat.arry[2][3]) + (1.0f * _mat.arry[3][3]);
+		rst_x /= rst_w;
+		rst_y /= rst_w;
+		rst_z /= rst_w;
 
 		return Vector3D_<T>(rst_x, rst_y, rst_z);
 	}

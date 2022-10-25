@@ -251,10 +251,14 @@ HRESULT DXDevice::createRenderTargetView()
 
 	ID3D11Texture2D* pBackBuffer = nullptr;
 	m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&pBackBuffer); // 위에서 만든 0번 버퍼를 가져옴. 복사본이 오는 것임.
-	rst = m_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &m_pRTV);
-	pBackBuffer->Release(); // 복사본 릴리즈
+	if (pBackBuffer != nullptr)
+	{
+		rst = m_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &m_pRTV);
+		pBackBuffer->Release(); // 복사본 릴리즈
+		return rst;
+	}
 
-	return rst;
+	return S_FALSE;
 }
 
 // 5) 뷰 포트 설정

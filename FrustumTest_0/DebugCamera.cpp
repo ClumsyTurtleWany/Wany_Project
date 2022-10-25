@@ -1,6 +1,7 @@
 #include "DebugCamera.hpp"
 #include "Input.hpp"
 #include "Timer.hpp"
+#include "DXMath.hpp"
 
 DebugCamera::DebugCamera()
 {
@@ -9,6 +10,13 @@ DebugCamera::DebugCamera()
 DebugCamera::DebugCamera(ProjectionType _type)
 {
 	projType = _type;
+}
+
+bool DebugCamera::initialize()
+{
+	frustum.createShader(ShaderType::Axis3D);
+	frustum.initialize();
+	return true;
 }
 
 bool DebugCamera::frame()
@@ -78,12 +86,23 @@ bool DebugCamera::frame()
 	
 	DirectX::XMMATRIX rotation;
 	DirectX::XMVECTOR quaternion = DirectX::XMQuaternionRotationRollPitchYaw(pitch, yaw, roll);
-	DirectX::XMMATRIX world = DirectX::XMMatrixAffineTransformation({ 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f, 1.0f }, quaternion, DirectX::XMLoadFloat3(&curPos));
+	//DirectX::XMMATRIX world = DirectX::XMMatrixAffineTransformation({ 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f, 1.0f }, quaternion, DirectX::XMLoadFloat3(&curPos));
+	DirectX::XMMATRIX world = DirectX::XMMatrixAffineTransformation({ 1.0f, 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f, 1.0f }, quaternion, Vector3fToXMVector(cameraPos));
 	DirectX::XMVECTOR determinant;
 	DirectX::XMMATRIX view = DirectX::XMMatrixInverse(&determinant, world);
 	
-	matView = *((Matrix4x4*)&view);
+	//matView = *((Matrix4x4*)&view);
+	matView = toMatrix(view);
 
 	update();
+
+	frustum.createFrustum(&matView, &matProj_Perspective);
+
+	return true;
+}
+
+bool DebugCamera::render()
+{
+	frustum.render();
 	return true;
 }

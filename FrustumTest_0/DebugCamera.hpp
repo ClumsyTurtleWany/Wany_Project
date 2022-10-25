@@ -9,11 +9,14 @@ public:
 	float yaw = 0.0f;
 	float pitch = 0.0f;
 	float roll = 0.0f;
+	Frustum frustum;
 
 public:
 	DebugCamera();
 	DebugCamera(ProjectionType _type);
 
 public:
+	virtual bool initialize() override;
 	virtual bool frame() override;
+	virtual bool render() override;
 };

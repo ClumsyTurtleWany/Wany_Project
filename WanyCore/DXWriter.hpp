@@ -21,15 +21,15 @@
 class DXWriter : public Singleton<DXWriter>
 {
 public:
-	ID2D1Factory*			m_pd2dFactory;
-	IDWriteFactory*			m_pDWriteFactory;
-	ID2D1RenderTarget*		m_pd2dRenderTarget; // 직접 만들지 않고 3D Device에서 가져와서 사용.
-	IDWriteTextFormat*		m_pTextFormat; // 글자(Text)를 바꿀 수 있지만 폰트와 크기는 변경 불가, 색상이나 위치는 변경 가능.
-	ID2D1SolidColorBrush*	m_pTextColor;	// 색상 관련 브러쉬
+	ID2D1Factory*			m_pd2dFactory = nullptr;
+	IDWriteFactory*			m_pDWriteFactory = nullptr;
+	ID2D1RenderTarget*		m_pd2dRenderTarget = nullptr; // 직접 만들지 않고 3D Device에서 가져와서 사용.
+	IDWriteTextFormat*		m_pTextFormat = nullptr; // 글자(Text)를 바꿀 수 있지만 폰트와 크기는 변경 불가, 색상이나 위치는 변경 가능.
+	ID2D1SolidColorBrush*	m_pTextColor = nullptr;	// 색상 관련 브러쉬
 
 	std::wstring			m_strDefault;
 
-	IDWriteTextLayout* m_pTextLayout; // 글자(Text)를 못바꾸는 대신 폰트나 크기 색상 등등 전부 변경 가능.
+	IDWriteTextLayout* m_pTextLayout = nullptr; // 글자(Text)를 못바꾸는 대신 폰트나 크기 색상 등등 전부 변경 가능.
 
 	bool bDrawLayout = false;
 

@@ -43,15 +43,17 @@ class Plane3D : public object3D<float>
 {
 private:
 	Axis3D axis;
-
+	
 public:
 	float testTime = 0.0f;
+	Vector3f curPos;
 
 public:
 	virtual bool initialize() override;
 	virtual bool initializeVertexList() override;
 	virtual bool initializeIndexList() override;
 	virtual bool render() override;
+	virtual bool frame(float _dt) override;
 };
 
 class Cube3D : public object3D<float>
@@ -64,12 +66,14 @@ public:
 	float yaw = 0.0f;
 	float pitch = 0.0f;
 	float roll = 0.0f;
+	Vector3f curPos;
 
 public:
 	virtual bool initialize() override;
 	virtual bool initializeVertexList() override;
 	virtual bool initializeIndexList() override;
 	virtual bool render() override;
+	virtual bool frame(float _dt) override;
 
 public:
 	virtual bool rotationYawPitchRoll(float _yaw, float _pitch, float _roll);
@@ -81,11 +85,13 @@ private:
 	Axis3D axis;
 
 public:
-	int width = 0.0f;
-	int height = 0.0f;
+	int width = 0;
+	int height = 0;
+	Vector3f curPos;
 
 public:
 	virtual bool render() override;
+	virtual bool frame(float _dt) override;
 
 public:
 	bool build(int _width, int _height);	
