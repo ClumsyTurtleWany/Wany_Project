@@ -229,7 +229,7 @@ HRESULT DXDevice::createSwapChain()
 
 	// UINT Flags;
 	Desc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
-
+	//Desc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 	// DXGI_SWAP_EFFECT SwapEffect;
 	// 페이지 플립핑 이후 백 버퍼를 삭제할지 보존할지 결정하는 클래그
 	// DXGI_SWAP_EFFECT_DISCARD = 0 : Present 호출 시 백 버퍼 내용 삭제
