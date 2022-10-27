@@ -20,8 +20,8 @@ bool DXDevice::resize()
 	m_pDepthStencilView->Release();
 	m_pDepthStencilView = nullptr;
 
-	pDSTexture->Release();
-	pDSTexture = nullptr;
+	m_pDSTexture->Release();
+	m_pDSTexture = nullptr;
 	 
 	// 변경된 윈도우의 크기를 얻고 백 버퍼의 크기를 재 조정.
 	DXGI_SWAP_CHAIN_DESC desc;
@@ -236,7 +236,7 @@ HRESULT DXDevice::createSwapChain()
 	// DXGI_SWAP_EFFECT_SEQUENTIAL = 1 : Present 호출 시 백 버퍼 내용 보존
 	// 플래그는 멀티 샘플링과 함께 사용 불가!
 
-	return m_pGIFactory->CreateSwapChain(m_pd3dDevice, &Desc, &m_pSwapChain);;
+	return m_pGIFactory->CreateSwapChain(m_pd3dDevice, &Desc, &m_pSwapChain);
 
 
 }
@@ -304,7 +304,7 @@ HRESULT DXDevice::createDepthStencilView()
 	desc.BindFlags = D3D11_BIND_DEPTH_STENCIL; // 중요! 어디에 적용 할 것인지 정하는 것.
 	desc.CPUAccessFlags = 0;
 	desc.MiscFlags = 0;
-	HRESULT rst = m_pd3dDevice->CreateTexture2D(&desc, NULL, &pDSTexture);
+	HRESULT rst = m_pd3dDevice->CreateTexture2D(&desc, NULL, &m_pDSTexture);
 	if (FAILED(rst))
 	{
 		return rst;
@@ -317,7 +317,7 @@ HRESULT DXDevice::createDepthStencilView()
 	DSdesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 	DSdesc.Flags = 0;
 
-	rst = m_pd3dDevice->CreateDepthStencilView(pDSTexture, &DSdesc, &m_pDepthStencilView);
+	rst = m_pd3dDevice->CreateDepthStencilView(m_pDSTexture, &DSdesc, &m_pDepthStencilView);
 	if (FAILED(rst))
 	{
 		return rst;
@@ -409,10 +409,10 @@ bool DXDevice::release()
 		m_pDepthStencilView = nullptr;
 	}
 
-	if (pDSTexture != nullptr)
+	if (m_pDSTexture != nullptr)
 	{
-		pDSTexture->Release();
-		pDSTexture = nullptr;
+		m_pDSTexture->Release();
+		m_pDSTexture = nullptr;
 	}
 
 	if (m_pRTV != nullptr)

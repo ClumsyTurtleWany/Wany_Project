@@ -121,6 +121,15 @@
     <Filter Include="Common\Camera">
       <UniqueIdentifier>{93d8837b-9260-448c-a7c4-9c1803765b7b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DirectX\HLSL\Vertex">
+      <UniqueIdentifier>{3dbab01f-76c4-4ca0-909a-94f0b78a1f41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\HLSL\Pixel">
+      <UniqueIdentifier>{57c64567-6cf4-4ad8-9f07-7e47754e1099}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\HLSL\Text">
+      <UniqueIdentifier>{35900060-2924-4fff-87e8-dc5700c4cd3f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowUI.hpp">
@@ -232,23 +241,40 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ShapeShader.txt">
-      <Filter>DirectX\HLSL</Filter>
+    <Text Include="DefaultObject.txt">
+      <Filter>DirectX\HLSL\Text</Filter>
     </Text>
     <Text Include="MaskShader.txt">
-      <Filter>DirectX\HLSL</Filter>
+      <Filter>DirectX\HLSL\Text</Filter>
     </Text>
-    <Text Include="TextureShader.txt">
-      <Filter>DirectX\HLSL</Filter>
-    </Text>
-    <Text Include="DefaultObject.txt">
-      <Filter>DirectX\HLSL</Filter>
+    <Text Include="ShapeShader.txt">
+      <Filter>DirectX\HLSL\Text</Filter>
     </Text>
     <Text Include="Textured3D.txt">
-      <Filter>DirectX\HLSL</Filter>
+      <Filter>DirectX\HLSL\Text</Filter>
+    </Text>
+    <Text Include="TextureShader.txt">
+      <Filter>DirectX\HLSL\Text</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="VS_ConstantBuffer.hlsl">
+      <Filter>DirectX\HLSL\Vertex</Filter>
+    </FxCompile>
+    <FxCompile Include="VS_Texture.hlsl">
+      <Filter>DirectX\HLSL\Vertex</Filter>
+    </FxCompile>
+    <FxCompile Include="PS_Default.hlsl">
+      <Filter>DirectX\HLSL\Pixel</Filter>
+    </FxCompile>
+    <FxCompile Include="PS_Mask.hlsl">
+      <Filter>DirectX\HLSL\Pixel</Filter>
+    </FxCompile>
+    <FxCompile Include="PS_Texture.hlsl">
+      <Filter>DirectX\HLSL\Pixel</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

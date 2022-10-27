@@ -15,6 +15,19 @@ enum class ShaderType
 	Axis3D,
 };
 
+enum class VSCodeType
+{
+	Texture,
+	ConstantBuffer,
+};
+
+enum class PSCodeType
+{
+	Normal,
+	Texture,
+	Mask,
+};
+
 class DXShaderManager : public Singleton<DXShaderManager>
 {
 private:
@@ -25,15 +38,24 @@ private:
 
 	std::map<int, DXShader*> m_ShaderList;
 
+	std::map<VSCodeType, ID3DBlob*> m_pVertexShaderCodeMap;
+	std::map<PSCodeType, ID3DBlob*> m_pPixelShaderCodeMap;
+
 private:
 	DXShaderManager() {};
 	~DXShaderManager() { release(); };
+
+private:
+	bool LoadVSCode(VSCodeType _key, std::wstring _filename);
+	bool LoadPSCode(PSCodeType _key, std::wstring _filename);
 
 public:
 	void setDevice(ID3D11Device* _device, ID3D11DeviceContext* _context);
 	bool Load(int _key, ShaderType _type = ShaderType::Texture);
 	DXShader* getShader(int _key);
 	bool DeleteShader(int _key);
+	ID3DBlob* getVSCode(VSCodeType _key);
+	ID3DBlob* getPSCode(PSCodeType _key);
 
 public:
 	bool initialize();

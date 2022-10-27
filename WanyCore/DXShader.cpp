@@ -20,13 +20,10 @@ bool DXShader::initialize()
 		return false;
 	}
 
-	if (isConstant)
+	if (FAILED(CreateConstantBuffer()))
 	{
-		if (FAILED(CreateConstantBuffer()))
-		{
-			OutputDebugString(L"WanyCore::DXShader::Failed Create Constant Buffer.\n");
-			return false;
-		}
+		OutputDebugString(L"WanyCore::DXShader::Failed Create Constant Buffer.\n");
+		return false;
 	}
 
 	if (FAILED(CreateVertexBuffer()))
@@ -420,41 +417,46 @@ HRESULT DXShader::CreateVertexLayout()
 
 HRESULT DXShader::CreateVertexSharder()
 {
-	// 정점 레이아웃은 정점 쉐이더와 밀접한 관련이 있다.
-	// 정점 레이아웃 생성 시 사전에 정점 쉐이더 생성이 필요함. VertexShader.txt 참고.
-	// 따라서 정점 쉐이더 컴파일이 먼저 필요함. 쉐이더 안에서는 유니코드가 작동 안함.
-	// D3DCompileFromFile()
-	// LPCWSTR pFileName : 파일 이름
-	// D3D_SHADER_MACRO* pDefines
-	// ID3DInclude* pInclude
-	// LPCSTR pEntrypoint : 사용할 함수(VertexShader.txt에 있는 함수) 이름
-	// LPCSTR pTarget : 컴파일러 버전(쉐이더 버전 별로 다름)
-	// UINT Flags1
-	// UINT Flags2
-	// ID3DBlob** ppCode : 결과(.obj 파일의 시작 주소와, 크기를 반환 함.)
-	// _Always_(_Outptr_opt_result_maybenull_ : Error Code
-	HRESULT result;
-	ID3DBlob* pErrorCode = nullptr;
-	result = D3DCompileFromFile(
-		m_wstrShaderFile.c_str(), //L"../../resource/shader/ShapeShader.txt",  //L"VertexShader.txt",
-		NULL, NULL,
-		"VS",
-		"vs_5_0",
-		0, 0,
-		&m_pVertexShaderCode,
-		&pErrorCode);
-
-	if (FAILED(result))
+	if (m_pVertexShaderCode == nullptr)
 	{
-		if (pErrorCode != nullptr) // 쉐이더 파일에서는 디버깅이 불가능 해서 Error Code 받아와서 처리하는게 좋음.
+		// 정점 레이아웃은 정점 쉐이더와 밀접한 관련이 있다.
+		// 정점 레이아웃 생성 시 사전에 정점 쉐이더 생성이 필요함. VertexShader.txt 참고.
+		// 따라서 정점 쉐이더 컴파일이 먼저 필요함. 쉐이더 안에서는 유니코드가 작동 안함.
+		// D3DCompileFromFile()
+		// LPCWSTR pFileName : 파일 이름
+		// D3D_SHADER_MACRO* pDefines
+		// ID3DInclude* pInclude
+		// LPCSTR pEntrypoint : 사용할 함수(VertexShader.txt에 있는 함수) 이름
+		// LPCSTR pTarget : 컴파일러 버전(쉐이더 버전 별로 다름)
+		// UINT Flags1
+		// UINT Flags2
+		// ID3DBlob** ppCode : 결과(.obj 파일의 시작 주소와, 크기를 반환 함.)
+		// _Always_(_Outptr_opt_result_maybenull_ : Error Code
+		std::wstring filepath = m_wstrVertexShaderFile.empty() ? m_wstrShaderFile : m_wstrVertexShaderFile;
+		HRESULT result;
+		ID3DBlob* pErrorCode = nullptr;
+		result = D3DCompileFromFile(
+			filepath.c_str(), //L"../../resource/shader/ShapeShader.txt",  //L"VertexShader.txt",
+			NULL, NULL,
+			"VS",
+			"vs_5_0",
+			0, 0,
+			&m_pVertexShaderCode,
+			&pErrorCode);
+
+		if (FAILED(result))
 		{
-			OutputDebugStringA((char*)pErrorCode->GetBufferPointer());
-			pErrorCode->Release();
+			if (pErrorCode != nullptr) // 쉐이더 파일에서는 디버깅이 불가능 해서 Error Code 받아와서 처리하는게 좋음.
+			{
+				OutputDebugStringA((char*)pErrorCode->GetBufferPointer());
+				pErrorCode->Release();
+			}
+			return result;
 		}
-		return result;
+	
 	}
 
-	result = m_pd3dDevice->CreateVertexShader(m_pVertexShaderCode->GetBufferPointer(), m_pVertexShaderCode->GetBufferSize(), NULL, &m_pVertexShader);
+	HRESULT result = m_pd3dDevice->CreateVertexShader(m_pVertexShaderCode->GetBufferPointer(), m_pVertexShaderCode->GetBufferSize(), NULL, &m_pVertexShader);
 
 	if (FAILED(result))
 	{
@@ -466,29 +468,33 @@ HRESULT DXShader::CreateVertexSharder()
 
 HRESULT DXShader::CreatePixelSharder()
 {
-	// Pixel Shader Create
-	HRESULT result;
-	ID3DBlob* pErrorCode = nullptr; // 
-	result = D3DCompileFromFile(
-		m_wstrShaderFile.c_str(), //L"../../resource/shader/ShapeShader.txt", //L"PixelShader.txt",
-		NULL, NULL,
-		"PS",
-		"ps_5_0",
-		0, 0,
-		&m_pPixelShaderCode,
-		&pErrorCode);
-
-	if (FAILED(result))
+	if (m_pPixelShaderCode == nullptr)
 	{
-		if (pErrorCode != nullptr) // 쉐이더 파일에서는 디버깅이 불가능 해서 Error Code 받아와서 처리하는게 좋음.
+		// Pixel Shader Create
+		std::wstring filepath = m_wstrPixelShaderFile.empty() ? m_wstrShaderFile : m_wstrPixelShaderFile;
+		HRESULT result;
+		ID3DBlob* pErrorCode = nullptr; // 
+		result = D3DCompileFromFile(
+			filepath.c_str(), //L"../../resource/shader/ShapeShader.txt", //L"PixelShader.txt",
+			NULL, NULL,
+			"PS",
+			"ps_5_0",
+			0, 0,
+			&m_pPixelShaderCode,
+			&pErrorCode);
+
+		if (FAILED(result))
 		{
-			OutputDebugStringA((char*)pErrorCode->GetBufferPointer());
-			pErrorCode->Release();
+			if (pErrorCode != nullptr) // 쉐이더 파일에서는 디버깅이 불가능 해서 Error Code 받아와서 처리하는게 좋음.
+			{
+				OutputDebugStringA((char*)pErrorCode->GetBufferPointer());
+				pErrorCode->Release();
+			}
+			return result;
 		}
-		return result;
 	}
 
-	result = m_pd3dDevice->CreatePixelShader(m_pPixelShaderCode->GetBufferPointer(), m_pPixelShaderCode->GetBufferSize(), NULL, &m_pPixelShader);
+	HRESULT result = m_pd3dDevice->CreatePixelShader(m_pPixelShaderCode->GetBufferPointer(), m_pPixelShaderCode->GetBufferSize(), NULL, &m_pPixelShader);
 
 	if (FAILED(result))
 	{
@@ -605,9 +611,14 @@ void DXShader::setShaderFile(std::wstring _file)
 	m_wstrShaderFile = _file;
 }
 
-void DXShader::setCreateConstantFlag(bool _flag)
+void DXShader::setVertexShaderFile(std::wstring _file)
 {
-	isConstant = _flag;
+	m_wstrVertexShaderFile = _file;
+}
+
+void DXShader::setPixelShaderFile(std::wstring _file)
+{
+	m_wstrPixelShaderFile = _file;
 }
 
 void DXShader::setTopology(D3D11_PRIMITIVE_TOPOLOGY _topology)
@@ -618,6 +629,16 @@ void DXShader::setTopology(D3D11_PRIMITIVE_TOPOLOGY _topology)
 void DXShader::setCullMode(CullMode _mode)
 {
 	m_CullMode = _mode;
+}
+
+void DXShader::setVSCode(ID3DBlob* _VS)
+{
+	m_pVertexShaderCode = _VS;
+}
+
+void DXShader::setPSCode(ID3DBlob* _PS)
+{
+	m_pPixelShaderCode = _PS;
 }
 
 std::vector<Vertex>* DXShader::getVertexList()

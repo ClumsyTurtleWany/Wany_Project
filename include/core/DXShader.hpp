@@ -63,7 +63,10 @@ protected:
 	ID3DBlob*					m_pPixelShaderCode = nullptr;
 
 	std::wstring				m_wstrShaderFile;
+	std::wstring				m_wstrVertexShaderFile;
+	std::wstring				m_wstrPixelShaderFile;
 
+	// Optional
 	D3D11_PRIMITIVE_TOPOLOGY	m_Topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	CullMode					m_CullMode = CullMode::Back;
 
@@ -74,7 +77,6 @@ protected:
 
 protected:
 	bool isCreated = false;
-	bool isConstant = false;
 
 protected:
 	virtual HRESULT CreateVertexBuffer();
@@ -101,9 +103,12 @@ public:
 	void setColor(const Vector4f& _color);
 	void setTextureMask(DXTexture* _texture);
 	void setShaderFile(std::wstring _file);
-	void setCreateConstantFlag(bool _flag);
+	void setVertexShaderFile(std::wstring _file);
+	void setPixelShaderFile(std::wstring _file);
 	void setTopology(D3D11_PRIMITIVE_TOPOLOGY _topology);
 	void setCullMode(CullMode _mode);
+	void setVSCode(ID3DBlob* _VS);
+	void setPSCode(ID3DBlob* _PS);
 
 public:
 	float getTextureWidth();

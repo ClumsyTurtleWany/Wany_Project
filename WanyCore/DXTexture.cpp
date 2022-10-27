@@ -69,3 +69,35 @@ bool DXTexture::release()
 
 	return true;
 }
+
+bool DXTexture::CreateRenderTarget(float _width, float _height)
+{
+	ZeroMemory(&m_Desc, sizeof(m_Desc));
+	m_Desc.Width = _width;
+	m_Desc.Height = _height;
+	m_Desc.MipLevels = 1;
+	m_Desc.ArraySize = 1;
+	m_Desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	m_Desc.SampleDesc.Count = 1;
+	m_Desc.SampleDesc.Quality = 0;
+	m_Desc.Usage = D3D11_USAGE_DEFAULT;
+	m_Desc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+	m_Desc.CPUAccessFlags = 0;
+	m_Desc.MiscFlags = 0;
+
+	HRESULT rst = m_pd3dDevice->CreateTexture2D(&m_Desc, NULL, &m_pTextureResource);
+	if (FAILED(rst))
+	{
+		OutputDebugString(L"WanyCore::DXTexture::CreateRenderTarget::Failed Create Render Target Texture.\n");
+		return false;
+	}
+
+	rst = m_pd3dDevice->CreateShaderResourceView(m_pTextureResource, NULL, &m_pTextureResourceView);
+	if (FAILED(rst))
+	{
+		OutputDebugString(L"WanyCore::DXTexture::CreateRenderTarget::Failed Create Render Target Texture Resource View.\n");
+		return false;
+	}
+
+	return true;
+}

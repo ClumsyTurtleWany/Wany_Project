@@ -78,12 +78,12 @@ float4 PS(	PixelShader_input _input ) : SV_Target
 
 
 	// 2022-09-27 테스트용. 마스크 없이 불가능 할 듯.
-	float4 vColor = g_txTextureA.Sample(g_SampleA, _input.t);
 	//if((vColor.r >= 0.99f) && (vColor.g >= 0.99f) && (vColor.b >= 0.99f))
 	//{
 	//	discard; // 투명도 조절은 아니다.
 	//}
 
+	float4 vColor = g_txTextureA.Sample(g_SampleA, _input.t);
 	return vColor * _input.c;
 	
 }

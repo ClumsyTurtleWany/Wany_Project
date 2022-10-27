@@ -36,5 +36,6 @@ public:
 
 	bool release();
 	
+	bool CreateRenderTarget(float _width, float _height);
 };
 

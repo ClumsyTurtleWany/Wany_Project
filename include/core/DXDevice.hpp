@@ -35,7 +35,7 @@ public:
 	//IDXGIAdapter* m_pAdapter = nullptr;
 
 	// Depth Stencil View
-	ID3D11Texture2D* pDSTexture = nullptr;
+	ID3D11Texture2D* m_pDSTexture = nullptr;
 	ID3D11DepthStencilView* m_pDepthStencilView = nullptr;
 
 public:

@@ -22,6 +22,12 @@ bool GameCore::CoreInitialize()
 	}
 	
 	DXShaderManager::getInstance()->setDevice(m_pd3dDevice, m_pImmediateContext);
+	if (!DXShaderManager::getInstance()->initialize())
+	{
+		OutputDebugString(L"WanyCore::DXShaderManager::Failed Initialize.\n");
+		return false;
+	}
+
 	DXTextureManager::getInstance()->setDevice(m_pd3dDevice, m_pImmediateContext);
 
 	DXShaderBorderManager::getInstance()->setDevice(m_pd3dDevice, m_pImmediateContext);

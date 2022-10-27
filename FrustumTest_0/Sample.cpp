@@ -112,7 +112,7 @@ bool Sample::frame()
     //pObject->translation(cos(gameTime) * 10.0f * dt, cos(gameTime) * 10.0f * dt, cos(gameTime) * 10.0f * dt);
 
     pBoxObject->testTime = gameTime;
-    pBoxObject->rotationYawPitchRoll(gameTime, 0.0f, 0.0f);
+    pBoxObject->rotationYawPitchRoll(gameTime * 2.0f, 0.0f, 0.0f);
     Matrix4x4 matRotationY = Make3DMatrix_RotationY(dt);
     pBoxObject->data.matWorld = pBoxObject->data.matWorld * matRotationY;
     pBoxObject->frame(dt);
