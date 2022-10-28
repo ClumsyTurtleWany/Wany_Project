@@ -56,3 +56,10 @@ public:
 
 template <class T>
 T* Singleton<T>::instance = nullptr;
+
+
+// FBX SDK
+// 1. https://www.autodesk.com/developer-network/platform-technologies/fbx-sdk-2020-2-1
+// 2. Windows -> FBX SDK 2020.2.1 VS2019
+// 3. Copy include, lib to project (program files//autodesk//fbx//fbxsdk//2020.2.1//include, lib
+//

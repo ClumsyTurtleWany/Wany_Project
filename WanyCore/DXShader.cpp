@@ -140,18 +140,18 @@ bool DXShader::render()
 	//m_pImmediateContext->OMSetBlendState(DXSamplerState::pBlendSamplerState, 0, -1);
 
 	// Rasterizer State Àû¿ë
-	if (m_CullMode == CullMode::None)
-	{
-		m_pImmediateContext->RSSetState(DXSamplerState::pRSSolid_CullNone);
-	}
-	else if (m_CullMode == CullMode::Front)
-	{
-		m_pImmediateContext->RSSetState(DXSamplerState::pRSSolid_CullFront);
-	}
-	else
-	{
-		m_pImmediateContext->RSSetState(DXSamplerState::pDefaultRSSolid);
-	}
+	//if (m_CullMode == CullMode::None)
+	//{
+	//	m_pImmediateContext->RSSetState(DXSamplerState::pRSSolid_CullNone);
+	//}
+	//else if (m_CullMode == CullMode::Front)
+	//{
+	//	m_pImmediateContext->RSSetState(DXSamplerState::pRSSolid_CullFront);
+	//}
+	//else
+	//{
+	//	m_pImmediateContext->RSSetState(DXSamplerState::pDefaultRSSolid);
+	//}
 
 	if (m_pConstantBuffer != nullptr)
 	{

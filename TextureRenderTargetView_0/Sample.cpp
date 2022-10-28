@@ -127,17 +127,15 @@ bool Sample::frame()
 
 bool Sample::render()
 {
-    //textureRenderTarget.setOldRTV(m_pRTV);
-    //textureRenderTarget.setOldDSV(m_pDepthStencilView);
+    KeyState KeyState_F4 = Input::getInstance()->getKey(VK_F4);
+    if (KeyState_F4 == KeyState::Hold)
+    {
+        m_pImmediateContext->RSSetState(DXSamplerState::pDefaultRSWireFrame);
+    }
 
     if (textureRenderTarget.begin())
     {
         // ¸ÞÀÎ ºä Æ÷Æ® ·»´õ¸µ
-        KeyState KeyState_F4 = Input::getInstance()->getKey(VK_F4);
-        if (KeyState_F4 == KeyState::Hold)
-        {
-            m_pImmediateContext->RSSetState(DXSamplerState::pDefaultRSWireFrame);
-        }
 
         Matrix4x4 matView = renderCamera->getMatrix_View();
         Matrix4x4 matProj = renderCamera->getMatrix_Projection();
