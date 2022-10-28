@@ -7,6 +7,10 @@
 #pragma comment(lib, "libxml2-md.lib") // libfbxsdk-md 에 필요한 lib
 #pragma comment(lib, "zlib-md.lib") // libfbxsdk-md 에 필요한 lib
 
+#pragma warning(disable : 26451)
+#pragma warning(disable : 26495)
+#pragma warning(disable : 26812)
+
 class FBXLoader
 {
 private:
@@ -27,5 +31,5 @@ public:
 	bool Load(const char* _filename, std::vector<std::vector<Vertex>>& _dst);
 	bool PreProcess(FbxNode* _node);
 	bool ParseMesh(FbxMesh* _mesh, std::vector<Vertex>& _dst);
-	FbxVector2 ReadTextureCoord(FbxMesh* _mesh, FbxLayerElementUV* _uv);
+	bool ReadTextureCoord(FbxLayerElementUV* _uv, int _vertexIdx, FbxVector2& _dst);
 };

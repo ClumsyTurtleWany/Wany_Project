@@ -9,7 +9,7 @@ private:
 	ID3D11DeviceContext*	m_pImmediateContext = nullptr;
 
 	// Texture Render Target View
-	D3D11_VIEWPORT			m_viewPort;
+	D3D11_VIEWPORT			m_viewPort = D3D11_VIEWPORT();
 
 	ID3D11RenderTargetView* m_pRenderTargetView = nullptr;
 	DXTexture*				m_pTexture = nullptr;
@@ -20,7 +20,7 @@ private:
 	// For Save Prev View Infomation.
 	ID3D11RenderTargetView* m_pOldRenderTargetView = nullptr;
 	ID3D11DepthStencilView* m_pOldDepthStencilView = nullptr;
-	D3D11_VIEWPORT			m_OldViewPort[D3D11_VIEWPORT_AND_SCISSORRECT_MAX_INDEX];
+	D3D11_VIEWPORT			m_OldViewPort[D3D11_VIEWPORT_AND_SCISSORRECT_MAX_INDEX] = {};
 
 	// For Render
 	DXShader*				m_pShader = nullptr;

@@ -137,22 +137,45 @@ bool DXShader::render()
 	}
 
 	// Blend State 적용.
-	//m_pImmediateContext->OMSetBlendState(DXSamplerState::pBlendSamplerState, 0, -1);
+	m_pImmediateContext->OMSetBlendState(DXSamplerState::pBlendSamplerState, 0, -1);
 
 	// Rasterizer State 적용
-	//if (m_CullMode == CullMode::None)
-	//{
-	//	m_pImmediateContext->RSSetState(DXSamplerState::pRSSolid_CullNone);
-	//}
-	//else if (m_CullMode == CullMode::Front)
-	//{
-	//	m_pImmediateContext->RSSetState(DXSamplerState::pRSSolid_CullFront);
-	//}
-	//else
-	//{
-	//	m_pImmediateContext->RSSetState(DXSamplerState::pDefaultRSSolid);
-	//}
+	ID3D11RasterizerState* pOldRasterizerState = nullptr;
+	m_pImmediateContext->RSGetState(&pOldRasterizerState);
+	D3D11_RASTERIZER_DESC RSDesc;
+	pOldRasterizerState->GetDesc(&RSDesc);
+	if (RSDesc.FillMode == D3D11_FILL_WIREFRAME)
+	{
+		if (m_CullMode == CullMode::None)
+		{
+			m_pImmediateContext->RSSetState(DXSamplerState::pRSWireFrame_CullNone);
+		}
+		else if (m_CullMode == CullMode::Front)
+		{
+			m_pImmediateContext->RSSetState(DXSamplerState::pRSWireFrame_CullFront);
+		}
+		else
+		{
+			m_pImmediateContext->RSSetState(DXSamplerState::pDefaultRSWireFrame);
+		}
+	}
+	else
+	{
+		if (m_CullMode == CullMode::None)
+		{
+			m_pImmediateContext->RSSetState(DXSamplerState::pRSSolid_CullNone);
+		}
+		else if (m_CullMode == CullMode::Front)
+		{
+			m_pImmediateContext->RSSetState(DXSamplerState::pRSSolid_CullFront);
+		}
+		else
+		{
+			m_pImmediateContext->RSSetState(DXSamplerState::pDefaultRSSolid);
+		}
+	}
 
+	// Constant Buffer 적용
 	if (m_pConstantBuffer != nullptr)
 	{
 		m_pImmediateContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
@@ -174,6 +197,9 @@ bool DXShader::render()
 		// Index Buffer 사용 할 땐 DrawIndexed 사용 해야 함.
 		m_pImmediateContext->DrawIndexed(static_cast<UINT>(m_IndexList.size()), 0, 0);
 	}
+
+	m_pImmediateContext->RSSetState(pOldRasterizerState);
+	pOldRasterizerState->Release();
 
 	return true;
 }

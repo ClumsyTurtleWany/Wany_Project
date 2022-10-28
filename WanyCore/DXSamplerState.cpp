@@ -3,6 +3,8 @@
 ID3D11SamplerState* DXSamplerState::pDefaultSamplerState = nullptr;
 ID3D11SamplerState* DXSamplerState::pDefaultMirrorSamplerState = nullptr;
 ID3D11RasterizerState* DXSamplerState::pDefaultRSWireFrame = nullptr;
+ID3D11RasterizerState* DXSamplerState::pRSWireFrame_CullNone = nullptr;
+ID3D11RasterizerState* DXSamplerState::pRSWireFrame_CullFront = nullptr;
 ID3D11RasterizerState* DXSamplerState::pDefaultRSSolid = nullptr;
 ID3D11RasterizerState* DXSamplerState::pRSSolid_CullNone = nullptr;
 ID3D11RasterizerState* DXSamplerState::pRSSolid_CullFront = nullptr;
@@ -12,7 +14,9 @@ ID3D11DepthStencilState* DXSamplerState::pGreaterDepthStencil = nullptr;
 
 bool DXSamplerState::setState(ID3D11Device* _pd3dDevice)
 {
+	/////////////////////////////////////////////////////////////////////////////////////////////////
 	// Sampler State
+	/////////////////////////////////////////////////////////////////////////////////////////////////
 	// D3D11_SAMPLER_DESC *pSamplerDesc
 	// ID3D11SamplerState** ppSamplerState
 	D3D11_SAMPLER_DESC SamplerDesc;
@@ -55,6 +59,9 @@ bool DXSamplerState::setState(ID3D11Device* _pd3dDevice)
 		return false;
 	}
 
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	// Rasterizer State
+	/////////////////////////////////////////////////////////////////////////////////////////////////
 	// Debug 시 유용한 샘플러
 	// Wire Frame: 삼각형의 엣지만 랜더링 한다.
 	// Rasterizer State -> Pixel Shader로 넘겨준다.
@@ -74,9 +81,26 @@ bool DXSamplerState::setState(ID3D11Device* _pd3dDevice)
 	rst = _pd3dDevice->CreateRasterizerState(&RSWireDesc, &pDefaultRSWireFrame);
 	if (FAILED(rst))
 	{
-		OutputDebugString(L"WanyCore::DXSamplerState::Failed Create Rasterizer State Wire Frame.\n");
+		OutputDebugString(L"WanyCore::DXSamplerState::Failed Create Rasterizer State Wire Frame (Render Front Only).\n");
 		return false;
 	}
+
+	RSWireDesc.CullMode = D3D11_CULL_NONE;
+	rst = _pd3dDevice->CreateRasterizerState(&RSWireDesc, &pRSWireFrame_CullNone);
+	if (FAILED(rst))
+	{
+		OutputDebugString(L"WanyCore::DXSamplerState::Failed Create Rasterizer State Wire Frame (Render Double Side).\n");
+		return false;
+	}
+
+	RSWireDesc.CullMode = D3D11_CULL_FRONT;
+	rst = _pd3dDevice->CreateRasterizerState(&RSWireDesc, &pRSWireFrame_CullFront);
+	if (FAILED(rst))
+	{
+		OutputDebugString(L"WanyCore::DXSamplerState::Failed Create Rasterizer State Wire Frame (Render Back Only).\n");
+		return false;
+	}
+		
 
 	// Solid: 디폴트로 사용되는 샘플러. 기존에 Rasterizer State 셋팅 해 주기 전에는 Solid로 설정되어 있음.
 	D3D11_RASTERIZER_DESC RSSolidDesc;
@@ -205,6 +229,18 @@ bool DXSamplerState::release()
 	{
 		pDefaultRSWireFrame->Release();
 		pDefaultRSWireFrame = nullptr;
+	}
+
+	if (pRSWireFrame_CullNone != nullptr)
+	{
+		pRSWireFrame_CullNone->Release();
+		pRSWireFrame_CullNone = nullptr;
+	}
+
+	if (pRSWireFrame_CullFront != nullptr)
+	{
+		pRSWireFrame_CullFront->Release();
+		pRSWireFrame_CullFront = nullptr;
 	}
 
 	if (pDefaultRSSolid != nullptr)

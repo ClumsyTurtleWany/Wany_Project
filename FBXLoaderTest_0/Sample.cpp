@@ -18,7 +18,7 @@ bool Sample::initialize()
     std::vector<std::vector<Vertex>> vertexList;
     if (fbxLoader.initialize())
     {
-        fbxLoader.Load("../resource/box.FBX", vertexList);
+        fbxLoader.Load("../resource/charMob.FBX", vertexList);
     }
 
     float height = g_pWindow->getClientHeight() / 4.0f;
@@ -55,9 +55,9 @@ bool Sample::initialize()
             pBoxObject->initialize();
             pBoxObject->translation(-2.0f, 0.0f, -2.0f);
 
-            pBoxObject->pShader->updateVertexList(&vertexList[0]);
+            pBoxObject->pShader->updateVertexList(&vertexList[4]);
             std::vector<DWORD> indexList;
-            for (DWORD i = 0; i < 36; i++)
+            for (DWORD i = 0; i < vertexList[4].size(); i++)
             {
                 indexList.push_back(i);
             }

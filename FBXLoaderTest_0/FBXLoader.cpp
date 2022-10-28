@@ -57,7 +57,11 @@ bool FBXLoader::release()
 
 bool FBXLoader::Load(const char* _filename, std::vector<std::vector<Vertex>>& _dst)
 {
-	m_pImporter->Initialize(_filename);
+	if (!m_pImporter->Initialize(_filename))
+	{
+		return false;
+	}
+
 	m_pImporter->Import(m_pScene);
 	m_pRoot = m_pScene->GetRootNode();
 	PreProcess(m_pRoot);
@@ -136,7 +140,7 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, std::vector<Vertex>& _dst)
 		int polySize = _mesh->GetPolygonSize(polyIdx);
 		int faceCount = polySize - 2;
 
-		FbxVector4* pVertexPosition = _mesh->GetControlPoints(); // 제어점. 정점의 시작 위치
+		FbxVector4* pVertexPosition = _mesh->GetControlPoints(); // 제어점(Control point == Vertices). 정점의 시작 위치
 		for (int faceIdx = 0; faceIdx < faceCount; faceIdx++)
 		{
 			int cornerIdx[3]; 
@@ -170,9 +174,15 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, std::vector<Vertex>& _dst)
 				
 				Vector4f color = {1.0f, 1.0f, 1.0f, 1.0f};
 				Vector2f texture;
-				FbxVector2 tex = ReadTextureCoord(_mesh, UVList[0]);
-				texture.x = tex.mData[0];
-				texture.y = 1.0f - tex.mData[1];
+				FbxVector2 tex; // = ;
+				if (!UVList.empty())
+				{
+					if (ReadTextureCoord(UVList[0], vertexIdx, tex))
+					{
+						texture.x = tex.mData[0];
+						texture.y = 1.0f - tex.mData[1];
+					}
+				}
 
 				_dst.push_back(Vertex(pos, color, texture));
 			}
@@ -182,9 +192,55 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, std::vector<Vertex>& _dst)
 	return true;
 }
 
-FbxVector2 FBXLoader::ReadTextureCoord(FbxMesh* _mesh, FbxLayerElementUV* _uv)
+bool FBXLoader::ReadTextureCoord(FbxLayerElementUV* _uv, int _vertexIdx, FbxVector2& _dst)
 {
+	if (_uv == nullptr || _dst == nullptr)
+	{
+		return false;
+	}
 
+	//EMappingMode
+	switch (_uv->GetMappingMode())
+	{
+		case FbxLayerElementUV::eByControlPoint:
+		{
+			switch (_uv->GetReferenceMode())
+			{
+			case FbxLayerElementUV::eDirect:
+			{
+				FbxVector2 fbxUv = _uv->GetDirectArray().GetAt(_vertexIdx);
+				_dst.mData[0] = fbxUv.mData[0];
+				_dst.mData[1] = fbxUv.mData[1];
+				break;
+			}
+			case FbxLayerElementUV::eIndexToDirect:
+			{
+				int id = _uv->GetIndexArray().GetAt(_vertexIdx);
+				FbxVector2 fbxUv = _uv->GetDirectArray().GetAt(id);
+				_dst.mData[0] = fbxUv.mData[0];
+				_dst.mData[1] = fbxUv.mData[1];
+				break;
+			}
+			}
+			break;
+		}
+		case FbxLayerElementUV::eByPolygonVertex:
+		{
+			switch (_uv->GetReferenceMode())
+			{
+				// Always enters this part for the example model
+			case FbxLayerElementUV::eDirect: // fbx 5.0 이하일 때
+			case FbxLayerElementUV::eIndexToDirect:
+			{
+				_dst.mData[0] = _uv->GetDirectArray().GetAt(0).mData[0];
+				_dst.mData[1] = _uv->GetDirectArray().GetAt(0).mData[1];
+				break;
+			}
+			}
+			break;
+		}
+		
+	}
 
-	return FbxVector2();
+	return true;
 }

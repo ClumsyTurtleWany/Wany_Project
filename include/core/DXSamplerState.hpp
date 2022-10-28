@@ -8,6 +8,8 @@ public:
 	static ID3D11SamplerState* pDefaultSamplerState;
 	static ID3D11SamplerState* pDefaultMirrorSamplerState;
 	static ID3D11RasterizerState* pDefaultRSWireFrame;
+	static ID3D11RasterizerState* pRSWireFrame_CullNone;
+	static ID3D11RasterizerState* pRSWireFrame_CullFront;
 	static ID3D11RasterizerState* pDefaultRSSolid;
 	static ID3D11RasterizerState* pRSSolid_CullNone;
 	static ID3D11RasterizerState* pRSSolid_CullFront;

@@ -16,8 +16,8 @@ public:
 	Cube3D* pBoxObject = nullptr;
 	Map3D* pWorldMap = nullptr;
 	DebugCamera* renderCamera = nullptr;
-	D3D11_VIEWPORT ViewPort[4];
-	Camera* ViewPortCamera[4];
+	D3D11_VIEWPORT ViewPort[4] = { D3D11_VIEWPORT(),};
+	Camera* ViewPortCamera[4] = { nullptr, };
 	DXTextureRenderTarget textureRenderTarget;
 
 	FBXLoader fbxLoader;
