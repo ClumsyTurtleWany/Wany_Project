@@ -79,11 +79,21 @@ bool QuadTree3D::buildTree(node3D<float>* _parent)
 	int LB = _parent->LB;
 	int RB = _parent->RB;
 
+	if (((RT - LT) <= 0) || ((RB - LB) <= 0))
+	{
+		return false;
+	}
+
 	int topCenter = (RT + LT) / 2;
 	int bottomCenter = (RB + LB) / 2;
 	int leftCenter = (LT + LB) / 2;
 	int rightCenter = (RT + RB) / 2;
 	int center = (leftCenter + rightCenter) / 2;
+
+	if ((topCenter <= LT) || (leftCenter <= LT))
+	{
+		return false;
+	}
 	// 0 1
 	// 2 3
 	_parent->child[0] = createNode(LT, topCenter, leftCenter, center, _parent);
