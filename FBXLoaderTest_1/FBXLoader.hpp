@@ -46,5 +46,7 @@ public:
 	
 	int getSubMaterialIndex(FbxLayerElementMaterial* _material, int _polyIdx);
 
+	DXTexture* FindTexture(FbxSurfaceMaterial* _surface, const char* _name);
+
 	FBXObject* getObject(std::wstring _key);
 };

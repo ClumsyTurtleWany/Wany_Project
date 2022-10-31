@@ -211,6 +211,20 @@ bool FBXLoader::ParseNode(FbxNode* _node, FBXObject* _dst)
 		return false;
 	}
 
+	int totalGeometryObject = _node->GetDstObjectCount();
+	FbxSkeleton* pSkeleton = _node->GetSkeleton();
+	if (pSkeleton != nullptr)
+	{
+		int a = 0;
+	}
+
+	FbxObject* pObject = _node->GetDstObject();
+	if(pObject != nullptr)
+	{
+		int a = 0;
+		
+	}
+
 	FbxMesh* pMesh = _node->GetMesh();
 	if (pMesh != nullptr)
 	{
@@ -220,7 +234,7 @@ bool FBXLoader::ParseNode(FbxNode* _node, FBXObject* _dst)
 		//return false;
 	}
 
-	int childCount = _node->GetChildCount();
+	int childCount = _node->GetChildCount(); // Child 갯수가 0이면 정적 매쉬, 0이 아니면 동적 매쉬로 볼 수 있음.
 	for (int idx = 0; idx < childCount; idx++)
 	{
 		FBXObject* childObject = new FBXObject;
@@ -281,29 +295,34 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXObject* _dst)
 		FbxSurfaceMaterial* pSurface = pNode->GetMaterial(idx);
 		if (pSurface != nullptr)
 		{
-			auto prop = pSurface->FindProperty(FbxSurfaceMaterial::sDiffuse); // 기존에 많이 사용하던 텍스쳐 방식. 보통 Diffuse는 무조건 있음. 기본 방식
-			if (prop.IsValid())
+			//auto prop = pSurface->FindProperty(FbxSurfaceMaterial::sDiffuse); // 기존에 많이 사용하던 텍스쳐 방식. 보통 Diffuse는 무조건 있음. 기본 방식
+			//if (prop.IsValid())
+			//{
+			//	const FbxFileTexture* textureFile = prop.GetSrcObject<FbxFileTexture>();
+			//	if (textureFile != nullptr)
+			//	{
+			//		textureName = textureFile->GetFileName();
+			//		if (!textureName.empty())
+			//		{
+			//			std::filesystem::path path(textureName);
+			//			std::wstring file = path.filename().c_str();
+			//			std::wstring newPath = L"../resource/";
+			//			newPath += file;
+			//			if (DXTextureManager::getInstance()->Load(newPath))
+			//			{
+			//				DXTexture* pTexture = DXTextureManager::getInstance()->getTexture(newPath);
+			//				if (pTexture != nullptr)
+			//				{
+			//					_dst->Materials[idx]->setTexture(pTexture);
+			//				}
+			//			}
+			//		}
+			//	}
+			//}
+			DXTexture* pTexture = FindTexture(pSurface, FbxSurfaceMaterial::sDiffuse);
+			if (pTexture != nullptr)
 			{
-				const FbxFileTexture* textureFile = prop.GetSrcObject<FbxFileTexture>();
-				if (textureFile != nullptr)
-				{
-					textureName = textureFile->GetFileName();
-					if (!textureName.empty())
-					{
-						std::filesystem::path path(textureName);
-						std::wstring file = path.filename().c_str();
-						std::wstring newPath = L"../resource/";
-						newPath += file;
-						if (DXTextureManager::getInstance()->Load(newPath))
-						{
-							DXTexture* pTexture = DXTextureManager::getInstance()->getTexture(newPath);
-							if (pTexture != nullptr)
-							{
-								_dst->Materials[idx]->setTexture(pTexture);
-							}
-						}
-					}
-				}
+				_dst->Materials[idx]->setTexture(pTexture);
 			}
 		}
 	}
@@ -412,7 +431,8 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXObject* _dst)
 						color.x = fbxColor.mRed;
 						color.y = fbxColor.mGreen;
 						color.z = fbxColor.mBlue;
-						color.w = fbxColor.mAlpha;
+						//color.w = fbxColor.mAlpha;
+						color.w = 1.0f;
 					}
 				}
 
@@ -422,7 +442,7 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXObject* _dst)
 
 		}
 
-		basePolyIdx += polyCount;
+		basePolyIdx += polySize;
 	}
 
 	for (size_t idx = 0; idx < _dst->Materials.size(); idx++)
@@ -782,6 +802,78 @@ int FBXLoader::getSubMaterialIndex(FbxLayerElementMaterial* _material, int _poly
 		}
 	}
 	return iSubMtrl;
+}
+
+DXTexture* FBXLoader::FindTexture(FbxSurfaceMaterial* _surface, const char* _name)
+{
+	if (_surface == nullptr)
+	{
+		return nullptr;
+	}
+
+	//static const char* sShadingModel;
+	//static const char* sMultiLayer;
+	//
+	//static const char* sEmissive;
+	//static const char* sEmissiveFactor;
+	//
+	//static const char* sAmbient;
+	//static const char* sAmbientFactor;
+	//
+	//static const char* sDiffuse;
+	//static const char* sDiffuseFactor;
+	//
+	//static const char* sSpecular;
+	//static const char* sSpecularFactor;
+	//static const char* sShininess;
+	//
+	//static const char* sBump;
+	//static const char* sNormalMap;
+	//static const char* sBumpFactor;
+	//
+	//static const char* sTransparentColor;
+	//static const char* sTransparencyFactor;
+	//
+	//static const char* sReflection;
+	//static const char* sReflectionFactor;
+	//
+	//static const char* sDisplacementColor;
+	//static const char* sDisplacementFactor;
+	//
+	//static const char* sVectorDisplacementColor;
+	//static const char* sVectorDisplacementFactor;
+
+	std::string textureName;
+	auto prop = _surface->FindProperty(_name); // 기존에 많이 사용하던 텍스쳐 방식. 보통 Diffuse는 무조건 있음. 기본 방식
+	if (prop.IsValid())
+	{
+		const FbxFileTexture* textureFile = prop.GetSrcObject<FbxFileTexture>();
+		if (textureFile != nullptr)
+		{
+			textureName = textureFile->GetFileName();
+			if (!textureName.empty())
+			{
+				std::filesystem::path path(textureName);
+				std::wstring file = path.filename().c_str();
+				std::wstring newPath = L"../resource/";
+				newPath += file;
+				if (DXTextureManager::getInstance()->Load(newPath))
+				{
+					DXTexture* pTexture = DXTextureManager::getInstance()->getTexture(newPath);
+					if (pTexture != nullptr)
+					{
+						return pTexture;
+					}
+					else
+					{
+						return nullptr;
+					}
+				}
+			}
+		}
+	}
+	
+	return nullptr;
 }
 
 FBXObject* FBXLoader::getObject(std::wstring _key)

@@ -22,6 +22,9 @@ bool Sample::initialize()
         pFbxObject = new FBXObject;
         //pFbxObject->initialize();
         FBXLoader::getInstance()->Load(L"../resource/MultiCameras.FBX", pFbxObject);
+        //FBXLoader::getInstance()->Load(L"../resource/charMob.FBX", pFbxObject);
+        //FBXLoader::getInstance()->Load(L"../resource/box.FBX", pFbxObject);
+        //FBXLoader::getInstance()->Load(L"../resource/mb2001.FBX", pFbxObject);
     }
 
     float height = g_pWindow->getClientHeight() / 4.0f;
