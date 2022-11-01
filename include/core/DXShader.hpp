@@ -62,9 +62,11 @@ protected:
 	ID3DBlob*					m_pVertexShaderCode = nullptr;
 	ID3DBlob*					m_pPixelShaderCode = nullptr;
 
+	// File
 	std::wstring				m_wstrShaderFile;
 	std::wstring				m_wstrVertexShaderFile;
 	std::wstring				m_wstrPixelShaderFile;
+	std::wstring				m_wstrTextureFile;
 
 	// Optional
 	D3D11_PRIMITIVE_TOPOLOGY	m_Topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
@@ -105,6 +107,7 @@ public:
 	void setShaderFile(std::wstring _file);
 	void setVertexShaderFile(std::wstring _file);
 	void setPixelShaderFile(std::wstring _file);
+	void setTextureFile(std::wstring _file);
 	void setTopology(D3D11_PRIMITIVE_TOPOLOGY _topology);
 	void setCullMode(CullMode _mode);
 	void setVSCode(ID3DBlob* _VS);

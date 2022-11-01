@@ -14,6 +14,7 @@ HRESULT DXTexture::Load(std::wstring _filename)
 	// const wchar_t* fileName
 	// ID3D11Resource** texture
 	// ID3D11ShaderResourceView** textureView
+	m_wstrFileName = _filename;
 	HRESULT rst = DirectX::CreateWICTextureFromFile(m_pd3dDevice, _filename.c_str(), (ID3D11Resource**)&m_pTextureResource, &m_pTextureResourceView);
 	if (FAILED(rst))
 	{

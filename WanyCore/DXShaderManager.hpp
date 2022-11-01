@@ -33,6 +33,7 @@ class DXShaderManager : public Singleton<DXShaderManager>
 private:
 	friend class Singleton<DXShaderManager>;
 
+private:
 	ID3D11Device* m_pd3dDevice = nullptr;
 	ID3D11DeviceContext* m_pImmediateContext = nullptr;
 

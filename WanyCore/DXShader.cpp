@@ -647,6 +647,11 @@ void DXShader::setPixelShaderFile(std::wstring _file)
 	m_wstrPixelShaderFile = _file;
 }
 
+void DXShader::setTextureFile(std::wstring _file)
+{
+	m_wstrTextureFile = _file;
+}
+
 void DXShader::setTopology(D3D11_PRIMITIVE_TOPOLOGY _topology)
 {
 	m_Topology = _topology;

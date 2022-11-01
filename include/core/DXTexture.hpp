@@ -24,6 +24,9 @@ private:
 	ID3D11Texture2D*			m_pTextureResource;
 	D3D11_TEXTURE2D_DESC		m_Desc;
 
+private:
+	std::wstring				m_wstrFileName;
+
 public:
 	void setDevice(ID3D11Device* _device, ID3D11DeviceContext* _context);
 	HRESULT Load(std::wstring _filename);
