@@ -276,5 +276,11 @@
     <FxCompile Include="PS_Texture.hlsl">
       <Filter>DirectX\HLSL\Pixel</Filter>
     </FxCompile>
+    <FxCompile Include="VS_Light.hlsl">
+      <Filter>DirectX\HLSL\Vertex</Filter>
+    </FxCompile>
+    <FxCompile Include="PS_Light.hlsl">
+      <Filter>DirectX\HLSL\Pixel</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

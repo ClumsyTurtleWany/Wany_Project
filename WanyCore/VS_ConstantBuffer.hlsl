@@ -14,6 +14,7 @@
 struct VertexShader_input
 {
 	float3 p : POSITION;
+	float3 n : NORMAL;
 	float4 c : COLOR;
 	float2 t : TEXTURE;
 };
@@ -21,8 +22,9 @@ struct VertexShader_input
 struct VertexShader_output
 {
 	float4 p : SV_POSITION;
+	float3 n : NORMAL;
 	float4 c : COLOR0; // COLOR0 과 COLOR1 밖에 없음.
-	float2 t : TEXCOORD0; // TEXCOORD0 ~ TEXCOORD7 (15) 까지 있음. 
+	float2 t : TEXCOORD0; // TEXCOORD0 ~ TEXCOORD7 (15) 까지 있음.
 };
 
 // 상수 버퍼는 레지스터 단위로만 저장됨.
@@ -60,8 +62,14 @@ VertexShader_output VS(VertexShader_input _input)
 	float4 vProj = mul(vView, g_matProj);
 
 	output.p = vProj;
+	output.n = _input.n;
 	output.c = _input.c;
 	output.t = _input.t;
+
+	//float3 vLight = float3(0, 0, 1);
+	//float fdot = dot(_input.n, -vLight);
+	//output.c = float4(fdot, fdot, fdot, 1.0); // 내적값이 0이면 좋지 않음. 최소한의 값을 사용하여 윤곽이 살짝 보이게 하는것을 엠비언트 조명이라 함.
+
 	return output;
 }
 

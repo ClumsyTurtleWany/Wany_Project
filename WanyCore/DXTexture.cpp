@@ -23,7 +23,11 @@ HRESULT DXTexture::Load(std::wstring _filename)
 		if (FAILED(rst))
 		{
 			OutputDebugString(L"WanyCore::DXTexture::Failed Create DDS Texture From File.\n");
-			OutputDebugString(L"WanyCore::DXTexture::Failed Load.\n");
+			//OutputDebugString(L"WanyCore::DXTexture::Failed Load.\n");
+			std::wstring debugString = L"WanyCore::DXTexture::Failed Load(";
+			debugString += _filename;
+			debugString += L")\n";
+			OutputDebugString(debugString.c_str());
 			return rst;
 		}
 

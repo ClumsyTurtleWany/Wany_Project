@@ -14,6 +14,7 @@
 struct VertexShader_input
 {
 	float3 p : POSITION;
+	float3 n : NORMAL;
 	float4 c : COLOR;
 	float2 t : TEXTURE;
 };
@@ -21,6 +22,7 @@ struct VertexShader_input
 struct VertexShader_output
 {
 	float4 p : SV_POSITION;
+	float3 n : NORMAL;
 	float4 c : COLOR0; // COLOR0 과 COLOR1 밖에 없음.
 	float2 t : TEXCOORD0; // TEXCOORD0 ~ TEXCOORD7 (15) 까지 있음. 
 };
@@ -30,6 +32,7 @@ VertexShader_output VS(VertexShader_input _input)
 	VertexShader_output output; // = (VertexShader_output)0;
 
 	output.p = float4(_input.p, 1.0f);
+	output.n = _input.n;
 	output.c = _input.c;
 	output.t = _input.t;
 	return output;

@@ -9,6 +9,7 @@ SamplerState	g_SampleA			: register(s0); // 샘플링을 하려면 샘플러가 필요함
 struct PixelShader_input
 {
 	float4 p : SV_POSITION;
+	float3 n : NORMAL;
 	float4 c : COLOR0;
 	float2 t : TEXCOORD0;
 };
