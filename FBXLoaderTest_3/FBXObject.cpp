@@ -123,9 +123,16 @@ bool FBXObject::setMatrix(Matrix4x4* _world, Matrix4x4* _view, Matrix4x4* _proj)
 			it->updateConstantData(&data);
 		}
 
+		Matrix4x4 matWorld = data.matWorld;
 		for (auto it : child)
 		{
-			it->setMatrix(_world, _view, _proj);
+			if (it->m_wstrNodeType != L"Mesh")
+			{
+				continue;
+			}
+
+			it->setMatrix(&matWorld, &data.matView, &data.matProj);
+			matWorld._41 += 2.0f;
 		}
 
 		return true;

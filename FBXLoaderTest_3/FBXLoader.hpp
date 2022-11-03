@@ -21,9 +21,7 @@ private:
 
 	FbxManager*		m_pManager = nullptr;
 	FbxImporter*	m_pImporter = nullptr;
-	//FbxScene*		m_pScene = nullptr; // 매 파일마다 새롭게 생성해 줘야 함.
-	//FbxNode*		m_pRoot = nullptr; // Tree 구조로 되어있음. 매 파일마다 새롭게 생성해 줘야 함.
-	//std::vector<FbxMesh*> m_MeshList;
+	
 	std::wstring	m_wstrResourceDir = L"";
 
 	std::map<std::wstring, std::unique_ptr<FBXObject>> m_ObjectMap;
@@ -35,9 +33,13 @@ public:
 	virtual bool release();
 
 private:
+	// Parser
 	bool ParseNode(FbxNode* _node, FBXObject* _dst);
 	bool ParseMesh(FbxMesh* _mesh, FBXObject* _dst);
+	bool ParseDummy(FbxNull* _dummy, FBXObject* _dst);
+	bool ParseSkeleton(FbxSkeleton* _skeleton, FBXObject* _dst);
 	
+	// Read Data
 	bool ReadTextureCoord(FbxLayerElementUV* _uv, int _vertexIdx, int _uvIdx, FbxVector2& _dst);
 	bool ReadColorCoord(FbxLayerElementVertexColor* _color, int _vertexIdx, int _colorIdx, FbxColor& _dst);
 	bool ReadNormal(FbxLayerElementNormal* _normal, int _vertexIdx, int _normalIdx, FbxVector4& _dst);
@@ -45,6 +47,11 @@ private:
 	int getSubMaterialIndex(FbxLayerElementMaterial* _material, int _polyIdx);
 
 	DXTexture* FindTexture(FbxSurfaceMaterial* _surface, const char* _name, std::wstring* _rst = nullptr);
+
+	// Matrix
+	FbxAMatrix getGeometryMatrix(FbxNode* _node);
+	FbxAMatrix getNormalMatrix(const FbxAMatrix& _src);
+	FbxAMatrix getWorldMatrix(FbxNode* _node);
 
 public:
 	bool LoadDir(std::wstring _path);

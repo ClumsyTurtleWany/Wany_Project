@@ -18,28 +18,29 @@ bool Sample::initialize()
     if (FBXLoader::getInstance()->initialize())
     {
         FBXLoader::getInstance()->setResourceDirectory(RESOURCE_DIR);
-        //FBXLoader::getInstance()->Load("../resource/charMob.FBX", vertexList);
-        //FBXLoader::getInstance()->Load("../resource/box.FBX", vertexList);
         pFbxObject = new FBXObject;
         //pFbxObject->initialize();
-        //FBXLoader::getInstance()->Load(L"../resource/MultiCameras.FBX", pFbxObject);
-        //FBXLoader::getInstance()->Load(L"../resource/charMob.FBX", pFbxObject);
-        //FBXLoader::getInstance()->Load(L"../resource/box.FBX", pFbxObject);
-        //FBXLoader::getInstance()->Load(L"../resource/mb2001.FBX", pFbxObject);
-        //FBXLoader::getInstance()->Load(L"../resource/rockBlobSix.FBX", pFbxObject);
-        //FBXLoader::getInstance()->Load(L"../resource/mb10230.FBX", pFbxObject);
-        FBXLoader::getInstance()->Load(L"../resource/FBX/SM_Tree_Var01.FBX", pFbxObject);
+        //FBXLoader::getInstance()->Load(L"../resource/FBX/MultiCameras.FBX", pFbxObject);
+        FBXLoader::getInstance()->Load(L"../resource/FBX/charMob.FBX", pFbxObject);
+        //FBXLoader::getInstance()->Load(L"../resource/FBX/box.FBX", pFbxObject);
+        //FBXLoader::getInstance()->Load(L"../resource/FBX/mb2001.FBX", pFbxObject);
+        //FBXLoader::getInstance()->Load(L"../resource/FBX/rockBlobSix.FBX", pFbxObject);
+        //FBXLoader::getInstance()->Load(L"../resource/FBX/mb10230.FBX", pFbxObject);
+        //FBXLoader::getInstance()->Load(L"../resource/FBX/SM_Tree_Var01.FBX", pFbxObject);
+        //FBXLoader::getInstance()->Load(L"../resource/FBX/Turret_Deploy1.FBX", pFbxObject);
 
         //if (FBXLoader::getInstance()->LoadDir(L"../resource/FBX/"))
-        //{
-        //    //pFbxObject = FBXLoader::getInstance()->getObject(L"MultiCameras.FBX");
-        //    //pFbxObject = FBXLoader::getInstance()->getObject(L"charMob.FBX");
-        //    //pFbxObject = FBXLoader::getInstance()->getObject(L"box.FBX");
-        //    //pFbxObject = FBXLoader::getInstance()->getObject(L"mb2001.fbx");
-        //    //pFbxObject = FBXLoader::getInstance()->getObject(L"rockBlobSix.FBX");
-        //    //pFbxObject = FBXLoader::getInstance()->getObject(L"mb10230.fbx");
-        //    pFbxObject = FBXLoader::getInstance()->getObject(L"SM_Tree_Var01.FBX");
-        //}
+        {
+            //pFbxObject = FBXLoader::getInstance()->getObject(L"MultiCameras.FBX");
+            //pFbxObject = FBXLoader::getInstance()->getObject(L"charMob.FBX");
+            //pFbxObject = FBXLoader::getInstance()->getObject(L"box.FBX");
+            //pFbxObject = FBXLoader::getInstance()->getObject(L"mb2001.fbx");
+            //pFbxObject = FBXLoader::getInstance()->getObject(L"rockBlobSix.FBX");
+            //pFbxObject = FBXLoader::getInstance()->getObject(L"mb10230.fbx");
+            //pFbxObject = FBXLoader::getInstance()->getObject(L"SM_Tree_Var01.FBX");
+            //pFbxObject = FBXLoader::getInstance()->getObject(L"ship.FBX");
+            //pFbxObject = FBXLoader::getInstance()->getObject(L"Turret_Deploy1.FBX");
+        }
 
         //pFbxObject->rotationYawPitchRoll(90.0f, 90.0f, 0);
     }

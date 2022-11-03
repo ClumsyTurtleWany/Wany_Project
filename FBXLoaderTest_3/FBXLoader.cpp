@@ -69,6 +69,11 @@ bool FBXLoader::LoadDir(std::wstring _path)
 		{
 			if ((fileExtension == L".FBX") || (fileExtension == L".fbx"))
 			{
+				if (filename == L"Turret_Deploy1.FBX")
+				{
+					int a = 0;
+				}
+
 				auto it = m_ObjectMap.find(filename);
 				if (it != m_ObjectMap.end())
 				{
@@ -103,7 +108,10 @@ bool FBXLoader::Load(std::wstring _path, FBXObject* _dst)
 		return false;
 	}
 
-	FbxScene* pScene = FbxScene::Create(m_pManager, ""); // Scene은 파일 마다 로드 해야함.
+	// 기본적으로 디자인 파일들은 Scene 단위로 저장됨.
+	// Scene은 트리 구조로 이루어져 있어 Root부터 시작되며 보통 Root는 NULL로 이루어져있음.
+	// 따라서 파일 마다 새로 생성해서 로드 해줄 필요가 있음.
+	FbxScene* pScene = FbxScene::Create(m_pManager, "");
 	if (pScene == nullptr)
 	{
 		OutputDebugString(L"WanyCore::FBXLoader::Load::Failed Create Scene.\n");
@@ -145,15 +153,16 @@ bool FBXLoader::ParseNode(FbxNode* _node, FBXObject* _dst)
 		return false;
 	}
 
+	bool isValid = false;
 	FbxNodeAttribute* pAttribute = _node->GetNodeAttribute();
 	if (pAttribute != nullptr)
 	{
 		// Attribute Type
 		// eUnknown,
-		// eNull,
+		// eNull, // 더미 오브젝트로 이용 될 수도 있음.
 		// eMarker,
-		// eSkeleton,
-		// eMesh,
+		// eSkeleton, // 애니메이션용 데이터.
+		// eMesh, // 랜더링용 데이터.
 		// eNurbs,
 		// ePatch,
 		// eCamera,
@@ -171,11 +180,37 @@ bool FBXLoader::ParseNode(FbxNode* _node, FBXObject* _dst)
 		// eSubDiv,
 		// eCachedEffect,
 		// eLine
+
 		FbxNodeAttribute::EType attributeType = pAttribute->GetAttributeType();
 		switch (attributeType)
 		{
+			case FbxNodeAttribute::EType::eNull: // 보통 Root 노드는 NULL을 가짐.
+			{
+				isValid = true;
+				FbxNull* pDummy = _node->GetNull();
+				if (pDummy != nullptr)
+				{
+					// Dummy: 자식 오브젝트의 원점과 부모 오브젝트의 원점을 맞춰주기 위한 정보.
+					ParseDummy(pDummy, _dst);
+				}
+				break;
+			}
+
+			case FbxNodeAttribute::EType::eSkeleton:
+			{
+				isValid = true;
+				FbxSkeleton* pSkeleton = _node->GetSkeleton();
+				if (pSkeleton != nullptr)
+				{
+					// Skeleton: 애니메이션을 위한 정보
+					ParseSkeleton(pSkeleton, _dst);
+				}
+				break;
+			}
+
 			case FbxNodeAttribute::EType::eMesh:
 			{
+				isValid = true;
 				FbxMesh* pMesh = _node->GetMesh();
 				if (pMesh != nullptr)
 				{
@@ -188,13 +223,7 @@ bool FBXLoader::ParseNode(FbxNode* _node, FBXObject* _dst)
 		}
 	}
 
-	//FbxMesh* pMesh = _node->GetMesh();
-	//if (pMesh != nullptr)
-	//{
-	//	// Mesh: 랜더 가능한 데이터
-	//	// Scene graph 형식(트리에 모든 정보를 다 넣어서 저장 후 사용 및 랜더링하는 방식) 이라고 부름.
-	//	ParseMesh(pMesh, _dst);
-	//}
+	_dst->m_strNodeName = _node->GetName();
 
 	int childCount = _node->GetChildCount(); // Child 갯수가 0이면 정적 매쉬, 0이 아니면 동적 매쉬로 볼 수 있음.
 	for (int idx = 0; idx < childCount; idx++)
@@ -210,15 +239,39 @@ bool FBXLoader::ParseNode(FbxNode* _node, FBXObject* _dst)
 			delete childObject;
 		}
 	}
-
-	return true;
+	
+	return isValid;
 }
 
 bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXObject* _dst)
 {
-	if (_mesh == nullptr)
+	if ((_mesh == nullptr) || (_dst == nullptr))
 	{
 		return false;
+	}
+
+	_dst->m_strDataName = _mesh->GetName();
+	_dst->m_wstrNodeType = L"Mesh";
+
+	int DeformerCnt = _mesh->GetDeformerCount();
+	for (int idx = 0; idx < DeformerCnt; idx++)
+	{
+		FbxDeformer* pDeformer = _mesh->GetDeformer(idx, FbxDeformer::EDeformerType::eSkin);
+		FbxSkin* pSkin = reinterpret_cast<FbxSkin*>(pDeformer);
+		int ClusterCnt = pSkin->GetClusterCount();
+		for (int clusterIdx = 0; clusterIdx < ClusterCnt; clusterIdx++)
+		{
+			FbxCluster* pCluster = pSkin->GetCluster(clusterIdx);
+			int clusterSize = pCluster->GetControlPointIndicesCount();
+
+			FbxNode* pLinkNode = pCluster->GetLink();
+			std::string LinkedNodeName = pLinkNode->GetName();
+
+			int* indices = pCluster->GetControlPointIndices();
+			int a = 0;
+			
+		}
+		
 	}
 
 	// Layer 개념 필요. 여러번에 걸쳐 동일한 곳에 랜더링 하는것 == 멀티 패스 랜더링. 텍스쳐로 치환하면 멀티 텍스처 랜더링.
@@ -320,47 +373,14 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXObject* _dst)
 
 	// 로컬 행렬
 	// Affine 행렬은 정점 변환 할 때, 그냥 행렬은 행렬 끼리 연산 할 때 사용
-	FbxAMatrix geometryMatrix; // 기하 행렬. 초기 정점 위치를 변환 할 때 사용. 로컬 행렬. 이 매트릭스를 적용해 바뀌지 않으면 월드 행렬에서 변환. 정점 변환.
-	FbxVector4 translation = pNode->GetGeometricTranslation(FbxNode::eSourcePivot);
-	FbxVector4 rotation = pNode->GetGeometricRotation(FbxNode::eSourcePivot);
-	FbxVector4 scale = pNode->GetGeometricScaling(FbxNode::eSourcePivot);
-	geometryMatrix.SetT(translation);
-	geometryMatrix.SetR(rotation);
-	geometryMatrix.SetS(scale);
+	FbxAMatrix geometryMatrix = getGeometryMatrix(pNode); // 기하 행렬. 초기 정점 위치를 변환 할 때 사용. 로컬 행렬. 이 매트릭스를 적용해 바뀌지 않으면 월드 행렬에서 변환. 정점 변환.
 
 	// 노말 성분은 역행렬의 전치 행렬로 곱해 줘야 함.
-	FbxAMatrix normalMatrix = geometryMatrix;
-	normalMatrix = normalMatrix.Inverse();
-	normalMatrix = normalMatrix.Transpose();
+	FbxAMatrix normalMatrix = getNormalMatrix(geometryMatrix);
 
 	// 월드 행렬, 애니메이션에서 사용 하면 안됨. 원래는 밖에서 사용해야 하나 임시로 사용
-	FbxVector4 translation_World;
-	if (pNode->LclTranslation.IsValid())
-	{
-		translation_World = pNode->LclTranslation;
-	}
-
-	FbxVector4 rotation_World;
-	if (pNode->LclRotation.IsValid())
-	{
-		rotation_World = pNode->LclRotation;
-	}
-
-	FbxVector4 scale_World;
-	if (pNode->LclScaling.IsValid())
-	{
-		scale_World = pNode->LclScaling;
-	}
-
-	FbxAMatrix worldMatrix;
-	worldMatrix.SetT(translation_World);
-	worldMatrix.SetR(rotation_World);
-	worldMatrix.SetS(scale_World);
-
-	FbxAMatrix normalMatrix_World = worldMatrix;
-	normalMatrix_World = normalMatrix_World.Inverse();
-	normalMatrix_World = normalMatrix_World.Transpose();
-
+	FbxAMatrix worldMatrix = getWorldMatrix(pNode);
+	FbxAMatrix normalMatrix_World = getNormalMatrix(worldMatrix);
 
 
 	int polyCount = _mesh->GetPolygonCount();
@@ -480,6 +500,55 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXObject* _dst)
 		_dst->Materials[idx]->updateIndexList(&indexList);
 	}
 
+	return true;
+}
+
+bool FBXLoader::ParseDummy(FbxNull* _dummy, FBXObject* _dst)
+{
+	if ((_dummy == nullptr) || (_dst == nullptr))
+	{
+		return false;
+	}
+
+	_dst->m_strDataName = _dummy->GetName();
+	_dst->m_wstrNodeType = L"Null";
+	return true;
+}
+
+bool FBXLoader::ParseSkeleton(FbxSkeleton* _skeleton, FBXObject* _dst)
+{
+	if ((_skeleton == nullptr) || (_dst == nullptr))
+	{
+		return false;
+	}
+
+	_dst->m_strDataName = _skeleton->GetName();
+
+	int DstObjectCnt = _skeleton->GetDstObjectCount();
+	for (int i = 0; i < DstObjectCnt; i++)
+	{
+		FbxObject* pObject = _skeleton->GetDstObject(i);
+		if (pObject != nullptr)
+		{
+			_dst->m_strTargetName.push_back(pObject->GetName());
+		}
+	}
+
+	int SrcObjectCnt = _skeleton->GetSrcObjectCount();
+	for (int i = 0; i < SrcObjectCnt; i++)
+	{
+		FbxObject* pObject = _skeleton->GetSrcObject(i);
+		if (pObject != nullptr)
+		{
+			_dst->m_strTargetName.push_back(pObject->GetName());
+		}
+	}
+
+	FbxSkeleton::EType skeletonType = _skeleton->GetSkeletonType();
+	FbxColor skeletonColor = _skeleton->GetLimbNodeColor();
+	double limbNodeSize = _skeleton->GetLimbNodeSizeDefaultValue();
+	
+	_dst->m_wstrNodeType = L"Skeleton";
 	return true;
 }
 
@@ -767,7 +836,7 @@ DXTexture* FBXLoader::FindTexture(FbxSurfaceMaterial* _surface, const char* _nam
 	//static const char* sAmbient;
 	//static const char* sAmbientFactor;
 	//
-	//static const char* sDiffuse;
+	//static const char* sDiffuse; // 기존에 많이 사용하던 텍스쳐 방식. 보통 Diffuse는 무조건 있음. 기본 방식
 	//static const char* sDiffuseFactor;
 	//
 	//static const char* sSpecular;
@@ -791,27 +860,27 @@ DXTexture* FBXLoader::FindTexture(FbxSurfaceMaterial* _surface, const char* _nam
 	//static const char* sVectorDisplacementFactor;
 
 	std::string textureName;
-	auto prop = _surface->FindProperty(_name); // 기존에 많이 사용하던 텍스쳐 방식. 보통 Diffuse는 무조건 있음. 기본 방식
+	auto prop = _surface->FindProperty(_name); 
 	if (prop.IsValid())
 	{
-		const FbxFileTexture* textureFile = prop.GetSrcObject<FbxFileTexture>();
-		if (textureFile != nullptr)
+		const FbxFileTexture* fbxFile = prop.GetSrcObject<FbxFileTexture>();
+		if (fbxFile != nullptr)
 		{
-			textureName = textureFile->GetFileName();
+			textureName = fbxFile->GetFileName();
 			if (!textureName.empty())
 			{
 				std::filesystem::path path(textureName);
 				std::wstring file = path.filename().c_str();
-				std::wstring newPath = m_wstrResourceDir;
-				newPath += file;
+				std::wstring wstrPath = m_wstrResourceDir;
+				wstrPath += file;
 				if (_rst != nullptr)
 				{
-					_rst->assign(newPath.begin(), newPath.end());
+					_rst->assign(wstrPath.begin(), wstrPath.end());
 				}
 
-				if (DXTextureManager::getInstance()->Load(newPath))
+				if (DXTextureManager::getInstance()->Load(wstrPath))
 				{
-					DXTexture* pTexture = DXTextureManager::getInstance()->getTexture(newPath);
+					DXTexture* pTexture = DXTextureManager::getInstance()->getTexture(wstrPath);
 					if (pTexture != nullptr)
 					{
 						return pTexture;
@@ -826,6 +895,59 @@ DXTexture* FBXLoader::FindTexture(FbxSurfaceMaterial* _surface, const char* _nam
 	}
 	
 	return nullptr;
+}
+
+FbxAMatrix FBXLoader::getGeometryMatrix(FbxNode* _node)
+{
+	// 로컬 행렬
+	// Affine 행렬은 정점 변환 할 때, 그냥 행렬은 행렬 끼리 연산 할 때 사용
+	FbxAMatrix geometryMatrix; // 기하 행렬. 초기 정점 위치를 변환 할 때 사용. 로컬 행렬. 이 매트릭스를 적용해 바뀌지 않으면 월드 행렬에서 변환. 정점 변환.
+	FbxVector4 translation = _node->GetGeometricTranslation(FbxNode::eSourcePivot);
+	FbxVector4 rotation = _node->GetGeometricRotation(FbxNode::eSourcePivot);
+	FbxVector4 scale = _node->GetGeometricScaling(FbxNode::eSourcePivot);
+	geometryMatrix.SetT(translation);
+	geometryMatrix.SetR(rotation);
+	geometryMatrix.SetS(scale);
+
+	return geometryMatrix;
+}
+
+FbxAMatrix FBXLoader::getNormalMatrix(const FbxAMatrix& _src)
+{
+	// 노말 성분은 역행렬의 전치 행렬로 곱해 줘야 함.
+	FbxAMatrix normalMatrix = _src;
+	normalMatrix = normalMatrix.Inverse();
+	normalMatrix = normalMatrix.Transpose();
+	return normalMatrix;
+}
+
+FbxAMatrix FBXLoader::getWorldMatrix(FbxNode* _node)
+{
+	// 월드 행렬, 애니메이션에서 사용 하면 안됨. 원래는 밖에서 사용해야 하나 임시로 사용
+	FbxVector4 translation_World;
+	if (_node->LclTranslation.IsValid())
+	{
+		translation_World = _node->LclTranslation;
+	}
+
+	FbxVector4 rotation_World;
+	if (_node->LclRotation.IsValid())
+	{
+		rotation_World = _node->LclRotation;
+	}
+
+	FbxVector4 scale_World;
+	if (_node->LclScaling.IsValid())
+	{
+		scale_World = _node->LclScaling;
+	}
+
+	FbxAMatrix worldMatrix;
+	worldMatrix.SetT(translation_World);
+	worldMatrix.SetR(rotation_World);
+	worldMatrix.SetS(scale_World);
+
+	return worldMatrix;
 }
 
 FBXObject* FBXLoader::getObject(std::wstring _key)

@@ -680,6 +680,11 @@ std::vector<Vertex>* DXShader::getVertexList()
 
 bool DXShader::updateVertexList(std::vector<Vertex>* _list)
 {
+	if (_list->empty())
+	{
+		return false;
+	}
+
 	if (m_VertexList.size() == _list->size())
 	{
 		m_VertexList.assign(_list->begin(), _list->end());
@@ -738,6 +743,11 @@ bool DXShader::updateVertexList(std::vector<Vertex>* _list)
 
 bool DXShader::updateIndexList(std::vector<DWORD>* _list)
 {
+	if (_list->empty())
+	{
+		return false;
+	}
+
 	/*if (m_IndexList.size() == _list->size())
 	{
 		m_IndexList.assign(_list->begin(), _list->end());

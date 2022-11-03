@@ -14,6 +14,18 @@ HRESULT DXTexture::Load(std::wstring _filename)
 	// const wchar_t* fileName
 	// ID3D11Resource** texture
 	// ID3D11ShaderResourceView** textureView
+
+	// WIC (Windows Image Component) : DX10 부터 .tga 파일은 지원하지 않음(표준화 되지 않아서). DirectXTex 에서는 지원함. 현재는 DirectXTK(Tool Kit) 사용 중.
+	// DDS (Direct Draw Surface)
+
+	size_t idx = _filename.find_last_of(L".");
+	std::wstring extension(_filename.begin() + idx, _filename.end());
+	if ((extension == L".tga") || (extension == L".TGA"))
+	{
+		_filename.erase(_filename.begin() + idx, _filename.end());
+		_filename += L".dds";
+	}
+
 	m_wstrFileName = _filename;
 	HRESULT rst = DirectX::CreateWICTextureFromFile(m_pd3dDevice, _filename.c_str(), (ID3D11Resource**)&m_pTextureResource, &m_pTextureResourceView);
 	if (FAILED(rst))

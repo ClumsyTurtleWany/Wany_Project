@@ -10,7 +10,6 @@ private:
 	ID3D11DeviceContext* m_pImmediateContext = nullptr;
 
 	std::map<std::wstring, DXTexture*> m_TextureList;
-	//std::map<std::wstring, DXTexture*> m_TextureMaskList;
 
 private:
 	DXTextureManager() {};
@@ -19,10 +18,13 @@ private:
 public:
 	void setDevice(ID3D11Device* _device, ID3D11DeviceContext* _context);
 	bool Load(std::wstring _filename);
-	//bool LoadMask(std::wstring _filename);
-	DXTexture* getTexture(std::wstring _filename);
-	//DXTexture* getTextureMask(std::wstring _filename);
+	bool Load(std::string _filename);
+	bool Load(const char* _filename);
 
+	DXTexture* getTexture(std::wstring _filename);
+	DXTexture* getTexture(std::string _filename);
+	DXTexture* getTexture(const char* _filename);
+	
 public:
 	bool initialize();
 	bool frame();

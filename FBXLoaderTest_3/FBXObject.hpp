@@ -14,6 +14,12 @@ public:
 	float roll = 0.0f;
 	Vector3f curPos;
 
+	std::wstring m_wstrNodeType;
+	std::string m_strNodeName;
+	std::string m_strDataName;
+	std::vector<std::string> m_strTargetName;
+
+	FBXObject* parent = nullptr;
 	std::vector<FBXObject*> child;
 	std::vector<DXShader*> Materials;
 
