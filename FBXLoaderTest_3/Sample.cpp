@@ -28,6 +28,7 @@ bool Sample::initialize()
         //FBXLoader::getInstance()->Load(L"../resource/FBX/mb10230.FBX", pFbxObject);
         //FBXLoader::getInstance()->Load(L"../resource/FBX/SM_Tree_Var01.FBX", pFbxObject);
         //FBXLoader::getInstance()->Load(L"../resource/FBX/Turret_Deploy1.FBX", pFbxObject);
+        //FBXLoader::getInstance()->Load(L"../resource/FBX/Idle.FBX", pFbxObject);
 
         //if (FBXLoader::getInstance()->LoadDir(L"../resource/FBX/"))
         {

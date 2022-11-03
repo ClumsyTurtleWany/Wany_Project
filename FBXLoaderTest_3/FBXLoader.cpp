@@ -259,15 +259,21 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXObject* _dst)
 		FbxDeformer* pDeformer = _mesh->GetDeformer(idx, FbxDeformer::EDeformerType::eSkin);
 		FbxSkin* pSkin = reinterpret_cast<FbxSkin*>(pDeformer);
 		int ClusterCnt = pSkin->GetClusterCount();
+
+		FbxGeometry* pGeometry = pSkin->GetGeometry();
 		for (int clusterIdx = 0; clusterIdx < ClusterCnt; clusterIdx++)
 		{
 			FbxCluster* pCluster = pSkin->GetCluster(clusterIdx);
+			FbxCluster::ELinkMode LinkMode = pCluster->GetLinkMode();
 			int clusterSize = pCluster->GetControlPointIndicesCount();
 
 			FbxNode* pLinkNode = pCluster->GetLink();
+			
 			std::string LinkedNodeName = pLinkNode->GetName();
 
 			int* indices = pCluster->GetControlPointIndices();
+			double* weights = pCluster->GetControlPointWeights();
+
 			int a = 0;
 			
 		}
