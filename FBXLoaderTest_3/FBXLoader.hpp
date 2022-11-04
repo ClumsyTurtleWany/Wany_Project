@@ -14,6 +14,7 @@
 #include "FBXObject.hpp"
 #include "DXTextureManager.hpp"
 
+
 class FBXLoader : public Singleton<FBXLoader>
 {
 private:
@@ -36,6 +37,7 @@ private:
 	// Parser
 	bool ParseNode(FbxNode* _node, FBXObject* _dst);
 	bool ParseMesh(FbxMesh* _mesh, FBXObject* _dst);
+	
 	bool ParseDummy(FbxNull* _dummy, FBXObject* _dst);
 	bool ParseSkeleton(FbxSkeleton* _skeleton, FBXObject* _dst);
 	
@@ -47,6 +49,7 @@ private:
 	int getSubMaterialIndex(FbxLayerElementMaterial* _material, int _polyIdx);
 
 	DXTexture* FindTexture(FbxSurfaceMaterial* _surface, const char* _name, std::wstring* _rst = nullptr);
+	std::wstring getTextureFileName(FbxSurfaceMaterial* _surface, const char* _name);
 
 	// Matrix
 	FbxAMatrix getGeometryMatrix(FbxNode* _node);
@@ -62,4 +65,8 @@ public:
 
 public:
 	void setResourceDirectory(std::wstring _dir);
+
+public:
+	Matrix4x4 toMatrix4x4(const FbxAMatrix& _src);
+	Matrix4x4 ConvertToDxMatrix(const FbxAMatrix& _src);
 };

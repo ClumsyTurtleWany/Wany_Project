@@ -123,8 +123,25 @@ bool FBXLoader::Load(std::wstring _path, FBXObject* _dst)
 	FbxSystemUnit::cm.ConvertScene(pScene); // 단위 변경. cm 단위로 변경
 	//FbxAxisSystem::MayaZUp.ConvertScene(pScene); // 기저 축 변경. 마야 기준으로 변경. 정점 변환이 아닌 행렬에 적용 되는 것임.
 	FbxAxisSystem sceneAxisSystem = pScene->GetGlobalSettings().GetAxisSystem();
-	FbxAxisSystem::DirectX.ConvertScene(pScene); // 기저 축 변경. DirectX 기준으로 바꿔도 실제 우리가 사용하는 축과 다름. (Right Vector가 마이너스임.).
-	FbxAxisSystem sceneAxisSystemAfter = pScene->GetGlobalSettings().GetAxisSystem();
+
+	int upSign = 0;
+	FbxAxisSystem::EUpVector up = sceneAxisSystem.GetUpVector(upSign);
+
+	int frontSign = 0;
+	FbxAxisSystem::EFrontVector front = sceneAxisSystem.GetFrontVector(frontSign);
+
+	FbxAxisSystem::ECoordSystem coord = sceneAxisSystem.GetCoorSystem();
+	bool bFlag = true;
+	if (((up == FbxAxisSystem::EUpVector::eYAxis) && (upSign == 1)) &&
+		((front == FbxAxisSystem::EFrontVector::eParityEven) && (frontSign == 1)) &&
+		((up == FbxAxisSystem::ECoordSystem::eLeftHanded)))
+	{
+		bFlag = false;
+	}
+
+	//FbxAxisSystem::DirectX.ConvertScene(pScene); // 기저 축 변경. DirectX 기준으로 바꿔도 실제 우리가 사용하는 축과 다름. (Right Vector가 마이너스임.).
+	//FbxAxisSystem sceneAxisSystemAfter = pScene->GetGlobalSettings().GetAxisSystem();
+	FbxAxisSystem::MayaZUp.ConvertScene(pScene); // 기저 축 변경. 마야 기준으로 변경. 정점 변환이 아닌 행렬에 적용 되는 것임.
 
 	if (!m_pImporter->Import(pScene))
 	{
@@ -253,7 +270,7 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXObject* _dst)
 	_dst->m_strDataName = _mesh->GetName();
 	_dst->m_wstrNodeType = L"Mesh";
 
-	int DeformerCnt = _mesh->GetDeformerCount();
+	/*int DeformerCnt = _mesh->GetDeformerCount();
 	for (int idx = 0; idx < DeformerCnt; idx++)
 	{
 		FbxDeformer* pDeformer = _mesh->GetDeformer(idx, FbxDeformer::EDeformerType::eSkin);
@@ -278,7 +295,7 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXObject* _dst)
 			
 		}
 		
-	}
+	}*/
 
 	// Layer 개념 필요. 여러번에 걸쳐 동일한 곳에 랜더링 하는것 == 멀티 패스 랜더링. 텍스쳐로 치환하면 멀티 텍스처 랜더링.
 	std::vector<FbxLayerElementUV*> UVList;
@@ -319,14 +336,25 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXObject* _dst)
 	// 각 페이스 별로 다른 텍스쳐를 사용 할 수 있다. 이것을 서브 머테리얼 이라고 함. (1개의 오브젝트에 여러개의 텍스쳐 사용)
 	// 서브 머테리얼을 렌더링 하기 위해선 같은 텍스쳐를 사용하는 페이스들을 묶어서 출력.
 	int MaterialCnt = pNode->GetMaterialCount(); // 텍스쳐가 붙은 갯수.
-	std::vector<std::vector<Vertex>> VertexList;
-	if (MaterialCnt == 0)
+	
+	//std::vector<std::vector<Vertex>> VertexList;
+	if (MaterialCnt < 1)
+	{
+		_dst->Materials.resize(1);
+	}
+	else
+	{
+		_dst->Materials.resize(MaterialCnt);
+	}
+
+	/*if (MaterialCnt == 0)
 	{
 		VertexList.resize(1);
 		_dst->Materials.resize(1);
-		if (DXShaderManager::getInstance()->Load(objectCnt, ShaderType::Object3D))
+		unsigned int ShaderID = DXShaderManager::getInstance()->getShaderCount();
+		if (DXShaderManager::getInstance()->Load(ShaderID, ShaderType::Object3D))
 		{
-			_dst->Materials[0] = DXShaderManager::getInstance()->getShader(objectCnt++);
+			_dst->Materials[0] = DXShaderManager::getInstance()->getShader(ShaderID);
 		}
 	}
 	else
@@ -335,14 +363,15 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXObject* _dst)
 		_dst->Materials.resize(MaterialCnt);
 		for (size_t idx = 0; idx < MaterialCnt; idx++)
 		{
-			if (DXShaderManager::getInstance()->Load(objectCnt, ShaderType::Object3D))
+			unsigned int ShaderID = DXShaderManager::getInstance()->getShaderCount();
+			if (DXShaderManager::getInstance()->Load(ShaderID, ShaderType::Object3D))
 			{
-				_dst->Materials[idx] = DXShaderManager::getInstance()->getShader(objectCnt++);
+				_dst->Materials[idx] = DXShaderManager::getInstance()->getShader(ShaderID);
 			}
 		}
-	}
+	}*/
 
-	std::string textureName;
+
 	for (int idx = 0; idx < MaterialCnt; idx++)
 	{
 		// 텍스처 정보를 가져오기 위한 것. 보통 1개의 Surface에 24개 이상의 텍스쳐가 붙어 있다.(24종 이상의 텍스쳐 방식이 존재한다.)
@@ -350,29 +379,7 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXObject* _dst)
 		FbxSurfaceMaterial* pSurface = pNode->GetMaterial(idx);
 		if (pSurface != nullptr)
 		{
-			std::wstring filename;
-			DXTexture* pTexture = FindTexture(pSurface, FbxSurfaceMaterial::sDiffuse, &filename);
-			if (pTexture != nullptr)
-			{
-				_dst->Materials[idx]->setTexture(pTexture);
-			}
-
-			if (!filename.empty())
-			{
-				_dst->Materials[idx]->setTextureFile(filename);
-			}
-
-			std::wstring filename2;
-			DXTexture* pTexture2 = FindTexture(pSurface, FbxSurfaceMaterial::sAmbient, &filename2);
-			if (pTexture2 != nullptr)
-			{
-				_dst->Materials[idx]->setTexture(pTexture2);
-			}
-
-			if (!filename2.empty())
-			{
-				_dst->Materials[idx]->setTextureFile(filename2);
-			}
+			_dst->Materials[idx].DiffuseTexture = getTextureFileName(pSurface, FbxSurfaceMaterial::sDiffuse);
 		}
 	}
 
@@ -387,6 +394,33 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXObject* _dst)
 	// 월드 행렬, 애니메이션에서 사용 하면 안됨. 원래는 밖에서 사용해야 하나 임시로 사용
 	FbxAMatrix worldMatrix = getWorldMatrix(pNode);
 	FbxAMatrix normalMatrix_World = getNormalMatrix(worldMatrix);
+
+
+	// 글로벌 매트릭스 = 해당 시간대의 로컬 + 월드 합친 것.
+	FbxScene* pScene = pNode->GetScene();
+	FbxAnimStack* pStack = pScene->GetSrcObject<FbxAnimStack>(0);
+	FbxLongLong s = 0;
+	FbxLongLong n = 0;
+	FbxTime::EMode TimeMode = FbxTime::GetGlobalTimeMode();;
+	if (pStack != nullptr)
+	{	
+		FbxTime::SetGlobalTimeMode(FbxTime::eFrames30);
+		//FbxTime::EMode TimeMode = FbxTime::GetGlobalTimeMode();
+		FbxTimeSpan localTimeSpan = pStack->GetLocalTimeSpan();// 시간 간격. 프레임 사이
+		FbxTime start = localTimeSpan.GetStart();
+		FbxTime end = localTimeSpan.GetStop();
+		FbxTime Duration = localTimeSpan.GetDirection();
+		s = start.GetFrameCount(TimeMode);
+		n = end.GetFrameCount(TimeMode);
+	}
+	FbxTime time;
+	time.SetFrame(s, TimeMode);
+	FbxAMatrix matGlobalTransform = pNode->EvaluateGlobalTransform(time);
+	FbxAMatrix matNormalGlobal = getNormalMatrix(matGlobalTransform);
+
+	// 최종 월드 행렬 = 자기(애니메이션) 행렬 * 부모(애니메이션) 행렬
+	// Final World Matrix =  Parent World Matrix * matGlobalTransform
+
 
 
 	int polyCount = _mesh->GetPolygonCount();
@@ -438,6 +472,7 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXObject* _dst)
 				FbxVector4 vertex = pVertexPosition[vertexIdx];
 				vertex = geometryMatrix.MultT(vertex); // 로컬 행렬 변환, Transform의 T, 열 우선 방식
 				vertex = worldMatrix.MultT(vertex); // 월드 변환 행렬. 나중에 뺄 것.
+				vertex = matGlobalTransform.MultT(vertex);
 
 				Vector3f pos;
 				pos.x = vertex.mData[0];
@@ -480,13 +515,16 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXObject* _dst)
 					{
 						fbxNormal = normalMatrix.MultT(fbxNormal);
 						fbxNormal = normalMatrix_World.MultT(fbxNormal); // 월드 변환. 나중에 뺄 것.
+						fbxNormal = matNormalGlobal.MultT(fbxNormal);
 						normal.x = fbxNormal.mData[0];
 						normal.y = fbxNormal.mData[2];
 						normal.z = fbxNormal.mData[1];
 					}
 				}
 
-				VertexList[MaterialIdx].push_back(Vertex(pos, normal, color, texture));
+				//VertexList[MaterialIdx].push_back(Vertex(pos, normal, color, texture));
+				
+				_dst->Materials[MaterialIdx].push_back(Vertex(pos, normal, color, texture));
 			}
 
 
@@ -497,13 +535,18 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXObject* _dst)
 
 	for (size_t idx = 0; idx < _dst->Materials.size(); idx++)
 	{
-		_dst->Materials[idx]->updateVertexList(&VertexList[idx]);
-		std::vector<DWORD> indexList;
-		for (size_t idx2 = 0; idx2 < VertexList[idx].size(); idx2++)
+		if (_dst->Materials[idx].isValid())
 		{
-			indexList.push_back(idx2);
+			_dst->Materials[idx].create();
+			if (DXTextureManager::getInstance()->Load(m_wstrResourceDir + _dst->Materials[idx].DiffuseTexture))
+			{
+				DXTexture* pTexture = DXTextureManager::getInstance()->getTexture(m_wstrResourceDir + _dst->Materials[idx].DiffuseTexture);
+				if (pTexture != nullptr)
+				{
+					_dst->Materials[idx].setTexture(pTexture);
+				}
+			}
 		}
-		_dst->Materials[idx]->updateIndexList(&indexList);
 	}
 
 	return true;
@@ -865,6 +908,9 @@ DXTexture* FBXLoader::FindTexture(FbxSurfaceMaterial* _surface, const char* _nam
 	//static const char* sVectorDisplacementColor;
 	//static const char* sVectorDisplacementFactor;
 
+	// FbxSurfaceMaterial
+	// 텍스처 정보를 가져오기 위한 것. 보통 1개의 Surface에 24개 이상의 텍스쳐가 붙어 있다.(24종 이상의 텍스쳐 방식이 존재한다.)
+	// 텍스쳐 맵을 가지고 있다(ex. 마스크 텍스처처럼 알파를 가진 놈들 등 여러가지 종류가 있음.)
 	std::string textureName;
 	auto prop = _surface->FindProperty(_name); 
 	if (prop.IsValid())
@@ -898,9 +944,79 @@ DXTexture* FBXLoader::FindTexture(FbxSurfaceMaterial* _surface, const char* _nam
 				}
 			}
 		}
+		else
+		{
+			int LayerdTextureNum = prop.GetSrcObjectCount<FbxLayeredTexture>();
+			for (int idx = 0; idx < LayerdTextureNum; idx++)
+			{
+				FbxFileTexture* pLayerTexture = prop.GetSrcObject<FbxFileTexture>(idx);
+				if (pLayerTexture != nullptr)
+				{
+					std::string filename = pLayerTexture->GetFileName();
+				}
+			}
+		}
 	}
 	
 	return nullptr;
+}
+
+std::wstring FBXLoader::getTextureFileName(FbxSurfaceMaterial* _surface, const char* _name)
+{
+	if (_surface == nullptr)
+	{
+		return L"";
+	}
+
+	//static const char* sShadingModel;
+	//static const char* sMultiLayer;
+	//
+	//static const char* sEmissive;
+	//static const char* sEmissiveFactor;
+	//
+	//static const char* sAmbient;
+	//static const char* sAmbientFactor;
+	//
+	//static const char* sDiffuse; // 기존에 많이 사용하던 텍스쳐 방식. 보통 Diffuse는 무조건 있음. 기본 방식
+	//static const char* sDiffuseFactor;
+	//
+	//static const char* sSpecular;
+	//static const char* sSpecularFactor;
+	//static const char* sShininess;
+	//
+	//static const char* sBump;
+	//static const char* sNormalMap;
+	//static const char* sBumpFactor;
+	//
+	//static const char* sTransparentColor;
+	//static const char* sTransparencyFactor;
+	//
+	//static const char* sReflection;
+	//static const char* sReflectionFactor;
+	//
+	//static const char* sDisplacementColor;
+	//static const char* sDisplacementFactor;
+	//
+	//static const char* sVectorDisplacementColor;
+	//static const char* sVectorDisplacementFactor;
+
+	std::wstring rst;
+	auto prop = _surface->FindProperty(_name);
+	if (prop.IsValid())
+	{
+		const FbxFileTexture* fbxFile = prop.GetSrcObject<FbxFileTexture>();
+		if (fbxFile != nullptr)
+		{
+			std::string textureName = fbxFile->GetFileName();
+			if (!textureName.empty())
+			{
+				std::filesystem::path path(textureName);
+				rst = path.filename().c_str();
+			}
+		}
+	}
+
+	return rst;
 }
 
 FbxAMatrix FBXLoader::getGeometryMatrix(FbxNode* _node)
@@ -970,4 +1086,31 @@ FBXObject* FBXLoader::getObject(std::wstring _key)
 void FBXLoader::setResourceDirectory(std::wstring _dir)
 {
 	m_wstrResourceDir = _dir;
+}
+
+Matrix4x4 FBXLoader::toMatrix4x4(const FbxAMatrix& _src)
+{
+	Matrix4x4 rst;
+	float* arry = (float*)(&_src);
+	for (int row = 0; row < 4; row++)
+	{
+		for (int col = 0; col < 4; col++)
+		{
+			double val = _src.Get(row, col);
+			rst.arry[row][col] = static_cast<float>(val);
+		}
+	}
+	return rst;
+}
+
+Matrix4x4 FBXLoader::ConvertToDxMatrix(const FbxAMatrix& _src)
+{
+	Matrix4x4 rst;
+	Matrix4x4 src = toMatrix4x4(_src);
+	rst._11 = src._11; rst._12 = src._13; rst._13 = src._12; rst._14 = src._14;
+	rst._21 = src._21; rst._22 = src._23; rst._23 = src._22; rst._24 = src._24;
+	rst._31 = src._31; rst._32 = src._33; rst._33 = src._32; rst._34 = src._34;
+	rst._41 = src._41; rst._42 = src._43; rst._43 = src._42; rst._44 = src._44;
+
+	return rst;
 }

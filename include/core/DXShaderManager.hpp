@@ -37,10 +37,12 @@ private:
 	ID3D11Device* m_pd3dDevice = nullptr;
 	ID3D11DeviceContext* m_pImmediateContext = nullptr;
 
-	std::map<int, DXShader*> m_ShaderList;
+	std::map<unsigned int, DXShader*> m_ShaderList;
 
 	std::map<VSCodeType, ID3DBlob*> m_pVertexShaderCodeMap;
 	std::map<PSCodeType, ID3DBlob*> m_pPixelShaderCodeMap;
+
+	unsigned int ShaderCnt = 0;
 
 private:
 	DXShaderManager() {};
@@ -57,6 +59,7 @@ public:
 	bool DeleteShader(int _key);
 	ID3DBlob* getVSCode(VSCodeType _key);
 	ID3DBlob* getPSCode(PSCodeType _key);
+	unsigned int getShaderCount();
 
 public:
 	bool initialize();

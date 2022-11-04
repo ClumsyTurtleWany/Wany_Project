@@ -77,7 +77,7 @@ bool FBXObject::render()
 
 	for (auto it : Materials)
 	{
-		it->render();
+		it.render();
 	}
 
 	for (auto it : child)
@@ -120,19 +120,23 @@ bool FBXObject::setMatrix(Matrix4x4* _world, Matrix4x4* _view, Matrix4x4* _proj)
 		//pShader->updateConstantData(&data);
 		for (auto it : Materials)
 		{
-			it->updateConstantData(&data);
+			if (it.Shader == nullptr)
+			{
+				continue;
+			}
+			it.Shader->updateConstantData(&data);
 		}
 
 		Matrix4x4 matWorld = data.matWorld;
 		for (auto it : child)
 		{
-			if (it->m_wstrNodeType != L"Mesh")
-			{
-				continue;
-			}
-
+			//if (it->m_wstrNodeType != L"Mesh")
+			//{
+			//	continue;
+			//}
+			
 			it->setMatrix(&matWorld, &data.matView, &data.matProj);
-			matWorld._41 += 2.0f;
+			//matWorld._41 += 2.0f;
 		}
 
 		return true;

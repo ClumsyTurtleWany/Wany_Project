@@ -21,13 +21,13 @@ bool Sample::initialize()
         pFbxObject = new FBXObject;
         //pFbxObject->initialize();
         //FBXLoader::getInstance()->Load(L"../resource/FBX/MultiCameras.FBX", pFbxObject);
-        FBXLoader::getInstance()->Load(L"../resource/FBX/charMob.FBX", pFbxObject);
+        //FBXLoader::getInstance()->Load(L"../resource/FBX/charMob.FBX", pFbxObject);
         //FBXLoader::getInstance()->Load(L"../resource/FBX/box.FBX", pFbxObject);
         //FBXLoader::getInstance()->Load(L"../resource/FBX/mb2001.FBX", pFbxObject);
         //FBXLoader::getInstance()->Load(L"../resource/FBX/rockBlobSix.FBX", pFbxObject);
         //FBXLoader::getInstance()->Load(L"../resource/FBX/mb10230.FBX", pFbxObject);
         //FBXLoader::getInstance()->Load(L"../resource/FBX/SM_Tree_Var01.FBX", pFbxObject);
-        //FBXLoader::getInstance()->Load(L"../resource/FBX/Turret_Deploy1.FBX", pFbxObject);
+        FBXLoader::getInstance()->Load(L"../resource/FBX/Turret_Deploy1.FBX", pFbxObject);
         //FBXLoader::getInstance()->Load(L"../resource/FBX/Idle.FBX", pFbxObject);
 
         //if (FBXLoader::getInstance()->LoadDir(L"../resource/FBX/"))
@@ -184,64 +184,64 @@ bool Sample::render()
         Matrix4x4 matView = renderCamera->getMatrix_View();
         Matrix4x4 matProj = renderCamera->getMatrix_Projection();
 
-        if (renderCamera->frustum.classifyPoint(pBoxObject->curPos))
-        {
-            pBoxObject->setMatrix(nullptr, &matView, &matProj);
-            pBoxObject->render();
-        }
+        //if (renderCamera->frustum.classifyPoint(pBoxObject->curPos))
+        //{
+        //    pBoxObject->setMatrix(nullptr, &matView, &matProj);
+        //    pBoxObject->render();
+        //}
+        //
+        //if (renderCamera->frustum.classifyPoint(pObject->curPos))
+        //{
+        //    pObject->setMatrix(nullptr, &matView, &matProj);
+        //    pObject->render();
+        //}
 
-        if (renderCamera->frustum.classifyPoint(pObject->curPos))
-        {
-            pObject->setMatrix(nullptr, &matView, &matProj);
-            pObject->render();
-        }
-
-        if (renderCamera->frustum.classifyPoint(pWorldMap->curPos))
-        {
-            pWorldMap->setMatrix(nullptr, &matView, &matProj);
-            pWorldMap->render();
-        }
+        //if (renderCamera->frustum.classifyPoint(pWorldMap->curPos))
+        //{
+        //    pWorldMap->setMatrix(nullptr, &matView, &matProj);
+        //    pWorldMap->render();
+        //}
 
         pFbxObject->setMatrix(nullptr, &matView, &matProj);
         pFbxObject->render();
 
-        // 서브 뷰 포트 렌더링
-        // 1. 메인 뷰 포트 저장.
-        D3D11_VIEWPORT vpOld[D3D11_VIEWPORT_AND_SCISSORRECT_MAX_INDEX];
-        UINT nViewPorts = 1;
-        m_pImmediateContext->RSGetViewports(&nViewPorts, vpOld);
+        //// 서브 뷰 포트 렌더링
+        //// 1. 메인 뷰 포트 저장.
+        //D3D11_VIEWPORT vpOld[D3D11_VIEWPORT_AND_SCISSORRECT_MAX_INDEX];
+        //UINT nViewPorts = 1;
+        //m_pImmediateContext->RSGetViewports(&nViewPorts, vpOld);
 
-        // 2. Depth Stencil View Clear. 
-        // Depth Stencil View를 클리어 해 주지 않으면 위의 메인 뷰 포트에서 그려진 오브젝트로 인해 아래의 뷰포트들이 출력 안될 수도 있다.
-        m_pImmediateContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0); // Depth는 1.0f, Stencil은 0으로 클리어.
+        //// 2. Depth Stencil View Clear. 
+        //// Depth Stencil View를 클리어 해 주지 않으면 위의 메인 뷰 포트에서 그려진 오브젝트로 인해 아래의 뷰포트들이 출력 안될 수도 있다.
+        //m_pImmediateContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0); // Depth는 1.0f, Stencil은 0으로 클리어.
 
-        // 3. 서브 뷰포트 렌더링
-        for (int idx = 0; idx < 4; idx++)
-        {
-            m_pImmediateContext->RSSetViewports(1, &ViewPort[idx]);
+        //// 3. 서브 뷰포트 렌더링
+        //for (int idx = 0; idx < 4; idx++)
+        //{
+        //    m_pImmediateContext->RSSetViewports(1, &ViewPort[idx]);
 
 
-            KeyState KeyState_F4 = Input::getInstance()->getKey(VK_F4);
-            if (KeyState_F4 == KeyState::Hold)
-            {
-                m_pImmediateContext->RSSetState(DXSamplerState::pDefaultRSWireFrame);
-            }
+        //    KeyState KeyState_F4 = Input::getInstance()->getKey(VK_F4);
+        //    if (KeyState_F4 == KeyState::Hold)
+        //    {
+        //        m_pImmediateContext->RSSetState(DXSamplerState::pDefaultRSWireFrame);
+        //    }
 
-            Matrix4x4 matView_idx = ViewPortCamera[idx]->getMatrix_View();
-            Matrix4x4 matProj_idx = ViewPortCamera[idx]->getMatrix_Projection();
+        //    Matrix4x4 matView_idx = ViewPortCamera[idx]->getMatrix_View();
+        //    Matrix4x4 matProj_idx = ViewPortCamera[idx]->getMatrix_Projection();
 
-            pBoxObject->setMatrix(nullptr, &matView_idx, &matProj_idx);
-            pBoxObject->render();
+        //    pBoxObject->setMatrix(nullptr, &matView_idx, &matProj_idx);
+        //    pBoxObject->render();
 
-            pObject->setMatrix(nullptr, &matView_idx, &matProj_idx);
-            pObject->render();
+        //    pObject->setMatrix(nullptr, &matView_idx, &matProj_idx);
+        //    pObject->render();
 
-            pWorldMap->setMatrix(nullptr, &matView_idx, &matProj_idx);
-            pWorldMap->render();
-        }
+        //    //pWorldMap->setMatrix(nullptr, &matView_idx, &matProj_idx);
+        //    //pWorldMap->render();
+        //}
 
-        // 원래 뷰포트로 다시 세팅.
-        m_pImmediateContext->RSSetViewports(1, &vpOld[0]);
+        //// 원래 뷰포트로 다시 세팅.
+        //m_pImmediateContext->RSSetViewports(1, &vpOld[0]);
 
 
         m_pImmediateContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0); // Depth는 1.0f, Stencil은 0으로 클리어.

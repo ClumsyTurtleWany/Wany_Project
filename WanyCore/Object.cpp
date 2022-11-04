@@ -40,9 +40,10 @@ void objectBase::setDevice(ID3D11Device* _device, ID3D11DeviceContext* _context)
 
 bool objectBase::createShader(ShaderType _type)
 {
-	if (DXShaderManager::getInstance()->Load(object_id, _type))
+	unsigned int ShaderID = DXShaderManager::getInstance()->getShaderCount();
+	if (DXShaderManager::getInstance()->Load(ShaderID, _type))
 	{
-		pShader = DXShaderManager::getInstance()->getShader(object_id);
+		pShader = DXShaderManager::getInstance()->getShader(ShaderID);
 		return true;
 	}
 	return false;

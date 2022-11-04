@@ -78,49 +78,49 @@ protected:
 	DXTexture*					m_pTextureMask = nullptr;
 
 protected:
-	bool isCreated = false;
+	bool						isCreated = false;
 
 protected:
-	virtual HRESULT CreateVertexBuffer();
-	virtual HRESULT CreateIndexBuffer();
-	virtual HRESULT CreateConstantBuffer();
-	virtual HRESULT CreateVertexLayout();
-	virtual HRESULT CreateVertexSharder();
-	virtual HRESULT CreatePixelSharder();
+	virtual HRESULT				CreateVertexBuffer();
+	virtual HRESULT				CreateIndexBuffer();
+	virtual HRESULT				CreateConstantBuffer();
+	virtual HRESULT				CreateVertexLayout();
+	virtual HRESULT				CreateVertexSharder();
+	virtual HRESULT				CreatePixelSharder();
 
 public:
-	virtual void initializeVertexList();
-	virtual void initializeIndexList();
-	virtual void initializeConstantData();
+	virtual void				initializeVertexList();
+	virtual void				initializeIndexList();
+	virtual void				initializeConstantData();
 
 public:
-	virtual bool initialize();
-	virtual bool frame();
-	virtual bool render();
-	virtual bool release();
+	virtual bool				initialize();
+	virtual bool				frame();
+	virtual bool				render();
+	virtual bool				release();
 
 public:
-	void setDevice(ID3D11Device* _device, ID3D11DeviceContext* _context);
-	void setTexture(DXTexture* _texture);
-	void setColor(const Vector4f& _color);
-	void setTextureMask(DXTexture* _texture);
-	void setShaderFile(std::wstring _file);
-	void setVertexShaderFile(std::wstring _file);
-	void setPixelShaderFile(std::wstring _file);
-	void setTextureFile(std::wstring _file);
-	void setTopology(D3D11_PRIMITIVE_TOPOLOGY _topology);
-	void setCullMode(CullMode _mode);
-	void setVSCode(ID3DBlob* _VS);
-	void setPSCode(ID3DBlob* _PS);
+	void						setDevice(ID3D11Device* _device, ID3D11DeviceContext* _context);
+	void						setTexture(DXTexture* _texture);
+	void						setColor(const Vector4f& _color);
+	void						setTextureMask(DXTexture* _texture);
+	void						setShaderFile(std::wstring _file);
+	void						setVertexShaderFile(std::wstring _file);
+	void						setPixelShaderFile(std::wstring _file);
+	void						setTextureFile(std::wstring _file);
+	void						setTopology(D3D11_PRIMITIVE_TOPOLOGY _topology);
+	void						setCullMode(CullMode _mode);
+	void						setVSCode(ID3DBlob* _VS);
+	void						setPSCode(ID3DBlob* _PS);
 
 public:
-	float getTextureWidth();
-	float getTextureHeight();
-	std::vector<Vertex>* getVertexList();
+	float						getTextureWidth();
+	float						getTextureHeight();
+	std::vector<Vertex>*		getVertexList();
 
 public:
-	bool updateVertexList(std::vector<Vertex>* _list);
-	bool updateIndexList(std::vector<DWORD>* _list);
-	bool updateConstantData(ConstantBufferData* _data);
+	bool						updateVertexList(std::vector<Vertex>* _list);
+	bool						updateIndexList(std::vector<DWORD>* _list);
+	bool						updateConstantData(ConstantBufferData* _data);
 };
 

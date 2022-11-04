@@ -70,6 +70,11 @@ float DXTexture::getHeight()
 	return static_cast<float>(m_Desc.Height);
 }
 
+std::wstring DXTexture::getFileName()
+{
+	return m_wstrFileName;
+}
+
 bool DXTexture::release()
 {
 	if (m_pTextureResourceView != nullptr)

@@ -28,17 +28,24 @@ private:
 	std::wstring				m_wstrFileName;
 
 public:
-	void setDevice(ID3D11Device* _device, ID3D11DeviceContext* _context);
-	HRESULT Load(std::wstring _filename);
-	
-	ID3D11Resource* getResource();
-	ID3D11ShaderResourceView* getResourceView();
+	void						setDevice(ID3D11Device* _device, ID3D11DeviceContext* _context);
 
-	float getWidth();
-	float getHeight();
-
-	bool release();
+public:
+	HRESULT						Load(std::wstring _filename);
 	
-	bool CreateRenderTarget(float _width, float _height);
+public:
+	ID3D11Resource*				getResource();
+	ID3D11ShaderResourceView*	getResourceView();
+
+public:
+	float						getWidth();
+	float						getHeight();
+	std::wstring				getFileName();
+
+public:
+	bool						release();
+	
+public:
+	bool						CreateRenderTarget(float _width, float _height);
 };
 

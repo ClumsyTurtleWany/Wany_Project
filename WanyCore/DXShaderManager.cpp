@@ -165,6 +165,7 @@ bool DXShaderManager::Load(int _key, ShaderType _type)
 	}
 
 	m_ShaderList.insert(std::make_pair(_key, newShader));
+	ShaderCnt++;
 
 	return rst;
 }
@@ -217,6 +218,11 @@ ID3DBlob* DXShaderManager::getPSCode(PSCodeType _key)
 	{
 		return nullptr;
 	}
+}
+
+unsigned int DXShaderManager::getShaderCount()
+{
+	return ShaderCnt;
 }
 
 bool DXShaderManager::initialize()
