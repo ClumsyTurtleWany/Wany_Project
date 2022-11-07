@@ -157,3 +157,30 @@ bool FBXObject::rotationYawPitchRoll(float _yaw, float _pitch, float _roll)
 	data.matWorld._43 += translate.z;
 	return true;
 }
+
+Matrix4x4 FBXObject::interpolation(float _frame)
+{
+	FBXAnimationTrack A, B;
+	UINT StartFrame = m_animationSceneInfo.StartFrame;
+	UINT EndFrame = m_animationSceneInfo.EndFrame;
+	UINT FrameA = _frame < StartFrame ? StartFrame : _frame + 0;
+	UINT FrameB = _frame >= (EndFrame - 1) ? (EndFrame - 1) : _frame + 1;
+	A = m_animationTrackList[FrameA];
+	B = m_animationTrackList[FrameB];
+	if (A.frame == B.frame)
+	{
+		return m_animationTrackList[_frame].matAnimation;
+	}
+
+	float t = (_frame - A.frame) / (B.frame - A.frame);
+	Vector3f translation = Vector3fLerp(A.translation, B.translation, t);
+	Vector3f scale = Vector3fLerp(A.scale, B.scale, t);
+	Vector4f qRotation = QuaternionLerp(A.rotation, B.rotation, t);
+	Matrix4x4 matRotation = QuaternionToMatrix4x4(qRotation);
+	Matrix4x4 rst = matRotation;
+	rst._41 = translation.x;
+	rst._42 = translation.y;
+	rst._43 = translation.z;
+
+	return rst;
+}

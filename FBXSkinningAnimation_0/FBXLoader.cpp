@@ -118,12 +118,46 @@ bool FBXLoader::Load(std::wstring _path, FBXObject* _dst)
 		return false;
 	}
 
+	if (!m_pImporter->Import(pScene))
+	{
+		OutputDebugString(L"WanyCore::FBXLoader::Load::Failed Import Scene.\n");
+		return false;
+	}
+
+	if (!ParseScene(pScene, _dst))
+	{
+		OutputDebugString(L"WanyCore::FBXLoader::Load::Failed Parse Scene.\n");
+		return false;
+	}
+
+	FbxNode* pRoot = pScene->GetRootNode();
+	if (!ParseNode(pRoot, _dst))
+	{
+		OutputDebugString(L"WanyCore::FBXLoader::Load::Failed Parse Root Node.\n");
+		return false;
+	}
+
+	pRoot->Destroy();
+	pScene->Destroy();
+
+	return true;
+}
+
+bool FBXLoader::ParseScene(FbxScene* _scene, FBXObject* _dst)
+{
+	if ((_scene == nullptr) || (_dst == nullptr))
+	{
+		return false;
+	}
+
 	// 각 FBX를 만드는 툴(3D Max, 마야 등 디자인 툴)마다 기저 축과 단위가 다를 수 있기 때문에 설정 후 로딩 할 수 있다.
 	// 보통의 FBX는 기본적으로 오른손 좌표계, Y-Up
-	FbxSystemUnit::cm.ConvertScene(pScene); // 단위 변경. cm 단위로 변경
+	//FbxSystemUnit::cm.ConvertScene(_scene); // 단위 변경. cm 단위로 변경
+	FbxSystemUnit::m.ConvertScene(_scene); // 단위 변경. m 단위로 변경
 	//FbxAxisSystem::MayaZUp.ConvertScene(pScene); // 기저 축 변경. 마야 기준으로 변경. 정점 변환이 아닌 행렬에 적용 되는 것임.
-	FbxAxisSystem sceneAxisSystem = pScene->GetGlobalSettings().GetAxisSystem();
+	FbxAxisSystem sceneAxisSystem = _scene->GetGlobalSettings().GetAxisSystem();
 
+	// Test Code
 	int upSign = 0;
 	FbxAxisSystem::EUpVector up = sceneAxisSystem.GetUpVector(upSign);
 
@@ -141,23 +175,29 @@ bool FBXLoader::Load(std::wstring _path, FBXObject* _dst)
 
 	//FbxAxisSystem::DirectX.ConvertScene(pScene); // 기저 축 변경. DirectX 기준으로 바꿔도 실제 우리가 사용하는 축과 다름. (Right Vector가 마이너스임.).
 	//FbxAxisSystem sceneAxisSystemAfter = pScene->GetGlobalSettings().GetAxisSystem();
-	FbxAxisSystem::MayaZUp.ConvertScene(pScene); // 기저 축 변경. 마야 기준으로 변경. 정점 변환이 아닌 행렬에 적용 되는 것임.
+	FbxAxisSystem::MayaZUp.ConvertScene(_scene); // 기저 축 변경. 마야 기준으로 변경. 정점 변환이 아닌 행렬에 적용 되는 것임.
 
-	if (!m_pImporter->Import(pScene))
+
+	// Animation Scene Information
+	FbxAnimStack* pStack = _scene->GetSrcObject<FbxAnimStack>(0);
+	FbxLongLong s = 0;
+	FbxLongLong n = 0;
+	FbxTime::EMode TimeMode = FbxTime::GetGlobalTimeMode();
+	if (pStack != nullptr)
 	{
-		OutputDebugString(L"WanyCore::FBXLoader::Load::Failed Import Scene.\n");
-		return false;
+		FbxTime::SetGlobalTimeMode(FbxTime::eFrames30);
+		//FbxTime::EMode TimeMode = FbxTime::GetGlobalTimeMode();
+		FbxTimeSpan localTimeSpan = pStack->GetLocalTimeSpan();// 시간 간격. 프레임 사이
+		FbxTime start = localTimeSpan.GetStart();
+		FbxTime end = localTimeSpan.GetStop();
+		FbxTime Duration = localTimeSpan.GetDirection();
+		s = start.GetFrameCount(TimeMode);
+		n = end.GetFrameCount(TimeMode);
 	}
 
-	FbxNode* pRoot = pScene->GetRootNode();
-	if (!ParseNode(pRoot, _dst))
-	{
-		OutputDebugString(L"WanyCore::FBXLoader::Load::Failed Parse Root Node.\n");
-		return false;
-	}
-
-	pRoot->Destroy();
-	pScene->Destroy();
+	_dst->m_animationSceneInfo.TimeMode = TimeMode;
+	_dst->m_animationSceneInfo.StartFrame = s;
+	_dst->m_animationSceneInfo.EndFrame = n;
 
 	return true;
 }
@@ -240,12 +280,30 @@ bool FBXLoader::ParseNode(FbxNode* _node, FBXObject* _dst)
 		}
 	}
 
+
+
+	FbxTime time;
+	UINT StartFrame = _dst->m_animationSceneInfo.StartFrame;
+	UINT EndFrame = _dst->m_animationSceneInfo.EndFrame;
+	FbxTime::EMode TimeMode = _dst->m_animationSceneInfo.TimeMode;
+	for (UINT t = StartFrame; t < EndFrame; t++)
+	{
+		time.SetFrame(t, TimeMode);
+		FBXAnimationTrack Track;
+		Track.frame = t;
+		FbxAMatrix fbxMatrix = _node->EvaluateGlobalTransform(time);
+		Track.matAnimation = toMatrix4x4(fbxMatrix);
+		Matrix4x4Decompose(Track.matAnimation , Track.scale, Track.rotation, Track.translation);
+		_dst->m_animationTrackList.push_back(Track);
+	}
+
 	_dst->m_strNodeName = _node->GetName();
 
 	int childCount = _node->GetChildCount(); // Child 갯수가 0이면 정적 매쉬, 0이 아니면 동적 매쉬로 볼 수 있음.
 	for (int idx = 0; idx < childCount; idx++)
 	{
 		FBXObject* childObject = new FBXObject;
+		childObject->m_animationSceneInfo = _dst->m_animationSceneInfo;
 		FbxNode* pChild = _node->GetChild(idx);
 		if (ParseNode(pChild, childObject))
 		{
@@ -391,37 +449,21 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXObject* _dst)
 	// 노말 성분은 역행렬의 전치 행렬로 곱해 줘야 함.
 	FbxAMatrix normalMatrix = getNormalMatrix(geometryMatrix);
 
-	// 월드 행렬, 애니메이션에서 사용 하면 안됨. 원래는 밖에서 사용해야 하나 임시로 사용
-	FbxAMatrix worldMatrix = getWorldMatrix(pNode);
-	FbxAMatrix normalMatrix_World = getNormalMatrix(worldMatrix);
-
-
-	// 글로벌 매트릭스 = 해당 시간대의 로컬 + 월드 합친 것.
-	FbxScene* pScene = pNode->GetScene();
-	FbxAnimStack* pStack = pScene->GetSrcObject<FbxAnimStack>(0);
-	FbxLongLong s = 0;
-	FbxLongLong n = 0;
-	FbxTime::EMode TimeMode = FbxTime::GetGlobalTimeMode();;
-	if (pStack != nullptr)
-	{	
-		FbxTime::SetGlobalTimeMode(FbxTime::eFrames30);
-		//FbxTime::EMode TimeMode = FbxTime::GetGlobalTimeMode();
-		FbxTimeSpan localTimeSpan = pStack->GetLocalTimeSpan();// 시간 간격. 프레임 사이
-		FbxTime start = localTimeSpan.GetStart();
-		FbxTime end = localTimeSpan.GetStop();
-		FbxTime Duration = localTimeSpan.GetDirection();
-		s = start.GetFrameCount(TimeMode);
-		n = end.GetFrameCount(TimeMode);
-	}
-	FbxTime time;
-	time.SetFrame(s, TimeMode);
-	FbxAMatrix matGlobalTransform = pNode->EvaluateGlobalTransform(time);
-	FbxAMatrix matNormalGlobal = getNormalMatrix(matGlobalTransform);
-
-	// 최종 월드 행렬 = 자기(애니메이션) 행렬 * 부모(애니메이션) 행렬
-	// Final World Matrix =  Parent World Matrix * matGlobalTransform
-	//XMMatrixDecompose 매트릭스 분해
-	//matGlobalTransform
+	//// 월드 행렬, 애니메이션에서 사용 하면 안됨. 원래는 밖에서 사용해야 하나 임시로 사용
+	//FbxAMatrix worldMatrix = getWorldMatrix(pNode);
+	//FbxAMatrix normalMatrix_World = getNormalMatrix(worldMatrix);
+	//
+	//
+	//// 글로벌 매트릭스 = 해당 시간대의 로컬 + 월드 합친 것.
+	//FbxTime time;
+	//time.SetFrame(_dst->m_animationSceneInfo.StartFrame, _dst->m_animationSceneInfo.TimeMode);
+	//FbxAMatrix matGlobalTransform = pNode->EvaluateGlobalTransform(time);
+	//FbxAMatrix matNormalGlobal = getNormalMatrix(matGlobalTransform);
+	//
+	//// 최종 월드 행렬 = 자기(애니메이션) 행렬 * 부모(애니메이션) 행렬
+	//// Final World Matrix =  Parent World Matrix * matGlobalTransform
+	////XMMatrixDecompose 매트릭스 분해
+	////matGlobalTransform
 
 
 	int polyCount = _mesh->GetPolygonCount();
@@ -472,8 +514,8 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXObject* _dst)
 				int vertexIdx = cornerIdx[idx];
 				FbxVector4 vertex = pVertexPosition[vertexIdx];
 				vertex = geometryMatrix.MultT(vertex); // 로컬 행렬 변환, Transform의 T, 열 우선 방식
-				vertex = worldMatrix.MultT(vertex); // 월드 변환 행렬. 나중에 뺄 것.
-				vertex = matGlobalTransform.MultT(vertex);
+				//vertex = worldMatrix.MultT(vertex); // 월드 변환 행렬. 나중에 뺄 것.
+				//vertex = matGlobalTransform.MultT(vertex);
 
 				Vector3f pos;
 				pos.x = vertex.mData[0];
@@ -515,8 +557,8 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXObject* _dst)
 					if (ReadNormal(NormalList[0], vertexIdx, normalIdx, fbxNormal))
 					{
 						fbxNormal = normalMatrix.MultT(fbxNormal);
-						fbxNormal = normalMatrix_World.MultT(fbxNormal); // 월드 변환. 나중에 뺄 것.
-						fbxNormal = matNormalGlobal.MultT(fbxNormal);
+						//fbxNormal = normalMatrix_World.MultT(fbxNormal); // 월드 변환. 나중에 뺄 것.
+						//fbxNormal = matNormalGlobal.MultT(fbxNormal);
 						normal.x = fbxNormal.mData[0];
 						normal.y = fbxNormal.mData[2];
 						normal.z = fbxNormal.mData[1];

@@ -13,6 +13,7 @@
 
 #include "FBXObject.hpp"
 #include "DXTextureManager.hpp"
+#include "DXMath.hpp"
 
 
 class FBXLoader : public Singleton<FBXLoader>
@@ -35,6 +36,7 @@ public:
 
 private:
 	// Parser
+	bool ParseScene(FbxScene* _scene, FBXObject* _dst);
 	bool ParseNode(FbxNode* _node, FBXObject* _dst);
 	bool ParseMesh(FbxMesh* _mesh, FBXObject* _dst);
 	

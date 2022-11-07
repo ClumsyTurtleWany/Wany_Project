@@ -2,6 +2,19 @@
 #include "Object.hpp"
 #include "NewObject.hpp"
 
+//#include "fbxsdk.h" // 헤더 안에 하위 헤더들을 불러오지 못함.
+#include <fbxsdk.h>
+//#pragma comment(lib, "libfbxsdk.lib")
+#pragma comment(lib, "libfbxsdk-md.lib") // 다중 스레드 디버그 dll (md), 다중 스레드 (mt)
+#pragma comment(lib, "libxml2-md.lib") // libfbxsdk-md 에 필요한 lib
+#pragma comment(lib, "zlib-md.lib") // libfbxsdk-md 에 필요한 lib
+
+#pragma warning(disable : 26451)
+#pragma warning(disable : 26495)
+#pragma warning(disable : 26812)
+
+#include "DXMath.hpp"
+
 struct FBXAnimationTrack
 {
 	UINT frame;
@@ -12,8 +25,9 @@ struct FBXAnimationTrack
 	Vector3f scale;
 };
 
-struct FBXAnimationData
+struct FBXAnimationSceneInfo
 {
+	FbxTime::EMode TimeMode;
 	UINT StartFrame;
 	UINT EndFrame;
 	float TickPerFrame = 160.0f;
@@ -116,7 +130,7 @@ struct Mesh
 	}
 };
 
-struct Node
+class FBXFile
 {
 	Mesh mesh;
 
@@ -143,6 +157,9 @@ public:
 	std::vector<FBXObject*>		child;
 	std::vector<Material>		Materials;
 
+	FBXAnimationSceneInfo		m_animationSceneInfo;
+	std::vector<FBXAnimationTrack> m_animationTrackList;
+
 public:
 	virtual bool				initialize() override;
 	virtual bool				initializeVertexList() override;
@@ -153,5 +170,6 @@ public:
 
 public:
 	virtual bool				rotationYawPitchRoll(float _yaw, float _pitch, float _roll);
+	virtual Matrix4x4			interpolation(float _frame);
 
 };

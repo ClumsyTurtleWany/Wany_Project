@@ -69,11 +69,13 @@ VertexShader_output VS(VertexShader_input _input)
 	// matrix matTranspose = transpose(g_matWorld); // 매번 전치행렬 변환작업하는건 비효율적이므로 가급적 응용프로그램에서 전치해서 보내줄 것.
 
 	float4 vAnimation = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	float4 vAnimationNormal = float4(0.0f, 0.0f, 0.0f, 0.0f);
 	for (int iBone = 0; iBone < 4; iBone++)
 	{
 		uint iBoneIndex = _input.index[iBone];
 		float fWeight = _input.weight[iBone];
 		vAnimation += mul(vLocal, g_matBone[iBoneIndex]) * fWeight;
+		vAnimationNormal += mul(_input.n, g_matBone[iBoneIndex]) * fWeight;
 	}
 
 	float4 vWorld = mul(vAnimation, g_matWorld);
@@ -81,14 +83,15 @@ VertexShader_output VS(VertexShader_input _input)
 	float4 vProj = mul(vView, g_matProj);
 
 	output.p = vProj;
-	output.n = _input.n;
+	//output.n = _input.n;
+	output.n = vAnimationNormal;
 	output.c = _input.c;
 	output.t = _input.t;
 
 	output.vWorld = vWorld;
 
 	float3 vLight = g_light.xyz; // 이런식으로 사용 가능
-	float fdot = max(0.3f, dot(_input.n, -vLight));// 내적값이 0이면 좋지 않음. 최소한의 값을 사용하여 윤곽이 살짝 보이게 하는것을 엠비언트 조명이라 함.
+	float fdot = max(0.3f, dot(output.n, -vLight));// 내적값이 0이면 좋지 않음. 최소한의 값을 사용하여 윤곽이 살짝 보이게 하는것을 엠비언트 조명이라 함.
 	output.lightColor = float4(fdot, fdot, fdot, 1.0f); 
 	output.light = vLight;
 

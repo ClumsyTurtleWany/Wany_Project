@@ -76,4 +76,45 @@ inline Vector4f toVector4f(const DirectX::XMVECTOR& _vec)
 	return rst;
 }
 
+inline bool Matrix4x4Decompose(Matrix4x4& _src, Vector3f& _scale, Vector4f& _rotation, Vector3f& _translation)
+{
+	DirectX::XMVECTOR s, r, t;
+
+	if (!DirectX::XMMatrixDecompose(&s, &r, &t, toXMMatrix(_src)))
+	{
+		return false;
+	}
+
+	_scale = toVector3f(s);
+	_rotation = toVector4f(r);
+	_translation = toVector3f(t);
+
+	return true;
+}
+
+// (Vector3f) Linear Interpolation
+inline Vector3f Vector3fLerp(const Vector3f& _v1, const Vector3f& _v2, float _t)
+{
+	DirectX::XMVECTOR v1 = Vector3fToXMVector(_v1);
+	DirectX::XMVECTOR v2 = Vector3fToXMVector(_v2);
+	DirectX::XMVECTOR rst = DirectX::XMVectorLerp(v1, v2, _t);
+	return toVector3f(rst);
+}
+
+// (Quaternion) Linear Interpolation
+inline Vector4f QuaternionLerp(const Vector4f& _v1, const Vector4f& _v2, float _t)
+{
+	DirectX::XMVECTOR v1 = Vector4fToXMVector(_v1);
+	DirectX::XMVECTOR v2 = Vector4fToXMVector(_v2);
+	DirectX::XMVECTOR rst = DirectX::XMQuaternionSlerp(v1, v2, _t);
+	return toVector4f(rst);
+}
+
+inline Matrix4x4 QuaternionToMatrix4x4(const Vector4f& _v)
+{
+	DirectX::XMVECTOR v = Vector4fToXMVector(_v);
+	DirectX::XMMATRIX rst = DirectX::XMMatrixRotationQuaternion(v);
+	return toMatrix(rst);
+}
+
 #endif
