@@ -185,6 +185,7 @@ copy "..\\lib\\FMOD\\fmodL.dll" "..\\$(TargetName)\\"</Command>
     <ClInclude Include="DXDevice.hpp" />
     <ClInclude Include="DXSamplerState.hpp" />
     <ClInclude Include="DXShader.hpp" />
+    <ClInclude Include="DXAnimationShader.hpp" />
     <ClInclude Include="DXShaderBorder.hpp" />
     <ClInclude Include="DXShaderBorderManager.hpp" />
     <ClInclude Include="DXShaderManager.hpp" />
@@ -204,6 +205,7 @@ copy "..\\lib\\FMOD\\fmodL.dll" "..\\$(TargetName)\\"</Command>
     <ClCompile Include="DXDevice.cpp" />
     <ClCompile Include="DXSamplerState.cpp" />
     <ClCompile Include="DXShader.cpp" />
+    <ClCompile Include="DXAnimationShader.cpp" />
     <ClCompile Include="DXShaderBorder.cpp" />
     <ClCompile Include="DXShaderBorderManager.cpp" />
     <ClCompile Include="DXShaderManager.cpp" />
@@ -240,6 +242,14 @@ copy "..\\lib\\FMOD\\fmodL.dll" "..\\$(TargetName)\\"</Command>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PS</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="VS_Animation.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS</EntryPointName>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="VS_ConstantBuffer.hlsl">

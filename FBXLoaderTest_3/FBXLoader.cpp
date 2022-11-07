@@ -420,7 +420,8 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXObject* _dst)
 
 	// 최종 월드 행렬 = 자기(애니메이션) 행렬 * 부모(애니메이션) 행렬
 	// Final World Matrix =  Parent World Matrix * matGlobalTransform
-
+	//XMMatrixDecompose 매트릭스 분해
+	//matGlobalTransform
 
 
 	int polyCount = _mesh->GetPolygonCount();
@@ -862,7 +863,7 @@ int FBXLoader::getSubMaterialIndex(FbxLayerElementMaterial* _material, int _poly
 		}
 		default:
 		{
-			break;
+			//break;
 		}
 		}
 	}

@@ -94,6 +94,46 @@ bool DXShaderManager::LoadPSCode(PSCodeType _key, std::wstring _filename)
 	}
 }
 
+bool DXShaderManager::CreateVertexShader()
+{
+	for (auto it : m_pVertexShaderCodeMap)
+	{
+		ID3D11VertexShader* pVertexShader;
+		HRESULT result = m_pd3dDevice->CreateVertexShader(it.second->GetBufferPointer(), it.second->GetBufferSize(), NULL, &pVertexShader);
+
+		if (FAILED(result))
+		{
+			OutputDebugString(L"WanyCore::DXShaderManager::CreateVertexShader::Failed Create Vertex Shader.\n");
+			return false;
+		}
+		else
+		{
+			m_pVertexShaderMap.insert(std::make_pair(it.first, pVertexShader));
+		}
+	}
+	return true;
+}
+
+bool DXShaderManager::CreatePixelShader()
+{
+	for (auto it : m_pPixelShaderCodeMap)
+	{
+		ID3D11PixelShader* pPixelShader;
+		HRESULT result = m_pd3dDevice->CreatePixelShader(it.second->GetBufferPointer(), it.second->GetBufferSize(), NULL, &pPixelShader);
+
+		if (FAILED(result))
+		{
+			OutputDebugString(L"WanyCore::DXShaderManager::CreatePixelShader::Failed Create Pixel Shader.\n");
+			return false;
+		}
+		else
+		{
+			m_pPixelShaderMap.insert(std::make_pair(it.first, pPixelShader));
+		}
+	}
+	return true;
+}
+
 bool DXShaderManager::Load(int _key, ShaderType _type)
 {
 	auto it = m_ShaderList.find(_key);
@@ -107,6 +147,10 @@ bool DXShaderManager::Load(int _key, ShaderType _type)
 	{
 		newShader = new DXShaderBorder;
 	}
+	else if (_type == ShaderType::Animation3D)
+	{
+		newShader = new DXAnimationShader;
+	}
 	else
 	{ 
 		newShader = new DXShader;
@@ -114,48 +158,61 @@ bool DXShaderManager::Load(int _key, ShaderType _type)
 	
 	newShader->setDevice(m_pd3dDevice, m_pImmediateContext);
 
-	ID3DBlob* pVSCode = nullptr;
-	ID3DBlob* pPSCode = nullptr;
+	std::wstring shaderFile;
+	VSCodeType vsCodeType;
+	PSCodeType psCodeType;
 	if (_type == ShaderType::Mask)
 	{
 		// 텍스처 출력 가능. 마스크 Discard
-		newShader->setShaderFile(L"../include/core/HLSL/MaskShader.txt");
-		pVSCode = getVSCode(VSCodeType::Texture);
-		pPSCode = getPSCode(PSCodeType::Mask);
+		shaderFile = L"../include/core/HLSL/MaskShader.txt";
+		vsCodeType = VSCodeType::Texture;
+		psCodeType = PSCodeType::Mask;
 	}
 	else if (_type == ShaderType::Texture)
 	{
 		// 텍스처 출력 가능.
-		newShader->setShaderFile(L"../include/core/HLSL/TextureShader.txt");
-		pVSCode = getVSCode(VSCodeType::Texture);
-		pPSCode = getPSCode(PSCodeType::Texture);
+		shaderFile = L"../include/core/HLSL/TextureShader.txt";
+		vsCodeType = VSCodeType::Texture;
+		psCodeType = PSCodeType::Texture;
 	}
 	else if (_type == ShaderType::Object3D)
 	{
 		// Constant Data 이용하여 쉐이더에서 매트릭스 계산. 텍스처 출력 가능.
-		newShader->setShaderFile(L"../include/core/HLSL/Textured3D.txt");
-		//newShader->setCreateConstantFlag(true);
-		pVSCode = getVSCode(VSCodeType::ConstantBuffer);
-		pPSCode = getPSCode(PSCodeType::Texture);
+		shaderFile = L"../include/core/HLSL/Textured3D.txt";
+		vsCodeType = VSCodeType::ConstantBuffer;
+		psCodeType = PSCodeType::Texture;
+	}
+	else if (_type == ShaderType::Animation3D)
+	{
+		shaderFile = L"../include/core/HLSL/Textured3D.txt";
+		vsCodeType = VSCodeType::Animation;
+		psCodeType = PSCodeType::Light;
 	}
 	else if (_type == ShaderType::Axis3D)
 	{
 		// Constant Data 이용하여 쉐이더에서 매트릭스 계산.
-		newShader->setShaderFile(L"../include/core/HLSL/DefaultObject.txt");
-		//newShader->setCreateConstantFlag(true);
-		pVSCode = getVSCode(VSCodeType::ConstantBuffer);
-		pPSCode = getPSCode(PSCodeType::Normal);
+		shaderFile = L"../include/core/HLSL/DefaultObject.txt";
+		vsCodeType = VSCodeType::ConstantBuffer;
+		psCodeType = PSCodeType::Normal;
 	}
 	else
 	{
 		// 다이렉트로 픽셀 뿌림. 텍스처 출력 불가.
-		newShader->setShaderFile(L"../include/core/HLSL/ShapeShader.txt");
-		pVSCode = getVSCode(VSCodeType::Texture);
-		pPSCode = getPSCode(PSCodeType::Normal);
+		shaderFile = L"../include/core/HLSL/ShapeShader.txt";
+		vsCodeType = VSCodeType::Texture;
+		psCodeType = PSCodeType::Normal;
 	}
 
+	ID3DBlob* pVSCode = getVSCode(vsCodeType);
+	ID3DBlob* pPSCode = getPSCode(psCodeType);
+	ID3D11VertexShader* pVertexShader = getVertexShader(vsCodeType);
+	ID3D11PixelShader* pPixelShader = getPixelShader(psCodeType);
+
+	newShader->setShaderFile(shaderFile);
 	newShader->setVSCode(pVSCode);
 	newShader->setPSCode(pPSCode);
+	newShader->setVertexShader(pVertexShader);
+	newShader->setPixelShader(pPixelShader);
 
 	bool rst = newShader->initialize();
 	if (!rst)
@@ -203,6 +260,7 @@ ID3DBlob* DXShaderManager::getVSCode(VSCodeType _key)
 	}
 	else
 	{
+		OutputDebugString(L"WanyCore::DXShaderManager::getVSCode::Failed Get Vertex Shader Code.\n");
 		return nullptr;
 	}
 }
@@ -216,6 +274,35 @@ ID3DBlob* DXShaderManager::getPSCode(PSCodeType _key)
 	}
 	else
 	{
+		OutputDebugString(L"WanyCore::DXShaderManager::getPSCode::Failed Get Pixel Shader Code.\n");
+		return nullptr;
+	}
+}
+
+ID3D11VertexShader* DXShaderManager::getVertexShader(VSCodeType _key)
+{
+	auto it = m_pVertexShaderMap.find(_key);
+	if (it != m_pVertexShaderMap.end())
+	{
+		return it->second;
+	}
+	else
+	{
+		OutputDebugString(L"WanyCore::DXShaderManager::getVertexShader::Failed Get Vertex Shader.\n");
+		return nullptr;
+	}
+}
+
+ID3D11PixelShader* DXShaderManager::getPixelShader(PSCodeType _key)
+{
+	auto it = m_pPixelShaderMap.find(_key);
+	if (it != m_pPixelShaderMap.end())
+	{
+		return it->second;
+	}
+	else
+	{
+		OutputDebugString(L"WanyCore::DXShaderManager::getPixelShader::Failed Get Pixel Shader.\n");
 		return nullptr;
 	}
 }
@@ -240,6 +327,18 @@ bool DXShaderManager::initialize()
 		return false;
 	}
 
+	if (!LoadVSCode(VSCodeType::Light, L"../include/core/HLSL/VS_Light.hlsl"))
+	{
+		OutputDebugString(L"WanyCore::DXShaderManager::initialize::Failed Load VS Code(VS_Light.hlsl).\n");
+		return false;
+	}
+
+	if (!LoadVSCode(VSCodeType::Animation, L"../include/core/HLSL/VS_Animation.hlsl"))
+	{
+		OutputDebugString(L"WanyCore::DXShaderManager::initialize::Failed Load VS Code(VS_Animation.hlsl).\n");
+		return false;
+	}
+
 	// Load Pixel Shader Code.
 	if (!LoadPSCode(PSCodeType::Normal, L"../include/core/HLSL/PS_Default.hlsl"))
 	{
@@ -258,6 +357,27 @@ bool DXShaderManager::initialize()
 		OutputDebugString(L"WanyCore::DXShaderManager::initialize::Failed Load PS Code(PS_Mask.hlsl).\n");
 		return false;
 	}
+
+	if (!LoadPSCode(PSCodeType::Light, L"../include/core/HLSL/PS_Light.hlsl"))
+	{
+		OutputDebugString(L"WanyCore::DXShaderManager::initialize::Failed Load PS Code(PS_Light.hlsl).\n");
+		return false;
+	}
+
+	// Create Vertex Shader
+	if (!CreateVertexShader())
+	{
+		OutputDebugString(L"WanyCore::DXShaderManager::initialize::Failed Create Vertex Shader.\n");
+		return false;
+	}
+
+	// Create Pixel Shader
+	if (!CreatePixelShader())
+	{
+		OutputDebugString(L"WanyCore::DXShaderManager::initialize::Failed Create Pixel Shader.\n");
+		return false;
+	}
+
 	return true;
 }
 
@@ -281,6 +401,38 @@ bool DXShaderManager::render()
 
 bool DXShaderManager::release()
 {
+	for (auto it : m_pVertexShaderCodeMap)
+	{
+		ID3DBlob* pVSCode = it.second;
+		pVSCode->Release();
+		pVSCode = nullptr;
+	}
+	m_pVertexShaderCodeMap.clear();
+
+	for (auto it : m_pPixelShaderCodeMap)
+	{
+		ID3DBlob* pPSCode = it.second;
+		pPSCode->Release();
+		pPSCode = nullptr;
+	}
+	m_pPixelShaderCodeMap.clear();
+
+	for (auto it : m_pVertexShaderMap)
+	{
+		ID3D11VertexShader* pVS = it.second;
+		pVS->Release();
+		pVS = nullptr;
+	}
+	m_pVertexShaderMap.clear();
+
+	for (auto it : m_pPixelShaderMap)
+	{
+		ID3D11PixelShader* pPS = it.second;
+		pPS->Release();
+		pPS = nullptr;
+	}
+	m_pPixelShaderMap.clear();	
+
 	if (!m_ShaderList.empty())
 	{
 		for (auto it : m_ShaderList)

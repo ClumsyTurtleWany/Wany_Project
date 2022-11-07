@@ -235,25 +235,25 @@ bool DXShader::release()
 		m_pVertexLayout = nullptr;
 	}
 
-	if (m_pVertexShader != nullptr)
+	if (isCreateVS && (m_pVertexShader != nullptr))
 	{
 		m_pVertexShader->Release();
 		m_pVertexShader = nullptr;
 	}
 
-	if (m_pPixelShader != nullptr)
+	if (isCreatePS && (m_pPixelShader != nullptr))
 	{
 		m_pPixelShader->Release();
 		m_pPixelShader = nullptr;
 	}
 
-	if (m_pVertexShaderCode != nullptr)
+	if (isCreateVSCode && (m_pVertexShaderCode != nullptr))
 	{
 		m_pVertexShaderCode->Release();
 		m_pVertexShaderCode = nullptr;
 	}
-
-	if (m_pPixelShaderCode != nullptr)
+	
+	if (isCreatePSCode && (m_pPixelShaderCode != nullptr))
 	{
 		m_pPixelShaderCode->Release();
 		m_pPixelShaderCode = nullptr;
@@ -480,17 +480,26 @@ HRESULT DXShader::CreateVertexSharder()
 			}
 			return result;
 		}
-	
+
+		isCreateVSCode = true;	
 	}
 
-	HRESULT result = m_pd3dDevice->CreateVertexShader(m_pVertexShaderCode->GetBufferPointer(), m_pVertexShaderCode->GetBufferSize(), NULL, &m_pVertexShader);
-
-	if (FAILED(result))
+	if (m_pVertexShader == nullptr)
 	{
+		HRESULT result = m_pd3dDevice->CreateVertexShader(m_pVertexShaderCode->GetBufferPointer(), m_pVertexShaderCode->GetBufferSize(), NULL, &m_pVertexShader);
+
+		if (FAILED(result))
+		{
+			return result;
+		}
+
+		isCreateVS = true;
 		return result;
 	}
-
-	return result;
+	else
+	{
+		return S_OK;
+	}
 }
 
 HRESULT DXShader::CreatePixelSharder()
@@ -517,18 +526,27 @@ HRESULT DXShader::CreatePixelSharder()
 				OutputDebugStringA((char*)pErrorCode->GetBufferPointer());
 				pErrorCode->Release();
 			}
+		}
+
+		isCreatePSCode = true;
+	}
+
+	if (m_pPixelShader == nullptr)
+	{
+		HRESULT result = m_pd3dDevice->CreatePixelShader(m_pPixelShaderCode->GetBufferPointer(), m_pPixelShaderCode->GetBufferSize(), NULL, &m_pPixelShader);
+
+		if (FAILED(result))
+		{
 			return result;
 		}
-	}
 
-	HRESULT result = m_pd3dDevice->CreatePixelShader(m_pPixelShaderCode->GetBufferPointer(), m_pPixelShaderCode->GetBufferSize(), NULL, &m_pPixelShader);
-
-	if (FAILED(result))
-	{
+		isCreatePS = true;
 		return result;
 	}
-
-	return result;
+	else
+	{
+		return S_OK;
+	}
 }
 
 void DXShader::initializeVertexList()
@@ -663,14 +681,24 @@ void DXShader::setCullMode(CullMode _mode)
 	m_CullMode = _mode;
 }
 
-void DXShader::setVSCode(ID3DBlob* _VS)
+void DXShader::setVSCode(ID3DBlob* _VSCode)
 {
-	m_pVertexShaderCode = _VS;
+	m_pVertexShaderCode = _VSCode;
 }
 
-void DXShader::setPSCode(ID3DBlob* _PS)
+void DXShader::setPSCode(ID3DBlob* _PSCode)
 {
-	m_pPixelShaderCode = _PS;
+	m_pPixelShaderCode = _PSCode;
+}
+
+void DXShader::setVertexShader(ID3D11VertexShader* _VS)
+{
+	m_pVertexShader = _VS;
+}
+
+void DXShader::setPixelShader(ID3D11PixelShader* _PS)
+{
+	m_pPixelShader = _PS;
 }
 
 std::vector<Vertex>* DXShader::getVertexList()

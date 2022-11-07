@@ -57,7 +57,7 @@ inline DirectX::XMVECTOR Vector4fToXMVector(const Vector4f& _vec)
 	return rst;
 }
 
-inline Vector4f toVector3f(const DirectX::XMVECTOR& _vec)
+inline Vector3f toVector3f(const DirectX::XMVECTOR& _vec)
 {
 	Vector3f rst;
 	rst.x = DirectX::XMVectorGetX(_vec);

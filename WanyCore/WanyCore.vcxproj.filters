@@ -186,6 +186,9 @@
     <ClInclude Include="Camera.hpp">
       <Filter>Common\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="DXAnimationShader.hpp">
+      <Filter>DirectX\Shader\헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowUI.cpp">
@@ -239,6 +242,9 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Common\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="DXAnimationShader.cpp">
+      <Filter>DirectX\Shader\소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="DefaultObject.txt">
@@ -281,6 +287,9 @@
     </FxCompile>
     <FxCompile Include="PS_Light.hlsl">
       <Filter>DirectX\HLSL\Pixel</Filter>
+    </FxCompile>
+    <FxCompile Include="VS_Animation.hlsl">
+      <Filter>DirectX\HLSL\Vertex</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

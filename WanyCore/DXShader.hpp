@@ -79,6 +79,10 @@ protected:
 
 protected:
 	bool						isCreated = false;
+	bool						isCreateVSCode = false;
+	bool						isCreatePSCode = false;
+	bool						isCreateVS = false;
+	bool						isCreatePS = false;
 
 protected:
 	virtual HRESULT				CreateVertexBuffer();
@@ -110,8 +114,10 @@ public:
 	void						setTextureFile(std::wstring _file);
 	void						setTopology(D3D11_PRIMITIVE_TOPOLOGY _topology);
 	void						setCullMode(CullMode _mode);
-	void						setVSCode(ID3DBlob* _VS);
-	void						setPSCode(ID3DBlob* _PS);
+	void						setVSCode(ID3DBlob* _VSCode);
+	void						setPSCode(ID3DBlob* _PSCode);
+	void						setVertexShader(ID3D11VertexShader* _VS);
+	void						setPixelShader(ID3D11PixelShader* _PS);
 
 public:
 	float						getTextureWidth();
