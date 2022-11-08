@@ -288,11 +288,11 @@ bool FBXLoader::ParseNode(FbxNode* _node, FBXObject* _dst)
 	FbxTime::EMode TimeMode = _dst->m_animationSceneInfo.TimeMode;
 	for (UINT t = StartFrame; t < EndFrame; t++)
 	{
-		time.SetFrame(t, TimeMode);
+		time.SetFrame(t, TimeMode); // 이게 시간을 많이 잡아먹어서 최대한 적게 호출하는게 좋다.
 		FBXAnimationTrack Track;
 		Track.frame = t;
 		FbxAMatrix fbxMatrix = _node->EvaluateGlobalTransform(time);
-		Track.matAnimation = toMatrix4x4(fbxMatrix);
+		Track.matAnimation = ConvertToDxMatrix(fbxMatrix);
 		Matrix4x4Decompose(Track.matAnimation , Track.scale, Track.rotation, Track.translation);
 		_dst->m_animationTrackList.push_back(Track);
 	}
@@ -305,7 +305,7 @@ bool FBXLoader::ParseNode(FbxNode* _node, FBXObject* _dst)
 		FBXObject* childObject = new FBXObject;
 		childObject->m_animationSceneInfo = _dst->m_animationSceneInfo;
 		FbxNode* pChild = _node->GetChild(idx);
-		if (ParseNode(pChild, childObject))
+		if (isValid |= ParseNode(pChild, childObject))
 		{
 			_dst->child.push_back(childObject);
 		}
@@ -328,32 +328,12 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXObject* _dst)
 	_dst->m_strDataName = _mesh->GetName();
 	_dst->m_wstrNodeType = L"Mesh";
 
-	/*int DeformerCnt = _mesh->GetDeformerCount();
-	for (int idx = 0; idx < DeformerCnt; idx++)
+
+	if (!ParseMeshSkinning(_mesh, _dst))
 	{
-		FbxDeformer* pDeformer = _mesh->GetDeformer(idx, FbxDeformer::EDeformerType::eSkin);
-		FbxSkin* pSkin = reinterpret_cast<FbxSkin*>(pDeformer);
-		int ClusterCnt = pSkin->GetClusterCount();
 
-		FbxGeometry* pGeometry = pSkin->GetGeometry();
-		for (int clusterIdx = 0; clusterIdx < ClusterCnt; clusterIdx++)
-		{
-			FbxCluster* pCluster = pSkin->GetCluster(clusterIdx);
-			FbxCluster::ELinkMode LinkMode = pCluster->GetLinkMode();
-			int clusterSize = pCluster->GetControlPointIndicesCount();
-
-			FbxNode* pLinkNode = pCluster->GetLink();
-			
-			std::string LinkedNodeName = pLinkNode->GetName();
-
-			int* indices = pCluster->GetControlPointIndices();
-			double* weights = pCluster->GetControlPointWeights();
-
-			int a = 0;
-			
-		}
-		
-	}*/
+	}
+	
 
 	// Layer 개념 필요. 여러번에 걸쳐 동일한 곳에 랜더링 하는것 == 멀티 패스 랜더링. 텍스쳐로 치환하면 멀티 텍스처 랜더링.
 	std::vector<FbxLayerElementUV*> UVList;
@@ -465,13 +445,13 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXObject* _dst)
 	////XMMatrixDecompose 매트릭스 분해
 	////matGlobalTransform
 
-
 	int polyCount = _mesh->GetPolygonCount();
 	// 3정점 = 1폴리곤(Triangle) 일 수도 있고
 	// 4정점 = 1폴리곤(Quad) 일 수도 있다.
 	// 폴리곤 -> 페이스 -> 정점
 	int basePolyIdx = 0; // Color
 	int MaterialIdx = 0;
+	FbxVector4* pVertexPosition = _mesh->GetControlPoints(); // 제어점(Control point == Vertices). 정점의 시작 위치. 
 	for (int polyIdx = 0; polyIdx < polyCount; polyIdx++)
 	{
 		int polySize = _mesh->GetPolygonSize(polyIdx);
@@ -481,7 +461,6 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXObject* _dst)
 			MaterialIdx = getSubMaterialIndex(MaterialList[0], polyIdx);
 		}
 
-		FbxVector4* pVertexPosition = _mesh->GetControlPoints(); // 제어점(Control point == Vertices). 정점의 시작 위치. 
 		for (int faceIdx = 0; faceIdx < faceCount; faceIdx++)
 		{
 			// FBX는 시계 반대 방향임. DirectX와 좌표계 방향이 다르다. 
@@ -566,8 +545,25 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXObject* _dst)
 				}
 
 				//VertexList[MaterialIdx].push_back(Vertex(pos, normal, color, texture));
-				
-				_dst->Materials[MaterialIdx].push_back(Vertex(pos, normal, color, texture));
+				if (1)
+				{
+					_dst->Materials[MaterialIdx].push_back(Vertex(pos, normal, color, texture));
+				}
+				else
+				{
+					SkinningData skinData = _dst->SkinningList[vertexIdx];
+					IndexWeightData IWData;
+					IWData.index.x = skinData.index[0];
+					IWData.index.y = skinData.index[1];
+					IWData.index.z = skinData.index[2];
+					IWData.index.w = skinData.index[3];
+					IWData.weight.x = skinData.weight[0];
+					IWData.weight.y = skinData.weight[1];
+					IWData.weight.z = skinData.weight[2];
+					IWData.weight.w = skinData.weight[3];
+
+					_dst->Materials[MaterialIdx].push_back(Vertex(pos, normal, color, texture), IWData);
+				}
 			}
 
 
@@ -590,6 +586,74 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXObject* _dst)
 				}
 			}
 		}
+	}
+
+	return true;
+}
+
+bool FBXLoader::ParseMeshSkinning(FbxMesh* _mesh, FBXObject* _dst)
+{
+	if ((_mesh == nullptr) || (_dst == nullptr))
+	{
+		return false;
+	}
+
+	// Skinning
+	// VertexCnt == 메쉬으 정점 개수와 동일해야 한다.
+	int VertexCnt = _mesh->GetControlPointsCount();
+	_dst->SkinningList.resize(VertexCnt);
+
+	// Skinning: 정점에 영향을 주는 행렬들을 찾는 과정.
+	int DeformerCnt = _mesh->GetDeformerCount(FbxDeformer::EDeformerType::eSkin);
+	for (int idx = 0; idx < DeformerCnt; idx++)
+	{
+		// Deformer(리깅 도구): 뼈대에 스킨을 붙이는 작업 도구.
+		FbxDeformer* pDeformer = _mesh->GetDeformer(idx, FbxDeformer::EDeformerType::eSkin);
+		FbxSkin* pSkin = reinterpret_cast<FbxSkin*>(pDeformer);
+
+		FbxGeometry* pGeometry = pSkin->GetGeometry();
+		int ClusterCnt = pSkin->GetClusterCount(); // ClusterCnt 개의 Bone이 VertexCnt 수만큼의 정점에 영향을 준다.
+		for (int clusterIdx = 0; clusterIdx < ClusterCnt; clusterIdx++)
+		{
+			// Cluster: 뼈대에 붙이는 덩어리(구, Sphere), Mesh의 정점 덩어리. 뼈대가 영향을 미치는 정점 덩어리.
+			FbxCluster* pCluster = pSkin->GetCluster(clusterIdx);
+
+			FbxCluster::ELinkMode LinkMode = pCluster->GetLinkMode();
+			FbxNode* pLinkNode = pCluster->GetLink(); // Bone으로 보면 됨.
+			std::string LinkedNodeName = pLinkNode->GetName();
+			int BoneIndex = 0;// = pLinkNode 의 Bone 데이터; // 오브젝트에서 찾아서 넣어줘야 함.
+
+			// 어떤 정점이 영향을 받는지 체크
+			int* indices = pCluster->GetControlPointIndices();
+			double* weights = pCluster->GetControlPointWeights();
+			int clusterSize = pCluster->GetControlPointIndicesCount(); // 하나의 뼈대(BoneIndex의 행렬)가 영향을 주는 Vertex 개 수.
+			for (int vertexIdx = 0; vertexIdx < clusterSize; vertexIdx++)
+			{
+				// 각 정점마다 저장해 주어야 함. 지금은 4개를 넘기도록 했기 때문에 Weight가 큰 순으로 사용 해 주어야 함.
+				// 현재 뼈대가 영향을 주는 정점과 가중치. VertexIndex의 정점에 Weight만큼 BoneIndex 행렬이 영향을 준다.
+				int VertexIndex = indices[vertexIdx];
+				float Weight = static_cast<float>(weights[vertexIdx]);
+
+				_dst->SkinningList[VertexIndex].setKey(LinkedNodeName);
+				_dst->SkinningList[VertexIndex].insert(BoneIndex, Weight);
+			}
+
+			int a = 0;
+
+			// 뼈대 공간으로 변환하는 행렬이 필요하다.
+			// Mesh의 정점들은 월드 행렬 공간에 있기 때문에(애니메이션) 
+			// Skin Mesh가 Bone을 이탈하지 않게 하기 위해서는 Bone공간으로 변환이 필요함.
+			FbxAMatrix matXBindPose;
+			FbxAMatrix matRefGlobalInitPosition;
+			pCluster->GetTransformLinkMatrix(matXBindPose); // Dress Pose == Bind Pose가 만들어 짐.(Animation Matrix)
+			pCluster->GetTransformMatrix(matRefGlobalInitPosition); // Offset Matrix, 부모 자식 뼈대가 붙어 다녀야 하기 때문에 Pivot(Dummy, offset)이 정리되어야 한다 == 이동이 꼭 필요하다.  
+			FbxAMatrix matInversedBindPose = matRefGlobalInitPosition.Inverse() * matXBindPose; // 전역 행렬이 곱해진 후 바인드 포즈가 곱해진 것이 애니메이션
+			matInversedBindPose = matInversedBindPose.Inverse(); // 따라서 역행렬로 만들어 주어서 정점에 곱해 주어야 뼈대의 로컬 행렬로 변환 가능하다.
+			Matrix4x4 matInvBindPose = ConvertToDxMatrix(matInversedBindPose); // 정점과 곱한 후 VertexBuffer에 넣고 월드 행렬과 곱해줘도 되고, VertexBuffer는 냅두고 월드 행렬 앞에 곱해도 됨.
+			//_dst->BindPoseMap.insert(std::make_pair(BoneIndex, matInvBindPose)); // 상수 버퍼 적용 전에 곱해 주고
+			_dst->BindPoseMap.insert(std::make_pair(LinkedNodeName, matInvBindPose)); // 상수 버퍼 적용 전에 곱해 주고
+		}
+		int b = 0;
 	}
 
 	return true;
@@ -1143,6 +1207,7 @@ Matrix4x4 FBXLoader::toMatrix4x4(const FbxAMatrix& _src)
 			rst.arry[row][col] = static_cast<float>(val);
 		}
 	}
+
 	return rst;
 }
 
@@ -1150,10 +1215,12 @@ Matrix4x4 FBXLoader::ConvertToDxMatrix(const FbxAMatrix& _src)
 {
 	Matrix4x4 rst;
 	Matrix4x4 src = toMatrix4x4(_src);
-	rst._11 = src._11; rst._12 = src._13; rst._13 = src._12; rst._14 = src._14;
-	rst._21 = src._21; rst._22 = src._23; rst._23 = src._22; rst._24 = src._24;
-	rst._31 = src._31; rst._32 = src._33; rst._33 = src._32; rst._34 = src._34;
-	rst._41 = src._41; rst._42 = src._43; rst._43 = src._42; rst._44 = src._44;
+	rst._11 = src._11; rst._12 = src._13; rst._13 = src._12;
+	rst._21 = src._31; rst._22 = src._33; rst._23 = src._32;
+	rst._31 = src._21; rst._32 = src._23; rst._33 = src._22;
+	rst._41 = src._41; rst._42 = src._43; rst._43 = src._42;
+	rst._14 = rst._24 = rst._34 = 0.0f;
+	rst._44 = 1.0f;
 
 	return rst;
 }

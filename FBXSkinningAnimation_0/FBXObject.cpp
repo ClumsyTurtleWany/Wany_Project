@@ -91,6 +91,51 @@ bool FBXObject::render()
 bool FBXObject::frame(float _dt)
 {
 	curPos = Vector3f(0.0f, 0.0f, 0.0f) * data.matWorld;
+
+	m_currentAnimationFrame = m_currentAnimationFrame + (0.001f * m_animationSceneInfo.FrameSpeed * m_AnimationInverse);
+	if ((m_currentAnimationFrame >= (m_animationSceneInfo.EndFrame - 1)) ||
+		(m_currentAnimationFrame <= m_animationSceneInfo.StartFrame))
+	{
+		m_currentAnimationFrame = min(m_currentAnimationFrame, m_animationSceneInfo.EndFrame - 1);
+		m_currentAnimationFrame = max(m_currentAnimationFrame, m_animationSceneInfo.StartFrame);
+		m_AnimationInverse *= -1.0f;
+	}
+
+	Matrix4x4 matInterpolationAnimation = interpolation(m_currentAnimationFrame);
+	Matrix4x4 matTranspose = matInterpolationAnimation.Transpose();
+	ConstantBufferData_Bone BoneData;
+	BoneData.matBone[0] = matTranspose;
+	for (auto it : Materials)
+	{
+		if (it.Shader == nullptr)
+		{
+			continue;
+		}
+
+		DXAnimationShader* pAnimationShader = reinterpret_cast<DXAnimationShader*>(it.Shader);
+		pAnimationShader->updateConstantBuffer_Bone(&BoneData);
+	}
+
+	for (auto it : child)
+	{
+		it->frame(_dt);
+
+		/*Matrix4x4 matInterpolationAnimation = it->interpolation(m_currentAnimationFrame);
+		Matrix4x4 matTranspose = matInterpolationAnimation.Transpose();
+		ConstantBufferData_Bone BoneData;
+		BoneData.matBone[0] = matTranspose;
+		for (auto it : Materials)
+		{
+			if (it.Shader == nullptr)
+			{
+				continue;
+			}
+
+			DXAnimationShader* pAnimationShader = reinterpret_cast<DXAnimationShader*>(it.Shader);
+			pAnimationShader->updateConstantBuffer_Bone(&BoneData);
+		}*/
+	}
+
 	return true;
 }
 
@@ -163,8 +208,8 @@ Matrix4x4 FBXObject::interpolation(float _frame)
 	FBXAnimationTrack A, B;
 	UINT StartFrame = m_animationSceneInfo.StartFrame;
 	UINT EndFrame = m_animationSceneInfo.EndFrame;
-	UINT FrameA = _frame < StartFrame ? StartFrame : _frame + 0;
-	UINT FrameB = _frame >= (EndFrame - 1) ? (EndFrame - 1) : _frame + 1;
+	UINT FrameA = max(_frame + 0, StartFrame);
+	UINT FrameB = min(_frame + 1, EndFrame - 1);
 	A = m_animationTrackList[FrameA];
 	B = m_animationTrackList[FrameB];
 	if (A.frame == B.frame)
@@ -173,11 +218,16 @@ Matrix4x4 FBXObject::interpolation(float _frame)
 	}
 
 	float t = (_frame - A.frame) / (B.frame - A.frame);
-	Vector3f translation = Vector3fLerp(A.translation, B.translation, t);
-	Vector3f scale = Vector3fLerp(A.scale, B.scale, t);
-	Vector4f qRotation = QuaternionLerp(A.rotation, B.rotation, t);
+	Vector3f translation = LinearInterpolation(A.translation, B.translation, t);
+	Vector3f scale = LinearInterpolation(A.scale, B.scale, t);
+	Matrix4x4 matScale;
+	matScale.Identity();
+	matScale._11 = scale.x;
+	matScale._22 = scale.y;
+	matScale._33 = scale.z;
+	Vector4f qRotation = SphereLinearInterpolation(A.rotation, B.rotation, t);
 	Matrix4x4 matRotation = QuaternionToMatrix4x4(qRotation);
-	Matrix4x4 rst = matRotation;
+	Matrix4x4 rst = /*matScale **/ matRotation;
 	rst._41 = translation.x;
 	rst._42 = translation.y;
 	rst._43 = translation.z;

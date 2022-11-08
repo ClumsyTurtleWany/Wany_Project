@@ -29,6 +29,7 @@ bool Sample::initialize()
         //FBXLoader::getInstance()->Load(L"../resource/FBX/SM_Tree_Var01.FBX", pFbxObject);
         FBXLoader::getInstance()->Load(L"../resource/FBX/Turret_Deploy1.FBX", pFbxObject);
         //FBXLoader::getInstance()->Load(L"../resource/FBX/Idle.FBX", pFbxObject);
+        //FBXLoader::getInstance()->Load(L"../resource/FBX/Man.FBX", pFbxObject);
 
         //if (FBXLoader::getInstance()->LoadDir(L"../resource/FBX/"))
         {
@@ -163,6 +164,9 @@ bool Sample::frame()
     pBoxObject->frame(dt);
 
     pWorldMap->frame(dt);
+
+
+    pFbxObject->frame(dt);
 
     return true;
 }

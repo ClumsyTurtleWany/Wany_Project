@@ -93,7 +93,7 @@ inline bool Matrix4x4Decompose(Matrix4x4& _src, Vector3f& _scale, Vector4f& _rot
 }
 
 // (Vector3f) Linear Interpolation
-inline Vector3f Vector3fLerp(const Vector3f& _v1, const Vector3f& _v2, float _t)
+inline Vector3f LinearInterpolation(const Vector3f& _v1, const Vector3f& _v2, float _t)
 {
 	DirectX::XMVECTOR v1 = Vector3fToXMVector(_v1);
 	DirectX::XMVECTOR v2 = Vector3fToXMVector(_v2);
@@ -101,8 +101,16 @@ inline Vector3f Vector3fLerp(const Vector3f& _v1, const Vector3f& _v2, float _t)
 	return toVector3f(rst);
 }
 
+inline Vector4f LinearInterpolation(const Vector4f& _v1, const Vector4f& _v2, float _t)
+{
+	DirectX::XMVECTOR v1 = Vector4fToXMVector(_v1);
+	DirectX::XMVECTOR v2 = Vector4fToXMVector(_v2);
+	DirectX::XMVECTOR rst = DirectX::XMVectorLerp(v1, v2, _t);
+	return toVector4f(rst);
+}
+
 // (Quaternion) Linear Interpolation
-inline Vector4f QuaternionLerp(const Vector4f& _v1, const Vector4f& _v2, float _t)
+inline Vector4f SphereLinearInterpolation(const Vector4f& _v1, const Vector4f& _v2, float _t)
 {
 	DirectX::XMVECTOR v1 = Vector4fToXMVector(_v1);
 	DirectX::XMVECTOR v2 = Vector4fToXMVector(_v2);

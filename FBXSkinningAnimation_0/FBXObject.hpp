@@ -34,12 +34,37 @@ struct FBXAnimationSceneInfo
 	float FrameSpeed = 30.0f;
 };
 
+struct SkinningData
+{
+	std::vector<int> index;
+	std::vector<float> weight;
+	std::string BindPoseKey;
+	
+	void setKey(std::string _key)
+	{
+		BindPoseKey = _key;
+	}
+
+	void insert(int _idx, float _weight)
+	{
+		// IndexWeightData 에 넘겨주는건 4개니까, Sort 해서 넣어두는게 사용하기에 좋다.
+		index.push_back(_idx);
+		weight.push_back(_weight);
+	}
+};
+
+struct VertexData
+{
+	std::vector<SkinningData> SkinningList;
+};
+
 struct Material
 {
 	DXShader* Shader = nullptr;
 	std::vector<Vertex> VertexList;
 	std::vector<IndexWeightData> IWList;
 	std::vector<DWORD> IndexList;
+	
 
 	std::wstring DiffuseTexture;
 
@@ -136,6 +161,7 @@ class FBXFile
 
 };
 
+
 class FBXObject : public object3D<float>
 {
 private:
@@ -159,6 +185,13 @@ public:
 
 	FBXAnimationSceneInfo		m_animationSceneInfo;
 	std::vector<FBXAnimationTrack> m_animationTrackList;
+
+	float						m_currentAnimationFrame = 0.0f;
+	float						m_AnimationInverse = 1.0f;
+
+
+	std::vector<SkinningData> SkinningList;
+	std::map<std::string, Matrix4x4> BindPoseMap;
 
 public:
 	virtual bool				initialize() override;

@@ -39,6 +39,7 @@ private:
 	bool ParseScene(FbxScene* _scene, FBXObject* _dst);
 	bool ParseNode(FbxNode* _node, FBXObject* _dst);
 	bool ParseMesh(FbxMesh* _mesh, FBXObject* _dst);
+	bool ParseMeshSkinning(FbxMesh* _mesh, FBXObject* _dst);
 	
 	bool ParseDummy(FbxNull* _dummy, FBXObject* _dst);
 	bool ParseSkeleton(FbxSkeleton* _skeleton, FBXObject* _dst);

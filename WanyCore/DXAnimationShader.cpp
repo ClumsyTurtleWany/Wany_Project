@@ -127,7 +127,7 @@ bool DXAnimationShader::render()
 		m_pImmediateContext->UpdateSubresource(m_pConstantBuffer, 0, NULL, &m_ConstantData, 0, 0);
 	}
 
-	if ((m_pConstantBuffer != nullptr))
+	if ((m_pConstantBuffer_Bone != nullptr))
 	{
 		m_pImmediateContext->UpdateSubresource(m_pConstantBuffer_Bone, 0, NULL, &m_ConstantData_Bone, 0, 0);
 	}
