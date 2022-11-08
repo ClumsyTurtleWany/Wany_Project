@@ -286,7 +286,7 @@ bool FBXLoader::ParseNode(FbxNode* _node, FBXObject* _dst)
 	UINT StartFrame = _dst->m_animationSceneInfo.StartFrame;
 	UINT EndFrame = _dst->m_animationSceneInfo.EndFrame;
 	FbxTime::EMode TimeMode = _dst->m_animationSceneInfo.TimeMode;
-	for (UINT t = StartFrame; t < EndFrame; t++)
+	for (UINT t = StartFrame; t <= EndFrame; t++)
 	{
 		time.SetFrame(t, TimeMode); // 이게 시간을 많이 잡아먹어서 최대한 적게 호출하는게 좋다.
 		FBXAnimationTrack Track;

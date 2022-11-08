@@ -92,16 +92,24 @@ bool FBXObject::frame(float _dt)
 {
 	curPos = Vector3f(0.0f, 0.0f, 0.0f) * data.matWorld;
 
-	m_currentAnimationFrame = m_currentAnimationFrame + (0.001f * m_animationSceneInfo.FrameSpeed * m_AnimationInverse);
-	if ((m_currentAnimationFrame >= (m_animationSceneInfo.EndFrame - 1)) ||
-		(m_currentAnimationFrame <= m_animationSceneInfo.StartFrame))
+	m_currentAnimationFrame = m_currentAnimationFrame + (_dt * 0.1f * m_animationSceneInfo.FrameSpeed * m_AnimationInverse);
+	if ((m_currentAnimationFrame > m_animationSceneInfo.EndFrame ) ||
+		(m_currentAnimationFrame < m_animationSceneInfo.StartFrame))
 	{
-		m_currentAnimationFrame = min(m_currentAnimationFrame, m_animationSceneInfo.EndFrame - 1);
+		m_currentAnimationFrame = min(m_currentAnimationFrame, m_animationSceneInfo.EndFrame);
 		m_currentAnimationFrame = max(m_currentAnimationFrame, m_animationSceneInfo.StartFrame);
 		m_AnimationInverse *= -1.0f;
 	}
 
 	Matrix4x4 matInterpolationAnimation = interpolation(m_currentAnimationFrame);
+	auto it = BindPoseMap.find(m_strDataName);
+	size_t bpMapSize = BindPoseMap.size();
+	if (it != BindPoseMap.end())
+	{
+		Matrix4x4 BindPoseMatrix = it->second;
+		matInterpolationAnimation = BindPoseMatrix * matInterpolationAnimation;
+	}
+
 	Matrix4x4 matTranspose = matInterpolationAnimation.Transpose();
 	ConstantBufferData_Bone BoneData;
 	BoneData.matBone[0] = matTranspose;
@@ -209,7 +217,7 @@ Matrix4x4 FBXObject::interpolation(float _frame)
 	UINT StartFrame = m_animationSceneInfo.StartFrame;
 	UINT EndFrame = m_animationSceneInfo.EndFrame;
 	UINT FrameA = max(_frame + 0, StartFrame);
-	UINT FrameB = min(_frame + 1, EndFrame - 1);
+	UINT FrameB = min(_frame + 1, EndFrame);
 	A = m_animationTrackList[FrameA];
 	B = m_animationTrackList[FrameB];
 	if (A.frame == B.frame)
