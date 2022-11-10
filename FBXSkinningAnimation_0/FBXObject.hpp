@@ -14,6 +14,7 @@
 #pragma warning(disable : 26812)
 
 #include "DXMath.hpp"
+#include <set>
 
 struct FBXAnimationTrack
 {
@@ -34,28 +35,39 @@ struct FBXAnimationSceneInfo
 	float FrameSpeed = 30.0f;
 };
 
-struct SkinningData
+struct SkinWeight
 {
-	std::vector<int> index;
-	std::vector<float> weight;
-	std::string BindPoseKey;
-	
-	void setKey(std::string _key)
+	float weight = 0.0f;
+	std::string BoneName = "";
+
+	bool operator <(const SkinWeight& _comp) const
 	{
-		BindPoseKey = _key;
+		return weight < _comp.weight;
 	}
 
-	void insert(int _idx, float _weight)
+	bool operator >(const SkinWeight& _comp) const
 	{
-		// IndexWeightData 에 넘겨주는건 4개니까, Sort 해서 넣어두는게 사용하기에 좋다.
-		index.push_back(_idx);
-		weight.push_back(_weight);
+		return weight > _comp.weight;
 	}
 };
 
-struct VertexData
+struct SkinningData
 {
-	std::vector<SkinningData> SkinningList;
+	// IndexWeightData 에 넘겨주는건 4개니까, Sort 해서 넣어두는게 사용하기에 좋다.
+	std::multiset<SkinWeight, std::greater<SkinWeight>> SkinWeightList;
+
+	void insert(float _weight, std::string _boneName)
+	{
+		SkinWeight data;
+		data.weight = _weight;
+		data.BoneName = _boneName;
+		SkinWeightList.insert(data);
+	}
+
+	void insert(SkinWeight _data)
+	{
+		SkinWeightList.insert(_data);
+	}
 };
 
 struct Material
@@ -189,9 +201,11 @@ public:
 	float						m_currentAnimationFrame = 0.0f;
 	float						m_AnimationInverse = 1.0f;
 
-
+	ConstantBufferData_Bone		m_CBData_Bone;
 	std::vector<SkinningData> SkinningList;
 	std::map<std::string, Matrix4x4> BindPoseMap;
+	std::map<std::string, int> BindPoseKeyStringToIdxMap;
+	std::map<int, std::string> BindPoseIdxToKeyStringMap;
 
 public:
 	virtual bool				initialize() override;

@@ -304,6 +304,13 @@ bool FBXLoader::ParseNode(FbxNode* _node, FBXObject* _dst)
 	{
 		FBXObject* childObject = new FBXObject;
 		childObject->m_animationSceneInfo = _dst->m_animationSceneInfo;
+
+
+		childObject->BindPoseMap.insert(_dst->BindPoseMap.begin(), _dst->BindPoseMap.end());
+		childObject->m_CBData_Bone = _dst->m_CBData_Bone;
+		childObject->BindPoseKeyStringToIdxMap.insert(_dst->BindPoseKeyStringToIdxMap.begin(), _dst->BindPoseKeyStringToIdxMap.end());
+		childObject->BindPoseIdxToKeyStringMap.insert(_dst->BindPoseIdxToKeyStringMap.begin(), _dst->BindPoseIdxToKeyStringMap.end());
+
 		FbxNode* pChild = _node->GetChild(idx);
 		if (isValid |= ParseNode(pChild, childObject))
 		{
@@ -545,22 +552,32 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXObject* _dst)
 				}
 
 				//VertexList[MaterialIdx].push_back(Vertex(pos, normal, color, texture));
-				if (1)
+				if (_dst->BindPoseMap.empty())
 				{
 					_dst->Materials[MaterialIdx].push_back(Vertex(pos, normal, color, texture));
 				}
 				else
 				{
 					SkinningData skinData = _dst->SkinningList[vertexIdx];
+					std::vector<SkinWeight> SkinWeightList;
+					for (auto it = skinData.SkinWeightList.begin(); it != skinData.SkinWeightList.end(); it++)
+					{
+						SkinWeightList.push_back(*it);
+					}
+
 					IndexWeightData IWData;
-					IWData.index.x = skinData.index[0];
-					IWData.index.y = skinData.index[1];
-					IWData.index.z = skinData.index[2];
-					IWData.index.w = skinData.index[3];
-					IWData.weight.x = skinData.weight[0];
-					IWData.weight.y = skinData.weight[1];
-					IWData.weight.z = skinData.weight[2];
-					IWData.weight.w = skinData.weight[3];
+					for (int SkinWeightIdx = 0; SkinWeightIdx < SkinWeightList.size(); SkinWeightIdx++)
+					{
+						if (SkinWeightIdx < 4)
+						{
+							IWData.index.v[SkinWeightIdx] = _dst->BindPoseKeyStringToIdxMap.find(SkinWeightList[SkinWeightIdx].BoneName)->second;
+							IWData.weight.v[SkinWeightIdx] = SkinWeightList[SkinWeightIdx].weight;
+						}
+						else
+						{
+							break;
+						}
+					}
 
 					_dst->Materials[MaterialIdx].push_back(Vertex(pos, normal, color, texture), IWData);
 				}
@@ -634,8 +651,9 @@ bool FBXLoader::ParseMeshSkinning(FbxMesh* _mesh, FBXObject* _dst)
 				int VertexIndex = indices[vertexIdx];
 				float Weight = static_cast<float>(weights[vertexIdx]);
 
-				_dst->SkinningList[VertexIndex].setKey(LinkedNodeName);
-				_dst->SkinningList[VertexIndex].insert(BoneIndex, Weight);
+				//_dst->SkinningList[VertexIndex].setKey(LinkedNodeName);
+				//_dst->SkinningList[VertexIndex].insert(BoneIndex, Weight);
+				_dst->SkinningList[VertexIndex].insert(Weight, LinkedNodeName);
 			}
 
 			int a = 0;
@@ -654,6 +672,15 @@ bool FBXLoader::ParseMeshSkinning(FbxMesh* _mesh, FBXObject* _dst)
 			_dst->BindPoseMap.insert(std::make_pair(LinkedNodeName, matInvBindPose)); // 상수 버퍼 적용 전에 곱해 주고
 		}
 		int b = 0;
+	}
+
+	int NodeIdx = 0;
+	for (auto it : _dst->BindPoseMap)
+	{
+		_dst->m_CBData_Bone.matBone[NodeIdx] = it.second;
+		_dst->BindPoseKeyStringToIdxMap.insert(std::make_pair(it.first, NodeIdx));
+		_dst->BindPoseIdxToKeyStringMap.insert(std::make_pair(NodeIdx, it.first));
+		NodeIdx++;
 	}
 
 	return true;

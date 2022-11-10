@@ -5,12 +5,16 @@
 struct ConstantBufferData_Bone
 {
 	Matrix4x4 matBone[255];
+	Matrix4x4 matBind[255];
+	Matrix4x4 matAnim[255];
 
 	ConstantBufferData_Bone()
 	{
 		for (int i = 0; i < 255; i++)
 		{
 			matBone[i].Identity();
+			matBind[i].Identity();
+			matAnim[i].Identity();
 		}
 	}
 };

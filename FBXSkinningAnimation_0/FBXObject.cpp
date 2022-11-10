@@ -92,7 +92,7 @@ bool FBXObject::frame(float _dt)
 {
 	curPos = Vector3f(0.0f, 0.0f, 0.0f) * data.matWorld;
 
-	m_currentAnimationFrame = m_currentAnimationFrame + (_dt * 0.1f * m_animationSceneInfo.FrameSpeed * m_AnimationInverse);
+	m_currentAnimationFrame = m_currentAnimationFrame + (/*_dt **/ 0.01f * m_animationSceneInfo.FrameSpeed * m_AnimationInverse);
 	if ((m_currentAnimationFrame > m_animationSceneInfo.EndFrame ) ||
 		(m_currentAnimationFrame < m_animationSceneInfo.StartFrame))
 	{
@@ -101,18 +101,36 @@ bool FBXObject::frame(float _dt)
 		m_AnimationInverse *= -1.0f;
 	}
 
-	Matrix4x4 matInterpolationAnimation = interpolation(m_currentAnimationFrame);
-	auto it = BindPoseMap.find(m_strDataName);
-	size_t bpMapSize = BindPoseMap.size();
-	if (it != BindPoseMap.end())
-	{
-		Matrix4x4 BindPoseMatrix = it->second;
-		matInterpolationAnimation = BindPoseMatrix * matInterpolationAnimation;
-	}
+	m_currentAnimationFrame = 0.0f;
 
-	Matrix4x4 matTranspose = matInterpolationAnimation.Transpose();
-	ConstantBufferData_Bone BoneData;
-	BoneData.matBone[0] = matTranspose;
+	Matrix4x4 matInterpolationAnimation = interpolation(m_currentAnimationFrame);
+	Matrix4x4 matAnimationTranspose = matInterpolationAnimation.Transpose();
+	ConstantBufferData_Bone CBData_Bone;
+	if (BindPoseMap.empty())
+	{
+		//Matrix4x4 matTranspose = matInterpolationAnimation.Transpose();
+		CBData_Bone.matBone[0] = matAnimationTranspose;
+	}
+	else
+	{
+		for (int idx = 0; idx < 255; idx++)
+		{
+			Matrix4x4 MergedMatrix = m_CBData_Bone.matBone[idx] * matInterpolationAnimation;
+			Matrix4x4 matTranspose = MergedMatrix.Transpose();
+			CBData_Bone.matBone[idx] = matTranspose;
+			CBData_Bone.matBind[idx] = m_CBData_Bone.matBone[idx];
+			CBData_Bone.matAnim[idx] = matInterpolationAnimation;
+
+			auto it = BindPoseIdxToKeyStringMap.find(idx);
+			if (it != BindPoseIdxToKeyStringMap.end())
+			{
+				std::string keyVal = it->second;
+				int a = 0;
+			}
+		}
+	}
+	
+	//BoneData.matBone[0] = matTranspose;
 	for (auto it : Materials)
 	{
 		if (it.Shader == nullptr)
@@ -121,7 +139,8 @@ bool FBXObject::frame(float _dt)
 		}
 
 		DXAnimationShader* pAnimationShader = reinterpret_cast<DXAnimationShader*>(it.Shader);
-		pAnimationShader->updateConstantBuffer_Bone(&BoneData);
+		//pAnimationShader->updateConstantBuffer_Bone(&BoneData);
+		pAnimationShader->updateConstantBuffer_Bone(&CBData_Bone);
 	}
 
 	for (auto it : child)
@@ -235,7 +254,7 @@ Matrix4x4 FBXObject::interpolation(float _frame)
 	matScale._33 = scale.z;
 	Vector4f qRotation = SphereLinearInterpolation(A.rotation, B.rotation, t);
 	Matrix4x4 matRotation = QuaternionToMatrix4x4(qRotation);
-	Matrix4x4 rst = /*matScale **/ matRotation;
+	Matrix4x4 rst = matScale * matRotation;
 	rst._41 = translation.x;
 	rst._42 = translation.y;
 	rst._43 = translation.z;

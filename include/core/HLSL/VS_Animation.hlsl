@@ -30,6 +30,9 @@ struct VertexShader_output
 	float4 lightColor : TEXCOORD1;
 	float4 vWorld : TEXCOORD2;
 	float3 light : TEXCOORD3;
+	float4 vAnimation : TEXCOORD4;
+	matrix bind : TEXCOORD5;
+	matrix anim : TEXCOORD9;
 };
 
 // 상수 버퍼는 레지스터 단위로만 저장됨.
@@ -51,6 +54,8 @@ cbuffer ConstantData : register(b0)
 cbuffer ConstantData_Bone : register(b1)
 {
 	matrix g_matBone[255];
+	matrix g_matBind[255];
+	matrix g_matAnim[255];
 }
 
 VertexShader_output VS(VertexShader_input _input)
@@ -95,5 +100,9 @@ VertexShader_output VS(VertexShader_input _input)
 	output.lightColor = float4(fdot, fdot, fdot, 1.0f); 
 	output.light = vLight;
 
+	output.vAnimation = vAnimation;
+	output.bind = g_matBind[_input.index[0]];
+	output.anim = g_matAnim[_input.index[0]];
+	
 	return output;
 }

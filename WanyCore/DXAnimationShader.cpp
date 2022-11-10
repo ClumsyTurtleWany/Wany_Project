@@ -342,6 +342,8 @@ bool DXAnimationShader::updateConstantBuffer_Bone(ConstantBufferData_Bone* _data
 	for (int idx = 0; idx < 255; idx++)
 	{
 		m_ConstantData_Bone.matBone[idx] = _data->matBone[idx];
+		m_ConstantData_Bone.matBind[idx] = _data->matBind[idx];
+		m_ConstantData_Bone.matAnim[idx] = _data->matAnim[idx];
 	}
 	return true;
 }
