@@ -37,7 +37,7 @@ public:
 private:
 	// Parser
 	bool ParseScene(FbxScene* _scene, FBXFileData* _dst);
-	bool ParseNode(FbxNode* _node, FBXObject* _dst);
+	bool ParseNode(FbxNode* _node, FBXFileData* _dst);
 	bool ParseMesh(FbxMesh* _mesh, FBXObject* _dst);
 	bool ParseMeshSkinning(FbxMesh* _mesh, FBXObject* _dst);
 	
@@ -74,5 +74,6 @@ public:
 	Matrix4x4 ConvertToDxMatrix(const FbxAMatrix& _src);
 
 public:
+	bool GenerateAnimationTrack(FBXFileData* _data);
 	bool GenerateObjectFromFileData(FBXFileData* _src, FBXObject* _dst);
 };

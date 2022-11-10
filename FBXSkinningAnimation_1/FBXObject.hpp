@@ -180,7 +180,7 @@ class FBXFileData
 {
 public:
 	FBXAnimationSceneInfo						AnimationSceneInfo;
-	std::map<std::string, FBXAnimationTrack>	AnimationTrackMap;
+	std::map<std::string, std::vector<FBXAnimationTrack>>	AnimationTrackMap;
 	std::map<std::string, Matrix4x4>			BindPoseMap;
 
 	std::vector<FbxNode*>						NodeList;

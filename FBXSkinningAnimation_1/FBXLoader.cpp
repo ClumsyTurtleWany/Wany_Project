@@ -132,7 +132,7 @@ bool FBXLoader::Load(std::wstring _path, FBXObject* _dst)
 	}
 
 	FbxNode* pRoot = pScene->GetRootNode();
-	if (!ParseNode(pRoot, _dst))
+	if (!ParseNode(pRoot, &fileData))
 	{
 		OutputDebugString(L"WanyCore::FBXLoader::Load::Failed Parse Root Node.\n");
 		return false;
@@ -203,7 +203,7 @@ bool FBXLoader::ParseScene(FbxScene* _scene, FBXFileData* _dst)
 	return true;
 }
 
-bool FBXLoader::ParseNode(FbxNode* _node, FBXObject* _dst)
+bool FBXLoader::ParseNode(FbxNode* _node, FBXFileData* _dst)
 {
 	if ((_node == nullptr) || (_dst == nullptr))
 	{
@@ -281,22 +281,25 @@ bool FBXLoader::ParseNode(FbxNode* _node, FBXObject* _dst)
 		}
 	}
 
-
-
-	FbxTime time;
-	UINT StartFrame = _dst->m_animationSceneInfo.StartFrame;
-	UINT EndFrame = _dst->m_animationSceneInfo.EndFrame;
-	FbxTime::EMode TimeMode = _dst->m_animationSceneInfo.TimeMode;
-	for (UINT t = StartFrame; t <= EndFrame; t++)
+	if (isValid)
 	{
-		time.SetFrame(t, TimeMode); // 이게 시간을 많이 잡아먹어서 최대한 적게 호출하는게 좋다.
-		FBXAnimationTrack Track;
-		Track.frame = t;
-		FbxAMatrix fbxMatrix = _node->EvaluateGlobalTransform(time);
-		Track.matAnimation = ConvertToDxMatrix(fbxMatrix);
-		Matrix4x4Decompose(Track.matAnimation , Track.scale, Track.rotation, Track.translation);
-		_dst->m_animationTrackList.push_back(Track);
+		_dst->NodeList.push_back(_node);
 	}
+
+	//FbxTime time;
+	//UINT StartFrame = _dst->m_animationSceneInfo.StartFrame;
+	//UINT EndFrame = _dst->m_animationSceneInfo.EndFrame;
+	//FbxTime::EMode TimeMode = _dst->m_animationSceneInfo.TimeMode;
+	//for (UINT t = StartFrame; t <= EndFrame; t++)
+	//{
+	//	time.SetFrame(t, TimeMode); // 이게 시간을 많이 잡아먹어서 최대한 적게 호출하는게 좋다.
+	//	FBXAnimationTrack Track;
+	//	Track.frame = t;
+	//	FbxAMatrix fbxMatrix = _node->EvaluateGlobalTransform(time);
+	//	Track.matAnimation = ConvertToDxMatrix(fbxMatrix);
+	//	Matrix4x4Decompose(Track.matAnimation , Track.scale, Track.rotation, Track.translation);
+	//	_dst->m_animationTrackList.push_back(Track);
+	//}
 
 	_dst->m_strNodeName = _node->GetName();
 
@@ -1259,6 +1262,54 @@ Matrix4x4 FBXLoader::ConvertToDxMatrix(const FbxAMatrix& _src)
 	rst._44 = 1.0f;
 
 	return rst;
+}
+
+bool FBXLoader::GenerateAnimationTrack(FBXFileData* _data)
+{
+	FbxTime time;
+	UINT StartFrame = _data->AnimationSceneInfo.StartFrame;
+	UINT EndFrame = _data->AnimationSceneInfo.EndFrame;
+	FbxTime::EMode TimeMode = _data->AnimationSceneInfo.TimeMode;
+	std::vector<std::vector<FBXAnimationTrack>> TrackList;
+	size_t NodeNum = _data->NodeList.size();
+	TrackList.resize(NodeNum);
+	for (UINT t = StartFrame; t <= EndFrame; t++)
+	{
+		time.SetFrame(t, TimeMode); // 이게 시간을 많이 잡아먹어서 최대한 적게 호출하는게 좋다.
+		for (size_t NodeIdx = 0; NodeIdx < NodeNum; NodeIdx++)
+		{
+			FbxNode* currentNode = _data->NodeList[NodeIdx];
+			FBXAnimationTrack Track;
+			Track.frame = t;
+			FbxAMatrix fbxMatrix = currentNode->EvaluateGlobalTransform(time);
+			Track.matAnimation = ConvertToDxMatrix(fbxMatrix);
+			Matrix4x4Decompose(Track.matAnimation, Track.scale, Track.rotation, Track.translation);
+
+			
+			TrackList[NodeIdx].push_back(Track);
+			//_data->AnimationTrackMap.insert(std::make_pair(NodeName, Track));
+		}
+		/*for (auto it : _data->NodeList)
+		{
+			FBXAnimationTrack Track;
+			Track.frame = t;
+			FbxAMatrix fbxMatrix = it->EvaluateGlobalTransform(time);
+			Track.matAnimation = ConvertToDxMatrix(fbxMatrix);
+			Matrix4x4Decompose(Track.matAnimation, Track.scale, Track.rotation, Track.translation);
+			
+			std::string NodeName = it->GetName();
+			_data->AnimationTrackMap.insert(std::make_pair(NodeName, Track));
+		}*/
+	}
+
+	for (size_t NodeIdx = 0; NodeIdx < NodeNum; NodeIdx++)
+	{
+		FbxNode* currentNode = _data->NodeList[NodeIdx];
+		std::string NodeName = currentNode->GetName();
+		_data->AnimationTrackMap.insert(std::make_pair(NodeName, TrackList[NodeIdx]));
+	}
+
+	return true;
 }
 
 bool FBXLoader::GenerateObjectFromFileData(FBXFileData* _src, FBXObject* _dst)
