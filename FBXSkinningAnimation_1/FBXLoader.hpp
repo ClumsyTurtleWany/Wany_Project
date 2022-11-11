@@ -38,11 +38,13 @@ private:
 	// Parser
 	bool ParseScene(FbxScene* _scene, FBXFileData* _dst);
 	bool ParseNode(FbxNode* _node, FBXFileData* _dst);
-	bool ParseMesh(FbxMesh* _mesh, FBXObject* _dst);
-	bool ParseMeshSkinning(FbxMesh* _mesh, FBXObject* _dst);
+	bool PreProcess(FBXFileData* _dst);
+	bool ParseMesh(FbxMesh* _mesh, FBXFileData* _dst);
+	bool ParseMeshLayer(FbxMesh* _mesh, MeshData* _dstData);
+	bool ParseMeshSkinning(FbxMesh* _mesh, FBXFileData* _dst, MeshData* _dstData);
+	bool ParseDummy(FbxNull* _dummy, FBXFileData* _dst);
+	bool ParseSkeleton(FbxSkeleton* _skeleton, FBXFileData* _dst);
 	
-	bool ParseDummy(FbxNull* _dummy, FBXObject* _dst);
-	bool ParseSkeleton(FbxSkeleton* _skeleton, FBXObject* _dst);
 	
 	// Read Data
 	bool ReadTextureCoord(FbxLayerElementUV* _uv, int _vertexIdx, int _uvIdx, FbxVector2& _dst);

@@ -153,10 +153,10 @@ bool Cube3D::rotationYawPitchRoll(float _yaw, float _pitch, float _roll)
 bool Map3D::build(int _width, int _height)
 {
 	// width와 height는 2^n + 1 으로 생성하는게 좋다. 그래야 셀이 잘리지 않는다.
-	std::vector<Vertex> VertexList;
+	//std::vector<Vertex> VertexList;
 	int vertexCount = _width * _height;
 	int cellCount = (_width - 1) * (_height - 1); // 셀
-	int faceCount = cellCount * 2;
+	faceCount = cellCount * 2;
 	VertexList.resize(vertexCount);
 
 	int width_half = _width / 2;
@@ -170,19 +170,21 @@ bool Map3D::build(int _width, int _height)
 			VertexList[idx].color = Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
 
 			VertexList[idx].pos = Vector3f(static_cast<float>(col - width_half) * cellDistance,
-				cosf(DegreeToRadian(col)) * 20.0f + sinf(DegreeToRadian(row)) * 20.0f/*0.0f*/,
+				/*cosf(DegreeToRadian(col)) * 20.0f + sinf(DegreeToRadian(row)) * 20.0f*/0.0f,
 				static_cast<float>(height_half - row) * cellDistance);
 
 			VertexList[idx].texture =
 				Vector2f((static_cast<float>(col) / static_cast<float>(_width - 1)) * 10.0f,
 					(static_cast<float>(row) / static_cast<float>(_height - 1)) * 10.0f);
 
+			//VertexList[idx].normal = Vector3f(0.0f, 1.0f, 0.0f);
+
 		}
 	}
 
 	pShader->updateVertexList(&VertexList);
 
-	std::vector<DWORD> IndexList;
+	//std::vector<DWORD> IndexList;
 	int indexCount = faceCount * 3;
 	IndexList.resize(indexCount);
 	size_t idx = 0;
@@ -210,6 +212,66 @@ bool Map3D::build(int _width, int _height)
 	axis.initialize();
 
 	return true;
+}
+
+bool Map3D::LoadHeightMap(std::wstring _filename)
+{
+	// Texture에 접근하기 위해선 CPU에 접근 해야함. 
+
+	return false;
+}
+
+bool Map3D::GenerateNormal()
+{
+	std::vector<Vector3f> FaceNormal;
+	FaceNormal.resize(faceCount);
+	for (size_t idx = 0; idx < IndexList.size(); idx += 3)
+	{
+		DWORD i0 = IndexList[idx + 0];
+		DWORD i1 = IndexList[idx + 1];
+		DWORD i2 = IndexList[idx + 2];
+		FaceNormal[idx / 3] = ComputeFaceNormal(i0, i1, i2);
+	}
+
+	struct VertexFaceInfo
+	{
+		std::vector<UINT> faceIndexList;
+		//std::vector<UINT> edgeList; // 원래는 엣지도 다 가지고 있어야 함.
+		Vector3f normal;
+	};
+	std::vector<VertexFaceInfo> VertexFaceInfoList; // Face Look Up Table
+	VertexFaceInfoList.resize(VertexList.size());
+	for (UINT FaceIdx = 0; FaceIdx < faceCount; FaceIdx++)
+	{
+		for (UINT idx = 0; idx < 3; idx++)
+		{
+			UINT VertexID = IndexList[idx + 0];
+			VertexFaceInfoList[VertexID].faceIndexList.push_back(FaceIdx);
+		}
+	}
+
+	for (UINT VertexIdx = 0; VertexIdx < VertexList.size(); VertexIdx++)
+	{
+		for (UINT idx = 0; idx < VertexFaceInfoList[VertexIdx].faceIndexList.size(); idx++)
+		{
+			UINT FaceID = VertexFaceInfoList[VertexIdx].faceIndexList[idx];
+			VertexFaceInfoList[VertexIdx].normal += FaceNormal[FaceID];
+		}
+		VertexList[VertexIdx].normal = VertexFaceInfoList[VertexIdx].normal.normalized();
+
+
+
+	}
+
+}
+
+Vector3f Map3D::ComputeFaceNormal(DWORD _i0, DWORD _i1, DWORD _i2)
+{
+	Vector3f normal;
+	Vector3f v0 = VertexList[_i1].pos - VertexList[_i0].pos;
+	Vector3f v1 = VertexList[_i2].pos - VertexList[_i0].pos;
+	normal = v0.cross(v1);
+	return normal;
 }
 
 bool Map3D::render()

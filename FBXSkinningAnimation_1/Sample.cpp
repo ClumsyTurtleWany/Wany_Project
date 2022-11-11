@@ -103,6 +103,7 @@ bool Sample::initialize()
             float y = (g_pWindow->getClientHeight() - height) / 2.0f;
 
             pWorldMap = new Map3D;
+            pWorldMap->LoadHeightMap(L"../resource/Map/heightMap513.bmp");
             pWorldMap->createShader(ShaderType::Object3D);
             pWorldMap->setTexture(pTexture);
             pWorldMap->build(513, 513);

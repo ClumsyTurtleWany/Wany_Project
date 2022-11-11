@@ -128,7 +128,7 @@ bool DXShader::render()
 		ID3D11ShaderResourceView* resourceView = m_pTexture->getResourceView();
 		m_pImmediateContext->PSSetShaderResources(0, 1, &resourceView); // 레지스터 0번
 
-		// Alpha 제거 (배경 제거 - 포토샵 누끼 따는 것처럼)
+		// Alpha 제거 (배경 제거 - 포토샵 누끼 따는 것처럼), 이것도 멀티 텍스쳐 랜더링이다.
 		if (m_pTextureMask != nullptr)
 		{
 			ID3D11ShaderResourceView* resourceViewMask = m_pTextureMask->getResourceView();

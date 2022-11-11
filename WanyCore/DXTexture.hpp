@@ -32,6 +32,7 @@ public:
 
 public:
 	HRESULT						Load(std::wstring _filename);
+	HRESULT						LoadEX(std::wstring _filename);
 	
 public:
 	ID3D11Resource*				getResource();

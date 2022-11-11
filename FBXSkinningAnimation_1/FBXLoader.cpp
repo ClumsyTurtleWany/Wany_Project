@@ -138,6 +138,12 @@ bool FBXLoader::Load(std::wstring _path, FBXObject* _dst)
 		return false;
 	}
 
+	if (!PreProcess(&fileData))
+	{
+		OutputDebugString(L"WanyCore::FBXLoader::Load::Failed Pre Process.\n");
+		return false;
+	}
+
 	pRoot->Destroy();
 	pScene->Destroy();
 
@@ -249,7 +255,8 @@ bool FBXLoader::ParseNode(FbxNode* _node, FBXFileData* _dst)
 				if (pDummy != nullptr)
 				{
 					// Dummy: 자식 오브젝트의 원점과 부모 오브젝트의 원점을 맞춰주기 위한 정보.
-					ParseDummy(pDummy, _dst);
+					//ParseDummy(pDummy, _dst);
+					_dst->DummyList.push_back(pDummy);
 				}
 				break;
 			}
@@ -261,7 +268,8 @@ bool FBXLoader::ParseNode(FbxNode* _node, FBXFileData* _dst)
 				if (pSkeleton != nullptr)
 				{
 					// Skeleton: 애니메이션을 위한 정보
-					ParseSkeleton(pSkeleton, _dst);
+					//ParseSkeleton(pSkeleton, _dst);
+					_dst->SkeletonList.push_back(pSkeleton);
 				}
 				break;
 			}
@@ -274,7 +282,8 @@ bool FBXLoader::ParseNode(FbxNode* _node, FBXFileData* _dst)
 				{
 					// Mesh: 랜더 가능한 데이터
 					// Scene graph 형식(트리에 모든 정보를 다 넣어서 저장 후 사용 및 랜더링하는 방식) 이라고 부름.
-					ParseMesh(pMesh, _dst);
+					//ParseMesh(pMesh, _dst);
+					_dst->MeshList.push_back(pMesh);
 				}
 				break;
 			}
@@ -301,50 +310,70 @@ bool FBXLoader::ParseNode(FbxNode* _node, FBXFileData* _dst)
 	//	_dst->m_animationTrackList.push_back(Track);
 	//}
 
-	_dst->m_strNodeName = _node->GetName();
+	
 
 	int childCount = _node->GetChildCount(); // Child 갯수가 0이면 정적 매쉬, 0이 아니면 동적 매쉬로 볼 수 있음.
 	for (int idx = 0; idx < childCount; idx++)
 	{
-		FBXObject* childObject = new FBXObject;
-		childObject->m_animationSceneInfo = _dst->m_animationSceneInfo;
-
-
-		childObject->BindPoseMap.insert(_dst->BindPoseMap.begin(), _dst->BindPoseMap.end());
-		childObject->m_CBData_Bone = _dst->m_CBData_Bone;
-		childObject->BindPoseKeyStringToIdxMap.insert(_dst->BindPoseKeyStringToIdxMap.begin(), _dst->BindPoseKeyStringToIdxMap.end());
-		childObject->BindPoseIdxToKeyStringMap.insert(_dst->BindPoseIdxToKeyStringMap.begin(), _dst->BindPoseIdxToKeyStringMap.end());
-
 		FbxNode* pChild = _node->GetChild(idx);
-		if (isValid |= ParseNode(pChild, childObject))
+		if (isValid |= ParseNode(pChild, _dst))
 		{
-			_dst->child.push_back(childObject);
 		}
 		else
 		{
-			delete childObject;
 		}
 	}
 	
 	return isValid;
 }
 
-bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXObject* _dst)
+bool FBXLoader::PreProcess(FBXFileData* _dst)
+{
+	if (!GenerateAnimationTrack(_dst))
+	{
+
+	}
+
+	for (auto it : _dst->DummyList)
+	{
+		if (!ParseDummy(it, _dst))
+		{
+
+		}
+	}
+
+	for (auto it : _dst->SkeletonList)
+	{
+		if (!ParseSkeleton(it, _dst))
+		{
+
+		}
+	}
+
+	for (auto it : _dst->MeshList)
+	{
+		if (!ParseMesh(it, _dst))
+		{
+
+		}
+	}
+
+	return true;
+}
+
+bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXFileData* _dst)
 {
 	if ((_mesh == nullptr) || (_dst == nullptr))
 	{
 		return false;
 	}
 
-	_dst->m_strDataName = _mesh->GetName();
-	_dst->m_wstrNodeType = L"Mesh";
+	MeshData meshData;
 
-
-	if (!ParseMeshSkinning(_mesh, _dst))
+	if (!ParseMeshSkinning(_mesh, _dst , &meshData))
 	{
 
 	}
-	
 
 	// Layer 개념 필요. 여러번에 걸쳐 동일한 곳에 랜더링 하는것 == 멀티 패스 랜더링. 텍스쳐로 치환하면 멀티 텍스처 랜더링.
 	std::vector<FbxLayerElementUV*> UVList;
@@ -353,6 +382,7 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXObject* _dst)
 	std::vector<FbxLayerElementNormal*> NormalList;
 	
 	int layerCount = _mesh->GetLayerCount();
+	meshData.LayerList.resize(layerCount);
 	for (int layerIdx = 0; layerIdx < layerCount; layerIdx++)
 	{
 		FbxLayer* pLayer = _mesh->GetLayer(layerIdx);
@@ -379,47 +409,28 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXObject* _dst)
 		{
 			NormalList.push_back(pNormal);
 		}
+
+		meshData.LayerList[layerIdx].ElementUV = pUV;
+		meshData.LayerList[layerIdx].ElementColor = pColor;
+		meshData.LayerList[layerIdx].ElementMaterialList = pMaterial;
+		meshData.LayerList[layerIdx].ElementNormalList = pNormal;
 	}
 
 	FbxNode* pNode = _mesh->GetNode(); // 원래는 Mesh가 아닌 Node로 돌리는게 맞다.  
 	// 각 페이스 별로 다른 텍스쳐를 사용 할 수 있다. 이것을 서브 머테리얼 이라고 함. (1개의 오브젝트에 여러개의 텍스쳐 사용)
 	// 서브 머테리얼을 렌더링 하기 위해선 같은 텍스쳐를 사용하는 페이스들을 묶어서 출력.
 	int MaterialCnt = pNode->GetMaterialCount(); // 텍스쳐가 붙은 갯수.
-	
+	meshData.MaterialNameList.resize(MaterialCnt);
 	//std::vector<std::vector<Vertex>> VertexList;
+	for()
 	if (MaterialCnt < 1)
 	{
-		_dst->Materials.resize(1);
+		meshData.Materials.resize(1);
 	}
 	else
 	{
-		_dst->Materials.resize(MaterialCnt);
+		meshData.Materials.resize(MaterialCnt);
 	}
-
-	/*if (MaterialCnt == 0)
-	{
-		VertexList.resize(1);
-		_dst->Materials.resize(1);
-		unsigned int ShaderID = DXShaderManager::getInstance()->getShaderCount();
-		if (DXShaderManager::getInstance()->Load(ShaderID, ShaderType::Object3D))
-		{
-			_dst->Materials[0] = DXShaderManager::getInstance()->getShader(ShaderID);
-		}
-	}
-	else
-	{
-		VertexList.resize(MaterialCnt);
-		_dst->Materials.resize(MaterialCnt);
-		for (size_t idx = 0; idx < MaterialCnt; idx++)
-		{
-			unsigned int ShaderID = DXShaderManager::getInstance()->getShaderCount();
-			if (DXShaderManager::getInstance()->Load(ShaderID, ShaderType::Object3D))
-			{
-				_dst->Materials[idx] = DXShaderManager::getInstance()->getShader(ShaderID);
-			}
-		}
-	}*/
-
 
 	for (int idx = 0; idx < MaterialCnt; idx++)
 	{
@@ -440,21 +451,6 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXObject* _dst)
 	// 노말 성분은 역행렬의 전치 행렬로 곱해 줘야 함.
 	FbxAMatrix normalMatrix = getNormalMatrix(geometryMatrix);
 
-	//// 월드 행렬, 애니메이션에서 사용 하면 안됨. 원래는 밖에서 사용해야 하나 임시로 사용
-	//FbxAMatrix worldMatrix = getWorldMatrix(pNode);
-	//FbxAMatrix normalMatrix_World = getNormalMatrix(worldMatrix);
-	//
-	//
-	//// 글로벌 매트릭스 = 해당 시간대의 로컬 + 월드 합친 것.
-	//FbxTime time;
-	//time.SetFrame(_dst->m_animationSceneInfo.StartFrame, _dst->m_animationSceneInfo.TimeMode);
-	//FbxAMatrix matGlobalTransform = pNode->EvaluateGlobalTransform(time);
-	//FbxAMatrix matNormalGlobal = getNormalMatrix(matGlobalTransform);
-	//
-	//// 최종 월드 행렬 = 자기(애니메이션) 행렬 * 부모(애니메이션) 행렬
-	//// Final World Matrix =  Parent World Matrix * matGlobalTransform
-	////XMMatrixDecompose 매트릭스 분해
-	////matGlobalTransform
 
 	int polyCount = _mesh->GetPolygonCount();
 	// 3정점 = 1폴리곤(Triangle) 일 수도 있고
@@ -612,7 +608,58 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXObject* _dst)
 	return true;
 }
 
-bool FBXLoader::ParseMeshSkinning(FbxMesh* _mesh, FBXObject* _dst)
+bool FBXLoader::ParseMeshLayer(FbxMesh* _mesh, MeshData* _dstData)
+{
+	if (_mesh == nullptr || _dstData == nullptr)
+	{
+		return false;
+	}
+
+	// Layer 개념 필요. 여러번에 걸쳐 동일한 곳에 랜더링 하는것 == 멀티 패스 랜더링. 텍스쳐로 치환하면 멀티 텍스처 랜더링.
+	std::vector<FbxLayerElementUV*> UVList;
+	std::vector<FbxLayerElementVertexColor*> ColorList;
+	std::vector<FbxLayerElementMaterial*> MaterialList;
+	std::vector<FbxLayerElementNormal*> NormalList;
+
+	int layerCount = _mesh->GetLayerCount();
+	_dstData->LayerList.resize(layerCount);
+	for (int layerIdx = 0; layerIdx < layerCount; layerIdx++)
+	{
+		FbxLayer* pLayer = _mesh->GetLayer(layerIdx);
+		FbxLayerElementUV* pUV = pLayer->GetUVs();
+		if (pUV != nullptr)
+		{
+			UVList.push_back(pUV);
+		}
+
+		FbxLayerElementVertexColor* pColor = pLayer->GetVertexColors();
+		if (pColor != nullptr)
+		{
+			ColorList.push_back(pColor);
+		}
+
+		FbxLayerElementMaterial* pMaterial = pLayer->GetMaterials();
+		if (pMaterial != nullptr)
+		{
+			MaterialList.push_back(pMaterial);
+		}
+
+		FbxLayerElementNormal* pNormal = pLayer->GetNormals();
+		if (pNormal != nullptr)
+		{
+			NormalList.push_back(pNormal);
+		}
+
+		_dstData->LayerList[layerIdx].ElementUV = pUV;
+		_dstData->LayerList[layerIdx].ElementColor = pColor;
+		_dstData->LayerList[layerIdx].ElementMaterialList = pMaterial;
+		_dstData->LayerList[layerIdx].ElementNormalList = pNormal;
+	}
+
+	return true;
+}
+
+bool FBXLoader::ParseMeshSkinning(FbxMesh* _mesh, FBXFileData* _dst, MeshData* _dstData)
 {
 	if ((_mesh == nullptr) || (_dst == nullptr))
 	{
@@ -622,7 +669,7 @@ bool FBXLoader::ParseMeshSkinning(FbxMesh* _mesh, FBXObject* _dst)
 	// Skinning
 	// VertexCnt == 메쉬으 정점 개수와 동일해야 한다.
 	int VertexCnt = _mesh->GetControlPointsCount();
-	_dst->SkinningList.resize(VertexCnt);
+	_dstData->SkinningList.resize(VertexCnt);
 
 	// Skinning: 정점에 영향을 주는 행렬들을 찾는 과정.
 	int DeformerCnt = _mesh->GetDeformerCount(FbxDeformer::EDeformerType::eSkin);
@@ -665,10 +712,8 @@ bool FBXLoader::ParseMeshSkinning(FbxMesh* _mesh, FBXObject* _dst)
 
 				//_dst->SkinningList[VertexIndex].setKey(LinkedNodeName);
 				//_dst->SkinningList[VertexIndex].insert(BoneIndex, Weight);
-				_dst->SkinningList[VertexIndex].insert(Weight, LinkedNodeName);
+				_dstData->SkinningList[VertexIndex].insert(Weight, LinkedNodeName);
 			}
-
-			int a = 0;
 
 			// 뼈대 공간으로 변환하는 행렬이 필요하다.
 			// Mesh의 정점들은 월드 행렬 공간에 있기 때문에(애니메이션) 
@@ -683,67 +728,42 @@ bool FBXLoader::ParseMeshSkinning(FbxMesh* _mesh, FBXObject* _dst)
 			//_dst->BindPoseMap.insert(std::make_pair(BoneIndex, matInvBindPose)); // 상수 버퍼 적용 전에 곱해 주고
 			_dst->BindPoseMap.insert(std::make_pair(LinkedNodeName, matInvBindPose)); // 상수 버퍼 적용 전에 곱해 주고
 		}
-		int b = 0;
+		
 	}
 
-	int NodeIdx = 0;
+	/*int NodeIdx = 0;
 	for (auto it : _dst->BindPoseMap)
 	{
 		_dst->m_CBData_Bone.matBone[NodeIdx] = it.second;
 		_dst->BindPoseKeyStringToIdxMap.insert(std::make_pair(it.first, NodeIdx));
 		_dst->BindPoseIdxToKeyStringMap.insert(std::make_pair(NodeIdx, it.first));
 		NodeIdx++;
-	}
+	}*/
 
 	return true;
 }
 
-bool FBXLoader::ParseDummy(FbxNull* _dummy, FBXObject* _dst)
+bool FBXLoader::ParseDummy(FbxNull* _dummy, FBXFileData* _dst)
 {
 	if ((_dummy == nullptr) || (_dst == nullptr))
 	{
 		return false;
 	}
 
-	_dst->m_strDataName = _dummy->GetName();
-	_dst->m_wstrNodeType = L"Null";
+	_dst->DummyList.push_back(_dummy);
+
 	return true;
 }
 
-bool FBXLoader::ParseSkeleton(FbxSkeleton* _skeleton, FBXObject* _dst)
+bool FBXLoader::ParseSkeleton(FbxSkeleton* _skeleton, FBXFileData* _dst)
 {
 	if ((_skeleton == nullptr) || (_dst == nullptr))
 	{
 		return false;
 	}
 
-	_dst->m_strDataName = _skeleton->GetName();
+	_dst->SkeletonList.push_back(_skeleton);
 
-	int DstObjectCnt = _skeleton->GetDstObjectCount();
-	for (int i = 0; i < DstObjectCnt; i++)
-	{
-		FbxObject* pObject = _skeleton->GetDstObject(i);
-		if (pObject != nullptr)
-		{
-			_dst->m_strTargetName.push_back(pObject->GetName());
-		}
-	}
-
-	int SrcObjectCnt = _skeleton->GetSrcObjectCount();
-	for (int i = 0; i < SrcObjectCnt; i++)
-	{
-		FbxObject* pObject = _skeleton->GetSrcObject(i);
-		if (pObject != nullptr)
-		{
-			_dst->m_strTargetName.push_back(pObject->GetName());
-		}
-	}
-
-	FbxSkeleton::EType skeletonType = _skeleton->GetSkeletonType();
-	FbxColor skeletonColor = _skeleton->GetLimbNodeColor();
-	double limbNodeSize = _skeleton->GetLimbNodeSizeDefaultValue();
-	
-	_dst->m_wstrNodeType = L"Skeleton";
 	return true;
 }
 
@@ -1285,28 +1305,60 @@ bool FBXLoader::GenerateAnimationTrack(FBXFileData* _data)
 			Track.matAnimation = ConvertToDxMatrix(fbxMatrix);
 			Matrix4x4Decompose(Track.matAnimation, Track.scale, Track.rotation, Track.translation);
 
-			
 			TrackList[NodeIdx].push_back(Track);
-			//_data->AnimationTrackMap.insert(std::make_pair(NodeName, Track));
 		}
-		/*for (auto it : _data->NodeList)
-		{
-			FBXAnimationTrack Track;
-			Track.frame = t;
-			FbxAMatrix fbxMatrix = it->EvaluateGlobalTransform(time);
-			Track.matAnimation = ConvertToDxMatrix(fbxMatrix);
-			Matrix4x4Decompose(Track.matAnimation, Track.scale, Track.rotation, Track.translation);
-			
-			std::string NodeName = it->GetName();
-			_data->AnimationTrackMap.insert(std::make_pair(NodeName, Track));
-		}*/
 	}
 
 	for (size_t NodeIdx = 0; NodeIdx < NodeNum; NodeIdx++)
 	{
+		// Original Animation Track List Map.
 		FbxNode* currentNode = _data->NodeList[NodeIdx];
 		std::string NodeName = currentNode->GetName();
 		_data->AnimationTrackMap.insert(std::make_pair(NodeName, TrackList[NodeIdx]));
+
+		// Generate Matrix List Map of Interpolation Animation.
+		size_t TrackSize = TrackList[NodeIdx].size();
+		std::vector<Matrix4x4> InterpolationMatrixList;
+		InterpolationMatrixList.resize(TrackSize * _data->InterpolationSampling);
+		for (size_t FrameIdx = 0; FrameIdx < TrackSize; FrameIdx++)
+		{
+			FBXAnimationTrack A, B;
+			UINT FrameA = max(FrameIdx + 0, _data->AnimationSceneInfo.StartFrame);
+			UINT FrameB = min(FrameIdx + 1, _data->AnimationSceneInfo.EndFrame);
+			A = TrackList[NodeIdx][FrameA];
+			B = TrackList[NodeIdx][FrameB];
+			if (A.frame == B.frame) // End Frame
+			{
+				//InterpolationMatrixList[FrameIdx] = TrackList[NodeIdx][FrameIdx].matAnimation;
+				InterpolationMatrixList.push_back(TrackList[NodeIdx][FrameIdx].matAnimation);
+				continue;
+			}
+
+			//float t = (FrameIdx - A.frame) / (B.frame - A.frame);
+			float tick = 1.0f / _data->InterpolationSampling; // Sampling 수 만큼 보간.
+			for (float t = 0.0f; t < 1.0f; t += tick)
+			{
+				Vector3f translation = LinearInterpolation(A.translation, B.translation, t);
+				Vector3f scale = LinearInterpolation(A.scale, B.scale, t);
+				Matrix4x4 matScale;
+				matScale.Identity();
+				matScale._11 = scale.x;
+				matScale._22 = scale.y;
+				matScale._33 = scale.z;
+				Vector4f qRotation = SphereLinearInterpolation(A.rotation, B.rotation, t);
+				Matrix4x4 matRotation = QuaternionToMatrix4x4(qRotation);
+				Matrix4x4 rst = matScale * matRotation;
+				rst._41 = translation.x;
+				rst._42 = translation.y;
+				rst._43 = translation.z;
+
+				//InterpolationMatrixList[FrameIdx] = rst;
+				InterpolationMatrixList.push_back(rst);
+			}
+			_data->InterpolationFrameMatrixList.insert(std::make_pair(NodeName, InterpolationMatrixList));
+
+		}
+
 	}
 
 	return true;

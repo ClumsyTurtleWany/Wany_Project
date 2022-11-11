@@ -77,7 +77,6 @@ struct Material
 	std::vector<DWORD> IndexList;
 	std::vector<IndexWeightData> IWList;
 	
-
 	std::wstring DiffuseTexture;
 
 	bool isValid()
@@ -144,6 +143,11 @@ struct Material
 
 struct Layer
 {
+	FbxLayerElementUV*			ElementUV = nullptr;
+	FbxLayerElementVertexColor* ElementColor = nullptr;
+	FbxLayerElementMaterial*	ElementMaterialList = nullptr;
+	FbxLayerElementNormal*		ElementNormalList = nullptr;
+
 	std::vector<Material> MaterialList;
 	void render()
 	{
@@ -154,9 +158,11 @@ struct Layer
 	}
 };
 
-struct Mesh
+struct MeshData
 {
 	std::vector<Layer> LayerList;
+	std::vector<SkinningData> SkinningList;
+	std::vector<std::wstring> MaterialNameList; // Texture File Name
 
 	void render()
 	{
@@ -167,29 +173,39 @@ struct Mesh
 	}
 };
 
+
 struct FBXVertex
 {
+	FbxVector4 Position;
+	FbxVector2 TexUV;
+	FbxVector4 Normal;
+	FbxVector4 Color;
+
 	Vertex vertex;
+	DWORD index;
 	IndexWeightData IWData;
 	SkinningData skinningData;
-
-
 };
+
+using FBXAnimationTrackList = std::vector<FBXAnimationTrack>;
 
 class FBXFileData
 {
 public:
-	FBXAnimationSceneInfo						AnimationSceneInfo;
-	std::map<std::string, std::vector<FBXAnimationTrack>>	AnimationTrackMap;
-	std::map<std::string, Matrix4x4>			BindPoseMap;
+	FBXAnimationSceneInfo							AnimationSceneInfo;
+	std::map<std::string, FBXAnimationTrackList>	AnimationTrackMap;
 
-	std::vector<FbxNode*>						NodeList;
-	std::vector<FbxMesh*>						MeshList;
-	std::vector<FbxSkeleton*>					SkeletonList;
+	float InterpolationSampling = 100.0f;
+	std::map<std::string, std::vector<Matrix4x4>>	InterpolationFrameMatrixList;
 
-	std::vector<Layer>							LayerList;
+	std::map<std::string, Matrix4x4>				BindPoseMap;
 
+	std::vector<FbxNode*>							NodeList;
+	std::vector<FbxMesh*>							MeshList;
+	std::vector<FbxNull*>							DummyList;
+	std::vector<FbxSkeleton*>						SkeletonList;
 
+	std::vector<MeshData>							MeshDataList;
 
 };
 

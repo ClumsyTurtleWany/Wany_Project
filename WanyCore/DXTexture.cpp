@@ -50,6 +50,55 @@ HRESULT DXTexture::Load(std::wstring _filename)
 	return rst;
 }
 
+HRESULT DXTexture::LoadEX(std::wstring _filename)
+{
+	// 텍스처에 접근하기 위해서는 CPU에 접근해야 하고,
+	// CPU에 접근하는 방법은 스테이징 밖에 없다.
+	HRESULT rst = DirectX::CreateWICTextureFromFileEx(m_pd3dDevice, _filename.c_str(), 0, D3D11_USAGE_STAGING, 0, D3D10_CPU_ACCESS_READ | D3D10_CPU_ACCESS_WRITE, 0, DirectX::WIC_LOADER_DEFAULT,  (ID3D11Resource**)&m_pTextureResource, nullptr);
+	if (FAILED(rst))
+	{
+		return rst;
+	}
+
+	ID3D11Texture2D* pTexture2D = NULL;
+	rst = pTexture2D->QueryInterface(__uuidof(ID3D11Texture2D), (LPVOID*)&pTexture2D);
+	if (FAILED(rst))
+	{
+		return rst;
+	}
+
+	pTexture2D->GetDesc(&m_Desc);
+
+	// CPU 접근 방법. 컨텍스트로 접근 가능.
+	D3D11_MAPPED_SUBRESOURCE MappedFaceDest; // 핵심 리소스
+	//void* pData; // 배열의 시작 주소
+	//UINT RowPitch; // 한줄의 길이, DX는 기본적으로 여분을 가지고 있어서 Texture Width * Pixel Byte 보다 큰 값을 가질 수 있다. 
+	//UINT DepthPitch; // 
+	rst = m_pImmediateContext->Map(pTexture2D, D3D11CalcSubresource(0, 0, 1), D3D11_MAP_READ, 0, &MappedFaceDest); // CPU에 접근
+	if (SUCCEEDED(rst))
+	{
+		std::vector<UINT> resultList;
+		resultList.resize(m_Desc.Height * m_Desc.Width);
+		UCHAR* pTexels = (UCHAR*)MappedFaceDest.pData;
+		for (UINT row = 0; row < m_Desc.Height; row++)
+		{
+			UINT rowStart = row * MappedFaceDest.RowPitch; // 줄단위로 넘어가야함.
+			for (UINT col = 0; col < m_Desc.Width; col++)
+			{
+				UINT colStart = col * 4; // 4Byte씩 움직임.
+				UINT Red = pTexels[rowStart + colStart + 0]; // 결과 값.
+				resultList[row * m_Desc.Width + col] = Red; //static_cast<float>(Red) / 255.0f;
+			}
+		}
+
+		m_pImmediateContext->Unmap(pTexture2D, D3D11CalcSubresource(0, 0, 1)); // Unmap 전에는 어느 텍스처에도 접근 불가.
+		return rst;
+	}
+
+	pTexture2D->Release();
+	return rst;;
+}
+
 ID3D11Resource* DXTexture::getResource()
 {
 	return m_pTextureResource;

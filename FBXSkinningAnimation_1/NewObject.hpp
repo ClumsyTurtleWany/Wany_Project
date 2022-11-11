@@ -88,6 +88,9 @@ public:
 	int width = 0;
 	int height = 0;
 	Vector3f curPos;
+	UINT faceCount = 0;
+	std::vector<Vertex> VertexList;
+	std::vector<DWORD> IndexList;
 
 public:
 	virtual bool render() override;
@@ -95,4 +98,7 @@ public:
 
 public:
 	bool build(int _width, int _height);	
+	bool LoadHeightMap(std::wstring _filename);
+	bool GenerateNormal();
+	Vector3f ComputeFaceNormal(DWORD _i0, DWORD _i1, DWORD _i2);
 };

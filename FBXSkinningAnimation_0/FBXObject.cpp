@@ -101,7 +101,7 @@ bool FBXObject::frame(float _dt)
 		m_AnimationInverse *= -1.0f;
 	}
 
-	m_currentAnimationFrame = 0.0f;
+	//m_currentAnimationFrame = 0.0f;
 
 	Matrix4x4 matInterpolationAnimation = interpolation(m_currentAnimationFrame);
 	Matrix4x4 matAnimationTranspose = matInterpolationAnimation.Transpose();
