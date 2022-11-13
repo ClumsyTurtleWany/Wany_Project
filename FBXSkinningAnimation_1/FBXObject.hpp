@@ -73,6 +73,8 @@ struct SkinningData
 struct Material
 {
 	DXShader* Shader = nullptr;
+	FbxSurfaceMaterial* Surface;
+
 	std::vector<Vertex> VertexList;
 	std::vector<DWORD> IndexList;
 	std::vector<IndexWeightData> IWList;
@@ -162,6 +164,8 @@ struct MeshData
 {
 	std::vector<Layer> LayerList;
 	std::vector<SkinningData> SkinningList;
+
+	int MaterialNum = 0;
 	std::vector<std::wstring> MaterialNameList; // Texture File Name
 
 	void render()
@@ -189,6 +193,37 @@ struct FBXVertex
 
 using FBXAnimationTrackList = std::vector<FBXAnimationTrack>;
 
+struct FBXNodeData
+{
+	// Node Type
+	FbxNodeAttribute::EType AttributeType;
+
+	// Node Name
+	std::string				Name;
+
+	FbxNode*				Node = nullptr;
+	FbxMesh*				Mesh = nullptr;
+	FbxNull*				Dummy = nullptr;
+	FbxSkeleton*			Skeleton = nullptr;
+
+	// Local Geometry Matrix
+	FbxAMatrix				LocalGeometryMatrix;
+	FbxAMatrix				LocalNormalMatrix;
+
+	// Bind Pose Matrix
+	Matrix4x4				BindPoseMatrix;
+
+	// Original Animation Track
+	FBXAnimationTrackList	AnimationTrack;
+	// Interpolation Animation Track
+	std::vector<Matrix4x4>	InterpolationFrameMatrix;
+
+	int MaterialNum = 0;
+	std::vector<Material> Materials;
+};
+
+
+
 class FBXFileData
 {
 public:
@@ -199,12 +234,16 @@ public:
 	std::map<std::string, std::vector<Matrix4x4>>	InterpolationFrameMatrixList;
 
 	std::map<std::string, Matrix4x4>				BindPoseMap;
+	std::map<std::string, FbxAMatrix>				LocalGeometryMatrixMap;
+	std::map<std::string, FbxAMatrix>				NormalMatrixMap;
 
 	std::vector<FbxNode*>							NodeList;
+	std::vector<std::string>						NodeNameList;
 	std::vector<FbxMesh*>							MeshList;
 	std::vector<FbxNull*>							DummyList;
 	std::vector<FbxSkeleton*>						SkeletonList;
 
+	std::vector<FBXNodeData>						NodeDataList;
 	std::vector<MeshData>							MeshDataList;
 
 };

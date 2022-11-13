@@ -218,6 +218,9 @@ bool FBXLoader::ParseNode(FbxNode* _node, FBXFileData* _dst)
 	}
 
 	bool isValid = false;
+
+	FBXNodeData NodeData;
+	NodeData.Name = _node->GetName();
 	FbxNodeAttribute* pAttribute = _node->GetNodeAttribute();
 	if (pAttribute != nullptr)
 	{
@@ -245,18 +248,20 @@ bool FBXLoader::ParseNode(FbxNode* _node, FBXFileData* _dst)
 		// eCachedEffect,
 		// eLine
 
-		FbxNodeAttribute::EType attributeType = pAttribute->GetAttributeType();
-		switch (attributeType)
+		//FbxNodeAttribute::EType attributeType = pAttribute->GetAttributeType();
+		NodeData.AttributeType = pAttribute->GetAttributeType();
+		switch (NodeData.AttributeType)
 		{
 			case FbxNodeAttribute::EType::eNull: // 보통 Root 노드는 NULL을 가짐.
 			{
 				isValid = true;
-				FbxNull* pDummy = _node->GetNull();
-				if (pDummy != nullptr)
+				//FbxNull* pDummy = _node->GetNull();
+				NodeData.Dummy = _node->GetNull();
+				if (NodeData.Dummy != nullptr)
 				{
 					// Dummy: 자식 오브젝트의 원점과 부모 오브젝트의 원점을 맞춰주기 위한 정보.
 					//ParseDummy(pDummy, _dst);
-					_dst->DummyList.push_back(pDummy);
+					_dst->DummyList.push_back(NodeData.Dummy);
 				}
 				break;
 			}
@@ -264,12 +269,13 @@ bool FBXLoader::ParseNode(FbxNode* _node, FBXFileData* _dst)
 			case FbxNodeAttribute::EType::eSkeleton:
 			{
 				isValid = true;
-				FbxSkeleton* pSkeleton = _node->GetSkeleton();
-				if (pSkeleton != nullptr)
+				//FbxSkeleton* pSkeleton = _node->GetSkeleton();
+				NodeData.Skeleton = _node->GetSkeleton();
+				if (NodeData.Skeleton != nullptr)
 				{
 					// Skeleton: 애니메이션을 위한 정보
 					//ParseSkeleton(pSkeleton, _dst);
-					_dst->SkeletonList.push_back(pSkeleton);
+					_dst->SkeletonList.push_back(NodeData.Skeleton);
 				}
 				break;
 			}
@@ -277,13 +283,14 @@ bool FBXLoader::ParseNode(FbxNode* _node, FBXFileData* _dst)
 			case FbxNodeAttribute::EType::eMesh:
 			{
 				isValid = true;
-				FbxMesh* pMesh = _node->GetMesh();
-				if (pMesh != nullptr)
+				//FbxMesh* pMesh = _node->GetMesh();
+				NodeData.Mesh = _node->GetMesh();
+				if (NodeData.Mesh != nullptr)
 				{
 					// Mesh: 랜더 가능한 데이터
 					// Scene graph 형식(트리에 모든 정보를 다 넣어서 저장 후 사용 및 랜더링하는 방식) 이라고 부름.
 					//ParseMesh(pMesh, _dst);
-					_dst->MeshList.push_back(pMesh);
+					_dst->MeshList.push_back(NodeData.Mesh);
 				}
 				break;
 			}
@@ -293,24 +300,37 @@ bool FBXLoader::ParseNode(FbxNode* _node, FBXFileData* _dst)
 	if (isValid)
 	{
 		_dst->NodeList.push_back(_node);
+		_dst->NodeNameList.push_back(NodeData.Name);
+
+		// 로컬 행렬
+		// Affine 행렬은 정점 변환 할 때, 그냥 행렬은 행렬 끼리 연산 할 때 사용
+		NodeData.LocalGeometryMatrix = getGeometryMatrix(_node); // 기하 행렬. 초기 정점 위치를 변환 할 때 사용. 로컬 행렬. 이 매트릭스를 적용해 바뀌지 않으면 월드 행렬에서 변환. 정점 변환.
+		_dst->LocalGeometryMatrixMap.insert(std::make_pair(NodeData.Name, NodeData.LocalGeometryMatrix));
+
+		// 노말 성분은 역행렬의 전치 행렬로 곱해 줘야 함.
+		NodeData.LocalNormalMatrix = getNormalMatrix(NodeData.LocalGeometryMatrix);
+		_dst->NormalMatrixMap.insert(std::make_pair(NodeData.Name, NodeData.LocalGeometryMatrix));
+
+
+		// 각 페이스 별로 다른 텍스쳐를 사용 할 수 있다. 이것을 서브 머테리얼 이라고 함. (1개의 오브젝트에 여러개의 텍스쳐 사용)
+		// 서브 머테리얼을 렌더링 하기 위해선 같은 텍스쳐를 사용하는 페이스들을 묶어서 출력.
+		NodeData.MaterialNum = _node->GetMaterialCount(); // 텍스쳐가 붙은 갯수.
+		for (int idx = 0; idx < NodeData.MaterialNum; idx++)
+		{
+			Material material;
+			// 텍스처 정보를 가져오기 위한 것. 보통 1개의 Surface에 24개 이상의 텍스쳐가 붙어 있다.(24종 이상의 텍스쳐 방식이 존재한다.)
+			// 텍스쳐 맵을 가지고 있다(ex. 마스크 텍스처처럼 알파를 가진 놈들 등 여러가지 종류가 있음.)
+			material.Surface = _node->GetMaterial(idx);
+			if (material.Surface != nullptr)
+			{
+				material.DiffuseTexture = getTextureFileName(material.Surface, FbxSurfaceMaterial::sDiffuse);
+			}
+
+			NodeData.Materials.push_back(material);
+		}
+
+		_dst->NodeDataList.push_back(NodeData);
 	}
-
-	//FbxTime time;
-	//UINT StartFrame = _dst->m_animationSceneInfo.StartFrame;
-	//UINT EndFrame = _dst->m_animationSceneInfo.EndFrame;
-	//FbxTime::EMode TimeMode = _dst->m_animationSceneInfo.TimeMode;
-	//for (UINT t = StartFrame; t <= EndFrame; t++)
-	//{
-	//	time.SetFrame(t, TimeMode); // 이게 시간을 많이 잡아먹어서 최대한 적게 호출하는게 좋다.
-	//	FBXAnimationTrack Track;
-	//	Track.frame = t;
-	//	FbxAMatrix fbxMatrix = _node->EvaluateGlobalTransform(time);
-	//	Track.matAnimation = ConvertToDxMatrix(fbxMatrix);
-	//	Matrix4x4Decompose(Track.matAnimation , Track.scale, Track.rotation, Track.translation);
-	//	_dst->m_animationTrackList.push_back(Track);
-	//}
-
-	
 
 	int childCount = _node->GetChildCount(); // Child 갯수가 0이면 정적 매쉬, 0이 아니면 동적 매쉬로 볼 수 있음.
 	for (int idx = 0; idx < childCount; idx++)
@@ -334,7 +354,7 @@ bool FBXLoader::PreProcess(FBXFileData* _dst)
 
 	}
 
-	for (auto it : _dst->DummyList)
+	/*for (auto it : _dst->DummyList)
 	{
 		if (!ParseDummy(it, _dst))
 		{
@@ -356,12 +376,30 @@ bool FBXLoader::PreProcess(FBXFileData* _dst)
 		{
 
 		}
+	}*/
+
+	for (auto it : _dst->NodeDataList)
+	{
+		if (!ParseDummy(it.Dummy, _dst))
+		{
+
+		}
+
+		if (!ParseSkeleton(it.Skeleton, _dst))
+		{
+
+		}
+
+		if (!ParseMesh(it.Mesh, _dst, &it))
+		{
+
+		}
 	}
 
 	return true;
 }
 
-bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXFileData* _dst)
+bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXFileData* _dst, FBXNodeData* _dstData)
 {
 	if ((_mesh == nullptr) || (_dst == nullptr))
 	{
@@ -416,42 +454,45 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXFileData* _dst)
 		meshData.LayerList[layerIdx].ElementNormalList = pNormal;
 	}
 
-	FbxNode* pNode = _mesh->GetNode(); // 원래는 Mesh가 아닌 Node로 돌리는게 맞다.  
-	// 각 페이스 별로 다른 텍스쳐를 사용 할 수 있다. 이것을 서브 머테리얼 이라고 함. (1개의 오브젝트에 여러개의 텍스쳐 사용)
-	// 서브 머테리얼을 렌더링 하기 위해선 같은 텍스쳐를 사용하는 페이스들을 묶어서 출력.
-	int MaterialCnt = pNode->GetMaterialCount(); // 텍스쳐가 붙은 갯수.
-	meshData.MaterialNameList.resize(MaterialCnt);
-	//std::vector<std::vector<Vertex>> VertexList;
-	for()
-	if (MaterialCnt < 1)
-	{
-		meshData.Materials.resize(1);
-	}
-	else
-	{
-		meshData.Materials.resize(MaterialCnt);
-	}
+	//FbxNode* pNode = _mesh->GetNode(); // 원래는 Mesh가 아닌 Node로 돌리는게 맞다.  
+	//// 각 페이스 별로 다른 텍스쳐를 사용 할 수 있다. 이것을 서브 머테리얼 이라고 함. (1개의 오브젝트에 여러개의 텍스쳐 사용)
+	//// 서브 머테리얼을 렌더링 하기 위해선 같은 텍스쳐를 사용하는 페이스들을 묶어서 출력.
+	//int MaterialCnt = pNode->GetMaterialCount(); // 텍스쳐가 붙은 갯수.
+	//meshData.MaterialNameList.resize(MaterialCnt);
+	////std::vector<std::vector<Vertex>> VertexList;
+	//for (size_t LayerIdx = 0; LayerIdx < layerCount; LayerIdx++)
+	//{
+	//	if (MaterialCnt < 1)
+	//	{
+	//		meshData.LayerList[LayerIdx].MaterialList.resize(1);
+	//	}
+	//	else
+	//	{
+	//		meshData.LayerList[LayerIdx].MaterialList.resize(MaterialCnt);
+	//	}
+	//}
 
-	for (int idx = 0; idx < MaterialCnt; idx++)
-	{
-		// 텍스처 정보를 가져오기 위한 것. 보통 1개의 Surface에 24개 이상의 텍스쳐가 붙어 있다.(24종 이상의 텍스쳐 방식이 존재한다.)
-		// 텍스쳐 맵을 가지고 있다(ex. 마스크 텍스처처럼 알파를 가진 놈들 등 여러가지 종류가 있음.)
-		FbxSurfaceMaterial* pSurface = pNode->GetMaterial(idx);
-		if (pSurface != nullptr)
-		{
-			_dst->Materials[idx].DiffuseTexture = getTextureFileName(pSurface, FbxSurfaceMaterial::sDiffuse);
-		}
-	}
-
-
-	// 로컬 행렬
-	// Affine 행렬은 정점 변환 할 때, 그냥 행렬은 행렬 끼리 연산 할 때 사용
-	FbxAMatrix geometryMatrix = getGeometryMatrix(pNode); // 기하 행렬. 초기 정점 위치를 변환 할 때 사용. 로컬 행렬. 이 매트릭스를 적용해 바뀌지 않으면 월드 행렬에서 변환. 정점 변환.
-
-	// 노말 성분은 역행렬의 전치 행렬로 곱해 줘야 함.
-	FbxAMatrix normalMatrix = getNormalMatrix(geometryMatrix);
+	//for (int idx = 0; idx < MaterialCnt; idx++)
+	//{
+	//	// 텍스처 정보를 가져오기 위한 것. 보통 1개의 Surface에 24개 이상의 텍스쳐가 붙어 있다.(24종 이상의 텍스쳐 방식이 존재한다.)
+	//	// 텍스쳐 맵을 가지고 있다(ex. 마스크 텍스처처럼 알파를 가진 놈들 등 여러가지 종류가 있음.)
+	//	FbxSurfaceMaterial* pSurface = pNode->GetMaterial(idx);
+	//	if (pSurface != nullptr)
+	//	{
+	//		_dst->Materials[idx].DiffuseTexture = getTextureFileName(pSurface, FbxSurfaceMaterial::sDiffuse);
+	//	}
+	//}
 
 
+	//// 로컬 행렬
+	//// Affine 행렬은 정점 변환 할 때, 그냥 행렬은 행렬 끼리 연산 할 때 사용
+	//FbxAMatrix geometryMatrix = getGeometryMatrix(pNode); // 기하 행렬. 초기 정점 위치를 변환 할 때 사용. 로컬 행렬. 이 매트릭스를 적용해 바뀌지 않으면 월드 행렬에서 변환. 정점 변환.
+
+	//// 노말 성분은 역행렬의 전치 행렬로 곱해 줘야 함.
+	//FbxAMatrix normalMatrix = getNormalMatrix(geometryMatrix);
+
+
+	size_t LayerIdx = 0;
 	int polyCount = _mesh->GetPolygonCount();
 	// 3정점 = 1폴리곤(Triangle) 일 수도 있고
 	// 4정점 = 1폴리곤(Quad) 일 수도 있다.
@@ -465,7 +506,7 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXFileData* _dst)
 		int faceCount = polySize - 2;
 		if (!MaterialList.empty())
 		{
-			MaterialIdx = getSubMaterialIndex(MaterialList[0], polyIdx);
+			MaterialIdx = getSubMaterialIndex(MaterialList[LayerIdx], polyIdx);
 		}
 
 		for (int faceIdx = 0; faceIdx < faceCount; faceIdx++)
@@ -515,7 +556,7 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXFileData* _dst)
 				int uvidx = UVidx[idx];
 				if (!UVList.empty())
 				{
-					if (ReadTextureCoord(UVList[0], vertexIdx, uvidx, tex))
+					if (ReadTextureCoord(UVList[LayerIdx], vertexIdx, uvidx, tex))
 					{
 						texture.x = tex.mData[0];
 						texture.y = 1.0f - tex.mData[1];
@@ -526,7 +567,7 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXFileData* _dst)
 				{
 					int colorIdx = basePolyIdx + vertexColorIdx[idx];
 					FbxColor fbxColor;
-					if (ReadColorCoord(ColorList[0], vertexIdx, colorIdx, fbxColor))
+					if (ReadColorCoord(ColorList[LayerIdx], vertexIdx, colorIdx, fbxColor))
 					{
 						color.x = fbxColor.mRed;
 						color.y = fbxColor.mGreen;
@@ -540,7 +581,7 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXFileData* _dst)
 				{
 					int normalIdx = basePolyIdx + vertexColorIdx[idx];
 					FbxVector4 fbxNormal;
-					if (ReadNormal(NormalList[0], vertexIdx, normalIdx, fbxNormal))
+					if (ReadNormal(NormalList[LayerIdx], vertexIdx, normalIdx, fbxNormal))
 					{
 						fbxNormal = normalMatrix.MultT(fbxNormal);
 						//fbxNormal = normalMatrix_World.MultT(fbxNormal); // 월드 변환. 나중에 뺄 것.
