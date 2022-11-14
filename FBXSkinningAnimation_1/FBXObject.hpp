@@ -219,9 +219,9 @@ struct FBXNodeData
 
 	int MaterialNum = 0;
 	std::vector<Material> Materials;
+
+	std::vector<SkinningData> SkinningList;
 };
-
-
 
 class FBXFileData
 {

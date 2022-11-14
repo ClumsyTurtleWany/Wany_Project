@@ -77,8 +77,9 @@ HRESULT DXTexture::LoadEX(std::wstring _filename)
 	rst = m_pImmediateContext->Map(pTexture2D, D3D11CalcSubresource(0, 0, 1), D3D11_MAP_READ, 0, &MappedFaceDest); // CPU에 접근
 	if (SUCCEEDED(rst))
 	{
-		std::vector<UINT> resultList;
-		resultList.resize(m_Desc.Height * m_Desc.Width);
+		//std::vector<UINT> resultList;
+		//resultList.resize(m_Desc.Height * m_Desc.Width);
+		MappedResourceData.resize(m_Desc.Height * m_Desc.Width);
 		UCHAR* pTexels = (UCHAR*)MappedFaceDest.pData;
 		for (UINT row = 0; row < m_Desc.Height; row++)
 		{
@@ -87,7 +88,8 @@ HRESULT DXTexture::LoadEX(std::wstring _filename)
 			{
 				UINT colStart = col * 4; // 4Byte씩 움직임.
 				UINT Red = pTexels[rowStart + colStart + 0]; // 결과 값.
-				resultList[row * m_Desc.Width + col] = Red; //static_cast<float>(Red) / 255.0f;
+				//resultList[row * m_Desc.Width + col] = Red; //static_cast<float>(Red) / 255.0f;
+				MappedResourceData[row * m_Desc.Width + col] = Red; //static_cast<float>(Red) / 255.0f;
 			}
 		}
 
@@ -96,7 +98,7 @@ HRESULT DXTexture::LoadEX(std::wstring _filename)
 	}
 
 	pTexture2D->Release();
-	return rst;;
+	return rst;
 }
 
 ID3D11Resource* DXTexture::getResource()
@@ -122,6 +124,12 @@ float DXTexture::getHeight()
 std::wstring DXTexture::getFileName()
 {
 	return m_wstrFileName;
+}
+
+std::vector<UINT>& DXTexture::getMappedResource()
+{
+	return MappedResourceData;
+	// TODO: 여기에 return 문을 삽입합니다.
 }
 
 bool DXTexture::release()

@@ -599,7 +599,7 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXFileData* _dst, FBXNodeData* _dstDa
 				}
 				else
 				{
-					SkinningData skinData = _dst->SkinningList[vertexIdx];
+					SkinningData skinData = _dstData->SkinningList[vertexIdx];
 					std::vector<SkinWeight> SkinWeightList;
 					for (auto it = skinData.SkinWeightList.begin(); it != skinData.SkinWeightList.end(); it++)
 					{
@@ -611,7 +611,7 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXFileData* _dst, FBXNodeData* _dstDa
 					{
 						if (SkinWeightIdx < 4)
 						{
-							IWData.index.v[SkinWeightIdx] = _dst->BindPoseKeyStringToIdxMap.find(SkinWeightList[SkinWeightIdx].BoneName)->second;
+							IWData.index.v[SkinWeightIdx] = 0; //_dst->BindPoseKeyStringToIdxMap.find(SkinWeightList[SkinWeightIdx].BoneName)->second;
 							IWData.weight.v[SkinWeightIdx] = SkinWeightList[SkinWeightIdx].weight;
 						}
 						else
@@ -620,7 +620,7 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXFileData* _dst, FBXNodeData* _dstDa
 						}
 					}
 
-					_dst->Materials[MaterialIdx].push_back(Vertex(pos, normal, color, texture), IWData);
+					_dstData->Materials[MaterialIdx].push_back(Vertex(pos, normal, color, texture), IWData);
 				}
 			}
 
@@ -630,7 +630,7 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXFileData* _dst, FBXNodeData* _dstDa
 		basePolyIdx += polySize;
 	}
 
-	for (size_t idx = 0; idx < _dst->Materials.size(); idx++)
+	/*for (size_t idx = 0; idx < _dst->Materials.size(); idx++)
 	{
 		if (_dst->Materials[idx].isValid())
 		{
@@ -644,7 +644,7 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXFileData* _dst, FBXNodeData* _dstDa
 				}
 			}
 		}
-	}
+	}*/
 
 	return true;
 }

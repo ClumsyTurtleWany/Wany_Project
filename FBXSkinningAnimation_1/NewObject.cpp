@@ -207,6 +207,8 @@ bool Map3D::build(int _width, int _height)
 
 	pShader->updateIndexList(&IndexList);
 
+	GenerateNormal();
+
 	axis.createShader(ShaderType::Axis3D);
 	axis.setAxisSize(_width * 2.0f, 100.0f, _height * 2.0f);
 	axis.initialize();
@@ -223,8 +225,14 @@ bool Map3D::LoadHeightMap(std::wstring _filename)
 
 bool Map3D::GenerateNormal()
 {
+	if (IndexList.empty() || VertexList.empty())
+	{
+		return false;
+	}
+
 	std::vector<Vector3f> FaceNormal;
 	FaceNormal.resize(faceCount);
+	// Index 순회하며 각 Face의 Normal값 생성.
 	for (size_t idx = 0; idx < IndexList.size(); idx += 3)
 	{
 		DWORD i0 = IndexList[idx + 0];
@@ -258,11 +266,9 @@ bool Map3D::GenerateNormal()
 			VertexFaceInfoList[VertexIdx].normal += FaceNormal[FaceID];
 		}
 		VertexList[VertexIdx].normal = VertexFaceInfoList[VertexIdx].normal.normalized();
-
-
-
 	}
 
+	return true;
 }
 
 Vector3f Map3D::ComputeFaceNormal(DWORD _i0, DWORD _i1, DWORD _i2)

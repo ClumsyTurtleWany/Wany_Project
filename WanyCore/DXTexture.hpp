@@ -27,6 +27,9 @@ private:
 private:
 	std::wstring				m_wstrFileName;
 
+private:
+	std::vector<UINT>			MappedResourceData;
+
 public:
 	void						setDevice(ID3D11Device* _device, ID3D11DeviceContext* _context);
 
@@ -42,6 +45,7 @@ public:
 	float						getWidth();
 	float						getHeight();
 	std::wstring				getFileName();
+	std::vector<UINT>&			getMappedResource();
 
 public:
 	bool						release();
