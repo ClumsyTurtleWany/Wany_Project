@@ -177,7 +177,6 @@ struct MeshData
 	}
 };
 
-
 struct FBXVertex
 {
 	FbxVector4 Position;

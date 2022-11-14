@@ -540,7 +540,7 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXFileData* _dst, FBXNodeData* _dstDa
 			{
 				int vertexIdx = cornerIdx[idx];
 				FbxVector4 vertex = pVertexPosition[vertexIdx];
-				vertex = geometryMatrix.MultT(vertex); // 로컬 행렬 변환, Transform의 T, 열 우선 방식
+				vertex = _dstData->LocalGeometryMatrix.MultT(vertex); // 로컬 행렬 변환, Transform의 T, 열 우선 방식
 				//vertex = worldMatrix.MultT(vertex); // 월드 변환 행렬. 나중에 뺄 것.
 				//vertex = matGlobalTransform.MultT(vertex);
 
@@ -583,7 +583,7 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXFileData* _dst, FBXNodeData* _dstDa
 					FbxVector4 fbxNormal;
 					if (ReadNormal(NormalList[LayerIdx], vertexIdx, normalIdx, fbxNormal))
 					{
-						fbxNormal = normalMatrix.MultT(fbxNormal);
+						fbxNormal = _dstData->LocalNormalMatrix.MultT(fbxNormal);
 						//fbxNormal = normalMatrix_World.MultT(fbxNormal); // 월드 변환. 나중에 뺄 것.
 						//fbxNormal = matNormalGlobal.MultT(fbxNormal);
 						normal.x = fbxNormal.mData[0];
@@ -595,7 +595,7 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXFileData* _dst, FBXNodeData* _dstDa
 				//VertexList[MaterialIdx].push_back(Vertex(pos, normal, color, texture));
 				if (_dst->BindPoseMap.empty())
 				{
-					_dst->Materials[MaterialIdx].push_back(Vertex(pos, normal, color, texture));
+					_dstData->Materials[MaterialIdx].push_back(Vertex(pos, normal, color, texture));
 				}
 				else
 				{

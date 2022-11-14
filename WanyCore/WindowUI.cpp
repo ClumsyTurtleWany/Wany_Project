@@ -172,6 +172,12 @@ void WindowUI::disableResize()
 	ShowWindow(hWnd, SW_SHOW);
 }
 
+void WindowUI::setWindowHandle(HWND _hWnd)
+{
+	hWnd = _hWnd;
+	GetClientRect(hWnd, &clientRect);
+}
+
 bool WindowUI::run()
 {
 	MSG msg;

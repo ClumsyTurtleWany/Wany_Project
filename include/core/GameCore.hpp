@@ -22,7 +22,7 @@ public:
 	virtual bool render() { return true; };
 	virtual bool release() { return true; };
 
-private:
+public:
 	bool CoreInitialize();
 	bool CoreFrame();
 	bool CoreRender();

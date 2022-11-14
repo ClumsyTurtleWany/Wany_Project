@@ -51,7 +51,6 @@ bool Timer::render()
 
 bool Timer::release()
 {
-
 	return true;
 }
 

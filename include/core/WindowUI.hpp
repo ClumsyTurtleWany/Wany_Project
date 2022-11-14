@@ -21,6 +21,9 @@ public:
 	Vector2f getClientCenterPos();
 	void enableResize();
 	void disableResize();
+
+public:
+	void setWindowHandle(HWND _hWnd);
 	
 public:
 	virtual bool run();

@@ -29,7 +29,7 @@ public:
 
 	std::wstring			m_strDefault;
 
-	IDWriteTextLayout* m_pTextLayout = nullptr; // 글자(Text)를 못바꾸는 대신 폰트나 크기 색상 등등 전부 변경 가능.
+	IDWriteTextLayout*		m_pTextLayout = nullptr; // 글자(Text)를 못바꾸는 대신 폰트나 크기 색상 등등 전부 변경 가능.
 
 	bool bDrawLayout = false;
 
