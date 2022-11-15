@@ -406,9 +406,9 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXFileData* _dst, FBXNodeData* _dstDa
 		return false;
 	}
 
-	MeshData meshData;
+	//MeshData meshData;
 
-	if (!ParseMeshSkinning(_mesh, _dst , &meshData))
+	if (!ParseMeshSkinning(_mesh, _dst , _dstData))
 	{
 
 	}
@@ -420,7 +420,7 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXFileData* _dst, FBXNodeData* _dstDa
 	std::vector<FbxLayerElementNormal*> NormalList;
 	
 	int layerCount = _mesh->GetLayerCount();
-	meshData.LayerList.resize(layerCount);
+	//meshData.LayerList.resize(layerCount);
 	for (int layerIdx = 0; layerIdx < layerCount; layerIdx++)
 	{
 		FbxLayer* pLayer = _mesh->GetLayer(layerIdx);
@@ -448,10 +448,10 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXFileData* _dst, FBXNodeData* _dstDa
 			NormalList.push_back(pNormal);
 		}
 
-		meshData.LayerList[layerIdx].ElementUV = pUV;
-		meshData.LayerList[layerIdx].ElementColor = pColor;
-		meshData.LayerList[layerIdx].ElementMaterialList = pMaterial;
-		meshData.LayerList[layerIdx].ElementNormalList = pNormal;
+		//meshData.LayerList[layerIdx].ElementUV = pUV;
+		//meshData.LayerList[layerIdx].ElementColor = pColor;
+		//meshData.LayerList[layerIdx].ElementMaterialList = pMaterial;
+		//meshData.LayerList[layerIdx].ElementNormalList = pNormal;
 	}
 
 	//FbxNode* pNode = _mesh->GetNode(); // 원래는 Mesh가 아닌 Node로 돌리는게 맞다.  
@@ -700,7 +700,7 @@ bool FBXLoader::ParseMeshLayer(FbxMesh* _mesh, MeshData* _dstData)
 	return true;
 }
 
-bool FBXLoader::ParseMeshSkinning(FbxMesh* _mesh, FBXFileData* _dst, MeshData* _dstData)
+bool FBXLoader::ParseMeshSkinning(FbxMesh* _mesh, FBXFileData* _dst, FBXNodeData* _dstData)
 {
 	if ((_mesh == nullptr) || (_dst == nullptr))
 	{
@@ -1360,7 +1360,7 @@ bool FBXLoader::GenerateAnimationTrack(FBXFileData* _data)
 		// Generate Matrix List Map of Interpolation Animation.
 		size_t TrackSize = TrackList[NodeIdx].size();
 		std::vector<Matrix4x4> InterpolationMatrixList;
-		InterpolationMatrixList.resize(TrackSize * _data->InterpolationSampling);
+		//InterpolationMatrixList.resize(TrackSize * _data->InterpolationSampling);
 		for (size_t FrameIdx = 0; FrameIdx < TrackSize; FrameIdx++)
 		{
 			FBXAnimationTrack A, B;
@@ -1396,10 +1396,8 @@ bool FBXLoader::GenerateAnimationTrack(FBXFileData* _data)
 				//InterpolationMatrixList[FrameIdx] = rst;
 				InterpolationMatrixList.push_back(rst);
 			}
-			_data->InterpolationFrameMatrixList.insert(std::make_pair(NodeName, InterpolationMatrixList));
-
 		}
-
+		_data->InterpolationFrameMatrixList.insert(std::make_pair(NodeName, InterpolationMatrixList));
 	}
 
 	return true;

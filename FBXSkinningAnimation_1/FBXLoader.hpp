@@ -41,7 +41,7 @@ private:
 	bool PreProcess(FBXFileData* _dst);
 	bool ParseMesh(FbxMesh* _mesh, FBXFileData* _dst, FBXNodeData* _dstData);
 	bool ParseMeshLayer(FbxMesh* _mesh, MeshData* _dstData);
-	bool ParseMeshSkinning(FbxMesh* _mesh, FBXFileData* _dst, MeshData* _dstData);
+	bool ParseMeshSkinning(FbxMesh* _mesh, FBXFileData* _dst, FBXNodeData* _dstData);
 	bool ParseDummy(FbxNull* _dummy, FBXFileData* _dst);
 	bool ParseSkeleton(FbxSkeleton* _skeleton, FBXFileData* _dst);
 	
