@@ -254,6 +254,8 @@ private:
 	Axis3D						axis;
 
 public:
+	FBXFileData*				FileData = nullptr;
+
 	float						testTime = 0.0f;
 	float						yaw = 0.0f;
 	float						pitch = 0.0f;

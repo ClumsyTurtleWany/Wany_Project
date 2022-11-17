@@ -71,6 +71,16 @@ bool DXShader::frame()
 	return true;
 }
 
+bool DXShader::PreRender()
+{
+	if (!isCreated)
+	{
+		return false;
+	}
+
+	return true;
+}
+
 bool DXShader::render()
 {
 	if (!isCreated)

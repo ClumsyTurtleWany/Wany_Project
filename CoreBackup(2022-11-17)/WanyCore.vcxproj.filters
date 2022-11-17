@@ -1,0 +1,295 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="WinAPI">
+      <UniqueIdentifier>{ce9e022c-cd5d-4463-8521-df2c9bd9c9e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{e216b7d4-b57b-4115-9261-e897f5a56c5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX">
+      <UniqueIdentifier>{614d3de9-8e35-45e5-bc99-6b6fd077e8e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Device">
+      <UniqueIdentifier>{3c6ba72a-3b57-4537-b207-c39d49181e50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Device\소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="DirectX\Device\헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="DirectX\Shader">
+      <UniqueIdentifier>{1aa4328f-141b-46b7-83a0-5e2ba8584ef3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Texture">
+      <UniqueIdentifier>{154c0fc7-05f4-4963-86cb-adce3714206e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Shader\소스 파일">
+      <UniqueIdentifier>{42f54bef-a2af-4df9-9157-f7857e2911e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Shader\헤더 파일">
+      <UniqueIdentifier>{4101863f-a680-4a43-b2e4-b4e36b380f2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Texture\헤더 파일">
+      <UniqueIdentifier>{80e2accb-9c9a-412f-bde2-9505bdea4362}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Texture\소스 파일">
+      <UniqueIdentifier>{473647e6-2b40-4144-9313-1fa05d5a8803}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinAPI\Windows">
+      <UniqueIdentifier>{f8ba6985-b97a-4bf1-9f72-3c9a3d094533}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinAPI\Windows\헤더 파일">
+      <UniqueIdentifier>{627a6387-0046-4b01-b489-9407d8b006b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinAPI\Windows\소스 파일">
+      <UniqueIdentifier>{27ab7a23-54e2-4471-9fb5-879aa4c1c9f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{3fc1b9c5-6859-42d8-bcff-ce9d216a974f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\소스 파일">
+      <UniqueIdentifier>{c1d2d9e9-5280-4349-89bf-22b71bc4464e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\헤더 파일">
+      <UniqueIdentifier>{7b43c183-2378-430a-9394-e6d2688c2687}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Writer">
+      <UniqueIdentifier>{44717860-1f43-4207-ae35-5857c91755e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Writer\소스 파일">
+      <UniqueIdentifier>{78db0624-bc9a-419e-a6be-0a35ab5a1a66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Writer\헤더 파일">
+      <UniqueIdentifier>{ca2af170-d8b7-444f-b629-fe7ad6b02c91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Timer">
+      <UniqueIdentifier>{aeb2778c-313b-4211-bda1-e9543f2696c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Input">
+      <UniqueIdentifier>{ac8c139d-a924-4369-a894-285df4b0620e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Input\소스 파일">
+      <UniqueIdentifier>{1c9f1b78-9efe-4a8d-8565-316a18cf05fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Input\헤더 파일">
+      <UniqueIdentifier>{0b1cf5ac-996c-488e-8983-374f3835cb3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Timer\헤더 파일">
+      <UniqueIdentifier>{5146a59a-3122-451e-b1d6-4da5e53f0da1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Timer\소스 파일">
+      <UniqueIdentifier>{b6ad5e7f-ad58-441d-a480-dfe8d92877df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\HLSL">
+      <UniqueIdentifier>{5ec0543a-8a44-45b1-b77e-1e390b7eeb89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Sampler">
+      <UniqueIdentifier>{5a681b95-0733-4b00-b8a8-a601ee32be31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Sampler\소스 파일">
+      <UniqueIdentifier>{41d9279d-0040-44a9-899b-d4e36ef4404a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\Sampler\헤더 파일">
+      <UniqueIdentifier>{caea2542-fa29-4f07-abbd-a82e9a7b642a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object">
+      <UniqueIdentifier>{0a6e3010-d60c-46c6-8799-c540f01ebd87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\소스 파일">
+      <UniqueIdentifier>{7a9ee7c0-40a8-44a8-9cd9-11c6e73f8fed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\헤더 파일">
+      <UniqueIdentifier>{79298fbf-6992-4f74-af21-c57b3be7d074}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Sound">
+      <UniqueIdentifier>{b3ee17ff-3284-4a88-8569-f6d3acd2c839}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Sound\헤더 파일">
+      <UniqueIdentifier>{8a4e5c2a-20ed-4990-828f-aa4c4d40e683}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Sound\소스 파일">
+      <UniqueIdentifier>{1125e0c5-29fe-40fa-992e-5396b6332fa2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Camera">
+      <UniqueIdentifier>{93d8837b-9260-448c-a7c4-9c1803765b7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\HLSL\Vertex">
+      <UniqueIdentifier>{3dbab01f-76c4-4ca0-909a-94f0b78a1f41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\HLSL\Pixel">
+      <UniqueIdentifier>{57c64567-6cf4-4ad8-9f07-7e47754e1099}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX\HLSL\Text">
+      <UniqueIdentifier>{35900060-2924-4fff-87e8-dc5700c4cd3f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="WindowUI.hpp">
+      <Filter>WinAPI\Windows\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DXDevice.hpp">
+      <Filter>DirectX\Device\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DXShader.hpp">
+      <Filter>DirectX\Shader\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DXTexture.hpp">
+      <Filter>DirectX\Texture\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GameCore.hpp">
+      <Filter>Core\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.hpp">
+      <Filter>Common\Input\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DXWriter.hpp">
+      <Filter>DirectX\Writer\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Define.hpp">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.hpp">
+      <Filter>Common\Timer\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DXSamplerState.hpp">
+      <Filter>DirectX\Sampler\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DXTextureManager.hpp">
+      <Filter>DirectX\Texture\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DXShaderManager.hpp">
+      <Filter>DirectX\Shader\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.hpp">
+      <Filter>Object\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DXShaderBorder.hpp">
+      <Filter>DirectX\Shader\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="FMODSound.hpp">
+      <Filter>Common\Sound\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="FMODSoundManager.hpp">
+      <Filter>Common\Sound\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DXShaderBorderManager.hpp">
+      <Filter>DirectX\Shader\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.hpp">
+      <Filter>Common\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="DXAnimationShader.hpp">
+      <Filter>DirectX\Shader\헤더 파일</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="WindowUI.cpp">
+      <Filter>WinAPI\Windows\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DXDevice.cpp">
+      <Filter>DirectX\Device\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DXShader.cpp">
+      <Filter>DirectX\Shader\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DXTexture.cpp">
+      <Filter>DirectX\Texture\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GameCore.cpp">
+      <Filter>Core\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>Common\Input\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DXWriter.cpp">
+      <Filter>DirectX\Writer\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Common\Timer\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DXSamplerState.cpp">
+      <Filter>DirectX\Sampler\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DXTextureManager.cpp">
+      <Filter>DirectX\Texture\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DXShaderManager.cpp">
+      <Filter>DirectX\Shader\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Object\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DXShaderBorder.cpp">
+      <Filter>DirectX\Shader\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="FMODSound.cpp">
+      <Filter>Common\Sound\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="FMODSoundManager.cpp">
+      <Filter>Common\Sound\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DXShaderBorderManager.cpp">
+      <Filter>DirectX\Shader\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Common\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="DXAnimationShader.cpp">
+      <Filter>DirectX\Shader\소스 파일</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="DefaultObject.txt">
+      <Filter>DirectX\HLSL\Text</Filter>
+    </Text>
+    <Text Include="MaskShader.txt">
+      <Filter>DirectX\HLSL\Text</Filter>
+    </Text>
+    <Text Include="ShapeShader.txt">
+      <Filter>DirectX\HLSL\Text</Filter>
+    </Text>
+    <Text Include="Textured3D.txt">
+      <Filter>DirectX\HLSL\Text</Filter>
+    </Text>
+    <Text Include="TextureShader.txt">
+      <Filter>DirectX\HLSL\Text</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="VS_ConstantBuffer.hlsl">
+      <Filter>DirectX\HLSL\Vertex</Filter>
+    </FxCompile>
+    <FxCompile Include="VS_Texture.hlsl">
+      <Filter>DirectX\HLSL\Vertex</Filter>
+    </FxCompile>
+    <FxCompile Include="PS_Default.hlsl">
+      <Filter>DirectX\HLSL\Pixel</Filter>
+    </FxCompile>
+    <FxCompile Include="PS_Mask.hlsl">
+      <Filter>DirectX\HLSL\Pixel</Filter>
+    </FxCompile>
+    <FxCompile Include="PS_Texture.hlsl">
+      <Filter>DirectX\HLSL\Pixel</Filter>
+    </FxCompile>
+    <FxCompile Include="VS_Light.hlsl">
+      <Filter>DirectX\HLSL\Vertex</Filter>
+    </FxCompile>
+    <FxCompile Include="PS_Light.hlsl">
+      <Filter>DirectX\HLSL\Pixel</Filter>
+    </FxCompile>
+    <FxCompile Include="VS_Animation.hlsl">
+      <Filter>DirectX\HLSL\Vertex</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>

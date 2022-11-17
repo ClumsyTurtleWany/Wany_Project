@@ -100,6 +100,7 @@ public:
 public:
 	virtual bool				initialize();
 	virtual bool				frame();
+	virtual bool				PreRender();
 	virtual bool				render();
 	virtual bool				release();
 

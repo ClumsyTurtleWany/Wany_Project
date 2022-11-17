@@ -111,36 +111,50 @@ bool FBXLoader::Load(std::wstring _path, FBXObject* _dst)
 	// 기본적으로 디자인 파일들은 Scene 단위로 저장됨.
 	// Scene은 트리 구조로 이루어져 있어 Root부터 시작되며 보통 Root는 NULL로 이루어져있음.
 	// 따라서 파일 마다 새로 생성해서 로드 해줄 필요가 있음.
-	FBXFileData fileData;
+	if (_dst->FileData == nullptr)
+	{
+		_dst->FileData = new FBXFileData;
+	}
+
 	FbxScene* pScene = FbxScene::Create(m_pManager, "");
 	if (pScene == nullptr)
 	{
 		OutputDebugString(L"WanyCore::FBXLoader::Load::Failed Create Scene.\n");
+		delete _dst->FileData;
+		_dst->FileData = nullptr;
 		return false;
 	}
 
 	if (!m_pImporter->Import(pScene))
 	{
 		OutputDebugString(L"WanyCore::FBXLoader::Load::Failed Import Scene.\n");
+		delete _dst->FileData;
+		_dst->FileData = nullptr;
 		return false;
 	}
 
-	if (!ParseScene(pScene, &fileData))
+	if (!ParseScene(pScene, _dst->FileData))
 	{
 		OutputDebugString(L"WanyCore::FBXLoader::Load::Failed Parse Scene.\n");
+		delete _dst->FileData;
+		_dst->FileData = nullptr;
 		return false;
 	}
 
 	FbxNode* pRoot = pScene->GetRootNode();
-	if (!ParseNode(pRoot, &fileData))
+	if (!ParseNode(pRoot, _dst->FileData))
 	{
 		OutputDebugString(L"WanyCore::FBXLoader::Load::Failed Parse Root Node.\n");
+		delete _dst->FileData;
+		_dst->FileData = nullptr;
 		return false;
 	}
 
-	if (!PreProcess(&fileData))
+	if (!PreProcess(_dst->FileData))
 	{
 		OutputDebugString(L"WanyCore::FBXLoader::Load::Failed Pre Process.\n");
+		delete _dst->FileData;
+		_dst->FileData = nullptr;
 		return false;
 	}
 
