@@ -78,6 +78,24 @@ bool DXShader::PreRender()
 		return false;
 	}
 
+	// IASetInputLayout() Param
+	m_pImmediateContext->IASetInputLayout(m_pVertexLayout);
+
+	// 2) Vertex Shader Stage
+	m_pImmediateContext->VSSetShader(m_pVertexShader, NULL, 0);
+
+	// 3) Hull Shader Stage - 지금은 스킵
+	m_pImmediateContext->HSSetShader(NULL, NULL, 0);
+
+	// 4) Domain Shader Stage - 지금은 스킵
+	m_pImmediateContext->DSSetShader(NULL, NULL, 0);
+
+	// 5) Geometry Shader Stage - 지금은 스킵
+	m_pImmediateContext->GSSetShader(NULL, NULL, 0);
+
+	// 6) Pixel Shader Stage
+	m_pImmediateContext->PSSetShader(m_pPixelShader, NULL, 0);
+
 	return true;
 }
 
@@ -87,6 +105,8 @@ bool DXShader::render()
 	{
 		return false;
 	}
+
+	PreRender();
 
 	// GPU Update
 	m_pImmediateContext->UpdateSubresource(m_pVertexBuffer, 0, NULL, &m_VertexList.at(0), 0, 0);
@@ -110,23 +130,23 @@ bool DXShader::render()
 	UINT Offsets = 0; // 정점 버퍼에서 출발 지점(바이트)
 	m_pImmediateContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &Strides, &Offsets);
 
-	// IASetInputLayout() Param
-	m_pImmediateContext->IASetInputLayout(m_pVertexLayout);
+	//// IASetInputLayout() Param
+	//m_pImmediateContext->IASetInputLayout(m_pVertexLayout);
 
-	// 2) Vertex Shader Stage
-	m_pImmediateContext->VSSetShader(m_pVertexShader, NULL, 0);
+	//// 2) Vertex Shader Stage
+	//m_pImmediateContext->VSSetShader(m_pVertexShader, NULL, 0);
 
-	// 3) Hull Shader Stage - 지금은 스킵
-	m_pImmediateContext->HSSetShader(NULL, NULL, 0);
+	//// 3) Hull Shader Stage - 지금은 스킵
+	//m_pImmediateContext->HSSetShader(NULL, NULL, 0);
 
-	// 4) Domain Shader Stage - 지금은 스킵
-	m_pImmediateContext->DSSetShader(NULL, NULL, 0);
+	//// 4) Domain Shader Stage - 지금은 스킵
+	//m_pImmediateContext->DSSetShader(NULL, NULL, 0);
 
-	// 5) Geometry Shader Stage - 지금은 스킵
-	m_pImmediateContext->GSSetShader(NULL, NULL, 0);
+	//// 5) Geometry Shader Stage - 지금은 스킵
+	//m_pImmediateContext->GSSetShader(NULL, NULL, 0);
 
-	// 6) Pixel Shader Stage
-	m_pImmediateContext->PSSetShader(m_pPixelShader, NULL, 0);
+	//// 6) Pixel Shader Stage
+	//m_pImmediateContext->PSSetShader(m_pPixelShader, NULL, 0);
 
 	// 이러한 셋팅도 있는데 디폴트 값으로 이미 들어 있었다.
 	// 기본적으로 트라이앵글로 출력 하지만 포인트 혹은 사각형 등으로 출력도 가능.

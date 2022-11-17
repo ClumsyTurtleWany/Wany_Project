@@ -77,5 +77,5 @@ public:
 
 public:
 	bool GenerateAnimationTrack(FBXFileData* _data);
-	bool GenerateObjectFromFileData(FBXFileData* _src, FBXObject* _dst);
+	bool GenerateObjectFromFileData(FBXObject* _dst);
 };

@@ -158,6 +158,12 @@ bool FBXLoader::Load(std::wstring _path, FBXObject* _dst)
 		return false;
 	}
 
+	if (!GenerateObjectFromFileData(_dst))
+	{
+		OutputDebugString(L"WanyCore::FBXLoader::Load::Failed Generate FBX Object.\n");
+		return false;
+	}
+
 	pRoot->Destroy();
 	pScene->Destroy();
 
@@ -1417,7 +1423,12 @@ bool FBXLoader::GenerateAnimationTrack(FBXFileData* _data)
 	return true;
 }
 
-bool FBXLoader::GenerateObjectFromFileData(FBXFileData* _src, FBXObject* _dst)
+bool FBXLoader::GenerateObjectFromFileData(FBXObject* _dst)
 {
-	return false;
+	if (_dst->FileData == nullptr)
+	{
+		return false;
+	}
+
+	return true;
 }
