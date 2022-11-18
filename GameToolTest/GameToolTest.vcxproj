@@ -192,6 +192,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CDlgMapCreate.h" />
     <ClInclude Include="ClassView.h" />
     <ClInclude Include="DebugCamera.hpp" />
     <ClInclude Include="FileView.h" />
@@ -212,6 +213,7 @@
     <ClInclude Include="ViewTree.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CDlgMapCreate.cpp" />
     <ClCompile Include="ClassView.cpp" />
     <ClCompile Include="DebugCamera.cpp" />
     <ClCompile Include="FileView.cpp" />

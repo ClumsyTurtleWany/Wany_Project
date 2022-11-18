@@ -21,7 +21,7 @@ bool Sample::initialize()
         pFbxObject = new FBXObject;
         //pFbxObject->initialize();
         //FBXLoader::getInstance()->Load(L"../resource/FBX/MultiCameras.FBX", pFbxObject);
-        //FBXLoader::getInstance()->Load(L"../resource/FBX/charMob.FBX", pFbxObject);
+        FBXLoader::getInstance()->Load(L"../resource/FBX/charMob.FBX", pFbxObject);
         //FBXLoader::getInstance()->Load(L"../resource/FBX/box.FBX", pFbxObject);
         //FBXLoader::getInstance()->Load(L"../resource/FBX/mb2001.FBX", pFbxObject);
         //FBXLoader::getInstance()->Load(L"../resource/FBX/rockBlobSix.FBX", pFbxObject);
@@ -29,7 +29,7 @@ bool Sample::initialize()
         //FBXLoader::getInstance()->Load(L"../resource/FBX/SM_Tree_Var01.FBX", pFbxObject);
         //FBXLoader::getInstance()->Load(L"../resource/FBX/Turret_Deploy1.FBX", pFbxObject); // Object Animation
         //FBXLoader::getInstance()->Load(L"../resource/FBX/Idle.FBX", pFbxObject);
-        FBXLoader::getInstance()->Load(L"../resource/FBX/Man.FBX", pFbxObject); // Skinning Animation
+        //FBXLoader::getInstance()->Load(L"../resource/FBX/Man.FBX", pFbxObject); // Skinning Animation
 
         //if (FBXLoader::getInstance()->LoadDir(L"../resource/FBX/"))
         {

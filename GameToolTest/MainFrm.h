@@ -8,6 +8,7 @@
 #include "OutputWnd.h"
 #include "PropertiesWnd.h"
 #include "MapCreatorView.h"
+#include "CDlgMapCreate.h"
 
 class CMainFrame : public CFrameWndEx
 {
@@ -58,6 +59,10 @@ protected:
 
 	BOOL CreateDockingWindows();
 	void SetDockingWindowIcons(BOOL bHiColorIcons);
+public:
+	afx_msg void OnMenuMapCreate();
+	afx_msg void OnMenuMapSave();
+	afx_msg void OnMenuMapLoad();
 };
 
 

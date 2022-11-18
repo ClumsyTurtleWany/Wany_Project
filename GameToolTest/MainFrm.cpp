@@ -27,6 +27,9 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_COMMAND_RANGE(ID_VIEW_APPLOOK_WIN_2000, ID_VIEW_APPLOOK_WINDOWS_7, &CMainFrame::OnApplicationLook)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_VIEW_APPLOOK_WIN_2000, ID_VIEW_APPLOOK_WINDOWS_7, &CMainFrame::OnUpdateApplicationLook)
 	ON_WM_SETTINGCHANGE()
+	ON_COMMAND(ID_MENU_MAP_CREATE, &CMainFrame::OnMenuMapCreate)
+	ON_COMMAND(ID_MENU_MAP_SAVE, &CMainFrame::OnMenuMapSave)
+	ON_COMMAND(ID_MENU_MAP_LOAD, &CMainFrame::OnMenuMapLoad)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -238,7 +241,7 @@ BOOL CMainFrame::CreateDockingWindows()
 	CString strMapCreatorWnd;
 	bNameValid = strMapCreatorWnd.LoadString(IDS_MAPCREATOR_WND);
 	ASSERT(bNameValid);
-	if (!m_wndMapCreatorView.Create(strMapCreatorWnd, this, CRect(0, 0, 200, 200), TRUE, ID_MAPCREATOR_VIEW, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_LEFT | CBRS_FLOAT_MULTI))
+	if (!m_wndMapCreatorView.Create(strMapCreatorWnd, this, CRect(0, 0, 200, 200), TRUE, ID_MAPCREATOR_VIEW, WS_CHILD | WS_VISIBLE | WS_HSCROLL | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_LEFT | CBRS_FLOAT_MULTI))
 	{
 		TRACE0("맵 생성 도우미 창을 만들지 못했습니다.\n");
 		return FALSE; // 만들지 못했습니다.
@@ -418,4 +421,30 @@ void CMainFrame::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
 {
 	CFrameWndEx::OnSettingChange(uFlags, lpszSection);
 	m_wndOutput.UpdateFonts();
+}
+
+
+void CMainFrame::OnMenuMapCreate()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	//AfxMessageBox(L"Create Map");
+
+	CDlgMapCreate mapDlg;
+	mapDlg.DoModal(); // Modal: 대화 상자 닫기 전 까진 아무것도 하지 못함. Modal Less: 대화 상자 열려 있어도 작업 가능.
+	
+	INT CaptionSize = _ttoi(mapDlg.CaptionSize);
+	INT i = 0;
+
+}
+
+
+void CMainFrame::OnMenuMapSave()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+}
+
+
+void CMainFrame::OnMenuMapLoad()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 }

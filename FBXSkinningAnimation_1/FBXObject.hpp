@@ -210,7 +210,9 @@ struct FBXNodeData
 	FbxAMatrix				LocalNormalMatrix;
 
 	// Bind Pose Matrix
-	Matrix4x4				BindPoseMatrix;
+	//Matrix4x4				BindPoseMatrix;
+	std::map<std::string, Matrix4x4>				BindPoseMap;
+	std::map<std::string, unsigned int>				BindPoseKeyToIndexMap;
 
 	// Original Animation Track
 	FBXAnimationTrackList	AnimationTrack;
@@ -232,7 +234,7 @@ public:
 	float InterpolationSampling = 100.0f;
 	std::map<std::string, std::vector<Matrix4x4>>	InterpolationFrameMatrixList;
 
-	std::map<std::string, Matrix4x4>				BindPoseMap;
+	//std::map<std::string, Matrix4x4>				BindPoseMap;
 	std::map<std::string, FbxAMatrix>				LocalGeometryMatrixMap;
 	std::map<std::string, FbxAMatrix>				NormalMatrixMap;
 
@@ -262,26 +264,25 @@ public:
 	float						roll = 0.0f;
 	Vector3f					curPos;
 
-	std::wstring				m_wstrNodeType;
+	
 	std::string					m_strNodeName;
-	std::string					m_strDataName;
-	std::vector<std::string>	m_strTargetName;
+	
 
 	FBXObject*					parent = nullptr;
 	std::vector<FBXObject*>		child;
 	std::vector<Material>		Materials;
 
 	FBXAnimationSceneInfo		m_animationSceneInfo;
-	std::vector<FBXAnimationTrack> m_animationTrackList;
+	
+	std::map<std::string, std::vector<Matrix4x4>>	InterpolationFrameMatrixList;
 
 	float						m_currentAnimationFrame = 0.0f;
 	float						m_AnimationInverse = 1.0f;
 
 	ConstantBufferData_Bone		m_CBData_Bone;
-	std::vector<SkinningData> SkinningList;
+	
 	std::map<std::string, Matrix4x4> BindPoseMap;
-	std::map<std::string, int> BindPoseKeyStringToIdxMap;
-	std::map<int, std::string> BindPoseIdxToKeyStringMap;
+	std::map<std::string, unsigned int>	BindPoseKeyToIndexMap;
 
 public:
 	virtual bool				initialize() override;

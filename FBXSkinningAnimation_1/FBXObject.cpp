@@ -103,46 +103,61 @@ bool FBXObject::frame(float _dt)
 
 	UINT InterpolationIdx = m_currentAnimationFrame * FileData->InterpolationSampling;
 	
-	if (FileData->BindPoseMap.empty())
+	if (BindPoseMap.empty())
 	{
 		auto it = FileData->InterpolationFrameMatrixList.find(m_strNodeName);
 		if (it != FileData->InterpolationFrameMatrixList.end())
 		{
 			Matrix4x4 matTranspose = it->second[InterpolationIdx].Transpose();
-			ConstantBufferData_Bone CBData_Bone;
-			CBData_Bone.matBone[0] = matTranspose;
+			//ConstantBufferData_Bone CBData_Bone;
+			m_CBData_Bone.matBone[0] = matTranspose;
 		}
 	}
 	else
 	{
-		for (auto it : FileData->NodeDataList)
+		//for (auto Node : FileData->NodeDataList)
+		//{
+		//	ConstantBufferData_Bone CBData_Bone;
+		//	if (Node.AttributeType != FbxNodeAttribute::EType::eMesh)
+		//	{
+		//		continue;
+		//	}
+		//	else
+		//	{
+		//		size_t NodeIdx = 0;
+		//		for (auto it : Node.BindPoseMap)
+		//		{
+		//			auto AnimationTrack = FileData->InterpolationFrameMatrixList.find(it.first);
+		//			if (AnimationTrack == FileData->InterpolationFrameMatrixList.end())
+		//			{
+		//				CBData_Bone.matBone[NodeIdx++] = it.second;
+		//			}
+		//			else
+		//			{
+		//				Matrix4x4 MergedMatrix = it.second * AnimationTrack->second[InterpolationIdx];
+		//				CBData_Bone.matBone[NodeIdx++] = MergedMatrix.Transpose();
+		//			}
+		//		}
+		//	}
+
+		//	// pAnimationShader->updateConstantBuffer_Bone(&CBData_Bone);
+		//}
+
+		size_t BoneIdx = 0;
+		for (auto &it : BindPoseMap)
 		{
-			ConstantBufferData_Bone CBData_Bone;
-			if (it.AttributeType != FbxNodeAttribute::EType::eMesh)
+			auto AnimationTrack = FileData->InterpolationFrameMatrixList.find(it.first);
+			if (AnimationTrack == FileData->InterpolationFrameMatrixList.end())
 			{
-				continue;
+				m_CBData_Bone.matBone[BoneIdx++] = it.second;
 			}
 			else
 			{
-				size_t NodeIdx = 0;
-				for (auto it : FileData->BindPoseMap)
-				{
-					auto AnimationTrack = FileData->InterpolationFrameMatrixList.find(it.first);
-					if (AnimationTrack == FileData->InterpolationFrameMatrixList.end())
-					{
-						CBData_Bone.matBone[NodeIdx++] = it.second;
-					}
-					else
-					{
-						Matrix4x4 MergedMatrix = it.second * AnimationTrack->second[InterpolationIdx];
-						CBData_Bone.matBone[NodeIdx++] = MergedMatrix.Transpose();
-					}
-				}
+				Matrix4x4 MergedMatrix = it.second * AnimationTrack->second[InterpolationIdx];
+				m_CBData_Bone.matBone[BoneIdx++] = MergedMatrix.Transpose();
 			}
-
-			// pAnimationShader->updateConstantBuffer_Bone(&CBData_Bone);
 		}
-
+		
 	}
 	
 	//BoneData.matBone[0] = matTranspose;
@@ -156,6 +171,7 @@ bool FBXObject::frame(float _dt)
 		DXAnimationShader* pAnimationShader = reinterpret_cast<DXAnimationShader*>(it.Shader);
 		//pAnimationShader->updateConstantBuffer_Bone(&BoneData);
 		//pAnimationShader->updateConstantBuffer_Bone(&CBData_Bone);
+		pAnimationShader->updateConstantBuffer_Bone(&m_CBData_Bone);
 	}
 
 	for (auto it : child)
@@ -247,7 +263,7 @@ bool FBXObject::rotationYawPitchRoll(float _yaw, float _pitch, float _roll)
 
 Matrix4x4 FBXObject::interpolation(float _frame)
 {
-	FBXAnimationTrack A, B;
+	/*FBXAnimationTrack A, B;
 	UINT StartFrame = m_animationSceneInfo.StartFrame;
 	UINT EndFrame = m_animationSceneInfo.EndFrame;
 	UINT FrameA = max(_frame + 0, StartFrame);
@@ -274,5 +290,7 @@ Matrix4x4 FBXObject::interpolation(float _frame)
 	rst._42 = translation.y;
 	rst._43 = translation.z;
 
-	return rst;
+	return rst;*/
+
+	return Matrix4x4();
 }

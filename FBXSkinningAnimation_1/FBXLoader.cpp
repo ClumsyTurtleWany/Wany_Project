@@ -398,7 +398,7 @@ bool FBXLoader::PreProcess(FBXFileData* _dst)
 		}
 	}*/
 
-	for (auto it : _dst->NodeDataList)
+	for (auto &it : _dst->NodeDataList)
 	{
 		if (!ParseDummy(it.Dummy, _dst))
 		{
@@ -613,7 +613,7 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXFileData* _dst, FBXNodeData* _dstDa
 				}
 
 				//VertexList[MaterialIdx].push_back(Vertex(pos, normal, color, texture));
-				if (_dst->BindPoseMap.empty())
+				if (_dstData->BindPoseMap.empty())
 				{
 					_dstData->Materials[MaterialIdx].push_back(Vertex(pos, normal, color, texture));
 				}
@@ -631,7 +631,7 @@ bool FBXLoader::ParseMesh(FbxMesh* _mesh, FBXFileData* _dst, FBXNodeData* _dstDa
 					{
 						if (SkinWeightIdx < 4)
 						{
-							IWData.index.v[SkinWeightIdx] = 0; //_dst->BindPoseKeyStringToIdxMap.find(SkinWeightList[SkinWeightIdx].BoneName)->second;
+							IWData.index.v[SkinWeightIdx] = _dstData->BindPoseKeyToIndexMap.find(SkinWeightList[SkinWeightIdx].BoneName)->second;
 							IWData.weight.v[SkinWeightIdx] = SkinWeightList[SkinWeightIdx].weight;
 						}
 						else
@@ -787,19 +787,16 @@ bool FBXLoader::ParseMeshSkinning(FbxMesh* _mesh, FBXFileData* _dst, FBXNodeData
 			matInversedBindPose = matInversedBindPose.Inverse(); // 따라서 역행렬로 만들어 주어서 정점에 곱해 주어야 뼈대의 로컬 행렬로 변환 가능하다.
 			Matrix4x4 matInvBindPose = ConvertToDxMatrix(matInversedBindPose); // 정점과 곱한 후 VertexBuffer에 넣고 월드 행렬과 곱해줘도 되고, VertexBuffer는 냅두고 월드 행렬 앞에 곱해도 됨.
 			//_dst->BindPoseMap.insert(std::make_pair(BoneIndex, matInvBindPose)); // 상수 버퍼 적용 전에 곱해 주고
-			_dst->BindPoseMap.insert(std::make_pair(LinkedNodeName, matInvBindPose)); // 상수 버퍼 적용 전에 곱해 주고
+			_dstData->BindPoseMap.insert(std::make_pair(LinkedNodeName, matInvBindPose)); // 상수 버퍼 적용 전에 곱해 주고
 		}
 		
 	}
 
-	/*int NodeIdx = 0;
-	for (auto it : _dst->BindPoseMap)
+	int BindPoseIdx = 0;
+	for (auto it : _dstData->BindPoseMap)
 	{
-		_dst->m_CBData_Bone.matBone[NodeIdx] = it.second;
-		_dst->BindPoseKeyStringToIdxMap.insert(std::make_pair(it.first, NodeIdx));
-		_dst->BindPoseIdxToKeyStringMap.insert(std::make_pair(NodeIdx, it.first));
-		NodeIdx++;
-	}*/
+		_dstData->BindPoseKeyToIndexMap.insert(std::make_pair(it.first, BindPoseIdx++));
+	}
 
 	return true;
 }
@@ -1428,6 +1425,46 @@ bool FBXLoader::GenerateObjectFromFileData(FBXObject* _dst)
 	if (_dst->FileData == nullptr)
 	{
 		return false;
+	}
+
+	FBXFileData* pData = _dst->FileData;
+
+	for (auto it : pData->NodeDataList)
+	{
+		if (it.AttributeType != FbxNodeAttribute::EType::eMesh)
+		{
+			continue;
+		}
+		else
+		{
+			FBXObject* pObject = new FBXObject;
+			pObject->m_animationSceneInfo = pData->AnimationSceneInfo;
+			pObject->BindPoseMap.insert(it.BindPoseMap.begin(), it.BindPoseMap.end());
+			pObject->BindPoseKeyToIndexMap.insert(it.BindPoseKeyToIndexMap.begin(), it.BindPoseKeyToIndexMap.end());
+			pObject->FileData = pData;
+			for (auto material : it.Materials)
+			{
+				if (material.isValid())
+				{
+					pObject->Materials.push_back(material);
+				}
+			}
+
+			for (auto& material : pObject->Materials)
+			{
+				material.create();
+				if (DXTextureManager::getInstance()->Load(m_wstrResourceDir + material.DiffuseTexture))
+				{
+					DXTexture* pTexture = DXTextureManager::getInstance()->getTexture(m_wstrResourceDir + material.DiffuseTexture);
+					if (pTexture != nullptr)
+					{
+						material.setTexture(pTexture);
+					}
+				}
+			}
+
+			_dst->child.push_back(pObject);
+		}
 	}
 
 	return true;

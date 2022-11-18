@@ -21,6 +21,8 @@ MapCreatorView::~MapCreatorView()
 
 BEGIN_MESSAGE_MAP(MapCreatorView, CDockablePane)
 	ON_WM_CREATE()
+	ON_WM_PAINT()
+	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 
@@ -59,4 +61,22 @@ int MapCreatorView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	
 
 	return 0;
+}
+
+
+void MapCreatorView::OnPaint()
+{
+	CPaintDC dc(this); // device context for painting
+					   // TODO: 여기에 메시지 처리기 코드를 추가합니다.
+					   // 그리기 메시지에 대해서는 CDockablePane::OnPaint()을(를) 호출하지 마십시오.
+}
+
+
+void MapCreatorView::OnSize(UINT nType, int cx, int cy)
+{
+	CDockablePane::OnSize(nType, cx, cy);
+	
+	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
+	AdjustLayout();
+	RedrawWindow();
 }
