@@ -349,6 +349,12 @@ bool FBXLoader::ParseNode(FbxNode* _node, FBXFileData* _dst)
 			NodeData.Materials.push_back(material);
 		}
 
+		if (NodeData.MaterialNum == 0)
+		{
+			Material material;
+			NodeData.Materials.push_back(material);
+		}
+
 		_dst->NodeDataList.push_back(NodeData);
 	}
 
@@ -1438,6 +1444,7 @@ bool FBXLoader::GenerateObjectFromFileData(FBXObject* _dst)
 		else
 		{
 			FBXObject* pObject = new FBXObject;
+			pObject->m_strNodeName = it.Name;
 			pObject->m_animationSceneInfo = pData->AnimationSceneInfo;
 			pObject->BindPoseMap.insert(it.BindPoseMap.begin(), it.BindPoseMap.end());
 			pObject->BindPoseKeyToIndexMap.insert(it.BindPoseKeyToIndexMap.begin(), it.BindPoseKeyToIndexMap.end());

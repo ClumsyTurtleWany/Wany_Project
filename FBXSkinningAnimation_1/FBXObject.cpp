@@ -92,7 +92,7 @@ bool FBXObject::frame(float _dt)
 {
 	curPos = Vector3f(0.0f, 0.0f, 0.0f) * data.matWorld;
 
-	m_currentAnimationFrame = m_currentAnimationFrame + (/*_dt **/ 0.01f * FileData->AnimationSceneInfo.FrameSpeed * m_AnimationInverse);
+	m_currentAnimationFrame = m_currentAnimationFrame + (_dt * FileData->AnimationSceneInfo.FrameSpeed * m_AnimationInverse);
 	if ((m_currentAnimationFrame > FileData->AnimationSceneInfo.EndFrame ) ||
 		(m_currentAnimationFrame < FileData->AnimationSceneInfo.StartFrame))
 	{

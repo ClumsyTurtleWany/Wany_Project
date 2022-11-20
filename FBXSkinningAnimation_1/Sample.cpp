@@ -20,8 +20,8 @@ bool Sample::initialize()
         FBXLoader::getInstance()->setResourceDirectory(RESOURCE_DIR);
         pFbxObject = new FBXObject;
         //pFbxObject->initialize();
-        //FBXLoader::getInstance()->Load(L"../resource/FBX/MultiCameras.FBX", pFbxObject);
-        FBXLoader::getInstance()->Load(L"../resource/FBX/charMob.FBX", pFbxObject);
+        FBXLoader::getInstance()->Load(L"../resource/FBX/MultiCameras.FBX", pFbxObject);
+        //FBXLoader::getInstance()->Load(L"../resource/FBX/charMob.FBX", pFbxObject);
         //FBXLoader::getInstance()->Load(L"../resource/FBX/box.FBX", pFbxObject);
         //FBXLoader::getInstance()->Load(L"../resource/FBX/mb2001.FBX", pFbxObject);
         //FBXLoader::getInstance()->Load(L"../resource/FBX/rockBlobSix.FBX", pFbxObject);
