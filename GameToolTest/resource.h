@@ -84,11 +84,15 @@
 #define IDS_FIND_TAB                    302
 #define IDS_EXPLORER                    305
 #define IDS_EDIT_MENU                   306
+
 #define IDD_MAP_CREATE                  310
 #define ID_MAPCREATOR_VIEW              400
 #define IDS_MAPCREATOR_WND              401
 #define ID_STATIC_MAPCREATOR_LABEL      402
 #define ID_EDIT_MAPCREATOR_WIDTH        403
+#define ID_RIBBON_HOME_SMALL			404
+#define ID_RIBBON_HOME_LARGE			405
+
 #define IDC_EDIT_MAP_CAPTION            1000
 #define IDC_EDIT2                       1001
 #define IDC_EDIT3                       1002
@@ -97,6 +101,7 @@
 #define ID_MENU_MAP_CREATE              32774
 #define ID_MENU_MAP_SAVE                32775
 #define ID_MENU_MAP_LOAD                32776
+
 
 // Next default values for new objects
 // 

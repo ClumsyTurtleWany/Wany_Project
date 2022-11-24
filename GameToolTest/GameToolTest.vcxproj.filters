@@ -81,6 +81,9 @@
     <ClInclude Include="CDlgMapCreate.h">
       <Filter>MFC\헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="VisualManagerEx.h">
+      <Filter>MFC\헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameToolTest.cpp">
@@ -129,6 +132,9 @@
       <Filter>MFC\소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="CDlgMapCreate.cpp">
+      <Filter>MFC\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="VisualManagerEx.cpp">
       <Filter>MFC\소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

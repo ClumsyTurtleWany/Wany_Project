@@ -57,6 +57,8 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (CFrameWndEx::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
+	//CMFCVisualManager::SetDefaultManager(RUNTIME_CLASS(VisualManagerEx));
+	
 	BOOL bNameValid;
 
 	if (!m_wndMenuBar.Create(this))
@@ -69,26 +71,29 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	// 메뉴 모음을 활성화해도 포커스가 이동하지 않게 합니다.
 	CMFCPopupMenu::SetForceMenuFocus(FALSE);
+	
+	
+	
 
-	if (!m_wndToolBar.CreateEx(this, TBSTYLE_FLAT, WS_CHILD | WS_VISIBLE | CBRS_TOP | CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC) ||
-		!m_wndToolBar.LoadToolBar(theApp.m_bHiColorIcons ? IDR_MAINFRAME_256 : IDR_MAINFRAME))
-	{
-		TRACE0("도구 모음을 만들지 못했습니다.\n");
-		return -1;      // 만들지 못했습니다.
-	}
+	//if (!m_wndToolBar.CreateEx(this, TBSTYLE_FLAT, WS_CHILD | WS_VISIBLE | CBRS_TOP | CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC) ||
+	//	!m_wndToolBar.LoadToolBar(theApp.m_bHiColorIcons ? IDR_MAINFRAME_256 : IDR_MAINFRAME))
+	//{
+	//	TRACE0("도구 모음을 만들지 못했습니다.\n");
+	//	return -1;      // 만들지 못했습니다.
+	//}
 
-	CString strToolBarName;
-	bNameValid = strToolBarName.LoadString(IDS_TOOLBAR_STANDARD);
-	ASSERT(bNameValid);
-	m_wndToolBar.SetWindowText(strToolBarName);
+	//CString strToolBarName;
+	//bNameValid = strToolBarName.LoadString(IDS_TOOLBAR_STANDARD);
+	//ASSERT(bNameValid);
+	//m_wndToolBar.SetWindowText(strToolBarName);
 
-	CString strCustomize;
-	bNameValid = strCustomize.LoadString(IDS_TOOLBAR_CUSTOMIZE);
-	ASSERT(bNameValid);
-	m_wndToolBar.EnableCustomizeButton(TRUE, ID_VIEW_CUSTOMIZE, strCustomize);
+	//CString strCustomize;
+	//bNameValid = strCustomize.LoadString(IDS_TOOLBAR_CUSTOMIZE);
+	//ASSERT(bNameValid);
+	//m_wndToolBar.EnableCustomizeButton(TRUE, ID_VIEW_CUSTOMIZE, strCustomize);
 
-	// 사용자 정의 도구 모음 작업을 허용합니다.
-	InitUserToolbars(nullptr, uiFirstUserToolBarId, uiLastUserToolBarId);
+	//// 사용자 정의 도구 모음 작업을 허용합니다.
+	//InitUserToolbars(nullptr, uiFirstUserToolBarId, uiLastUserToolBarId);
 
 	if (!m_wndStatusBar.Create(this))
 	{
@@ -99,10 +104,10 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	// TODO: 도구 모음 및 메뉴 모음을 도킹할 수 없게 하려면 이 다섯 줄을 삭제하십시오.
 	m_wndMenuBar.EnableDocking(CBRS_ALIGN_ANY);
-	m_wndToolBar.EnableDocking(CBRS_ALIGN_ANY);
+	//m_wndToolBar.EnableDocking(CBRS_ALIGN_ANY);
 	EnableDocking(CBRS_ALIGN_ANY);
 	DockPane(&m_wndMenuBar);
-	DockPane(&m_wndToolBar);
+	//DockPane(&m_wndToolBar);
 
 
 	// Visual Studio 2005 스타일 도킹 창 동작을 활성화합니다.
@@ -110,8 +115,8 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// Visual Studio 2005 스타일 도킹 창 자동 숨김 동작을 활성화합니다.
 	EnableAutoHidePanes(CBRS_ALIGN_ANY);
 
-	// 메뉴 항목 이미지를 로드합니다(표준 도구 모음에 없음).
-	CMFCToolBar::AddToolBarForImageCollection(IDR_MENU_IMAGES, theApp.m_bHiColorIcons ? IDB_MENU_IMAGES_24 : 0);
+	//// 메뉴 항목 이미지를 로드합니다(표준 도구 모음에 없음).
+	//CMFCToolBar::AddToolBarForImageCollection(IDR_MENU_IMAGES, theApp.m_bHiColorIcons ? IDB_MENU_IMAGES_24 : 0);
 
 	// 도킹 창을 만듭니다.
 	if (!CreateDockingWindows())
@@ -136,49 +141,52 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// 보관된 값에 따라 비주얼 관리자 및 스타일을 설정합니다.
 	OnApplicationLook(theApp.m_nAppLook);
 
-	// 도구 모음 및 도킹 창 메뉴 바꾸기를 활성화합니다.
-	EnablePaneMenu(TRUE, ID_VIEW_CUSTOMIZE, strCustomize, ID_VIEW_TOOLBAR);
+	InitializeToolBar();
+	//InitializeRibbonBar();
 
-	// 빠른(<Alt> 키를 누른 채 끌기) 도구 모음 사용자 지정을 활성화합니다.
-	CMFCToolBar::EnableQuickCustomization();
+	//// 도구 모음 및 도킹 창 메뉴 바꾸기를 활성화합니다.
+	//EnablePaneMenu(TRUE, ID_VIEW_CUSTOMIZE, strCustomize, ID_VIEW_TOOLBAR);
 
-	if (CMFCToolBar::GetUserImages() == nullptr)
-	{
-		// 사용자 정의 도구 모음 이미지를 로드합니다.
-		if (m_UserImages.Load(_T(".\\UserImages.bmp")))
-		{
-			CMFCToolBar::SetUserImages(&m_UserImages);
-		}
-	}
+	//// 빠른(<Alt> 키를 누른 채 끌기) 도구 모음 사용자 지정을 활성화합니다.
+	//CMFCToolBar::EnableQuickCustomization();
 
-	// 메뉴 개인 설정을 활성화합니다(가장 최근에 사용한 명령).
-	// TODO: 사용자의 기본 명령을 정의하여 각 풀다운 메뉴에 하나 이상의 기본 명령을 포함시킵니다.
-	CList<UINT, UINT> lstBasicCommands;
+	//if (CMFCToolBar::GetUserImages() == nullptr)
+	//{
+	//	// 사용자 정의 도구 모음 이미지를 로드합니다.
+	//	if (m_UserImages.Load(_T(".\\UserImages.bmp")))
+	//	{
+	//		CMFCToolBar::SetUserImages(&m_UserImages);
+	//	}
+	//}
 
-	lstBasicCommands.AddTail(ID_FILE_NEW);
-	lstBasicCommands.AddTail(ID_FILE_OPEN);
-	lstBasicCommands.AddTail(ID_FILE_SAVE);
-	lstBasicCommands.AddTail(ID_FILE_PRINT);
-	lstBasicCommands.AddTail(ID_APP_EXIT);
-	lstBasicCommands.AddTail(ID_EDIT_CUT);
-	lstBasicCommands.AddTail(ID_EDIT_PASTE);
-	lstBasicCommands.AddTail(ID_EDIT_UNDO);
-	lstBasicCommands.AddTail(ID_APP_ABOUT);
-	lstBasicCommands.AddTail(ID_VIEW_STATUS_BAR);
-	lstBasicCommands.AddTail(ID_VIEW_TOOLBAR);
-	lstBasicCommands.AddTail(ID_VIEW_APPLOOK_OFF_2003);
-	lstBasicCommands.AddTail(ID_VIEW_APPLOOK_VS_2005);
-	lstBasicCommands.AddTail(ID_VIEW_APPLOOK_OFF_2007_BLUE);
-	lstBasicCommands.AddTail(ID_VIEW_APPLOOK_OFF_2007_SILVER);
-	lstBasicCommands.AddTail(ID_VIEW_APPLOOK_OFF_2007_BLACK);
-	lstBasicCommands.AddTail(ID_VIEW_APPLOOK_OFF_2007_AQUA);
-	lstBasicCommands.AddTail(ID_VIEW_APPLOOK_WINDOWS_7);
-	lstBasicCommands.AddTail(ID_SORTING_SORTALPHABETIC);
-	lstBasicCommands.AddTail(ID_SORTING_SORTBYTYPE);
-	lstBasicCommands.AddTail(ID_SORTING_SORTBYACCESS);
-	lstBasicCommands.AddTail(ID_SORTING_GROUPBYTYPE);
+	//// 메뉴 개인 설정을 활성화합니다(가장 최근에 사용한 명령).
+	//// TODO: 사용자의 기본 명령을 정의하여 각 풀다운 메뉴에 하나 이상의 기본 명령을 포함시킵니다.
+	//CList<UINT, UINT> lstBasicCommands;
 
-	CMFCToolBar::SetBasicCommands(lstBasicCommands);
+	//lstBasicCommands.AddTail(ID_FILE_NEW);
+	//lstBasicCommands.AddTail(ID_FILE_OPEN);
+	//lstBasicCommands.AddTail(ID_FILE_SAVE);
+	//lstBasicCommands.AddTail(ID_FILE_PRINT);
+	//lstBasicCommands.AddTail(ID_APP_EXIT);
+	//lstBasicCommands.AddTail(ID_EDIT_CUT);
+	//lstBasicCommands.AddTail(ID_EDIT_PASTE);
+	//lstBasicCommands.AddTail(ID_EDIT_UNDO);
+	//lstBasicCommands.AddTail(ID_APP_ABOUT);
+	//lstBasicCommands.AddTail(ID_VIEW_STATUS_BAR);
+	//lstBasicCommands.AddTail(ID_VIEW_TOOLBAR);
+	//lstBasicCommands.AddTail(ID_VIEW_APPLOOK_OFF_2003);
+	//lstBasicCommands.AddTail(ID_VIEW_APPLOOK_VS_2005);
+	//lstBasicCommands.AddTail(ID_VIEW_APPLOOK_OFF_2007_BLUE);
+	//lstBasicCommands.AddTail(ID_VIEW_APPLOOK_OFF_2007_SILVER);
+	//lstBasicCommands.AddTail(ID_VIEW_APPLOOK_OFF_2007_BLACK);
+	//lstBasicCommands.AddTail(ID_VIEW_APPLOOK_OFF_2007_AQUA);
+	//lstBasicCommands.AddTail(ID_VIEW_APPLOOK_WINDOWS_7);
+	//lstBasicCommands.AddTail(ID_SORTING_SORTALPHABETIC);
+	//lstBasicCommands.AddTail(ID_SORTING_SORTBYTYPE);
+	//lstBasicCommands.AddTail(ID_SORTING_SORTBYACCESS);
+	//lstBasicCommands.AddTail(ID_SORTING_GROUPBYTYPE);
+
+	//CMFCToolBar::SetBasicCommands(lstBasicCommands);
 
 	return 0;
 }
@@ -447,4 +455,97 @@ void CMainFrame::OnMenuMapSave()
 void CMainFrame::OnMenuMapLoad()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+}
+
+void CMainFrame::InitializeRibbonBar()
+{
+	m_RibbonBar.Create(this);
+
+	m_RibbonBarImage.SetImageSize(CSize(16, 16));
+	/*m_RibbonBarImage.Load(IDB_RIBBON_MENU);
+
+	m_RibbonBar.AddToTabs(new CMFCRibbonButton())*/
+
+
+	CMFCRibbonCategory* pCategory = nullptr;
+	CMFCRibbonPanel* pPanel = nullptr;
+
+	pCategory = m_RibbonBar.AddCategory(L"Test Ribbon Menu", ID_RIBBON_HOME_SMALL, ID_RIBBON_HOME_LARGE);
+	pPanel = pCategory->AddPanel(L"Test");
+	
+	
+}
+
+void CMainFrame::InitializeToolBar()
+{
+	if (!m_wndToolBar.CreateEx(this, TBSTYLE_FLAT, WS_CHILD | WS_VISIBLE | CBRS_TOP | CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC) ||
+		!m_wndToolBar.LoadToolBar(theApp.m_bHiColorIcons ? IDR_MAINFRAME_256 : IDR_MAINFRAME))
+	{
+		TRACE0("도구 모음을 만들지 못했습니다.\n");
+		return;      // 만들지 못했습니다.
+	}
+
+	// 메뉴 항목 이미지를 로드합니다(표준 도구 모음에 없음).
+	CMFCToolBar::AddToolBarForImageCollection(IDR_MENU_IMAGES, theApp.m_bHiColorIcons ? IDB_MENU_IMAGES_24 : 0);
+
+	m_wndToolBar.EnableDocking(CBRS_ALIGN_ANY);
+	DockPane(&m_wndToolBar);
+
+	BOOL bNameValid;
+	CString strToolBarName;
+	bNameValid = strToolBarName.LoadString(IDS_TOOLBAR_STANDARD);
+	ASSERT(bNameValid);
+	m_wndToolBar.SetWindowText(strToolBarName);
+
+	CString strCustomize;
+	bNameValid = strCustomize.LoadString(IDS_TOOLBAR_CUSTOMIZE);
+	ASSERT(bNameValid);
+	m_wndToolBar.EnableCustomizeButton(TRUE, ID_VIEW_CUSTOMIZE, strCustomize);
+
+	// 사용자 정의 도구 모음 작업을 허용합니다.
+	InitUserToolbars(nullptr, uiFirstUserToolBarId, uiLastUserToolBarId);
+
+	// 도구 모음 및 도킹 창 메뉴 바꾸기를 활성화합니다.
+	EnablePaneMenu(TRUE, ID_VIEW_CUSTOMIZE, strCustomize, ID_VIEW_TOOLBAR);
+
+	// 빠른(<Alt> 키를 누른 채 끌기) 도구 모음 사용자 지정을 활성화합니다.
+	CMFCToolBar::EnableQuickCustomization();
+
+	if (CMFCToolBar::GetUserImages() == nullptr)
+	{
+		// 사용자 정의 도구 모음 이미지를 로드합니다.
+		if (m_UserImages.Load(_T(".\\UserImages.bmp")))
+		{
+			CMFCToolBar::SetUserImages(&m_UserImages);
+		}
+	}
+
+	// 메뉴 개인 설정을 활성화합니다(가장 최근에 사용한 명령).
+	// TODO: 사용자의 기본 명령을 정의하여 각 풀다운 메뉴에 하나 이상의 기본 명령을 포함시킵니다.
+	CList<UINT, UINT> lstBasicCommands;
+
+	lstBasicCommands.AddTail(ID_FILE_NEW);
+	lstBasicCommands.AddTail(ID_FILE_OPEN);
+	lstBasicCommands.AddTail(ID_FILE_SAVE);
+	lstBasicCommands.AddTail(ID_FILE_PRINT);
+	lstBasicCommands.AddTail(ID_APP_EXIT);
+	lstBasicCommands.AddTail(ID_EDIT_CUT);
+	lstBasicCommands.AddTail(ID_EDIT_PASTE);
+	lstBasicCommands.AddTail(ID_EDIT_UNDO);
+	lstBasicCommands.AddTail(ID_APP_ABOUT);
+	lstBasicCommands.AddTail(ID_VIEW_STATUS_BAR);
+	lstBasicCommands.AddTail(ID_VIEW_TOOLBAR);
+	lstBasicCommands.AddTail(ID_VIEW_APPLOOK_OFF_2003);
+	lstBasicCommands.AddTail(ID_VIEW_APPLOOK_VS_2005);
+	lstBasicCommands.AddTail(ID_VIEW_APPLOOK_OFF_2007_BLUE);
+	lstBasicCommands.AddTail(ID_VIEW_APPLOOK_OFF_2007_SILVER);
+	lstBasicCommands.AddTail(ID_VIEW_APPLOOK_OFF_2007_BLACK);
+	lstBasicCommands.AddTail(ID_VIEW_APPLOOK_OFF_2007_AQUA);
+	lstBasicCommands.AddTail(ID_VIEW_APPLOOK_WINDOWS_7);
+	lstBasicCommands.AddTail(ID_SORTING_SORTALPHABETIC);
+	lstBasicCommands.AddTail(ID_SORTING_SORTBYTYPE);
+	lstBasicCommands.AddTail(ID_SORTING_SORTBYACCESS);
+	lstBasicCommands.AddTail(ID_SORTING_GROUPBYTYPE);
+
+	CMFCToolBar::SetBasicCommands(lstBasicCommands);
 }

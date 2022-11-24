@@ -20,9 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{F7F757D4-F065-4822-8A9B-36E74871960E}</ProjectGuid>
+    <ProjectGuid>{B17DFDD3-8801-490B-B9C5-A2AC13D55B3D}</ProjectGuid>
     <Keyword>MFCProj</Keyword>
-    <RootNamespace>GameToolTest</RootNamespace>
+    <RootNamespace>GameToolTest1</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -76,8 +76,6 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>../../output/Debug/$(TargetName)</OutDir>
-    <IntDir>../../output/Debug/$(TargetName)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -95,13 +93,9 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>../include/;../include/core/;../include/FMOD/;../include/FBX/;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalLibraryDirectories>../lib/;../lib/core/;../lib/FMOD/;../lib/FBX/debug/;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>WanyCore_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -113,9 +107,6 @@
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
-    <PreBuildEvent>
-      <Command>copy "..\\lib\\FMOD\\fmod.dll" "..\\..\\output\\Debug\\$(TargetName)\\"</Command>
-    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -192,39 +183,22 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="CDlgMapCreate.h" />
-    <ClInclude Include="ClassView.h" />
-    <ClInclude Include="DebugCamera.hpp" />
-    <ClInclude Include="FileView.h" />
     <ClInclude Include="framework.h" />
-    <ClInclude Include="Frustum.hpp" />
-    <ClInclude Include="GameToolTest.h" />
-    <ClInclude Include="GameToolTestDoc.h" />
-    <ClInclude Include="GameToolTestView.h" />
+    <ClInclude Include="GameToolTest_1.h" />
+    <ClInclude Include="GameToolTest_1Doc.h" />
+    <ClInclude Include="GameToolTest_1View.h" />
     <ClInclude Include="MainFrm.h" />
-    <ClInclude Include="MapCreatorView.h" />
-    <ClInclude Include="NewObject.hpp" />
     <ClInclude Include="OutputWnd.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="PropertiesWnd.h" />
     <ClInclude Include="Resource.h" />
-    <ClInclude Include="Sample.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="ViewTree.h" />
     <ClInclude Include="VisualManagerEx.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CDlgMapCreate.cpp" />
-    <ClCompile Include="ClassView.cpp" />
-    <ClCompile Include="DebugCamera.cpp" />
-    <ClCompile Include="FileView.cpp" />
-    <ClCompile Include="Frustum.cpp" />
-    <ClCompile Include="GameToolTest.cpp" />
-    <ClCompile Include="GameToolTestDoc.cpp" />
-    <ClCompile Include="GameToolTestView.cpp" />
+    <ClCompile Include="GameToolTest_1.cpp" />
+    <ClCompile Include="GameToolTest_1Doc.cpp" />
+    <ClCompile Include="GameToolTest_1View.cpp" />
     <ClCompile Include="MainFrm.cpp" />
-    <ClCompile Include="MapCreatorView.cpp" />
-    <ClCompile Include="NewObject.cpp" />
     <ClCompile Include="OutputWnd.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -232,43 +206,28 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="PropertiesWnd.cpp" />
-    <ClCompile Include="Sample.cpp" />
-    <ClCompile Include="ViewTree.cpp" />
     <ClCompile Include="VisualManagerEx.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="GameToolTest.rc" />
+    <ResourceCompile Include="GameToolTest1.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\classview.bmp" />
-    <Image Include="res\classview_hc.bmp" />
-    <Image Include="res\class_view.ico" />
-    <Image Include="res\class_view_hc.ico" />
-    <Image Include="res\explorer.bmp" />
-    <Image Include="res\explorer_hc.bmp" />
-    <Image Include="res\fileview.bmp" />
-    <Image Include="res\fileview_hc.bmp" />
-    <Image Include="res\file_view.ico" />
-    <Image Include="res\file_view_hc.ico" />
-    <Image Include="res\GameToolTest.ico" />
-    <Image Include="res\GameToolTestDoc.ico" />
-    <Image Include="res\menuimages.bmp" />
-    <Image Include="res\menuimages_hc.bmp" />
+    <Image Include="res\buttons.bmp" />
+    <Image Include="res\filelarge.bmp" />
+    <Image Include="res\filesmall.bmp" />
+    <Image Include="res\GameToolTest_1.ico" />
+    <Image Include="res\GameToolTest_1Doc.ico" />
+    <Image Include="res\main.bmp" />
     <Image Include="res\output_wnd.ico" />
     <Image Include="res\output_wnd_hc.ico" />
-    <Image Include="res\properties.bmp" />
-    <Image Include="res\properties_hc.bmp" />
-    <Image Include="res\properties_wnd.ico" />
-    <Image Include="res\properties_wnd_hc.ico" />
-    <Image Include="res\sort.bmp" />
-    <Image Include="res\sort_hc.bmp" />
     <Image Include="res\Toolbar.bmp" />
     <Image Include="res\Toolbar256.bmp" />
-    <Image Include="res\userimages.bmp" />
+    <Image Include="res\writelarge.bmp" />
+    <Image Include="res\writesmall.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\GameToolTest.rc2" />
+    <None Include="res\GameToolTest1.rc2" />
+    <None Include="res\ribbon.mfcribbon-ms" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
