@@ -2,7 +2,8 @@
 #include "VisualManagerEx.h"
 #include "resource.h"
 
-IMPLEMENT_DYNCREATE(VisualManagerEx, CMFCVisualManagerOffice2007)
+//IMPLEMENT_DYNCREATE(VisualManagerEx, CMFCVisualManagerOffice2007)
+IMPLEMENT_DYNCREATE(VisualManagerEx, CMFCVisualManagerVS2008)
 
 VisualManagerEx::VisualManagerEx()
 {

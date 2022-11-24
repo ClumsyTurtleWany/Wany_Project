@@ -94,7 +94,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	DockPane(&m_wndOutput);
 
 	// 보관된 값에 따라 비주얼 관리자 및 스타일을 설정합니다.
-	OnApplicationLook(theApp.m_nAppLook);
+	//OnApplicationLook(theApp.m_nAppLook);
 
 	return 0;
 }
