@@ -20,7 +20,7 @@ bool Sample::initialize()
         FBXLoader::getInstance()->setResourceDirectory(RESOURCE_DIR);
         pFbxObject = new FBXObject;
         //pFbxObject->initialize();
-        FBXLoader::getInstance()->Load(L"../resource/FBX/MultiCameras.FBX", pFbxObject);
+        //FBXLoader::getInstance()->Load(L"../resource/FBX/MultiCameras.FBX", pFbxObject);
         //FBXLoader::getInstance()->Load(L"../resource/FBX/charMob.FBX", pFbxObject);
         //FBXLoader::getInstance()->Load(L"../resource/FBX/box.FBX", pFbxObject);
         //FBXLoader::getInstance()->Load(L"../resource/FBX/mb2001.FBX", pFbxObject);
@@ -30,6 +30,10 @@ bool Sample::initialize()
         //FBXLoader::getInstance()->Load(L"../resource/FBX/Turret_Deploy1.FBX", pFbxObject); // Object Animation
         //FBXLoader::getInstance()->Load(L"../resource/FBX/Idle.FBX", pFbxObject);
         //FBXLoader::getInstance()->Load(L"../resource/FBX/Man.FBX", pFbxObject); // Skinning Animation
+        //FBXLoader::getInstance()->setResourceDirectory(L"../resource/FBX/Portal/AutoportalFrame/");
+        //FBXLoader::getInstance()->Load(L"../resource/FBX/Portal/AutoportalFrame/Autoportal_frame.fbx", pFbxObject);
+        FBXLoader::getInstance()->setResourceDirectory(L"../resource/FBX/Portal/Chell/");
+        FBXLoader::getInstance()->Load(L"../resource/FBX/Portal/Chell/Chell.fbx", pFbxObject);
 
         //if (FBXLoader::getInstance()->LoadDir(L"../resource/FBX/"))
         {
