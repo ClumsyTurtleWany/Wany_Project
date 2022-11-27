@@ -53,6 +53,16 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	BOOL bNameValid;
 
+	// 타이틀 바가 아닌 말그대로 윈도우 시스템에 접근, COLOR_WINDOW 색상으로 크롬 배경도 칠해짐.
+	//// Title Bar Start
+	//int aiElements[3] = { COLOR_ACTIVEBORDER, COLOR_ACTIVECAPTION, COLOR_WINDOW };
+	//DWORD aColors[3];
+	//aColors[0] = RGB(255, 0, 0);
+	//aColors[1] = RGB(0, 255, 0);
+	//aColors[2] = RGB(255, 255, 255);
+	//SetSysColors(3, aiElements, aColors);
+	//// Title Bar End
+
 	CMFCVisualManager::SetDefaultManager(RUNTIME_CLASS(VisualManagerEx));
 
 	CDockingManager::SetDockingMode(DT_SMART);

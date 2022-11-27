@@ -15,6 +15,9 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
 
 bool Sample::initialize()
 {
+    DaeFile chellDae;
+    chellDae.Load("../resource/FBX/Portal/Chell/Chell.dae");
+
     ObjFile chellObj;
     chellObj.Load(L"../resource/FBX/Portal/Chell/Chell.obj");
 

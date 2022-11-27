@@ -5,5 +5,6 @@
 
 class DaeFile
 {
-
+public:
+	bool Load(std::string filename);
 };
