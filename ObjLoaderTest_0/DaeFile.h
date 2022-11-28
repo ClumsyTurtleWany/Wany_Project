@@ -19,12 +19,10 @@ public:
 	std::map<std::string, std::string> _textureImages;
 
 public:
-	bool Load(std::string filename);
-
-public:
 	//----------------------------------------
 	// Common Function
 	//----------------------------------------
+	bool Load(std::string filename);
 	bool SplitString(std::string line, char delimiter, std::vector<std::string>& dst);
 
 public:
@@ -36,16 +34,16 @@ public:
 	bool ParseAssetInfo(TiXmlElement* parent);
 
 	// Texture images name
-	bool ParseLibImages(TiXmlElement* parent);
+	bool ParseImages(TiXmlElement* parent);
 
 	// Texture process method
-	bool ParseLibEffects(TiXmlElement* parent);
+	bool ParseEffects(TiXmlElement* parent);
 
 	// Material
-	bool ParseLidbMaterials(TiXmlElement* parent);
+	bool ParseMaterials(TiXmlElement* parent);
 
 	// Geometries -> Geometry
-	bool ParseLibGeometries(TiXmlElement* parent);
+	bool ParseGeometries(TiXmlElement* parent);
 	bool ParseGeometryMesh(TiXmlElement* parent, std::string id);
 	bool ParseGeometryMeshSource(TiXmlElement* parent);
 	bool ParseGeometryMeshVertices(TiXmlElement* parent);

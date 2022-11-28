@@ -33,7 +33,7 @@ bool DaeFile::Load(std::string filename)
 
 		textureImages.insert(std::make_pair(id, textureName));
 	}*/
-	if (!ParseLibImages(images))
+	if (!ParseImages(images))
 	{
 		OutputDebugString(L"Texture images info is null");
 	}
@@ -68,7 +68,7 @@ bool DaeFile::Load(std::string filename)
 
 		}
 	}*/
-	if (!ParseLibEffects(effects))
+	if (!ParseEffects(effects))
 	{
 		OutputDebugString(L"Texture images info is null");
 	}
@@ -107,7 +107,7 @@ bool DaeFile::Load(std::string filename)
 
 		}
 	}*/
-	if (!ParseLibGeometries(geometries))
+	if (!ParseGeometries(geometries))
 	{
 		OutputDebugString(L"Texture images info is null");
 	}
@@ -145,7 +145,7 @@ bool DaeFile::ParseAssetInfo(TiXmlElement* parent)
 	return true;
 }
 
-bool DaeFile::ParseLibImages(TiXmlElement* parent)
+bool DaeFile::ParseImages(TiXmlElement* parent)
 {
 	if (parent == nullptr)
 	{
@@ -177,7 +177,7 @@ bool DaeFile::ParseLibImages(TiXmlElement* parent)
 	return true;
 }
 
-bool DaeFile::ParseLibEffects(TiXmlElement* parent)
+bool DaeFile::ParseEffects(TiXmlElement* parent)
 {
 	if (parent == nullptr)
 	{
@@ -240,7 +240,7 @@ bool DaeFile::ParseLibEffects(TiXmlElement* parent)
 	return true;
 }
 
-bool DaeFile::ParseLidbMaterials(TiXmlElement* parent)
+bool DaeFile::ParseMaterials(TiXmlElement* parent)
 {
 	if (parent == nullptr)
 	{
@@ -250,7 +250,7 @@ bool DaeFile::ParseLidbMaterials(TiXmlElement* parent)
 	return true;
 }
 
-bool DaeFile::ParseLibGeometries(TiXmlElement* parent)
+bool DaeFile::ParseGeometries(TiXmlElement* parent)
 {
 	if (parent == nullptr)
 	{
@@ -429,7 +429,7 @@ bool DaeFile::ParseGeometryMeshSource(TiXmlElement* parent)
 	}
 
 	//--------------------------------------
-	// Parse float_array
+	// Parse accessor
 	//--------------------------------------
 	TiXmlElement* accessor = parent->FirstChildElement("technique_common")->FirstChildElement("accessor");
 	if (accessor == nullptr)
@@ -488,6 +488,29 @@ bool DaeFile::ParseGeometryMeshVertices(TiXmlElement* parent)
 	// --- [3]triangles				: attribute - count(int), material(string, 머테리얼)
 	// ---- [4]input				: attribute - offset(int), semantic(string, "VERTEX, NORMAL, TEXCOORD"), source(string, 적용할 소스 ID), set(int)
 
+	TiXmlAttribute* attribute = parent->FirstAttribute();
+	if (attribute == nullptr)
+	{
+		return false;
+	}
+
+	std::string id = attribute->Value();
+
+	TiXmlElement* input = parent->FirstChildElement("input");
+	if (input == nullptr)
+	{
+		return false;
+	}
+
+	attribute = input->FirstAttribute();
+	if (attribute == nullptr)
+	{
+		return false;
+	}
+
+	std::string semantic = attribute->Value(); attribute = attribute->Next();
+	std::string source = attribute->Value();
+
 	return true;
 }
 
@@ -510,6 +533,47 @@ bool DaeFile::ParseGeometryMeshTriangles(TiXmlElement* parent)
 	// ---- [4]input				: attribute - semantic(string, "POSITION"), source(string, 적용할 소스 id)
 	// --- [3]triangles				: attribute - count(int), material(string, 머테리얼)
 	// ---- [4]input				: attribute - offset(int), semantic(string, "VERTEX, NORMAL, TEXCOORD"), source(string, 적용할 소스 ID), set(int)
+
+	TiXmlAttribute* attribute = parent->FirstAttribute();
+	if (attribute == nullptr)
+	{
+		return false;
+	}
+
+	int count = std::stoi(attribute->Value()); attribute = attribute->Next();
+	std::string material = attribute->Value();
+
+	for (TiXmlElement* input = parent->FirstChildElement("input"); input != nullptr; input = input->NextSiblingElement())
+	{
+		if (input == nullptr)
+		{
+			continue;
+		}
+
+		attribute = input->FirstAttribute();
+		if (attribute == nullptr)
+		{
+			continue;
+		}
+
+		int offset = std::stoi(attribute->Value()); attribute = attribute->Next();
+		std::string semantic = attribute->Value(); attribute = attribute->Next();
+		std::string source = attribute->Value(); attribute = attribute->Next();
+		int set = std::stoi(attribute->Value());
+	}
+
+	TiXmlElement* p = parent->FirstChildElement("p");
+	if (p == nullptr)
+	{
+		return false;
+	}
+
+	std::string indexString = p->GetText();
+	std::vector<std::string> indexStringList;
+	if (!SplitString(indexString, ' ', indexStringList))
+	{
+
+	}
 
 	return true;
 }
