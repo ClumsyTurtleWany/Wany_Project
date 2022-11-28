@@ -13,12 +13,15 @@ bool DaeFile::Load(std::string filename)
 
 	// Asset Information
 	TiXmlElement* asset = root->FirstChildElement("asset");
-	TiXmlElement* upAxis = asset->FirstChildElement("up_axis");	
-	std::string axisVal = upAxis->GetText();
+	if (!ParseAssetInfo(asset))
+	{
+		OutputDebugString(L"Asset info is null");
+	}
+	
 
 	// Library images == Texture images
 	TiXmlElement* images = root->FirstChildElement("library_images");
-	TiXmlElement* image = images->FirstChildElement("image");
+	/*TiXmlElement* image = images->FirstChildElement("image");
 	for (TiXmlElement* target = image; target != nullptr; target = target->NextSiblingElement())
 	{
 		TiXmlAttribute* attribute = target->FirstAttribute();
@@ -27,11 +30,17 @@ bool DaeFile::Load(std::string filename)
 
 		TiXmlElement* ele = target->FirstChildElement("init_from")->FirstChildElement("ref");
 		std::string textureName = ele->GetText();
+
+		textureImages.insert(std::make_pair(id, textureName));
+	}*/
+	if (!ParseLibImages(images))
+	{
+		OutputDebugString(L"Texture images info is null");
 	}
 
 	// Library effects
 	TiXmlElement* effects = root->FirstChildElement("library_effects");
-	TiXmlElement* effect = effects->FirstChildElement("effect");
+	/*TiXmlElement* effect = effects->FirstChildElement("effect");
 	for (TiXmlElement* target = effect; target != nullptr; target = target->NextSiblingElement())
 	{
 		TiXmlAttribute* attribute = target->FirstAttribute();
@@ -58,11 +67,15 @@ bool DaeFile::Load(std::string filename)
 		{
 
 		}
+	}*/
+	if (!ParseLibEffects(effects))
+	{
+		OutputDebugString(L"Texture images info is null");
 	}
 
 	// Library geometries
 	TiXmlElement* geometries = root->FirstChildElement("library_geometries");
-	TiXmlElement* geometry = geometries->FirstChildElement("geometry");
+	/*TiXmlElement* geometry = geometries->FirstChildElement("geometry");
 	for (TiXmlElement* target = geometry; target != nullptr; target = target->NextSiblingElement())
 	{
 		TiXmlAttribute* attribute = target->FirstAttribute();
@@ -93,6 +106,10 @@ bool DaeFile::Load(std::string filename)
 			int a = 0;
 
 		}
+	}*/
+	if (!ParseLibGeometries(geometries))
+	{
+		OutputDebugString(L"Texture images info is null");
 	}
 
 	return false;
@@ -110,4 +127,389 @@ bool DaeFile::SplitString(std::string line, char delimiter, std::vector<std::str
 	}
 
 	return isValid;
+}
+
+bool DaeFile::ParseAssetInfo(TiXmlElement* parent)
+{
+	if (parent == nullptr)
+	{
+		return false;
+	}
+
+	TiXmlElement* upAxis = parent->FirstChildElement("up_axis");
+	if (upAxis != nullptr)
+	{
+		_axis[2] = upAxis->GetText();
+	}
+
+	return true;
+}
+
+bool DaeFile::ParseLibImages(TiXmlElement* parent)
+{
+	if (parent == nullptr)
+	{
+		return false;
+	}
+
+	TiXmlElement* image = parent->FirstChildElement("image");
+	for (TiXmlElement* target = image; target != nullptr; target = target->NextSiblingElement())
+	{
+		TiXmlAttribute* attribute = target->FirstAttribute();
+		if (attribute == nullptr)
+		{
+			continue;
+		}
+		
+		std::string name = attribute->Name();
+		std::string id = attribute->Value();
+		
+		TiXmlElement* ele = target->FirstChildElement("init_from")->FirstChildElement("ref");
+		if (ele == nullptr)
+		{
+			continue;
+		}
+		std::string textureName = ele->GetText();
+
+		_textureImages.insert(std::make_pair(id, textureName));
+	}
+
+	return true;
+}
+
+bool DaeFile::ParseLibEffects(TiXmlElement* parent)
+{
+	if (parent == nullptr)
+	{
+		return false;
+	}
+
+	TiXmlElement* effect = parent->FirstChildElement("effect");
+	for (TiXmlElement* target = effect; target != nullptr; target = target->NextSiblingElement())
+	{
+		TiXmlAttribute* attribute = target->FirstAttribute();
+		if (attribute == nullptr)
+		{
+			continue;
+		}
+
+		std::string name = attribute->Name();
+		std::string id = attribute->Value();
+
+		TiXmlElement* profile = target->FirstChildElement("profile_COMMON");
+		if (profile == nullptr)
+		{
+			continue;
+		}
+
+		TiXmlElement* technique = profile->FirstChildElement("technique");
+		if (technique == nullptr)
+		{
+			continue;
+		}
+
+		attribute = technique->FirstAttribute();
+		if (attribute == nullptr)
+		{
+			continue;
+		}
+
+		std::string id = attribute->Value();
+
+		TiXmlElement* blinn = technique->FirstChildElement("blinn");
+		if (blinn == nullptr)
+		{
+			continue;
+		}
+
+		TiXmlElement* diffuse = blinn->FirstChildElement("diffuse")->FirstChildElement("color");
+		if (diffuse == nullptr)
+		{
+			continue;
+		}
+		
+		std::string diffuseColor = diffuse->GetText();
+
+		TiXmlElement* newparam = profile->FirstChildElement("newparam");
+		if (newparam != nullptr)
+		{
+
+		}
+	}
+
+	return true;
+}
+
+bool DaeFile::ParseLidbMaterials(TiXmlElement* parent)
+{
+	if (parent == nullptr)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool DaeFile::ParseLibGeometries(TiXmlElement* parent)
+{
+	if (parent == nullptr)
+	{
+		return false;
+	}
+
+	// [0]library_geometries		
+	// - [1]geometry				: attribute - id
+	// -- [2]mesh
+	// --- [3]source				: attribute - id
+	// ---- [4]float_array			: attribute - id(string), count(int), digits(int) == length
+	// ---- [4]technique_common	:
+	// ----- [5]accessor			: attribute - vertices count(int), 적용할 소스 id(string), stride(int) 
+	// ------ [6]param				: attribute - name(string, x, y, z 혹은 u,v 순서), type(string, ex)"float")
+	// --- [3]vertices				: attribute - id(string)
+	// ---- [4]input				: attribute - semantic(string, "POSITION"), source(string, 적용할 소스 id)
+	// --- [3]triangles				: attribute - count(int), material(string, 머테리얼)
+	// ---- [4]input				: attribute - offset(int), semantic(string, "VERTEX, NORMAL, TEXCOORD"), source(string, 적용할 소스 ID), set(int)
+
+	for (TiXmlElement* geometry = parent->FirstChildElement("geometry"); geometry != nullptr; geometry = geometry->NextSiblingElement())
+	{
+		TiXmlAttribute* attribute = geometry->FirstAttribute();
+		if (attribute == nullptr)
+		{
+			continue;
+		}
+
+		std::string name = attribute->Name();
+		std::string id = attribute->Value();
+
+		TiXmlElement* mesh = geometry->FirstChildElement("mesh");
+		if (!ParseGeometryMesh(mesh, id))
+		{
+			continue;
+		}
+
+		/*TiXmlElement* source = geometry->FirstChildElement("mesh")->FirstChildElement("source");
+		for (TiXmlElement* ts = source; ts != nullptr; ts = ts->NextSiblingElement())
+		{
+			attribute = ts->FirstAttribute();
+			if (attribute == nullptr)
+			{
+				continue;
+			}
+			std::string sid = attribute->Value();
+
+			TiXmlElement* float_array = ts->FirstChildElement("float_array");
+			if (float_array == nullptr)
+			{
+				continue;
+			}
+
+			attribute = float_array->FirstAttribute();
+			if (attribute == nullptr)
+			{
+				continue;
+			}
+			std::string array_id = attribute->Value();
+
+			attribute = attribute->Next();
+			std::string count = attribute->Value();
+			attribute = attribute->Next();
+			std::string digits = attribute->Value();
+
+			std::string arrayData = float_array->GetText();
+
+			std::vector<std::string> rst;
+			if (SplitString(arrayData, ' ', rst))
+			{
+
+			}
+			int a = 0;
+
+		}*/
+	}
+
+	return true;
+}
+
+bool DaeFile::ParseGeometryMesh(TiXmlElement* parent, std::string id)
+{
+	if (parent == nullptr)
+	{
+		return false;
+	}
+
+	// [0]library_geometries		
+	// - [1]geometry				: attribute - id
+	// -- [2]mesh
+	// --- [3]source				: attribute - id
+	// ---- [4]float_array			: attribute - id(string), count(int), digits(int) == length
+	// ---- [4]technique_common	:
+	// ----- [5]accessor			: attribute - vertices count(int), 적용할 소스 id(string), stride(int) 
+	// ------ [6]param				: attribute - name(string, x, y, z 혹은 u,v 순서), type(string, ex)"float")
+	// --- [3]vertices				: attribute - id(string)
+	// ---- [4]input				: attribute - semantic(string, "POSITION"), source(string, 적용할 소스 id)
+	// --- [3]triangles				: attribute - count(int), material(string, 머테리얼)
+	// ---- [4]input				: attribute - offset(int), semantic(string, "VERTEX, NORMAL, TEXCOORD"), source(string, 적용할 소스 ID), set(int)
+
+	for (TiXmlElement* source = parent->FirstChildElement("source"); source != nullptr; source = source->NextSiblingElement())
+	{
+		if (!ParseGeometryMeshSource(source))
+		{
+			continue;
+		}
+	}
+
+	for (TiXmlElement* vertices = parent->FirstChildElement("vertices"); vertices != nullptr; vertices = vertices->NextSiblingElement())
+	{
+		if (!ParseGeometryMeshVertices(vertices))
+		{
+			continue;
+		}
+	}
+
+	for (TiXmlElement* triangles = parent->FirstChildElement("triangles"); triangles != nullptr; triangles = triangles->NextSiblingElement())
+	{
+		if (!ParseGeometryMeshTriangles(triangles))
+		{
+			continue;
+		}
+	}
+	return true;
+}
+
+bool DaeFile::ParseGeometryMeshSource(TiXmlElement* parent)
+{
+	if (parent == nullptr)
+	{
+		return false;
+	}
+
+	// [0]library_geometries		
+	// - [1]geometry				: attribute - id
+	// -- [2]mesh
+	// --- [3]source				: attribute - id
+	// ---- [4]float_array			: attribute - id(string), count(int), digits(int) == length
+	// ---- [4]technique_common
+	// ----- [5]accessor			: attribute - vertices count(int), 적용할 소스 id(string), stride(int) 
+	// ------ [6]param				: attribute - name(string, x, y, z 혹은 u,v 순서), type(string, ex)"float")
+	// --- [3]vertices				: attribute - id(string)
+	// ---- [4]input				: attribute - semantic(string, "POSITION"), source(string, 적용할 소스 id)
+	// --- [3]triangles				: attribute - count(int), material(string, 머테리얼)
+	// ---- [4]input				: attribute - offset(int), semantic(string, "VERTEX, NORMAL, TEXCOORD"), source(string, 적용할 소스 ID), set(int)
+
+	TiXmlAttribute* attribute = parent->FirstAttribute();
+	if (attribute == nullptr)
+	{
+		return false;
+	}
+	std::string sid = attribute->Value();
+
+	//--------------------------------------
+	// Parse float_array
+	//--------------------------------------
+	TiXmlElement* float_array = parent->FirstChildElement("float_array");
+	if (float_array == nullptr)
+	{
+		return false;
+	}
+
+	attribute = float_array->FirstAttribute();
+	if (attribute == nullptr)
+	{
+		return false;
+	}
+	std::string array_id = attribute->Value(); attribute = attribute->Next();
+	std::string count = attribute->Value(); attribute = attribute->Next();
+	std::string digits = attribute->Value();
+	std::string arrayData = float_array->GetText();
+
+	std::vector<std::string> rst;
+	if (SplitString(arrayData, ' ', rst))
+	{
+
+	}
+
+	//--------------------------------------
+	// Parse float_array
+	//--------------------------------------
+	TiXmlElement* accessor = parent->FirstChildElement("technique_common")->FirstChildElement("accessor");
+	if (accessor == nullptr)
+	{
+		return false;
+	}
+
+	attribute = accessor->FirstAttribute();
+	if (attribute == nullptr)
+	{
+		return false;
+	}
+
+	int verticesCount = std::stoi(attribute->Value()); attribute = attribute->Next();
+	std::string accessorSource = attribute->Value(); attribute = attribute->Next();
+	int stride = std::stoi(attribute->Value());
+
+	std::vector<std::string> paramList;
+	for (TiXmlElement* param = accessor->FirstChildElement("param"); param != nullptr; param = param->NextSiblingElement())
+	{
+		if (param == nullptr)
+		{
+			continue;
+		}
+
+		attribute = param->FirstAttribute();
+		if (attribute == nullptr)
+		{
+			continue;
+		}
+
+		std::string axis = attribute->Value();
+		paramList.push_back(axis);
+	}
+
+	return true;
+}
+
+bool DaeFile::ParseGeometryMeshVertices(TiXmlElement* parent)
+{
+	if (parent == nullptr)
+	{
+		return false;
+	}
+
+	// [0]library_geometries		
+	// - [1]geometry				: attribute - id
+	// -- [2]mesh
+	// --- [3]source				: attribute - id
+	// ---- [4]float_array			: attribute - id(string), count(int), digits(int) == length
+	// ---- [4]technique_common	:
+	// ----- [5]accessor			: attribute - vertices count(int), 적용할 소스 id(string), stride(int) 
+	// ------ [6]param				: attribute - name(string, x, y, z 혹은 u,v 순서), type(string, ex)"float")
+	// --- [3]vertices				: attribute - id(string)
+	// ---- [4]input				: attribute - semantic(string, "POSITION"), source(string, 적용할 소스 id)
+	// --- [3]triangles				: attribute - count(int), material(string, 머테리얼)
+	// ---- [4]input				: attribute - offset(int), semantic(string, "VERTEX, NORMAL, TEXCOORD"), source(string, 적용할 소스 ID), set(int)
+
+	return true;
+}
+
+bool DaeFile::ParseGeometryMeshTriangles(TiXmlElement* parent)
+{
+	if (parent == nullptr)
+	{
+		return false;
+	}
+
+	// [0]library_geometries		
+	// - [1]geometry				: attribute - id
+	// -- [2]mesh
+	// --- [3]source				: attribute - id
+	// ---- [4]float_array			: attribute - id(string), count(int), digits(int) == length
+	// ---- [4]technique_common	:
+	// ----- [5]accessor			: attribute - vertices count(int), 적용할 소스 id(string), stride(int) 
+	// ------ [6]param				: attribute - name(string, x, y, z 혹은 u,v 순서), type(string, ex)"float")
+	// --- [3]vertices				: attribute - id(string)
+	// ---- [4]input				: attribute - semantic(string, "POSITION"), source(string, 적용할 소스 id)
+	// --- [3]triangles				: attribute - count(int), material(string, 머테리얼)
+	// ---- [4]input				: attribute - offset(int), semantic(string, "VERTEX, NORMAL, TEXCOORD"), source(string, 적용할 소스 ID), set(int)
+
+	return true;
 }
