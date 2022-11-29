@@ -407,16 +407,12 @@ bool DaeFile::ParseGeometryMeshSource(TiXmlElement* parent)
 	// Parse float_array
 	//--------------------------------------
 	TiXmlElement* float_array = parent->FirstChildElement("float_array");
-	if (float_array == nullptr)
+	attribute = float_array->FirstAttribute();
+	if (float_array == nullptr || attribute == nullptr)
 	{
 		return false;
 	}
 
-	attribute = float_array->FirstAttribute();
-	if (attribute == nullptr)
-	{
-		return false;
-	}
 	std::string array_id = attribute->Value(); attribute = attribute->Next();
 	std::string count = attribute->Value(); attribute = attribute->Next();
 	std::string digits = attribute->Value();
@@ -432,13 +428,8 @@ bool DaeFile::ParseGeometryMeshSource(TiXmlElement* parent)
 	// Parse accessor
 	//--------------------------------------
 	TiXmlElement* accessor = parent->FirstChildElement("technique_common")->FirstChildElement("accessor");
-	if (accessor == nullptr)
-	{
-		return false;
-	}
-
 	attribute = accessor->FirstAttribute();
-	if (attribute == nullptr)
+	if (accessor == nullptr || attribute == nullptr)
 	{
 		return false;
 	}
@@ -450,13 +441,8 @@ bool DaeFile::ParseGeometryMeshSource(TiXmlElement* parent)
 	std::vector<std::string> paramList;
 	for (TiXmlElement* param = accessor->FirstChildElement("param"); param != nullptr; param = param->NextSiblingElement())
 	{
-		if (param == nullptr)
-		{
-			continue;
-		}
-
 		attribute = param->FirstAttribute();
-		if (attribute == nullptr)
+		if (param == nullptr || attribute == nullptr)
 		{
 			continue;
 		}
@@ -497,13 +483,8 @@ bool DaeFile::ParseGeometryMeshVertices(TiXmlElement* parent)
 	std::string id = attribute->Value();
 
 	TiXmlElement* input = parent->FirstChildElement("input");
-	if (input == nullptr)
-	{
-		return false;
-	}
-
 	attribute = input->FirstAttribute();
-	if (attribute == nullptr)
+	if (input == nullptr || attribute == nullptr)
 	{
 		return false;
 	}
