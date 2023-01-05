@@ -1,6 +1,6 @@
 #include "SocketNetwork.h"
 
-bool SocketNetwork::OpenSocket(SocketEx& target, ProtocolType protocol)
+bool SocketNetwork::StartUp()
 {
 	WSADATA wsa;
 	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
@@ -8,6 +8,17 @@ bool SocketNetwork::OpenSocket(SocketEx& target, ProtocolType protocol)
 		return false;
 	}
 
+	return true;
+}
+
+bool SocketNetwork::CleanUp()
+{
+	WSACleanup();
+	return true;
+}
+
+bool SocketNetwork::OpenSocket(SocketEx& target, ProtocolType protocol)
+{
 	//SOCKET sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	//SOCKET sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 	target.Protocol = protocol;
@@ -56,13 +67,10 @@ bool SocketNetwork::Bind(SocketEx& target, int port)
 	return true;
 }
 
-bool SocketNetwork::Accept(SocketEx& host, SocketEx& client)
+bool SocketNetwork::Listen(SocketEx& target)
 {
-	SetNonBlock(host);
-	int length = sizeof(SOCKADDR_IN);
-	client.Socket = accept(host.Socket, (sockaddr*)&client.Addr, &length);
-	SetBlock(host);
-	if (client.Socket == SOCKET_ERROR)
+	int rst = listen(target.Socket, SOMAXCONN);
+	if (rst == SOCKET_ERROR)
 	{
 		return false;
 	}
@@ -70,12 +78,24 @@ bool SocketNetwork::Accept(SocketEx& host, SocketEx& client)
 	return true;
 }
 
-bool SocketNetwork::Send(SocketEx& target, std::string& msg)
+SocketNetwork::SocketEx* SocketNetwork::Accept(SocketEx& host)
 {
-	SetNonBlock(target);
-	int length = msg.size();
+	SocketEx* Client = new SocketEx;
+	int length = sizeof(SOCKADDR_IN);
+	Client->Socket = accept(host.Socket, (sockaddr*)&Client->Addr, &length);
+	if (Client->Socket == SOCKET_ERROR)
+	{
+		delete Client;
+		Client = nullptr;
+		return nullptr;
+	}
+
+	return Client;
+}
+
+bool SocketNetwork::Send(SocketEx& target, std::string& msg, int length)
+{
 	int SendBytes = send(target.Socket, msg.c_str(), length, 0);
-	SetBlock(target);
 	if (SendBytes == SOCKET_ERROR)
 	{
 		if (WSAGetLastError() != WSAEWOULDBLOCK)
@@ -87,31 +107,37 @@ bool SocketNetwork::Send(SocketEx& target, std::string& msg)
 	return true;
 }
 
-bool SocketNetwork::Receive(SocketEx& target, std::string& msg)
+bool SocketNetwork::Receive(SocketEx& target, std::string& msg, int length)
 {
-	SetNonBlock(target);
-	char buffer[256] = { 0, };
-	int length = 256;
+	if (length < 1)
+	{
+		return false;
+	}
+
+	char* buffer = new char[length];
 	int ReceiveBytes = recv(target.Socket, buffer, length, 0);
-	SetBlock(target);
 	if (ReceiveBytes == SOCKET_ERROR)
 	{
 		if (WSAGetLastError() != WSAEWOULDBLOCK)
 		{
+			delete buffer;
+			buffer = nullptr;
 			return false;
 		}
 	}
 
-	int ReceiveMsgLength = ReceiveBytes / sizeof(char);
-	for (int i = 0; i < ReceiveMsgLength; i++)
+	for (int i = 0; i < ReceiveBytes; i++)
 	{
 		msg.push_back(buffer[i]);
 	}
 
+	delete[] buffer;
+	buffer = nullptr;
+
 	return true;
 }
 
-bool SocketNetwork::Close(SocketEx& target)
+bool SocketNetwork::CloseSocket(SocketEx& target)
 {
 	closesocket(target.Socket);
 	return true;

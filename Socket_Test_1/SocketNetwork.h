@@ -15,73 +15,71 @@ namespace SocketNetwork
 		UDP,
 	};
 
-	
-
-	typedef struct ClientInfo
+	typedef struct SocketEx
 	{
-		SOCKET Socket;
-		SOCKADDR_IN Addr;
+		std::string		IP;
+		int				Port;
+		ProtocolType	Protocol;
+		SOCKET			Socket;
+		SOCKADDR_IN		Addr;
 	};
 
-	typedef struct ThreadInfo
-	{
-		SOCKET Host;
-		ClientInfo Client;
-	};
+	// Open Socket;
+	bool OpenSocket(SocketEx& target, ProtocolType protocol = ProtocolType::TCP);
 
-	class Client
-	{
-	private:
-		int _Port;
-		std::string _IP;
+	// Client
+	bool Connect(SocketEx& target, std::string ip, int port);
 
+	// Host
+	bool Bind(SocketEx& target, int port);
+	bool Accept(SocketEx& host, SocketEx& client);
+
+	// Common
+	bool Send(SocketEx& target, std::string& msg);
+	bool Receive(SocketEx& target, std::string& msg);
+	bool Close(SocketEx& target);
+
+	void SetBlock(SocketEx& target);
+	void SetNonBlock(SocketEx& target);
+
+	class Server
+	{
 	public:
-		Client(std::string ip, int port);
-		~Client();
+		typedef struct ReceiveThreadInfo
+		{
+			Server* HostServer;
+			SocketEx* Client;
+		};
 
-	protected:
-		bool initialize();
-		bool run();
-		bool pause();
-		bool stop();
-		bool release();
-	};
-
-
-	class Host
-	{
 	private:
-		int Port = 0;
-		ProtocolType Protocol;
+		SocketEx SelfHost;
+		std::vector<SocketEx*> HostList;
+		std::vector<SocketEx*> ClientList;
 
-		WSADATA Wsa;
-		SOCKET MainSocket;
-		SOCKADDR_IN MainSockAddr;
+		bool isOpen = false;
 
-
-		HANDLE AcceptThreadHandle;
-		HANDLE RunEventHandle;
 		HANDLE ExitEventHandle;
-
-		std::vector<ClientInfo*> ClientList;
-
-	public:
-		Host(int port, ProtocolType protocol = ProtocolType::TCP);
-		~Host();
-
-	protected:
-		bool initialize();
-		bool release();
-
-	protected:
-		bool addClient(SOCKET socket, SOCKADDR_IN addr);
+		HANDLE AcceptThreadHandle = NULL;
 
 	public:
-		bool run();
-		bool pause();
-		bool stop();
+		Server();
+		~Server();
 
+	public:
+		bool Open(int port, ProtocolType protocol = ProtocolType::TCP);
+		bool Connect(std::string ip, int port);
+		bool Run();
+		bool Send(std::string& msg);
+		bool Close();
+
+	private:
+		bool AddClient(SocketEx* client);
+		bool SendToHost(std::string& msg);
+		bool SendToClient(std::string& msg);
+
+	private:
 		static DWORD WINAPI AcceptThread(LPVOID lpParam);
 		static DWORD WINAPI ReceiveThread(LPVOID lpParam);
+		static DWORD WINAPI SendThread(LPVOID lpParam);
 	};
 }

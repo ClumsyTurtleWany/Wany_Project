@@ -29,12 +29,6 @@
     <ClCompile Include="SocketNetwork.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="BlockNetworkExample.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="NonBlockNetworkExample.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="SocketNetworkServer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
