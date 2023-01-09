@@ -313,6 +313,12 @@ DWORD __stdcall SocketNetwork::Server::ReceiveThread(LPVOID lpParam)
 		{
 			if (ReceiveMsg.empty())
 			{
+				delete Client;
+				Client = nullptr;
+
+				delete ThreadInfo;
+				ThreadInfo = nullptr;
+
 				return 0;
 			}
 

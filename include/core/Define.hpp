@@ -1,7 +1,12 @@
 #pragma once
 
 // WinAPI
-#include <windows.h>
+#pragma comment(lib, "Ws2_32.lib") 
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
+#include <WinSock2.h>
+#include <WS2tcpip.h>
+
+#include <windows.h> // windows.h 와 WinSock2 순서 중요함. WinSock2를 먼저 Include 하고 WinSock2를 해야 정상 작동이 됨.
 #pragma comment(lib, "winmm.lib") // timeGetTime
 
 #include <cstdlib> // srand

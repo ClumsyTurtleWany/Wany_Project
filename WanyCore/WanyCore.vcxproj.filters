@@ -130,6 +130,15 @@
     <Filter Include="DirectX\HLSL\Text">
       <UniqueIdentifier>{35900060-2924-4fff-87e8-dc5700c4cd3f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Network">
+      <UniqueIdentifier>{e6893a5e-f06e-44f5-aa2a-7a3288e5f668}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network\헤더 파일">
+      <UniqueIdentifier>{3d959a80-3cf1-491e-8556-7a7fc6b5780a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network\소스 파일">
+      <UniqueIdentifier>{331de39e-a9d4-4039-96b8-6e0b2f0b8f60}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowUI.hpp">
@@ -189,6 +198,9 @@
     <ClInclude Include="DXAnimationShader.hpp">
       <Filter>DirectX\Shader\헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="SocketNetwork.h">
+      <Filter>Network\헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowUI.cpp">
@@ -244,6 +256,12 @@
     </ClCompile>
     <ClCompile Include="DXAnimationShader.cpp">
       <Filter>DirectX\Shader\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="SocketNetwork.cpp">
+      <Filter>Network\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="SocketNetworkServer.cpp">
+      <Filter>Network\소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
