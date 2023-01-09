@@ -1,6 +1,7 @@
 #pragma once
 #include "GameCore.hpp"
 #include "SelectModelServer.h"
+#include <atlconv.h>
 
 //C:\Users\kgca4108\Documents\Visual Studio 2019\My Exported Templates\CoreTestTemplate_0.zip
 class Sample : public WindowUI
@@ -21,4 +22,5 @@ public:
 
 public:
 	virtual bool run() override;
+	virtual void Print(std::string msg, ...);
 };

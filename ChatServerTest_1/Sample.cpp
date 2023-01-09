@@ -31,6 +31,15 @@ bool Sample::run()
 	return true;
 }
 
+void Sample::Print(std::string msg, ...)
+{
+	va_list arg;
+		va_start(arg, msg);
+		USES_CONVERSION;
+		SendMessage(ListBoxHandle, LB_ADDSTRING, 0, (LPARAM)A2W(msg.c_str()));
+	va_end(arg);
+}
+
 //bool Sample::initialize()
 //{
 //    return true;
@@ -55,91 +64,108 @@ LRESULT Sample::MsgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
 	{
-	case WM_CREATE:
-	{
-		ListBoxHandle = CreateWindow(L"listbox", NULL, WS_CHILD | WS_VISIBLE | WS_VSCROLL | WS_BORDER, 0, 0, 500, 600, hWnd, (HMENU)1000, hInstance, NULL);
-		EditBoxHandle = CreateWindow(L"edit", NULL, WS_CHILD | WS_VISIBLE | WS_BORDER, 0, 600, 450, 25, hWnd, (HMENU)1001, hInstance, NULL);
-		ButtonHandle = CreateWindow(L"button", NULL, WS_CHILD | WS_VISIBLE | WS_BORDER, 450, 600, 50, 25, hWnd, (HMENU)1002, hInstance, NULL);
-	}
-	break;
-	case WM_USER_NETWORK_MSG:
-	{
-		if (WSAGETSELECTERROR(lParam) != 0)
+		case WM_CREATE:
 		{
-			break;
+			ListBoxHandle = CreateWindow(L"listbox", NULL, WS_CHILD | WS_VISIBLE | WS_VSCROLL | WS_BORDER, 0, 0, 500, 600, hWnd, (HMENU)1000, hInstance, NULL);
+			EditBoxHandle = CreateWindow(L"edit", NULL, WS_CHILD | WS_VISIBLE | WS_BORDER, 0, 600, 450, 25, hWnd, (HMENU)1001, hInstance, NULL);
+			ButtonHandle = CreateWindow(L"button", NULL, WS_CHILD | WS_VISIBLE | WS_BORDER, 450, 600, 50, 25, hWnd, (HMENU)1002, hInstance, NULL);
 		}
-		DWORD dwSelect = WSAGETSELECTEVENT(lParam);
-		switch (dwSelect)
-		{
-		case FD_CONNECT:
-		{
-			int a = 0;
-		}break;
-		case FD_READ:
-		{
-			SOCKET sock = wParam;
-			std::string msg;
-			if (MainServer->ReceiveFromClient(sock, msg))
-			{
-				MainServer->SendMsgToClientAll(msg, 255);
-				std::wstring wMsg(msg.begin(), msg.end());
-				SendMessage(ListBoxHandle, LB_ADDSTRING, 0, (LPARAM)wMsg.c_str());
-			}
-			int a = 0;
-			
-		}break;
-		case FD_WRITE:
-		{
-			int at = 0;
-		}break;
-		case FD_CLOSE:
-		{
-			SOCKET sock = wParam;
-			if (MainServer->CloseClient(sock))
-			{
-
-			}
-		}break;
-		case FD_ACCEPT:
-		{
-			MainServer->AcceptClient();
-		}break;
-
-		}
-	} break;
-	case WM_COMMAND:
-	{
-		switch (LOWORD(wParam))
-		{
-		case 1002:
-		{
-			WCHAR szBuffer[255] = L"";
-			GetWindowText(EditBoxHandle, szBuffer, 255);
-			std::string msg;
-			for (int i = 0; i < 255; i++)
-			{
-				msg.push_back(szBuffer[i]);
-			}
-			MainServer->SendMsgToClientAll(msg, 255);
-			SendMessage(ListBoxHandle, LB_ADDSTRING, 0, (LPARAM)szBuffer);
-			//OutputDebugString(szBuffer);
-
-		} break;
-		}
-	}
-		
-	case WM_SIZE:
-	{
-		//UINT width = LOWORD(lParam);
-		//UINT height = HIWORD(wParam);
-		GetClientRect(hWnd, &clientRect);
-		resize();
-	} break;
-	case WM_DESTROY:
-		PostQuitMessage(0);
 		break;
-	default:
-		return DefWindowProc(hWnd, message, wParam, lParam);
+
+		case WM_USER_NETWORK_MSG:
+		{
+			if (WSAGETSELECTERROR(lParam) != 0)
+			{
+				break;
+			}
+
+			DWORD dwSelect = WSAGETSELECTEVENT(lParam);
+			switch (dwSelect)
+			{
+				case FD_CONNECT:
+				{
+					int a = 0;
+				}
+				break;
+
+				case FD_READ:
+				{
+					SOCKET sock = wParam;
+					std::string msg;
+					if (MainServer->ReceiveFromClient(sock, msg))
+					{
+						MainServer->SendMsgToClientAll(msg, 255);
+						Print(msg);
+					}
+					int a = 0;
+				}
+				break;
+
+				case FD_WRITE:
+				{
+			
+				}
+				break;
+
+				case FD_CLOSE:
+				{
+					SOCKET sock = wParam;
+					if (MainServer->CloseClient(sock))
+					{
+
+					}
+				}
+				break;
+
+				case FD_ACCEPT:
+				{
+					MainServer->AcceptClient();
+				}
+				break;
+
+			}
+		} 
+		break;
+
+		case WM_COMMAND:
+		{
+			switch (LOWORD(wParam))
+			{
+				case 1002:
+				{
+					WCHAR szBuffer[255] = L"";
+					GetWindowText(EditBoxHandle, szBuffer, 255);
+					USES_CONVERSION;
+					std::string msg = W2A(szBuffer);
+					if (msg.empty())
+					{
+						break;
+					}
+
+					MainServer->SendMsgToClientAll(msg, 255);
+					Print(msg);
+					SetWindowText(EditBoxHandle, L"");
+
+				} 
+				break;
+			}
+		}
+		
+		case WM_SIZE:
+		{
+			//UINT width = LOWORD(lParam);
+			//UINT height = HIWORD(wParam);
+			GetClientRect(hWnd, &clientRect);
+			resize();
+		} 
+		break;
+
+		case WM_DESTROY:
+			PostQuitMessage(0);
+			break;
+
+		default:
+			return DefWindowProc(hWnd, message, wParam, lParam);
 	}
 	return 0;
 }
