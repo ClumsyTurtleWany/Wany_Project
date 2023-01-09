@@ -82,7 +82,8 @@ LRESULT Sample::MsgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			if (MainServer->ReceiveFromClient(sock, msg))
 			{
 				MainServer->SendMsgToClientAll(msg, 255);
-				SendMessage(ListBoxHandle, LB_ADDSTRING, 0, (LPARAM)msg.c_str());
+				std::wstring wMsg(msg.begin(), msg.end());
+				SendMessage(ListBoxHandle, LB_ADDSTRING, 0, (LPARAM)wMsg.c_str());
 			}
 			int a = 0;
 			
