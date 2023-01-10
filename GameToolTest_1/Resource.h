@@ -48,6 +48,7 @@
 #define IDB_RIBBON_HOME_SMALL		400
 #define IDB_RIBBON_HOME_LARGE		401
 #define IDI_TEST_FILE_NEW			402
+#define IDB_WANREAL_LOGO			403
 
 // 다음은 새 개체에 사용할 기본값입니다.
 //

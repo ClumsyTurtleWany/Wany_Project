@@ -56,6 +56,7 @@ protected:
 	afx_msg void OnApplicationLook(UINT id);
 	afx_msg void OnUpdateApplicationLook(CCmdUI* pCmdUI);
 	afx_msg void OnSettingChange(UINT uFlags, LPCTSTR lpszSection);
+	afx_msg void OnNcPaint();
 	DECLARE_MESSAGE_MAP()
 
 	BOOL CreateDockingWindows();

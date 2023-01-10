@@ -31,6 +31,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_COMMAND_RANGE(ID_VIEW_APPLOOK_WIN_2000, ID_VIEW_APPLOOK_WINDOWS_7, &CMainFrame::OnApplicationLook)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_VIEW_APPLOOK_WIN_2000, ID_VIEW_APPLOOK_WINDOWS_7, &CMainFrame::OnUpdateApplicationLook)
 	ON_WM_SETTINGCHANGE()
+	//ON_WM_NCPAINT()
 END_MESSAGE_MAP()
 
 // CMainFrame 생성/소멸
@@ -116,6 +117,8 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 	// TODO: CREATESTRUCT cs를 수정하여 여기에서
 	//  Window 클래스 또는 스타일을 수정합니다.
 
+	
+
 	return TRUE;
 }
 
@@ -173,13 +176,15 @@ BOOL CMainFrame::initializeRibbonBar()
 	}
 	else
 	{
-		m_PanelImages.SetImageSize(CSize(16, 16));
+		// 셋팅 버튼 추가 
+		/*m_PanelImages.SetImageSize(CSize(16, 16));
 		m_PanelImages.Load(IDB_BUTTONS);
 
-		m_wndRibbonBar.AddToTabs(new CMFCRibbonButton(ID_APP_ABOUT, _T("\na"), m_PanelImages.ExtractIcon(0)));
+		m_wndRibbonBar.AddToTabs(new CMFCRibbonButton(ID_APP_ABOUT, _T("\na"), m_PanelImages.ExtractIcon(0)));*/
 
 		// Application Button
-		m_MainButton.SetImage(IDB_MAIN);
+		//m_MainButton.SetImage(IDB_MAIN);
+		m_MainButton.SetImage(IDB_WANREAL_LOGO);
 		m_wndRibbonBar.SetApplicationButton(&m_MainButton, CSize(64, 64));
 		
 		// Application Button Menu
@@ -306,4 +311,34 @@ void CMainFrame::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
 {
 	CFrameWndEx::OnSettingChange(uFlags, lpszSection);
 	m_wndOutput.UpdateFonts();
+}
+
+void CMainFrame::OnNcPaint()
+{
+	//CWindowDC dc(this);
+	//CRect rt;
+	//CPen pen;
+
+	//GetWindowRect(&rt);
+
+	//rt.NormalizeRect();
+	//rt.OffsetRect(-rt.left, -rt.top);
+
+	//// 프레임을 대신해서 그릴 선의 모양과 두께와 색
+
+	//pen.CreatePen(PS_SOLID, 1, RGB(36, 36, 36));
+
+	//// 프레임은 흰색으로 색칠한다
+
+	//dc.FillSolidRect(&rt, RGB(21, 21, 21));
+
+	//// 흰색으로 칠해진 프레임에 그림을 그려준다
+
+	//dc.SelectObject(pen);
+
+	//dc.Rectangle(&rt);
+
+	//Invalidate();
+
+	// Do not call CDialog::OnNcPaint() for painting messages
 }

@@ -18,7 +18,7 @@
     <ClInclude Include="Sample.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="NetworkDataPacket.h">
+    <ClInclude Include="NetworkDataParser.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="SelectModelServer.h">
@@ -30,6 +30,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="SelectModelServer.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkDataParser.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
