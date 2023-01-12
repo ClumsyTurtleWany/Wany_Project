@@ -13,7 +13,8 @@
 //
 
 #pragma once
-#include "OutputWnd.h"
+
+#include "LandscapeDockPane.h"
 
 class CMainFrame : public CFrameWndEx
 {
@@ -41,20 +42,29 @@ public:
 #endif
 
 protected:  // 컨트롤 모음이 포함된 멤버입니다.
+
 	CMFCRibbonBar     m_wndRibbonBar;
 	CMFCRibbonApplicationButton m_MainButton;
+	CMFCRibbonComboBox* m_pMode;
 	CMFCToolBarImages m_PanelImages;
 	CMFCRibbonStatusBar  m_wndStatusBar;
-	COutputWnd        m_wndOutput;
+	LandscapeDockPane	m_LandScapeDockPane;
+
 
 // 생성된 메시지 맵 함수
 protected:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	afx_msg void OnSettingChange(UINT uFlags, LPCTSTR lpszSection);
+
+	afx_msg void OnComboChangeMode();
+	afx_msg void OnUpdateComboChangeMode(CCmdUI* pcmdui);
+
 	DECLARE_MESSAGE_MAP()
 
-	BOOL CreateDockingWindows();
-	void SetDockingWindowIcons(BOOL bHiColorIcons);
+public:
+	bool InitializeRibbonBar();
+	bool InitializeStatusBar();
+	bool InitializeDockPane();
+
 };
 
 

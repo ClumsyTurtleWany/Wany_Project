@@ -9,7 +9,7 @@
 // Copyright (C) Microsoft Corporation
 // All rights reserved.
 
-// GameToolTest_2.h: GameToolTest_2 애플리케이션의 기본 헤더 파일
+// WanrealEditor.h: WanrealEditor 애플리케이션의 기본 헤더 파일
 //
 #pragma once
 
@@ -20,14 +20,14 @@
 #include "resource.h"       // 주 기호입니다.
 
 
-// CGameToolTest2App:
-// 이 클래스의 구현에 대해서는 GameToolTest_2.cpp을(를) 참조하세요.
+// CWanrealEditorApp:
+// 이 클래스의 구현에 대해서는 WanrealEditor.cpp을(를) 참조하세요.
 //
 
-class CGameToolTest2App : public CWinAppEx
+class CWanrealEditorApp : public CWinAppEx
 {
 public:
-	CGameToolTest2App() noexcept;
+	CWanrealEditorApp() noexcept;
 
 
 // 재정의입니다.
@@ -36,8 +36,6 @@ public:
 	virtual int ExitInstance();
 
 // 구현입니다.
-	BOOL  m_bHiColorIcons;
-
 	virtual void PreLoadState();
 	virtual void LoadCustomState();
 	virtual void SaveCustomState();
@@ -46,4 +44,4 @@ public:
 	DECLARE_MESSAGE_MAP()
 };
 
-extern CGameToolTest2App theApp;
+extern CWanrealEditorApp theApp;

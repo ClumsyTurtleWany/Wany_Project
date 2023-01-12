@@ -23,6 +23,7 @@ BEGIN_MESSAGE_MAP(MapCreatorView, CDockablePane)
 	ON_WM_CREATE()
 	ON_WM_PAINT()
 	ON_WM_SIZE()
+	ON_WM_SETFOCUS()
 END_MESSAGE_MAP()
 
 
@@ -64,12 +65,25 @@ int MapCreatorView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 }
 
 
-void MapCreatorView::OnPaint()
-{
-	CPaintDC dc(this); // device context for painting
-					   // TODO: 여기에 메시지 처리기 코드를 추가합니다.
-					   // 그리기 메시지에 대해서는 CDockablePane::OnPaint()을(를) 호출하지 마십시오.
-}
+//void MapCreatorView::OnPaint()
+//{
+//	CPaintDC dc(this); // device context for painting
+//					   // TODO: 여기에 메시지 처리기 코드를 추가합니다.
+//					   // 그리기 메시지에 대해서는 CDockablePane::OnPaint()을(를) 호출하지 마십시오.
+//
+//	CRect DockPaneRect;
+//	this->GetWindowRect(DockPaneRect);
+//	CBrush br;
+//	br.CreateSolidBrush(RGB(255, 255, 255));
+//	dc.FillRect(DockPaneRect, &br);
+//
+//	CRect TitleLabelRect;
+//	TitleLabel.GetWindowRect(TitleLabelRect);
+//	ScreenToClient(TitleLabelRect);
+//
+//	TitleLabelRect.InflateRect(1, 1);
+//	dc.Draw3dRect(TitleLabelRect, ::GetSysColor(COLOR_3DSHADOW), ::GetSysColor(COLOR_3DSHADOW));
+//}
 
 
 void MapCreatorView::OnSize(UINT nType, int cx, int cy)
@@ -78,5 +92,4 @@ void MapCreatorView::OnSize(UINT nType, int cx, int cy)
 	
 	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
 	AdjustLayout();
-	RedrawWindow();
 }

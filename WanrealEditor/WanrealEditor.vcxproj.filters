@@ -13,9 +13,21 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Pane">
+      <UniqueIdentifier>{9198f02f-78cc-4d82-acfd-2a5c53d8a089}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pane\Landscape">
+      <UniqueIdentifier>{b8744842-71f8-4c80-b6ce-06a53d9b8686}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pane\Landscape\소스 파일">
+      <UniqueIdentifier>{2b2e54bf-0581-46d9-a066-cd35f00fdc7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pane\Landscape\헤더 파일">
+      <UniqueIdentifier>{579b12ff-06bf-4393-9f8e-af3d1ff5fb02}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameToolTest_2.h">
+    <ClInclude Include="WanrealEditor.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="framework.h">
@@ -27,54 +39,60 @@
     <ClInclude Include="MainFrm.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GameToolTest_2Doc.h">
+    <ClInclude Include="WanrealEditorDoc.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GameToolTest_2View.h">
+    <ClInclude Include="WanrealEditorView.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Resource.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="OutputWnd.h">
+    <ClInclude Include="pch.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="pch.h">
+    <ClInclude Include="LandscapeDockPane.h">
+      <Filter>Pane\Landscape\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="LandscapeManagementDlg.h">
+      <Filter>Pane\Landscape\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TestDlg.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GameToolTest_2.cpp">
+    <ClCompile Include="WanrealEditor.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="MainFrm.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="GameToolTest_2Doc.cpp">
+    <ClCompile Include="WanrealEditorDoc.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="GameToolTest_2View.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="OutputWnd.cpp">
+    <ClCompile Include="WanrealEditorView.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="LandscapeDockPane.cpp">
+      <Filter>Pane\Landscape\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="LandscapeManagementDlg.cpp">
+      <Filter>Pane\Landscape\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TestDlg.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="GameToolTest2.rc">
+    <ResourceCompile Include="WanrealEditor.rc">
       <Filter>리소스 파일</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\output_wnd.ico">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="res\output_wnd_hc.ico">
-      <Filter>리소스 파일</Filter>
-    </Image>
     <Image Include="res\buttons.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
@@ -93,10 +111,10 @@
     <Image Include="res\writesmall.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
-    <Image Include="res\GameToolTest_2Doc.ico">
+    <Image Include="res\WanrealEditorDoc.ico">
       <Filter>리소스 파일</Filter>
     </Image>
-    <Image Include="res\GameToolTest_2.ico">
+    <Image Include="res\WanrealEditor.ico">
       <Filter>리소스 파일</Filter>
     </Image>
     <Image Include="res\Toolbar.bmp">
@@ -110,7 +128,7 @@
     <None Include="res\ribbon.mfcribbon-ms">
       <Filter>리소스 파일</Filter>
     </None>
-    <None Include="res\GameToolTest2.rc2">
+    <None Include="res\WanrealEditor.rc2">
       <Filter>리소스 파일</Filter>
     </None>
   </ItemGroup>

@@ -249,7 +249,7 @@ BOOL CMainFrame::CreateDockingWindows()
 	CString strMapCreatorWnd;
 	bNameValid = strMapCreatorWnd.LoadString(IDS_MAPCREATOR_WND);
 	ASSERT(bNameValid);
-	if (!m_wndMapCreatorView.Create(strMapCreatorWnd, this, CRect(0, 0, 200, 200), TRUE, ID_MAPCREATOR_VIEW, WS_CHILD | WS_VISIBLE | WS_HSCROLL | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_LEFT | CBRS_FLOAT_MULTI))
+	if (!m_wndMapCreatorView.Create(strMapCreatorWnd, this, CRect(0, 0, 200, 200), TRUE, ID_MAPCREATOR_VIEW, WS_CHILD | WS_VISIBLE | WS_HSCROLL | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_RIGHT | CBRS_FLOAT_MULTI))
 	{
 		TRACE0("맵 생성 도우미 창을 만들지 못했습니다.\n");
 		return FALSE; // 만들지 못했습니다.

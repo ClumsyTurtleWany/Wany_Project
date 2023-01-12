@@ -9,18 +9,18 @@
 // Copyright (C) Microsoft Corporation
 // All rights reserved.
 
-// GameToolTest_2Doc.h: CGameToolTest2Doc 클래스의 인터페이스
+// WanrealEditorDoc.h: CWanrealEditorDoc 클래스의 인터페이스
 //
 
 
 #pragma once
 
 
-class CGameToolTest2Doc : public CDocument
+class CWanrealEditorDoc : public CDocument
 {
 protected: // serialization에서만 만들어집니다.
-	CGameToolTest2Doc() noexcept;
-	DECLARE_DYNCREATE(CGameToolTest2Doc)
+	CWanrealEditorDoc() noexcept;
+	DECLARE_DYNCREATE(CWanrealEditorDoc)
 
 // 특성입니다.
 public:
@@ -39,7 +39,7 @@ public:
 
 // 구현입니다.
 public:
-	virtual ~CGameToolTest2Doc();
+	virtual ~CWanrealEditorDoc();
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;

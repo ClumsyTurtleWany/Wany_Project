@@ -9,40 +9,38 @@
 // Copyright (C) Microsoft Corporation
 // All rights reserved.
 
-// GameToolTest_2.cpp: 애플리케이션에 대한 클래스 동작을 정의합니다.
+// WanrealEditor.cpp: 애플리케이션에 대한 클래스 동작을 정의합니다.
 //
 
 #include "pch.h"
 #include "framework.h"
 #include "afxwinappex.h"
 #include "afxdialogex.h"
-#include "GameToolTest_2.h"
+#include "WanrealEditor.h"
 #include "MainFrm.h"
 
-#include "GameToolTest_2Doc.h"
-#include "GameToolTest_2View.h"
+#include "WanrealEditorDoc.h"
+#include "WanrealEditorView.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
 
-// CGameToolTest2App
+// CWanrealEditorApp
 
-BEGIN_MESSAGE_MAP(CGameToolTest2App, CWinAppEx)
-	ON_COMMAND(ID_APP_ABOUT, &CGameToolTest2App::OnAppAbout)
+BEGIN_MESSAGE_MAP(CWanrealEditorApp, CWinAppEx)
+	ON_COMMAND(ID_APP_ABOUT, &CWanrealEditorApp::OnAppAbout)
 	// 표준 파일을 기초로 하는 문서 명령입니다.
 	ON_COMMAND(ID_FILE_NEW, &CWinAppEx::OnFileNew)
 	ON_COMMAND(ID_FILE_OPEN, &CWinAppEx::OnFileOpen)
 END_MESSAGE_MAP()
 
 
-// CGameToolTest2App 생성
+// CWanrealEditorApp 생성
 
-CGameToolTest2App::CGameToolTest2App() noexcept
+CWanrealEditorApp::CWanrealEditorApp() noexcept
 {
-	m_bHiColorIcons = TRUE;
-
 
 	// 다시 시작 관리자 지원
 	m_dwRestartManagerSupportFlags = AFX_RESTART_MANAGER_SUPPORT_ALL_ASPECTS;
@@ -55,20 +53,20 @@ CGameToolTest2App::CGameToolTest2App() noexcept
 
 	// TODO: 아래 애플리케이션 ID 문자열을 고유 ID 문자열로 바꾸십시오(권장).
 	// 문자열에 대한 서식: CompanyName.ProductName.SubProduct.VersionInformation
-	SetAppID(_T("GameToolTest2.AppID.NoVersion"));
+	SetAppID(_T("WanrealEditor.AppID.NoVersion"));
 
 	// TODO: 여기에 생성 코드를 추가합니다.
 	// InitInstance에 모든 중요한 초기화 작업을 배치합니다.
 }
 
-// 유일한 CGameToolTest2App 개체입니다.
+// 유일한 CWanrealEditorApp 개체입니다.
 
-CGameToolTest2App theApp;
+CWanrealEditorApp theApp;
 
 
-// CGameToolTest2App 초기화
+// CWanrealEditorApp 초기화
 
-BOOL CGameToolTest2App::InitInstance()
+BOOL CWanrealEditorApp::InitInstance()
 {
 	// 애플리케이션 매니페스트가 ComCtl32.dll 버전 6 이상을 사용하여 비주얼 스타일을
 	// 사용하도록 지정하는 경우, Windows XP 상에서 반드시 InitCommonControlsEx()가 필요합니다. 
@@ -123,9 +121,9 @@ BOOL CGameToolTest2App::InitInstance()
 	CSingleDocTemplate* pDocTemplate;
 	pDocTemplate = new CSingleDocTemplate(
 		IDR_MAINFRAME,
-		RUNTIME_CLASS(CGameToolTest2Doc),
+		RUNTIME_CLASS(CWanrealEditorDoc),
 		RUNTIME_CLASS(CMainFrame),       // 주 SDI 프레임 창입니다.
-		RUNTIME_CLASS(CGameToolTest2View));
+		RUNTIME_CLASS(CWanrealEditorView));
 	if (!pDocTemplate)
 		return FALSE;
 	AddDocTemplate(pDocTemplate);
@@ -148,7 +146,7 @@ BOOL CGameToolTest2App::InitInstance()
 	return TRUE;
 }
 
-int CGameToolTest2App::ExitInstance()
+int CWanrealEditorApp::ExitInstance()
 {
 	//TODO: 추가한 추가 리소스를 처리합니다.
 	AfxOleTerm(FALSE);
@@ -156,7 +154,7 @@ int CGameToolTest2App::ExitInstance()
 	return CWinAppEx::ExitInstance();
 }
 
-// CGameToolTest2App 메시지 처리기
+// CWanrealEditorApp 메시지 처리기
 
 
 // 응용 프로그램 정보에 사용되는 CAboutDlg 대화 상자입니다.
@@ -192,15 +190,15 @@ BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 // 대화 상자를 실행하기 위한 응용 프로그램 명령입니다.
-void CGameToolTest2App::OnAppAbout()
+void CWanrealEditorApp::OnAppAbout()
 {
 	CAboutDlg aboutDlg;
 	aboutDlg.DoModal();
 }
 
-// CGameToolTest2App 사용자 지정 로드/저장 방법
+// CWanrealEditorApp 사용자 지정 로드/저장 방법
 
-void CGameToolTest2App::PreLoadState()
+void CWanrealEditorApp::PreLoadState()
 {
 	BOOL bNameValid;
 	CString strName;
@@ -209,15 +207,15 @@ void CGameToolTest2App::PreLoadState()
 	GetContextMenuManager()->AddMenu(strName, IDR_POPUP_EDIT);
 }
 
-void CGameToolTest2App::LoadCustomState()
+void CWanrealEditorApp::LoadCustomState()
 {
 }
 
-void CGameToolTest2App::SaveCustomState()
+void CWanrealEditorApp::SaveCustomState()
 {
 }
 
-// CGameToolTest2App 메시지 처리기
+// CWanrealEditorApp 메시지 처리기
 
 
 

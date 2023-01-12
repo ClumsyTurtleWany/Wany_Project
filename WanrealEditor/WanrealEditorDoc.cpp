@@ -9,7 +9,7 @@
 // Copyright (C) Microsoft Corporation
 // All rights reserved.
 
-// GameToolTest_2Doc.cpp: CGameToolTest2Doc 클래스의 구현
+// WanrealEditorDoc.cpp: CWanrealEditorDoc 클래스의 구현
 //
 
 #include "pch.h"
@@ -17,10 +17,10 @@
 // SHARED_HANDLERS는 미리 보기, 축소판 그림 및 검색 필터 처리기를 구현하는 ATL 프로젝트에서 정의할 수 있으며
 // 해당 프로젝트와 문서 코드를 공유하도록 해 줍니다.
 #ifndef SHARED_HANDLERS
-#include "GameToolTest_2.h"
+#include "WanrealEditor.h"
 #endif
 
-#include "GameToolTest_2Doc.h"
+#include "WanrealEditorDoc.h"
 
 #include <propkey.h>
 
@@ -28,27 +28,27 @@
 #define new DEBUG_NEW
 #endif
 
-// CGameToolTest2Doc
+// CWanrealEditorDoc
 
-IMPLEMENT_DYNCREATE(CGameToolTest2Doc, CDocument)
+IMPLEMENT_DYNCREATE(CWanrealEditorDoc, CDocument)
 
-BEGIN_MESSAGE_MAP(CGameToolTest2Doc, CDocument)
+BEGIN_MESSAGE_MAP(CWanrealEditorDoc, CDocument)
 END_MESSAGE_MAP()
 
 
-// CGameToolTest2Doc 생성/소멸
+// CWanrealEditorDoc 생성/소멸
 
-CGameToolTest2Doc::CGameToolTest2Doc() noexcept
+CWanrealEditorDoc::CWanrealEditorDoc() noexcept
 {
 	// TODO: 여기에 일회성 생성 코드를 추가합니다.
 
 }
 
-CGameToolTest2Doc::~CGameToolTest2Doc()
+CWanrealEditorDoc::~CWanrealEditorDoc()
 {
 }
 
-BOOL CGameToolTest2Doc::OnNewDocument()
+BOOL CWanrealEditorDoc::OnNewDocument()
 {
 	if (!CDocument::OnNewDocument())
 		return FALSE;
@@ -62,9 +62,9 @@ BOOL CGameToolTest2Doc::OnNewDocument()
 
 
 
-// CGameToolTest2Doc serialization
+// CWanrealEditorDoc serialization
 
-void CGameToolTest2Doc::Serialize(CArchive& ar)
+void CWanrealEditorDoc::Serialize(CArchive& ar)
 {
 	if (ar.IsStoring())
 	{
@@ -79,7 +79,7 @@ void CGameToolTest2Doc::Serialize(CArchive& ar)
 #ifdef SHARED_HANDLERS
 
 // 축소판 그림을 지원합니다.
-void CGameToolTest2Doc::OnDrawThumbnail(CDC& dc, LPRECT lprcBounds)
+void CWanrealEditorDoc::OnDrawThumbnail(CDC& dc, LPRECT lprcBounds)
 {
 	// 문서의 데이터를 그리려면 이 코드를 수정하십시오.
 	dc.FillSolidRect(lprcBounds, RGB(255, 255, 255));
@@ -100,7 +100,7 @@ void CGameToolTest2Doc::OnDrawThumbnail(CDC& dc, LPRECT lprcBounds)
 }
 
 // 검색 처리기를 지원합니다.
-void CGameToolTest2Doc::InitializeSearchContent()
+void CWanrealEditorDoc::InitializeSearchContent()
 {
 	CString strSearchContent;
 	// 문서의 데이터에서 검색 콘텐츠를 설정합니다.
@@ -110,7 +110,7 @@ void CGameToolTest2Doc::InitializeSearchContent()
 	SetSearchContent(strSearchContent);
 }
 
-void CGameToolTest2Doc::SetSearchContent(const CString& value)
+void CWanrealEditorDoc::SetSearchContent(const CString& value)
 {
 	if (value.IsEmpty())
 	{
@@ -130,19 +130,19 @@ void CGameToolTest2Doc::SetSearchContent(const CString& value)
 
 #endif // SHARED_HANDLERS
 
-// CGameToolTest2Doc 진단
+// CWanrealEditorDoc 진단
 
 #ifdef _DEBUG
-void CGameToolTest2Doc::AssertValid() const
+void CWanrealEditorDoc::AssertValid() const
 {
 	CDocument::AssertValid();
 }
 
-void CGameToolTest2Doc::Dump(CDumpContext& dc) const
+void CWanrealEditorDoc::Dump(CDumpContext& dc) const
 {
 	CDocument::Dump(dc);
 }
 #endif //_DEBUG
 
 
-// CGameToolTest2Doc 명령
+// CWanrealEditorDoc 명령

@@ -20,9 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{B3F0120C-1223-46F3-99E6-B678BDE8BDBD}</ProjectGuid>
+    <ProjectGuid>{0CD0B387-5CAD-4564-9D53-69E3D86D8218}</ProjectGuid>
     <Keyword>MFCProj</Keyword>
-    <RootNamespace>GameToolTest2</RootNamespace>
+    <RootNamespace>WanrealEditor</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -76,6 +76,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>../../output/Debug/$(TargetName)</OutDir>
+    <IntDir>../../output/Debug/$(TargetName)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -85,6 +87,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>../../output/Release/$(TargetName)</OutDir>
+    <IntDir>../../output/Release/$(TargetName)</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -93,9 +97,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>../include/;../include/core/;../include/FMOD/;../include/FBX/;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
+      <AdditionalLibraryDirectories>../lib/;../lib/core/;../lib/FMOD/;../lib/FBX/debug/;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>WanyCore_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -165,11 +173,15 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>../include/;../include/core/;../include/FMOD/;../include/FBX/;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>../lib/;../lib/core/;../lib/FMOD/;../lib/FBX/release/;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>WanyCore_release.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -184,48 +196,50 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
-    <ClInclude Include="GameToolTest_2.h" />
-    <ClInclude Include="GameToolTest_2Doc.h" />
-    <ClInclude Include="GameToolTest_2View.h" />
+    <ClInclude Include="LandscapeDockPane.h" />
+    <ClInclude Include="LandscapeManagementDlg.h" />
     <ClInclude Include="MainFrm.h" />
-    <ClInclude Include="OutputWnd.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TestDlg.h" />
+    <ClInclude Include="WanrealEditor.h" />
+    <ClInclude Include="WanrealEditorDoc.h" />
+    <ClInclude Include="WanrealEditorView.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GameToolTest_2.cpp" />
-    <ClCompile Include="GameToolTest_2Doc.cpp" />
-    <ClCompile Include="GameToolTest_2View.cpp" />
+    <ClCompile Include="LandscapeDockPane.cpp" />
+    <ClCompile Include="LandscapeManagementDlg.cpp" />
     <ClCompile Include="MainFrm.cpp" />
-    <ClCompile Include="OutputWnd.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="TestDlg.cpp" />
+    <ClCompile Include="WanrealEditor.cpp" />
+    <ClCompile Include="WanrealEditorDoc.cpp" />
+    <ClCompile Include="WanrealEditorView.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="GameToolTest2.rc" />
+    <ResourceCompile Include="WanrealEditor.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\buttons.bmp" />
     <Image Include="res\filelarge.bmp" />
     <Image Include="res\filesmall.bmp" />
-    <Image Include="res\GameToolTest_2.ico" />
-    <Image Include="res\GameToolTest_2Doc.ico" />
     <Image Include="res\main.bmp" />
-    <Image Include="res\output_wnd.ico" />
-    <Image Include="res\output_wnd_hc.ico" />
     <Image Include="res\Toolbar.bmp" />
     <Image Include="res\Toolbar256.bmp" />
+    <Image Include="res\WanrealEditor.ico" />
+    <Image Include="res\WanrealEditorDoc.ico" />
     <Image Include="res\writelarge.bmp" />
     <Image Include="res\writesmall.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\GameToolTest2.rc2" />
     <None Include="res\ribbon.mfcribbon-ms" />
+    <None Include="res\WanrealEditor.rc2" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

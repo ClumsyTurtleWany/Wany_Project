@@ -9,7 +9,7 @@
 // Copyright (C) Microsoft Corporation
 // All rights reserved.
 
-// GameToolTest_2View.cpp: CGameToolTest2View 클래스의 구현
+// WanrealEditorView.cpp: CWanrealEditorView 클래스의 구현
 //
 
 #include "pch.h"
@@ -17,39 +17,39 @@
 // SHARED_HANDLERS는 미리 보기, 축소판 그림 및 검색 필터 처리기를 구현하는 ATL 프로젝트에서 정의할 수 있으며
 // 해당 프로젝트와 문서 코드를 공유하도록 해 줍니다.
 #ifndef SHARED_HANDLERS
-#include "GameToolTest_2.h"
+#include "WanrealEditor.h"
 #endif
 
-#include "GameToolTest_2Doc.h"
-#include "GameToolTest_2View.h"
+#include "WanrealEditorDoc.h"
+#include "WanrealEditorView.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
 
-// CGameToolTest2View
+// CWanrealEditorView
 
-IMPLEMENT_DYNCREATE(CGameToolTest2View, CView)
+IMPLEMENT_DYNCREATE(CWanrealEditorView, CView)
 
-BEGIN_MESSAGE_MAP(CGameToolTest2View, CView)
+BEGIN_MESSAGE_MAP(CWanrealEditorView, CView)
 	ON_WM_CONTEXTMENU()
 	ON_WM_RBUTTONUP()
 END_MESSAGE_MAP()
 
-// CGameToolTest2View 생성/소멸
+// CWanrealEditorView 생성/소멸
 
-CGameToolTest2View::CGameToolTest2View() noexcept
+CWanrealEditorView::CWanrealEditorView() noexcept
 {
 	// TODO: 여기에 생성 코드를 추가합니다.
 
 }
 
-CGameToolTest2View::~CGameToolTest2View()
+CWanrealEditorView::~CWanrealEditorView()
 {
 }
 
-BOOL CGameToolTest2View::PreCreateWindow(CREATESTRUCT& cs)
+BOOL CWanrealEditorView::PreCreateWindow(CREATESTRUCT& cs)
 {
 	// TODO: CREATESTRUCT cs를 수정하여 여기에서
 	//  Window 클래스 또는 스타일을 수정합니다.
@@ -57,11 +57,11 @@ BOOL CGameToolTest2View::PreCreateWindow(CREATESTRUCT& cs)
 	return CView::PreCreateWindow(cs);
 }
 
-// CGameToolTest2View 그리기
+// CWanrealEditorView 그리기
 
-void CGameToolTest2View::OnDraw(CDC* /*pDC*/)
+void CWanrealEditorView::OnDraw(CDC* /*pDC*/)
 {
-	CGameToolTest2Doc* pDoc = GetDocument();
+	CWanrealEditorDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 	if (!pDoc)
 		return;
@@ -69,13 +69,13 @@ void CGameToolTest2View::OnDraw(CDC* /*pDC*/)
 	// TODO: 여기에 원시 데이터에 대한 그리기 코드를 추가합니다.
 }
 
-void CGameToolTest2View::OnRButtonUp(UINT /* nFlags */, CPoint point)
+void CWanrealEditorView::OnRButtonUp(UINT /* nFlags */, CPoint point)
 {
 	ClientToScreen(&point);
 	OnContextMenu(this, point);
 }
 
-void CGameToolTest2View::OnContextMenu(CWnd* /* pWnd */, CPoint point)
+void CWanrealEditorView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 {
 #ifndef SHARED_HANDLERS
 	theApp.GetContextMenuManager()->ShowPopupMenu(IDR_POPUP_EDIT, point.x, point.y, this, TRUE);
@@ -83,25 +83,25 @@ void CGameToolTest2View::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 }
 
 
-// CGameToolTest2View 진단
+// CWanrealEditorView 진단
 
 #ifdef _DEBUG
-void CGameToolTest2View::AssertValid() const
+void CWanrealEditorView::AssertValid() const
 {
 	CView::AssertValid();
 }
 
-void CGameToolTest2View::Dump(CDumpContext& dc) const
+void CWanrealEditorView::Dump(CDumpContext& dc) const
 {
 	CView::Dump(dc);
 }
 
-CGameToolTest2Doc* CGameToolTest2View::GetDocument() const // 디버그되지 않은 버전은 인라인으로 지정됩니다.
+CWanrealEditorDoc* CWanrealEditorView::GetDocument() const // 디버그되지 않은 버전은 인라인으로 지정됩니다.
 {
-	ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CGameToolTest2Doc)));
-	return (CGameToolTest2Doc*)m_pDocument;
+	ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CWanrealEditorDoc)));
+	return (CWanrealEditorDoc*)m_pDocument;
 }
 #endif //_DEBUG
 
 
-// CGameToolTest2View 메시지 처리기
+// CWanrealEditorView 메시지 처리기

@@ -9,21 +9,21 @@
 // Copyright (C) Microsoft Corporation
 // All rights reserved.
 
-// GameToolTest_2View.h: CGameToolTest2View 클래스의 인터페이스
+// WanrealEditorView.h: CWanrealEditorView 클래스의 인터페이스
 //
 
 #pragma once
 
 
-class CGameToolTest2View : public CView
+class CWanrealEditorView : public CView
 {
 protected: // serialization에서만 만들어집니다.
-	CGameToolTest2View() noexcept;
-	DECLARE_DYNCREATE(CGameToolTest2View)
+	CWanrealEditorView() noexcept;
+	DECLARE_DYNCREATE(CWanrealEditorView)
 
 // 특성입니다.
 public:
-	CGameToolTest2Doc* GetDocument() const;
+	CWanrealEditorDoc* GetDocument() const;
 
 // 작업입니다.
 public:
@@ -36,7 +36,7 @@ protected:
 
 // 구현입니다.
 public:
-	virtual ~CGameToolTest2View();
+	virtual ~CWanrealEditorView();
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
@@ -52,8 +52,8 @@ protected:
 	DECLARE_MESSAGE_MAP()
 };
 
-#ifndef _DEBUG  // GameToolTest_2View.cpp의 디버그 버전
-inline CGameToolTest2Doc* CGameToolTest2View::GetDocument() const
-   { return reinterpret_cast<CGameToolTest2Doc*>(m_pDocument); }
+#ifndef _DEBUG  // WanrealEditorView.cpp의 디버그 버전
+inline CWanrealEditorDoc* CWanrealEditorView::GetDocument() const
+   { return reinterpret_cast<CWanrealEditorDoc*>(m_pDocument); }
 #endif
 
