@@ -22,19 +22,23 @@
 #define IDR_WINDOWS_MENU                152
 #define IDS_EDIT_MENU                   306
 #define IDR_RIBBON                      307
-#define ID_COMBO_MODE                   310
-#define IDD_LandscapeManagementDlg      311
-#define IDD_TestDlg                     313
+#define ID_COMBO_MODE                   308
+#define IDD_LandscapeManagementAddDlg   319
+#define IDD_LandscapeDockPaneView       320
 #define ID_DOCKPANE_LANDSCAPE           400
+#define ID_RIBBON_BAR_LANDSCAPE         401
+#define IDD_LandscapeManagementDlg      410
+#define IDD_LandscapeSculptingDlg       420
+#define IDD_LandscapePaintingDlg        430
 #define ID_WRITE_PASTEASHYPERLINK       32770
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        310
+#define _APS_NEXT_RESOURCE_VALUE        318
 #define _APS_NEXT_COMMAND_VALUE         32771
 #define _APS_NEXT_CONTROL_VALUE         1000
-#define _APS_NEXT_SYMED_VALUE           314
+#define _APS_NEXT_SYMED_VALUE           321
 #endif
 #endif

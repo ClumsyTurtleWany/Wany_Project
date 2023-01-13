@@ -1,7 +1,11 @@
 #pragma once
 
 #include "LandscapeManagementDlg.h"
-#include "TestDlg.h"
+#include "LandscapeSculptingDlg.h"
+#include "LandscapePaintingDlg.h"
+
+#include "LandscapeDockPaneView.h"
+
 // LandscapeDockPane
 
 class LandscapeDockPane : public CDockablePane
@@ -18,16 +22,20 @@ protected:
 	virtual BOOL OnShowControlBarMenu(CPoint pt) { return TRUE; }
 
 private:
-	TestDlg m_LandscapeManagementDlg;
+	CFrameWndEx*			m_FrameWnd;
+	CView*					m_FormView;
+	CMFCRibbonBar			m_RibbonBar;
+	CMFCTabCtrl				m_TabCtrl;
+	LandscapeManagementDlg	m_LandscapeManagementDlg;
+	LandscapeSculptingDlg	m_LandscapeSculptingDlg;
+	LandscapePaintingDlg	m_LandscapePaintingDlg;
 
 public:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnSize(UINT nType, int cx, int cy);
-	//afx_msg void OnSetFocus(CWnd* pOldWnd);
-	afx_msg void OnPaint();
 
 public:
-	void InitializeRibbonBar();
+	
 };
 
 

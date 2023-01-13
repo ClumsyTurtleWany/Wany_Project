@@ -1,9 +1,9 @@
 ﻿#pragma once
-
+#include "LandscapeManagementAddDlg.h"
 
 // LandscapeManagementDlg 대화 상자
 
-class LandscapeManagementDlg : public CDialog
+class LandscapeManagementDlg : public CDialogEx
 {
 	DECLARE_DYNAMIC(LandscapeManagementDlg)
 
@@ -21,5 +21,10 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnSize(UINT nType, int cx, int cy);
+
+public:
+	CMFCTabCtrl		m_TabCtrl;
+	LandscapeManagementAddDlg m_LandscapeManagementAddDlg;
 };

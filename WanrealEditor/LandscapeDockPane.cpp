@@ -4,6 +4,7 @@
 #include "pch.h"
 #include "WanrealEditor.h"
 #include "LandscapeDockPane.h"
+#include "LandscapeDockPaneFrame.h"
 
 
 // LandscapeDockPane
@@ -22,8 +23,6 @@ LandscapeDockPane::~LandscapeDockPane()
 BEGIN_MESSAGE_MAP(LandscapeDockPane, CDockablePane)
 	ON_WM_CREATE()
 	ON_WM_SIZE()
-	ON_WM_SETFOCUS()
-	ON_WM_PAINT()
 END_MESSAGE_MAP()
 
 // LandscapeDockPane 메시지 처리기
@@ -33,10 +32,84 @@ int LandscapeDockPane::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (CDockablePane::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
-	m_LandscapeManagementDlg.Create(IDD_TestDlg, this);
-	m_LandscapeManagementDlg.ShowWindow(SW_SHOW);
 
-	//InitializeRibbonBar();
+
+	/*CRect rectPane;
+	this->GetClientRect(rectPane);
+
+	CCreateContext cc;
+
+	CView* pView = (CView*)RUNTIME_CLASS(LandscapeDockPaneView)->CreateObject();
+	ZeroMemory(&cc, sizeof(cc));
+	pView->Create(nullptr, nullptr, WS_CHILD, rectPane, this, IDD_LandscapeDockPaneView, &cc);
+	pView->OnInitialUpdate();
+	m_FormView = pView;
+
+
+	CFrameWndEx* pWnd = (CFrameWndEx*)RUNTIME_CLASS(LandscapeDockPaneFrame)->CreateObject();
+	pWnd->Create(nullptr, nullptr, WS_CHILD, rectPane, this);
+	pWnd.oninit
+
+		m_FrameWnd
+
+
+	DWORD dwStyle = WS_CHILD | WS_VISIBLE | CBRS_TOP;
+	if (!m_RibbonBar.Create(m_FormView, dwStyle, ID_RIBBON_BAR_LANDSCAPE))
+	{
+		return -1;
+	}*/
+
+
+
+
+
+
+
+	CRect rectTab;
+	this->GetWindowRect(rectTab);
+	ScreenToClient(rectTab);
+	if (!m_TabCtrl.Create(CMFCTabCtrl::STYLE_3D_ROUNDED, rectTab, this, 1, CMFCTabCtrl::LOCATION_TOP))
+	{
+		return -1;
+	}
+
+	if (!m_LandscapeManagementDlg.Create(IDD_LandscapeManagementDlg, &m_TabCtrl))
+	{
+		return -1;
+	}
+	//m_LandscapeManagementDlg.ShowWindow(SW_SHOW);
+
+	if (!m_LandscapeSculptingDlg.Create(IDD_LandscapeSculptingDlg, &m_TabCtrl))
+	{
+		return -1;
+	}
+	//m_LandscapeSculptingDlg.ShowWindow(SW_SHOW);
+
+	if (!m_LandscapePaintingDlg.Create(IDD_LandscapePaintingDlg, &m_TabCtrl))
+	{
+		return -1;
+	}
+	//m_LandscapePaintingDlg.ShowWindow(SW_SHOW);
+
+	m_TabCtrl.AddTab(&m_LandscapeManagementDlg, L"Management", 0, FALSE);
+	m_TabCtrl.AddTab(&m_LandscapeSculptingDlg, L"Sculpting", 1, FALSE);
+	m_TabCtrl.AddTab(&m_LandscapePaintingDlg, L"Painting", 2, FALSE);
+
+
+	m_TabCtrl.SetImageList(IDR_MAINFRAME, 32, RGB(255, 0, 0));
+	for (int tabIdx = 0; tabIdx < m_TabCtrl.GetTabsNum(); tabIdx++)
+	{
+		m_TabCtrl.SetTabBkColor(tabIdx, RGB(21, 21, 21));
+		m_TabCtrl.SetTabTextColor(tabIdx, RGB(255, 255, 255));
+		m_TabCtrl.SetTabIcon(tabIdx, tabIdx);
+	}
+
+	m_TabCtrl.SetActiveTabTextColor(RGB(255, 0, 0));
+	m_TabCtrl.SetActiveTabColor(RGB(255, 36, 36));
+	m_TabCtrl.SetActiveTabBoldFont(0);
+
+	m_TabCtrl.RecalcLayout();
+	m_TabCtrl.RedrawWindow();
 
 	return 0;
 }
@@ -44,62 +117,8 @@ int LandscapeDockPane::OnCreate(LPCREATESTRUCT lpCreateStruct)
 void LandscapeDockPane::OnSize(UINT nType, int cx, int cy)
 {
 	CDockablePane::OnSize(nType, cx, cy);
-	if (m_LandscapeManagementDlg.GetSafeHwnd())
-	{
-		int nLeft = ::GetSystemMetrics(SM_XVIRTUALSCREEN);  // 제일 왼쪽 모니터 X 좌표
-		int nTop = ::GetSystemMetrics(SM_YVIRTUALSCREEN); // 제일 위쪽 모니터 Y 좌표
-		int nWidth = ::GetSystemMetrics(SM_CXSCREEN); // 현재 모니터 전체 넓이
-		int nHeight = ::GetSystemMetrics(SM_CYSCREEN); // 현재 모니터 전체 높이
-		m_LandscapeManagementDlg.MoveWindow(0 + nLeft, 0 + nTop, cx, cy);
-		//m_LandscapeManagementDlg.SetWindowPos(NULL, 0, 0, cx, cy, SWP_NOZORDER);
-	}
-}
 
-//void LandscapeDockPane::OnSetFocus(CWnd* pOldWnd)
-//{
-//	CDockablePane::OnSetFocus(pOldWnd);
-//
-//	m_LandscapeManagementDlg.SetFocus();
-//	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
-//}
-
-
-void LandscapeDockPane::OnPaint()
-{
-	CPaintDC dc(this); // device context for painting
-					   // TODO: 여기에 메시지 처리기 코드를 추가합니다.
-					   // 그리기 메시지에 대해서는 CDockablePane::OnPaint()을(를) 호출하지 마십시오.
-
-	CRect rectPane;
-	this->GetWindowRect(rectPane);
-	ScreenToClient(rectPane);
-
-	CRect rectDlg;
-	m_LandscapeManagementDlg.GetWindowRect(rectDlg);
+	m_TabCtrl.SetWindowPos(nullptr, -1, -1, cx, cy, SWP_NOMOVE | SWP_NOACTIVATE | SWP_NOZORDER);
+	//m_LandscapeManagementDlg.SetWindowPos(nullptr, -1, -1, cx, cy, SWP_NOMOVE | SWP_NOACTIVATE | SWP_NOZORDER);
 	
-	int nLeft = ::GetSystemMetrics(SM_XVIRTUALSCREEN);  // 제일 왼쪽 모니터 X 좌표
-	int nTop = ::GetSystemMetrics(SM_YVIRTUALSCREEN); // 제일 위쪽 모니터 Y 좌표
-	rectDlg.left += nLeft;
-	rectDlg.top += nTop;
-	rectDlg.right += nLeft;
-	rectDlg.bottom += nTop;
-	ScreenToClient(rectDlg);
-
-	rectDlg.InflateRect(1, 1);
-
-	//dc.Draw3dRect(rectDlg, ::GetSysColor(COLOR_3DSHADOW), ::GetSysColor(COLOR_3DSHADOW));
-	dc.Draw3dRect(rectPane, ::GetSysColor(COLOR_3DSHADOW), ::GetSysColor(COLOR_3DSHADOW));
-}
-
-void LandscapeDockPane::InitializeRibbonBar()
-{
-	/*m_RibbonBar.Create(this);
-	
-	CMFCRibbonCategory* pCategoryManagement = nullptr;
-	CMFCRibbonPanel* pPanel = nullptr;
-
-	pCategoryManagement = m_RibbonBar.AddCategory(L"Management", NULL, NULL);
-	pPanel = pCategoryManagement->AddPanel(L"TestPanel");
-	pPanel->Add(new CMFCRibbonLabel(L"Test Panel Label"));*/
-
 }

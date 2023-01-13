@@ -13,17 +13,53 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Pane">
-      <UniqueIdentifier>{9198f02f-78cc-4d82-acfd-2a5c53d8a089}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Pane\Landscape">
+    <Filter Include="Landscape">
       <UniqueIdentifier>{b8744842-71f8-4c80-b6ce-06a53d9b8686}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Pane\Landscape\소스 파일">
-      <UniqueIdentifier>{2b2e54bf-0581-46d9-a066-cd35f00fdc7e}</UniqueIdentifier>
+    <Filter Include="Landscape\Pane">
+      <UniqueIdentifier>{9198f02f-78cc-4d82-acfd-2a5c53d8a089}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Pane\Landscape\헤더 파일">
-      <UniqueIdentifier>{579b12ff-06bf-4393-9f8e-af3d1ff5fb02}</UniqueIdentifier>
+    <Filter Include="Landscape\Pane\소스 파일">
+      <UniqueIdentifier>{611343d7-06c7-439b-9b29-403d1c4e1a90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Landscape\Pane\헤더 파일">
+      <UniqueIdentifier>{be03c372-ed5b-4207-8484-c81bddaf8070}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Landscape\Management">
+      <UniqueIdentifier>{7a1a890b-fbe4-486c-85e4-327e77d6d876}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Landscape\Sculpting">
+      <UniqueIdentifier>{20e5ec29-3878-4a9a-aeb1-48d79176b2e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Landscape\Painting">
+      <UniqueIdentifier>{e1ff67f6-7c8b-4053-b379-cfc4310c754b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Landscape\Management\소스 파일">
+      <UniqueIdentifier>{cf5203e1-f7f5-42cb-a3bf-16bae6b2a512}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Landscape\Management\헤더 파일">
+      <UniqueIdentifier>{d6df17ee-2093-4fac-acac-ab9327334f9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Landscape\Painting\소스 파일">
+      <UniqueIdentifier>{405f417a-3bc3-43a0-92b0-c327a47dde4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Landscape\Painting\헤더 파일">
+      <UniqueIdentifier>{3a0cc7df-9f4d-43d2-bbb8-ccf138b40e43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Landscape\Sculpting\헤더 파일">
+      <UniqueIdentifier>{17c28217-bfcf-4aaf-a9fd-bb826202d73d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Landscape\Sculpting\소스 파일">
+      <UniqueIdentifier>{266a81d9-eafa-47f4-80eb-1311a4e639ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CustomUI">
+      <UniqueIdentifier>{5d071454-17be-4508-968b-b18df37051e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CustomUI\소스 파일">
+      <UniqueIdentifier>{50f0334f-6182-49ec-a565-1c6baf9c6518}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CustomUI\헤더 파일">
+      <UniqueIdentifier>{47b6152d-5864-4277-9726-fcb3e6766a98}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -52,12 +88,24 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="LandscapeDockPane.h">
-      <Filter>Pane\Landscape\헤더 파일</Filter>
+      <Filter>Landscape\Pane\헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="LandscapeManagementDlg.h">
-      <Filter>Pane\Landscape\헤더 파일</Filter>
+      <Filter>Landscape\Management\헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="TestDlg.h">
+    <ClInclude Include="LandscapePaintingDlg.h">
+      <Filter>Landscape\Painting\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="LandscapeSculptingDlg.h">
+      <Filter>Landscape\Sculpting\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="LandscapeManagementAddDlg.h">
+      <Filter>Landscape\Management</Filter>
+    </ClInclude>
+    <ClInclude Include="LandscapeDockPaneView.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="LandscapeDockPaneFrame.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -78,12 +126,24 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="LandscapeDockPane.cpp">
-      <Filter>Pane\Landscape\소스 파일</Filter>
+      <Filter>Landscape\Pane\소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="LandscapeManagementDlg.cpp">
-      <Filter>Pane\Landscape\소스 파일</Filter>
+      <Filter>Landscape\Management\소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="TestDlg.cpp">
+    <ClCompile Include="LandscapePaintingDlg.cpp">
+      <Filter>Landscape\Painting\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="LandscapeSculptingDlg.cpp">
+      <Filter>Landscape\Sculpting\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="LandscapeManagementAddDlg.cpp">
+      <Filter>Landscape\Management</Filter>
+    </ClCompile>
+    <ClCompile Include="LandscapeDockPaneView.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="LandscapeDockPaneFrame.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
