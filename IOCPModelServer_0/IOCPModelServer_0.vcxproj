@@ -162,6 +162,7 @@ copy "..\\lib\\FMOD\\fmod.dll" "..\\$(TargetName)\\"</Command>
   <ItemGroup>
     <ClInclude Include="AsyncFileIO.h" />
     <ClInclude Include="NetworkDataPacket.h" />
+    <ClInclude Include="ObjectPool.h" />
     <ClInclude Include="Sample.h" />
     <ClInclude Include="IOCPServer.h" />
   </ItemGroup>

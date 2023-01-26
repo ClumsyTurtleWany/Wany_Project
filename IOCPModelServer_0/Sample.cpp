@@ -109,14 +109,14 @@ LRESULT Sample::MsgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 				case FD_READ:
 				{
-					SOCKET sock = wParam;
+					/*SOCKET sock = wParam;
 					std::string msg;
 					if (MainServer->ReceiveFromClient(sock, msg))
 					{
 						MainServer->SendMsgToClientAll(msg, 255);
 						Print(msg);
 					}
-					int a = 0;
+					int a = 0;*/
 				}
 				break;
 
@@ -128,17 +128,17 @@ LRESULT Sample::MsgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 				case FD_CLOSE:
 				{
-					SOCKET sock = wParam;
+					/*SOCKET sock = wParam;
 					if (MainServer->CloseClient(sock))
 					{
 
-					}
+					}*/
 				}
 				break;
 
 				case FD_ACCEPT:
 				{
-					MainServer->AcceptClient();
+					//MainServer->AcceptClient();
 				}
 				break;
 
@@ -152,7 +152,7 @@ LRESULT Sample::MsgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			{
 				case 1002:
 				{
-					WCHAR szBuffer[255] = L"";
+					/*WCHAR szBuffer[255] = L"";
 					GetWindowText(EditBoxHandle, szBuffer, 255);
 					USES_CONVERSION;
 					std::string msg = W2A(szBuffer);
@@ -163,7 +163,7 @@ LRESULT Sample::MsgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 					MainServer->SendMsgToClientAll(msg, 255);
 					Print(msg);
-					SetWindowText(EditBoxHandle, L"");
+					SetWindowText(EditBoxHandle, L"");*/
 
 				} 
 				break;
