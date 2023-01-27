@@ -75,6 +75,7 @@ bool AStarMap::FindPath(Index start, Index dst)
 		{
 			for (int col = -1; col <= 1; col += 1)
 			{
+				// 자기 자신 건너 뜀.
 				if ((row == 0) && (col == 0))
 				{
 					continue;
@@ -82,16 +83,19 @@ bool AStarMap::FindPath(Index start, Index dst)
 
 				int x = currentNode->Idx.x + col;
 				int y = currentNode->Idx.y + row;
+				// Out of Range
 				if (x < 0 || y < 0 || x >= Width || y >= Height)
 				{
 					continue;
 				}
 
+				// 벽
 				if (MapArray[y][x] == 1)
 				{
 					continue;
 				}
 
+				// 이미 방문한 노드인지 확인
 				bool isClosed = false;
 				for (auto it : ClosedSet)
 				{
@@ -107,6 +111,7 @@ bool AStarMap::FindPath(Index start, Index dst)
 					continue;
 				}
 
+				// 열려있는 노드와 스코어 비교하여 경로 획득.
 				int newCost = ((abs(row) + abs(col)) > 1) ? 14 : 10;
 				int totalCost = currentNode->G + newCost;
 				bool isOpened = false;
@@ -129,6 +134,7 @@ bool AStarMap::FindPath(Index start, Index dst)
 					continue;
 				}
 
+				// 새 경로 추가.
 				Node* newPathNode = new Node;
 				newPathNode->Parent = currentNode;
 				newPathNode->G = totalCost;
