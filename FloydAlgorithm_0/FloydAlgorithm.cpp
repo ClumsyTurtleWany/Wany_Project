@@ -162,7 +162,14 @@ void FloydGraph::Print(Index start, Index dst)
 	{
 		for (int col = 0; col < Width; col++)
 		{
-			std::cout << PrintMap[row][col] << " ";
+			if (PrintMap[row][col] == 1)
+			{
+				std::cout << "* ";
+			}
+			else
+			{
+				std::cout << PrintMap[row][col] << " ";
+			}
 		}
 		std::cout << std::endl;
 	}
