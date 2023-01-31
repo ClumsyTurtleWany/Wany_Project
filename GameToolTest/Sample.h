@@ -11,9 +11,9 @@
 class Sample : public GameCore
 {
 public:
-	//Plane3D* pObject = nullptr;
+	Plane3D* pObject = nullptr;
 	//Cube3D* pBoxObject = nullptr;
-	//Map3D* pWorldMap = nullptr;
+	Map3D* pWorldMap = nullptr;
 	DebugCamera* renderCamera = nullptr;
 	//D3D11_VIEWPORT ViewPort[4] = { D3D11_VIEWPORT(),};
 	//Camera* ViewPortCamera[4] = { nullptr, };
