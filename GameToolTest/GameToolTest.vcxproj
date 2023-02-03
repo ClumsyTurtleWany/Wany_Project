@@ -203,6 +203,7 @@
     <ClInclude Include="GameToolTestView.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MapCreatorView.h" />
+    <ClInclude Include="Mesh.hpp" />
     <ClInclude Include="NewObject.hpp" />
     <ClInclude Include="OutputWnd.h" />
     <ClInclude Include="pch.h" />
@@ -224,6 +225,7 @@
     <ClCompile Include="GameToolTestView.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MapCreatorView.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="NewObject.cpp" />
     <ClCompile Include="OutputWnd.cpp" />
     <ClCompile Include="pch.cpp">
