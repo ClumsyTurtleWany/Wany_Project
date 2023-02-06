@@ -152,26 +152,38 @@ int main(int argc, char** argv)
 	auto pos = ent->assign<Position>(0.f, 0.f);
 	auto rot = ent->assign<Rotation>(0.f);
 
-	std::cout << "Initial values: position(" << pos->x << ", " << pos->y << "), rotation(" << rot->angle << ")" << std::endl;
+	Entity* ent2 = world->create();
+	auto pos2 = ent2->assign<Position>(20.f, 20.f);
+	auto rot2 = ent2->assign<Rotation>(15.f);
+
+	std::cout << "ent Initial values: position(" << pos->x << ", " << pos->y << "), rotation(" << rot->angle << ")" << std::endl;
+	std::cout << "ent2 Initial values: position(" << pos2->x << ", " << pos2->y << "), rotation(" << rot2->angle << ")" << std::endl;
+
 
 	world->tick(10.f);
 
-	std::cout << "After tick(10): position(" << pos->x << ", " << pos->y << "), rotation(" << rot->angle << ")" << std::endl;
+	std::cout << "ent After tick(10): position(" << pos->x << ", " << pos->y << "), rotation(" << rot->angle << ")" << std::endl;
+	std::cout << "ent2 After tick(10): position(" << pos2->x << ", " << pos2->y << "), rotation(" << rot2->angle << ")" << std::endl;
 
 	world->disableSystem(testSystem);
 
 	world->tick(10.f);
 
-	std::cout << "After tick(10) and DisableSystem(testSystem): position(" << pos->x << ", " << pos->y << "), rotation(" << rot->angle << ")" << std::endl;
+	std::cout << "ent After tick(10) and DisableSystem(testSystem): position(" << pos->x << ", " << pos->y << "), rotation(" << rot->angle << ")" << std::endl;
+	std::cout << "ent2 After tick(10) and DisableSystem(testSystem): position(" << pos2->x << ", " << pos2->y << "), rotation(" << rot2->angle << ")" << std::endl;
 
 	world->enableSystem(testSystem);
 
 	world->tick(10.f);
 
-	std::cout << "After tick(10) and EnableSystem(testSystem): position(" << pos->x << ", " << pos->y << "), rotation(" << rot->angle << ")" << std::endl;
+	std::cout << "ent After tick(10) and EnableSystem(testSystem): position(" << pos->x << ", " << pos->y << "), rotation(" << rot->angle << ")" << std::endl;
+	std::cout << "ent2 After tick(10) and EnableSystem(testSystem): position(" << pos2->x << ", " << pos2->y << "), rotation(" << rot2->angle << ")" << std::endl;
 
 	ent->remove<Position>();
 	ent->remove<Rotation>();
+
+	ent2->remove<Position>();
+	ent2->remove<Rotation>();
 
 	std::cout << "Creating more entities..." << std::endl;
 

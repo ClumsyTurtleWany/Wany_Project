@@ -37,15 +37,18 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
+    <Filter Include="EntityComponentSystem\World">
+      <UniqueIdentifier>{8bea6b79-ca4c-4273-b5d8-ca2fa02adb7c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DXDevice.hpp">
       <Filter>DirectX\Device\헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="BaseEntity.hpp">
+    <ClInclude Include="Entity.hpp">
       <Filter>EntityComponentSystem\Entity</Filter>
     </ClInclude>
-    <ClInclude Include="EntitySystem.hpp">
+    <ClInclude Include="System.hpp">
       <Filter>EntityComponentSystem\System</Filter>
     </ClInclude>
     <ClInclude Include="Matrix.hpp">
@@ -75,8 +78,17 @@
     <ClInclude Include="GravityComponent.hpp">
       <Filter>EntityComponentSystem\Component</Filter>
     </ClInclude>
-    <ClInclude Include="BaseComponent.hpp">
+    <ClInclude Include="Component.hpp">
       <Filter>EntityComponentSystem\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="World.hpp">
+      <Filter>EntityComponentSystem\World</Filter>
+    </ClInclude>
+    <ClInclude Include="ECSCommon.hpp">
+      <Filter>EntityComponentSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="MovementSystem.hpp">
+      <Filter>EntityComponentSystem\System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -85,6 +97,15 @@
     </ClCompile>
     <ClCompile Include="WindowsClient.cpp">
       <Filter>WinAPI</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>EntityComponentSystem\World</Filter>
+    </ClCompile>
+    <ClCompile Include="System.cpp">
+      <Filter>EntityComponentSystem\System</Filter>
+    </ClCompile>
+    <ClCompile Include="MovementSystem.cpp">
+      <Filter>EntityComponentSystem\System</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
