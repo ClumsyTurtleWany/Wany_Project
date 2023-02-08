@@ -3,7 +3,7 @@
 
 namespace ECS
 {
-	struct Component
+	class Component
 	{
 
 	};

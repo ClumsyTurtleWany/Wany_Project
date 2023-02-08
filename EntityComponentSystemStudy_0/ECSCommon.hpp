@@ -3,18 +3,22 @@
 #include <unordered_map>
 #include <memory>
 #include <functional>
+#include <bitset>
+#include <array>
 
 namespace ECS
 {
-	template <typename T>
-	std::type_index GetTypeIndex()
-	{
-		return std::type_index(typeid(T));
-	}
-
 	class World;
 	class Entity;
 	class Component;
 	class System;
+
+	using ComponentID = std::type_index;
+
+	template <typename T>
+	ComponentID GetComponentID()
+	{
+		return ComponentID(typeid(T));
+	}
 
 }

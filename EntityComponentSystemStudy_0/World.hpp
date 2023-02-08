@@ -1,6 +1,7 @@
 #pragma once
 #include "ECSCommon.hpp"
 #include "System.hpp"
+#include "Entity.hpp"
 
 namespace ECS
 {
@@ -14,6 +15,9 @@ namespace ECS
 		static World* CreateWorld();
 		void Tick(float time);
 		void AddEntity(Entity* entity);
+
+		template <typename... T>
+		void GetEntities(std::vector<ECS::Entity>& entities);
 	};
 
 	inline World* World::CreateWorld()
@@ -24,13 +28,23 @@ namespace ECS
 
 	void World::Tick(float time)
 	{
-		for (auto system : Systems)
+		for (auto& system : Systems)
 		{
 			system.get()->Tick(this, time);
 		}
 	}
+
 	inline void World::AddEntity(Entity* entity)
 	{
-		Entities.push_back(std::make_shared<Entity>(entity));
+		std::shared_ptr<Entity> newEntity(entity);
+		Entities.push_back(newEntity);
 	}
+
+
+	template<typename ...T>
+	inline void World::GetEntities(std::vector<ECS::Entity>& entities)
+	{
+
+	}
+
 }
