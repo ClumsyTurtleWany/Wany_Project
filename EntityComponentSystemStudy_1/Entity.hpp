@@ -69,5 +69,25 @@ namespace ECS
 
 			return false;
 		}
+
+		template <typename T>
+		bool has() const
+		{
+			ComponentID id = ECS::GetComponentID<T>();
+			auto it = Components.find(id);
+			if (it != Components.end())
+			{
+				return true;
+			}
+			
+			return false;
+		}
+
+		template <typename T, typename V, typename... Types>
+		bool has() const
+		{
+			return has<T>() && has<V, Types...>();
+		}
+
 	};
 }
