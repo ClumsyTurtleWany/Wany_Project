@@ -66,6 +66,9 @@
     <ClInclude Include="RenderSystem.h">
       <Filter>ECS\System</Filter>
     </ClInclude>
+    <ClInclude Include="TransformComponent.h">
+      <Filter>ECS\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sample.cpp">

@@ -170,6 +170,7 @@ copy "..\\lib\\FMOD\\fmod.dll" "..\\$(TargetName)\\"</Command>
     <ClInclude Include="RenderSystem.h" />
     <ClInclude Include="Sample.h" />
     <ClInclude Include="System.hpp" />
+    <ClInclude Include="TransformComponent.h" />
     <ClInclude Include="World.hpp" />
   </ItemGroup>
   <ItemGroup>
