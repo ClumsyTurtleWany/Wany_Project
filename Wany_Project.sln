@@ -300,6 +300,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestDLL2", "TestDLL2\TestDL
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EntityComponentSystemStudy_0", "EntityComponentSystemStudy_0\EntityComponentSystemStudy_0.vcxproj", "{216425B4-E55C-4253-8D73-08F3D886F047}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EntityComponentSystemStudy_1", "EntityComponentSystemStudy_1\EntityComponentSystemStudy_1.vcxproj", "{45A0CBE2-8348-4638-8F9A-08295459F667}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -1528,6 +1530,18 @@ Global
 		{216425B4-E55C-4253-8D73-08F3D886F047}.Release|x64.Build.0 = Release|x64
 		{216425B4-E55C-4253-8D73-08F3D886F047}.Release|x86.ActiveCfg = Release|Win32
 		{216425B4-E55C-4253-8D73-08F3D886F047}.Release|x86.Build.0 = Release|Win32
+		{45A0CBE2-8348-4638-8F9A-08295459F667}.Debug|ARM.ActiveCfg = Debug|Win32
+		{45A0CBE2-8348-4638-8F9A-08295459F667}.Debug|ARM64.ActiveCfg = Debug|Win32
+		{45A0CBE2-8348-4638-8F9A-08295459F667}.Debug|x64.ActiveCfg = Debug|x64
+		{45A0CBE2-8348-4638-8F9A-08295459F667}.Debug|x64.Build.0 = Debug|x64
+		{45A0CBE2-8348-4638-8F9A-08295459F667}.Debug|x86.ActiveCfg = Debug|Win32
+		{45A0CBE2-8348-4638-8F9A-08295459F667}.Debug|x86.Build.0 = Debug|Win32
+		{45A0CBE2-8348-4638-8F9A-08295459F667}.Release|ARM.ActiveCfg = Release|Win32
+		{45A0CBE2-8348-4638-8F9A-08295459F667}.Release|ARM64.ActiveCfg = Release|Win32
+		{45A0CBE2-8348-4638-8F9A-08295459F667}.Release|x64.ActiveCfg = Release|x64
+		{45A0CBE2-8348-4638-8F9A-08295459F667}.Release|x64.Build.0 = Release|x64
+		{45A0CBE2-8348-4638-8F9A-08295459F667}.Release|x86.ActiveCfg = Release|Win32
+		{45A0CBE2-8348-4638-8F9A-08295459F667}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1677,6 +1691,7 @@ Global
 		{965D758B-B981-4EA6-8396-098DD9E05F22} = {B676016E-4677-4293-9B48-AA22321B0794}
 		{37C0291D-39AF-4CAA-8EDB-E2AE08BBE14B} = {B676016E-4677-4293-9B48-AA22321B0794}
 		{216425B4-E55C-4253-8D73-08F3D886F047} = {09354391-EE4B-403A-873B-80D1E1BC3594}
+		{45A0CBE2-8348-4638-8F9A-08295459F667} = {09354391-EE4B-403A-873B-80D1E1BC3594}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A3BBF0E1-2A93-4AE9-8140-46A77DAC79E2}
