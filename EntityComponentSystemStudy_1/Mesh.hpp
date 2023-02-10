@@ -3,7 +3,11 @@
 
 struct Material
 {
-
+	ID3D11VertexShader*		VertexShader = nullptr;
+	ID3D11PixelShader*		PixelShader = nullptr;
+	ID3D11Buffer*			ConstantBuffer = nullptr;
+	ConstantBufferData		ConstantBufData;
+	std::vector<DXTexture>	Textures;
 };
 
 struct MeshComponent
